@@ -1,0 +1,121 @@
+name: iOS App Store upload
+
+# Same pipeline as MetaTrade Locker: a GitHub Mac builds the chosen game, signs it with the App Store Connect
+# API key (automatic signing) and uploads it to App Store Connect. Secrets (repository settings):
+#   APPLE_TEAM_ID, APP_STORE_CONNECT_KEY_ID, APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_API_KEY_BASE64
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "Which game"
+        required: true
+        type: choice
+        options: [KunaiGaiden, Braise]
+        default: KunaiGaiden
+      marketing_version:
+        description: "Version shown on the App Store (CFBundleShortVersionString)"
+        required: true
+        default: "1.0"
+      upload_to_app_store:
+        description: "Upload the signed build to App Store Connect"
+        required: true
+        type: boolean
+        default: true
+      build_only:
+        description: "Unsigned simulator build only (no secrets needed): checks that everything compiles"
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: Build ${{ inputs.app }}
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      SCHEME: ${{ inputs.app }}
+      ARCHIVE_PATH: build/${{ inputs.app }}.xcarchive
+      EXPORT_PATH: build/export
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate the Xcode project
+        run: |
+          brew install xcodegen
+          cd ios && xcodegen generate
+          xcodebuild -version
+
+      - name: Build-only simulator check
+        if: ${{ inputs.build_only }}
+        run: |
+          xcodebuild build -project ios/Games.xcodeproj -scheme "$SCHEME" -configuration Debug \
+            -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO
+
+      - name: Validate required secrets
+        if: ${{ !inputs.build_only }}
+        run: |
+          test -n "$APPLE_TEAM_ID" || (echo "Missing APPLE_TEAM_ID" && exit 1)
+          test -n "$ASC_KEY_ID" || (echo "Missing APP_STORE_CONNECT_KEY_ID" && exit 1)
+          test -n "$ASC_ISSUER_ID" || (echo "Missing APP_STORE_CONNECT_ISSUER_ID" && exit 1)
+          test -n "${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}" || (echo "Missing APP_STORE_CONNECT_API_KEY_BASE64" && exit 1)
+
+      - name: Install App Store Connect API key
+        if: ${{ !inputs.build_only }}
+        run: |
+          mkdir -p "$HOME/private_keys"
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}" | base64 --decode > "$HOME/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+          chmod 600 "$HOME/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+
+      - name: Archive
+        if: ${{ !inputs.build_only }}
+        run: |
+          xcodebuild archive -project ios/Games.xcodeproj -scheme "$SCHEME" -configuration Release \
+            -destination "generic/platform=iOS" -archivePath "$ARCHIVE_PATH" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$HOME/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
+            MARKETING_VERSION="${{ inputs.marketing_version }}" CURRENT_PROJECT_VERSION="${{ github.run_number }}"
+
+      - name: Export signed IPA
+        if: ${{ !inputs.build_only }}
+        run: |
+          cat > build/ExportOptions.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>teamID</key><string>${APPLE_TEAM_ID}</string>
+            <key>uploadSymbols</key><true/>
+          </dict></plist>
+          PLIST
+          xcodebuild -exportArchive -archivePath "$ARCHIVE_PATH" -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist build/ExportOptions.plist -allowProvisioningUpdates \
+            -authenticationKeyPath "$HOME/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+      - name: Locate IPA
+        if: ${{ !inputs.build_only }}
+        id: ipa
+        run: |
+          IPA_PATH="$(find "$EXPORT_PATH" -name '*.ipa' -print -quit)"
+          test -n "$IPA_PATH" || (echo "No IPA exported" && exit 1)
+          echo "path=$IPA_PATH" >> "$GITHUB_OUTPUT"; ls -lh "$IPA_PATH"
+
+      - name: Keep the IPA
+        if: ${{ !inputs.build_only }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.app }}-iOS-${{ github.run_number }}
+          path: ${{ steps.ipa.outputs.path }}
+          retention-days: 14
+
+      - name: Upload to App Store Connect
+        if: ${{ !inputs.build_only && inputs.upload_to_app_store }}
+        run: |
+          xcrun altool --upload-app --type ios --file "${{ steps.ipa.outputs.path }}" \
+            --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"

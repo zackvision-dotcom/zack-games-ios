@@ -1,0 +1,86 @@
+# XcodeGen spec: `xcodegen generate` (run by the CI on a Mac) creates Games.xcodeproj with one app per game.
+name: Games
+options:
+  bundleIdPrefix: com.zvisionclub
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    ENABLE_BITCODE: NO
+    GENERATE_INFOPLIST_FILE: NO
+
+targets:
+  KunaiGaiden:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: KunaiGaiden/Assets.xcassets
+      - path: KunaiGaiden/Web
+        type: folder
+    info:
+      path: KunaiGaiden/Info.plist
+      properties:
+        CFBundleDisplayName: Kunai Gaiden
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.action-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.kunaigaiden
+        PRODUCT_NAME: KunaiGaiden
+
+  Braise:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Braise/Assets.xcassets
+      - path: Braise/Web
+        type: folder
+    info:
+      path: Braise/Info.plist
+      properties:
+        CFBundleDisplayName: Braise
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.adventure-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.braise
+        PRODUCT_NAME: Braise
