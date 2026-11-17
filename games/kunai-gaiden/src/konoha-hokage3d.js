@@ -1,6 +1,6 @@
-/* Kunai Online — the Gardien residence, rebuilt from the anime references (day views):
+/* Kunai Online — the Gardien residence, rebuilt from the reference sketches (day views):
    smooth red-orange drums with almost no windows, thin yellow-orange tiled skirts with draped ropes,
-   the white 火 disc on the upper drum, a flat roof terrace with the 火 painted on it and a few big white horns at the front,
+   the white 守 disc on the upper drum, a flat roof terrace with the 守 painted on it and a few big white horns at the front,
    low round annexes on both sides, a wide skirt at the base and a yellow-roofed entrance pavilion. Metres, shared ISO camera. */
 window.KGARDIEN = (() => {
   const M = 24, K = KGATE, rng = K.rng;
@@ -56,7 +56,7 @@ window.KGARDIEN = (() => {
     S.cylinder(0, 0, m(12.6), m(3.5), m(10.4), RED, 52, { cap: false, eave: m(1) });
     skirt(13.9, 12, 10.4, 11.5, 52, 2);
     ropes(13.95, 10.3, 12, 40);
-    // upper drum with the 火 disc and a few small windows
+    // upper drum with the 守 disc and a few small windows
     S.cylinder(0, 0, m(10.2), m(11.3), m(15.6), RED, 46, { cap: false, eave: m(.8) });
     // windows laid tangent to the drum (an axis-aligned quad stuck out of the curve on the sides)
     for (const a of [Math.PI / 2 - .55, Math.PI / 2 + .55]) { const rr = m(10.2 + .04), x = Math.cos(a) * rr, y = Math.sin(a) * rr, ux = Math.sin(a), uy = -Math.cos(a), hw = m(.45);
@@ -66,7 +66,7 @@ window.KGARDIEN = (() => {
     S.face(ep, mat(t.fireDisc, 4.8, { whole: true }), { n: [0, 1, 0], O: [ec[0] - er, ec[1], ec[2] + er], U: [1, 0, 0], V: [0, 0, -1], bias: 31 });
     skirt(11.2, 9.8, 15.6, 16.4, 46, 2);
     ropes(11.25, 15.5, 10, 41);
-    // roof terrace: red parapet ring, flat floor with the 火, a small dome hatch
+    // roof terrace: red parapet ring, flat floor with the 守, a small dome hatch
     S.cylinder(0, 0, m(9.6), m(16.3), m(17.2), RED, 44, { cap: false, bias: 3 });
     S.disc(0, 0, m(9.6), m(17.2), mat(t.fireRoof, 19.2, { whole: true }), { seg: 44, bias: 4 });
     S.ringWall(0, 0, m(9.1), m(9.6), m(17.2), m(17.7), 0, Math.PI * 2, RED, mat(t.red, 3), { seg: 44, bias: 5 });

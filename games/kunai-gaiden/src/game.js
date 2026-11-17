@@ -50,7 +50,7 @@ window.KGAME = (() => {
   const CSS = `
   :root{--paper1:#f7ebcb;--paper2:#e9d29f;--inkb:#3a2414;--red:#b8322a;--wood1:#4a2410;--wood2:#a3602f;--gold:#e0b04a}
   .k-font{font-family:'Potta One',sans-serif}
-  /* anime ninja scrolls: a thick rolled cylinder (red caps, gold rings, coloured body, black knobs) + flat cream paper with ink outlines */
+  /* ninja scrolls: a thick rolled cylinder (red caps, gold rings, coloured body, black knobs) + flat cream paper with ink outlines */
   .paper{background:#f7f1de;color:var(--inkb);border:2.5px solid #2a2230;box-shadow:0 5px 0 rgba(30,20,10,.25),0 8px 18px rgba(0,0,0,.35)}
   .maki{position:relative;border-radius:2px;background:linear-gradient(90deg,transparent calc(100% - 11px),#2a2230 calc(100% - 11px) calc(100% - 9px),#d8cba3 calc(100% - 9px)),#f7f1de}
   .kake{position:relative;border-radius:2px;padding-top:40px!important;padding-bottom:40px!important;
@@ -631,7 +631,7 @@ window.KGAME = (() => {
   function drawBigMap(c) { const m = A.mapArt, W = 1000, H = Math.round(W * m.height / m.width), RS = 2; c.width = W * RS; c.height = H * RS; c.style.width = W + 'px'; c.style.height = H + 'px'; const q = c.getContext('2d'), k = W / (m.width / A.mapPPM); q.setTransform(RS, 0, 0, RS, 0, 0); q.imageSmoothingQuality = 'high'; q.drawImage(m, 0, 0, W, H);
     const P = (x, y) => [(x - A.L.x0) * k, (y - A.L.y0) * k];
     const label = (txt, x, y, big) => { q.font = (big ? '400 21px' : '700 14px') + (big ? ' "Potta One",sans-serif' : ' "M PLUS Rounded 1c",sans-serif'); q.textAlign = 'center'; q.lineJoin = 'round'; q.lineWidth = big ? 6 : 4.5; q.strokeStyle = 'rgba(247,241,222,.95)'; q.strokeText(txt, x, y); q.fillStyle = big ? '#7a2a18' : '#2a2230'; q.fillText(txt, x, y); };
-    if (!A.region) for (const [lab, x, y] of [['Porte d’Aozora', 0, 140], ['Résidence du Gardien', 0, -46], ['Académie', -61, -48], ['Temple', 38, 18], ['Arène', -121, -2], ['Forêt aux loups', -100, 150], ['Camp des bandits', -128, -88], ['Falaise des Gardien', 0, -103]]) { const [px, py] = P(x, y); label(lab, px, py, true); }
+    if (!A.region) for (const [lab, x, y] of [['Porte d’Aozora', 0, 140], ['Résidence du Gardien', 0, -46], ['Académie', -61, -48], ['Temple', 38, 18], ['Arène', -121, -2], ['Forêt aux loups', -100, 150], ['Camp des bandits', -128, -88], ['Falaise des Gardiens', 0, -103]]) { const [px, py] = P(x, y); label(lab, px, py, true); }
     for (const n of NPCS) { const [x, y] = P(n.x, n.y), mk = marker(n); q.fillStyle = mk ? '#e0b04a' : '#f7f1de'; q.strokeStyle = '#2a2230'; q.lineWidth = 2.5; q.beginPath(); q.arc(x, y, mk ? 9 : 6, 0, TAU); q.fill(); q.stroke();
       if (mk) { q.fillStyle = '#7a2a18'; q.font = '400 13px "Potta One",sans-serif'; q.textAlign = 'center'; q.fillText(mk, x, y + 5); } q.textAlign = 'left'; q.font = '800 13px "M PLUS Rounded 1c",sans-serif'; q.lineWidth = 4; q.strokeStyle = 'rgba(247,241,222,.95)'; q.strokeText(n.name, x + 12, y + 5); q.fillStyle = '#2a2230'; q.fillText(n.name, x + 12, y + 5); }
     if (wpHere() && !GPS.path) gpsRoute(true); drawRoute(q, k, A.L, 8); c._k = k;

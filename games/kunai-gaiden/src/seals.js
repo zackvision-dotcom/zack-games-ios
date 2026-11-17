@@ -1,7 +1,7 @@
 /* Kunai Gaiden — techniques by drawing (touch screens).
    The player draws a sign with the finger in the pad at the bottom right; a recogniser (a $1-style
    template matcher, orientation-sensitive so M ≠ W and Z ≠ N) turns it into a technique.
-   Every technique then plays its hand seals (the twelve zodiac seals of the anime) in a medallion. */
+   Every technique then plays its hand seals (the twelve traditional zodiac seals) in a medallion. */
 window.KSEAL = (() => {
   /* ================= the signs ================= */
   // glyph drawn → technique (a straight line is the flash step, in the direction of the stroke)
@@ -73,7 +73,7 @@ window.KSEAL = (() => {
     i: { k: '亥', n: 'Sanglier', R: { x: 4, y: -5, r: -1.45, f: [1, 1, 1, 1, 1] }, L: { x: -4, y: 9, r: 1.45, f: [1, 1, 1, 1, 1] }, front: 'L' },
     clone: { k: '十', n: 'Clonage', R: { x: 0, y: -2, r: 0, f: [0, 1, 1, 0, 0] }, L: { x: -4, y: 6, r: -1.57, f: [0, 1, 1, 0, 0] }, front: 'R' },
     palm: { k: '掌', n: 'Paume', R: { x: 0, y: 6, r: 0, f: [1, 1, 1, 1, 1], sp: 1.5 }, front: 'R', swirl: true } };
-  // which seals each technique weaves (the anime's sequences where they exist)
+  // which seals each technique weaves (traditional-style sequences)
   const SEQ = { fire: ['mi', 'hitsuji', 'saru', 'i', 'uma', 'tora'], chidori: ['ushi', 'u', 'saru'], water: ['ushi', 'saru', 'u', 'ne', 'i', 'tori'], clone: ['clone'],
     subst: ['hitsuji', 'tora'], dash: ['tora'], sphere: ['palm'], wind: ['tori', 'inu', 'tora'] };
   const TECH = { fire: 'Boule de feu', chidori: 'Lame-tonnerre', water: 'Dragon d’eau', clone: 'Multiclonage', subst: 'Substitution', dash: 'Pas éclair', sphere: 'Sphère de chakra', wind: 'Lame de vent' };

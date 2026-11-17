@@ -464,9 +464,9 @@ window.KGATE = (() => {
   }
   return { M, build, textures, planks, stones, rng, leafMark, wear, JP };
 })();
-</script><script>/* Kunai Online — the Gardien residence, rebuilt from the anime references (day views):
+</script><script>/* Kunai Online — the Gardien residence, rebuilt from the reference sketches (day views):
    smooth red-orange drums with almost no windows, thin yellow-orange tiled skirts with draped ropes,
-   the white 火 disc on the upper drum, a flat roof terrace with the 火 painted on it and a few big white horns at the front,
+   the white 守 disc on the upper drum, a flat roof terrace with the 守 painted on it and a few big white horns at the front,
    low round annexes on both sides, a wide skirt at the base and a yellow-roofed entrance pavilion. Metres, shared ISO camera. */
 window.KGARDIEN = (() => {
   const M = 24, K = KGATE, rng = K.rng;
@@ -522,7 +522,7 @@ window.KGARDIEN = (() => {
     S.cylinder(0, 0, m(12.6), m(3.5), m(10.4), RED, 52, { cap: false, eave: m(1) });
     skirt(13.9, 12, 10.4, 11.5, 52, 2);
     ropes(13.95, 10.3, 12, 40);
-    // upper drum with the 火 disc and a few small windows
+    // upper drum with the 守 disc and a few small windows
     S.cylinder(0, 0, m(10.2), m(11.3), m(15.6), RED, 46, { cap: false, eave: m(.8) });
     // windows laid tangent to the drum (an axis-aligned quad stuck out of the curve on the sides)
     for (const a of [Math.PI / 2 - .55, Math.PI / 2 + .55]) { const rr = m(10.2 + .04), x = Math.cos(a) * rr, y = Math.sin(a) * rr, ux = Math.sin(a), uy = -Math.cos(a), hw = m(.45);
@@ -532,7 +532,7 @@ window.KGARDIEN = (() => {
     S.face(ep, mat(t.fireDisc, 4.8, { whole: true }), { n: [0, 1, 0], O: [ec[0] - er, ec[1], ec[2] + er], U: [1, 0, 0], V: [0, 0, -1], bias: 31 });
     skirt(11.2, 9.8, 15.6, 16.4, 46, 2);
     ropes(11.25, 15.5, 10, 41);
-    // roof terrace: red parapet ring, flat floor with the 火, a small dome hatch
+    // roof terrace: red parapet ring, flat floor with the 守, a small dome hatch
     S.cylinder(0, 0, m(9.6), m(16.3), m(17.2), RED, 44, { cap: false, bias: 3 });
     S.disc(0, 0, m(9.6), m(17.2), mat(t.fireRoof, 19.2, { whole: true }), { seg: 44, bias: 4 });
     S.ringWall(0, 0, m(9.1), m(9.6), m(17.2), m(17.7), 0, Math.PI * 2, RED, mat(t.red, 3), { seg: 44, bias: 5 });
@@ -901,7 +901,7 @@ window.KTOWN = (() => {
   }
 
   /* ---------- builders ---------- */
-  /* Aozora house, after the anime street backgrounds: a boxy 2–3 storey block in a pastel colour, a flat roof with a parapet
+  /* Aozora house, in a classic street style: a boxy 2–3 storey block in a pastel colour, a flat roof with a parapet
      and a water tank, small tiled pent roofs (hisashi) over every storey, balconies, a vertical kanji sign, sometimes a round
      corner tower with a dome. */
   function vsign(text, bg, fg) { const id = 'vs' + text + bg; return cache[id] || (cache[id] = tex(id, 64, 64 * text.length + 16, (g, W, H) => {
@@ -1782,7 +1782,7 @@ window.HERO = (() => {
       g.beginPath(); g.moveTo(3.6, -6.6); g.quadraticCurveTo(6.6, -3.6, 10.6, -4.2); g.lineWidth = 1; g.strokeStyle = 'rgba(0,0,0,.45)'; g.stroke(); });
   }
 
-  /* anime eye (outer corner toward +x before mirroring): thick upper lash with a flick, gradient iris, big pupil, highlights */
+  /* stylised eye (outer corner toward +x before mirroring): thick upper lash with a flick, gradient iris, big pupil, highlights */
   function eye(g, x, y, sx, m, s, iris) {
     iris = iris || ['#0a2560', '#1c6fe0', '#7cd0ff'];
     g.save(); g.translate(x, y); g.scale(m * sx * s, s);
@@ -3022,7 +3022,7 @@ window.KGAME = (() => {
   const CSS = `
   :root{--paper1:#f7ebcb;--paper2:#e9d29f;--inkb:#3a2414;--red:#b8322a;--wood1:#4a2410;--wood2:#a3602f;--gold:#e0b04a}
   .k-font{font-family:'Potta One',sans-serif}
-  /* anime ninja scrolls: a thick rolled cylinder (red caps, gold rings, coloured body, black knobs) + flat cream paper with ink outlines */
+  /* ninja scrolls: a thick rolled cylinder (red caps, gold rings, coloured body, black knobs) + flat cream paper with ink outlines */
   .paper{background:#f7f1de;color:var(--inkb);border:2.5px solid #2a2230;box-shadow:0 5px 0 rgba(30,20,10,.25),0 8px 18px rgba(0,0,0,.35)}
   .maki{position:relative;border-radius:2px;background:linear-gradient(90deg,transparent calc(100% - 11px),#2a2230 calc(100% - 11px) calc(100% - 9px),#d8cba3 calc(100% - 9px)),#f7f1de}
   .kake{position:relative;border-radius:2px;padding-top:40px!important;padding-bottom:40px!important;
@@ -3603,7 +3603,7 @@ window.KGAME = (() => {
   function drawBigMap(c) { const m = A.mapArt, W = 1000, H = Math.round(W * m.height / m.width), RS = 2; c.width = W * RS; c.height = H * RS; c.style.width = W + 'px'; c.style.height = H + 'px'; const q = c.getContext('2d'), k = W / (m.width / A.mapPPM); q.setTransform(RS, 0, 0, RS, 0, 0); q.imageSmoothingQuality = 'high'; q.drawImage(m, 0, 0, W, H);
     const P = (x, y) => [(x - A.L.x0) * k, (y - A.L.y0) * k];
     const label = (txt, x, y, big) => { q.font = (big ? '400 21px' : '700 14px') + (big ? ' "Potta One",sans-serif' : ' "M PLUS Rounded 1c",sans-serif'); q.textAlign = 'center'; q.lineJoin = 'round'; q.lineWidth = big ? 6 : 4.5; q.strokeStyle = 'rgba(247,241,222,.95)'; q.strokeText(txt, x, y); q.fillStyle = big ? '#7a2a18' : '#2a2230'; q.fillText(txt, x, y); };
-    if (!A.region) for (const [lab, x, y] of [['Porte d’Aozora', 0, 140], ['Résidence du Gardien', 0, -46], ['Académie', -61, -48], ['Temple', 38, 18], ['Arène', -121, -2], ['Forêt aux loups', -100, 150], ['Camp des bandits', -128, -88], ['Falaise des Gardien', 0, -103]]) { const [px, py] = P(x, y); label(lab, px, py, true); }
+    if (!A.region) for (const [lab, x, y] of [['Porte d’Aozora', 0, 140], ['Résidence du Gardien', 0, -46], ['Académie', -61, -48], ['Temple', 38, 18], ['Arène', -121, -2], ['Forêt aux loups', -100, 150], ['Camp des bandits', -128, -88], ['Falaise des Gardiens', 0, -103]]) { const [px, py] = P(x, y); label(lab, px, py, true); }
     for (const n of NPCS) { const [x, y] = P(n.x, n.y), mk = marker(n); q.fillStyle = mk ? '#e0b04a' : '#f7f1de'; q.strokeStyle = '#2a2230'; q.lineWidth = 2.5; q.beginPath(); q.arc(x, y, mk ? 9 : 6, 0, TAU); q.fill(); q.stroke();
       if (mk) { q.fillStyle = '#7a2a18'; q.font = '400 13px "Potta One",sans-serif'; q.textAlign = 'center'; q.fillText(mk, x, y + 5); } q.textAlign = 'left'; q.font = '800 13px "M PLUS Rounded 1c",sans-serif'; q.lineWidth = 4; q.strokeStyle = 'rgba(247,241,222,.95)'; q.strokeText(n.name, x + 12, y + 5); q.fillStyle = '#2a2230'; q.fillText(n.name, x + 12, y + 5); }
     if (wpHere() && !GPS.path) gpsRoute(true); drawRoute(q, k, A.L, 8); c._k = k;
@@ -4091,7 +4091,7 @@ window.KGAME = (() => {
 </script><script>/* Kunai Gaiden — techniques by drawing (touch screens).
    The player draws a sign with the finger in the pad at the bottom right; a recogniser (a $1-style
    template matcher, orientation-sensitive so M ≠ W and Z ≠ N) turns it into a technique.
-   Every technique then plays its hand seals (the twelve zodiac seals of the anime) in a medallion. */
+   Every technique then plays its hand seals (the twelve traditional zodiac seals) in a medallion. */
 window.KSEAL = (() => {
   /* ================= the signs ================= */
   // glyph drawn → technique (a straight line is the flash step, in the direction of the stroke)
@@ -4163,7 +4163,7 @@ window.KSEAL = (() => {
     i: { k: '亥', n: 'Sanglier', R: { x: 4, y: -5, r: -1.45, f: [1, 1, 1, 1, 1] }, L: { x: -4, y: 9, r: 1.45, f: [1, 1, 1, 1, 1] }, front: 'L' },
     clone: { k: '十', n: 'Clonage', R: { x: 0, y: -2, r: 0, f: [0, 1, 1, 0, 0] }, L: { x: -4, y: 6, r: -1.57, f: [0, 1, 1, 0, 0] }, front: 'R' },
     palm: { k: '掌', n: 'Paume', R: { x: 0, y: 6, r: 0, f: [1, 1, 1, 1, 1], sp: 1.5 }, front: 'R', swirl: true } };
-  // which seals each technique weaves (the anime's sequences where they exist)
+  // which seals each technique weaves (traditional-style sequences)
   const SEQ = { fire: ['mi', 'hitsuji', 'saru', 'i', 'uma', 'tora'], chidori: ['ushi', 'u', 'saru'], water: ['ushi', 'saru', 'u', 'ne', 'i', 'tori'], clone: ['clone'],
     subst: ['hitsuji', 'tora'], dash: ['tora'], sphere: ['palm'], wind: ['tori', 'inu', 'tora'] };
   const TECH = { fire: 'Boule de feu', chidori: 'Lame-tonnerre', water: 'Dragon d’eau', clone: 'Multiclonage', subst: 'Substitution', dash: 'Pas éclair', sphere: 'Sphère de chakra', wind: 'Lame de vent' };
@@ -5280,7 +5280,7 @@ const miniBase=(()=>{const W=Math.round(GW*MPPM),H=Math.round(GH*MPPM),c=documen
     else if(sh[0]==='ring'){q.arc(x,y,sh[1]*s,0,7);q.arc(x,y,(sh[1]-4)*s,0,7,true);shapeFill('#c0644a');}
     else if(sh[0]==='cap'){const w=sh[1]*s,d=sh[2]*s,r=Math.min(w,d)/2;q.roundRect?q.roundRect(x-w/2,y-d,w,d,r):q.rect(x-w/2,y-d,w,d);shapeFill('#efd88a');}
     else if(sh[0]==='L'){q.rect(x-10*s,y-45*s,10.3*s,45.6*s);q.rect(x,y-45*s,11*s,9.6*s);shapeFill('#d9cdb0');}
-    else if(sh[0]==='hokage'){q.arc(x,y,22*s,0,7);shapeFill('#e8a86a');q.beginPath();q.arc(x,y,16.5*s,0,7);shapeFill('#d0503a');q.fillStyle='#fff6e6';q.font='400 '+Math.round(13*s)+'px "Potta One",sans-serif';q.textAlign='center';q.textBaseline='middle';q.fillText('火',x,y);q.textAlign='start';q.textBaseline='alphabetic';}}
+    else if(sh[0]==='hokage'){q.arc(x,y,22*s,0,7);shapeFill('#e8a86a');q.beginPath();q.arc(x,y,16.5*s,0,7);shapeFill('#d0503a');q.fillStyle='#fff6e6';q.font='400 '+Math.round(13*s)+'px "Potta One",sans-serif';q.textAlign='center';q.textBaseline='middle';q.fillText('守',x,y);q.textAlign='start';q.textBaseline='alphabetic';}}
   return c;})();
 
 

@@ -249,7 +249,7 @@ const miniBase=(()=>{const W=Math.round(GW*MPPM),H=Math.round(GH*MPPM),c=documen
     else if(sh[0]==='ring'){q.arc(x,y,sh[1]*s,0,7);q.arc(x,y,(sh[1]-4)*s,0,7,true);shapeFill('#c0644a');}
     else if(sh[0]==='cap'){const w=sh[1]*s,d=sh[2]*s,r=Math.min(w,d)/2;q.roundRect?q.roundRect(x-w/2,y-d,w,d,r):q.rect(x-w/2,y-d,w,d);shapeFill('#efd88a');}
     else if(sh[0]==='L'){q.rect(x-10*s,y-45*s,10.3*s,45.6*s);q.rect(x,y-45*s,11*s,9.6*s);shapeFill('#d9cdb0');}
-    else if(sh[0]==='hokage'){q.arc(x,y,22*s,0,7);shapeFill('#e8a86a');q.beginPath();q.arc(x,y,16.5*s,0,7);shapeFill('#d0503a');q.fillStyle='#fff6e6';q.font='400 '+Math.round(13*s)+'px "Potta One",sans-serif';q.textAlign='center';q.textBaseline='middle';q.fillText('火',x,y);q.textAlign='start';q.textBaseline='alphabetic';}}
+    else if(sh[0]==='hokage'){q.arc(x,y,22*s,0,7);shapeFill('#e8a86a');q.beginPath();q.arc(x,y,16.5*s,0,7);shapeFill('#d0503a');q.fillStyle='#fff6e6';q.font='400 '+Math.round(13*s)+'px "Potta One",sans-serif';q.textAlign='center';q.textBaseline='middle';q.fillText('守',x,y);q.textAlign='start';q.textBaseline='alphabetic';}}
   return c;})();
 
 

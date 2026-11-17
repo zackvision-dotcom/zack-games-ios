@@ -60,7 +60,7 @@ window.KTOWN = (() => {
   }
 
   /* ---------- builders ---------- */
-  /* Aozora house, after the anime street backgrounds: a boxy 2–3 storey block in a pastel colour, a flat roof with a parapet
+  /* Aozora house, in a classic street style: a boxy 2–3 storey block in a pastel colour, a flat roof with a parapet
      and a water tank, small tiled pent roofs (hisashi) over every storey, balconies, a vertical kanji sign, sometimes a round
      corner tower with a dome. */
   function vsign(text, bg, fg) { const id = 'vs' + text + bg; return cache[id] || (cache[id] = tex(id, 64, 64 * text.length + 16, (g, W, H) => {

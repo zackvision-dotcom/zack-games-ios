@@ -78,7 +78,7 @@ const panel = p => js(`KGAME.dbg().openPanel('${p}'); 1`), closePanel = () => js
 const KS = {
   'probe': async (R, S) => { for (const [x, y] of [[0, 178], [0, 190], [10, 120], [-20, 90], [30, 60], [2, 40], [-40, 140]]) { await place(x, y); await sleep(1800); await still(join(ROOT, 'appstore', 'probe'), `p_${x}_${y}`); } },
   'combat-z': async (R, S) => { await place(0, 180); await setWeather('clear'); await ring(['bandit', 'wolf'], 6); await sleep(1200);
-    await rush(R, '01-combat-z', 6, async () => { await sleep(600); await drawSign('Z'); await sleep(1800); await key('j'); await sleep(400); await key('j'); }); await sleep(300); await still(S, 'combat-z'); },
+    await rush(R, '01-combat-z', 6, async () => { await sleep(600); await drawSign('Z'); await sleep(250); await still(S, 'combat-z'); await sleep(1500); await key('j'); await sleep(400); await key('j'); }); },
   'combat-v': async (R, S) => { await sleep(4000); await place(-4, 186); await ring(['wolf'], 5, 4, 3); await sleep(900);
     await rush(R, '02-combat-v-feu', 5, async () => { await sleep(400); await drawSign('V'); await sleep(700); await still(S, 'combat-v'); }); },
   'combat-o': async (R) => { await sleep(4000); await place(4, 182); await ring(['bandit'], 4, 3.5, 2.6); await sleep(900);
@@ -87,11 +87,10 @@ const KS = {
     await still(S, 'village-jour');
     await rush(R, '04-village-course', 7, async () => { await js("dispatchEvent(new KeyboardEvent('keydown',{key:'d'}))"); for (let i = 0; i < 5; i++) { await sleep(1000); await key(' '); } await js("dispatchEvent(new KeyboardEvent('keyup',{key:'d'}))"); }); },
   'village-large': async (R, S) => { await js('KSTREET.tod=11'); await place(30, 60); await sleep(2500); await rush(R, '05-village-large', 5); await still(S, 'village-large'); },
-  'nuit-orage': async (R, S) => { await place(-40, 140); await setWeather('storm'); await rush(R, '06-jour-nuit-orage', 7, async () => { for (let i = 0; i < 40; i++) { await js(`KSTREET.tod=${17 + i * .14}`); await sleep(150); } });
-    await ring(['wolf'], 5, 5, 3.5); await sleep(1200); await rush(R, '07-combat-orage', 6, async () => { await sleep(500); await drawSign('Z'); await sleep(1500); await key('j'); await sleep(300); await key('j'); }); await still(S, 'nuit-orage'); await setWeather('clear'); },
-  'boss': async (R, S) => { await js('KSTREET.tod=18.6'); await setWeather('cloudy'); await place(0, 184); await js('KGAME.ext.spawn("boss", __k.hero.x + 4, __k.hero.y - 1); 1'); await sleep(1500);
-    await rush(R, '08-boss-kurogane', 8, async () => { for (let i = 0; i < 4; i++) { await key('j'); await sleep(350); } await drawSign('V'); await sleep(900); for (let i = 0; i < 3; i++) { await key('j'); await sleep(350); } await drawSign('Z'); });
-    await still(S, 'boss'); },
+  'nuit-orage': async (R, S) => { await place(0, 184); await setWeather('storm'); await rush(R, '06-jour-nuit-orage', 7, async () => { for (let i = 0; i < 40; i++) { await js(`KSTREET.tod=${16 + i * .1}`); await sleep(150); } });
+    await js('KSTREET.tod=19.6'); await ring(['wolf', 'bandit'], 6, 4.5, 3.2); await sleep(1200); await rush(R, '07-combat-orage', 6, async () => { await sleep(500); await drawSign('Z'); await sleep(250); await still(S, 'nuit-orage'); await sleep(1300); await key('j'); await sleep(300); await key('j'); }); await setWeather('clear'); },
+  'boss': async (R, S) => { await js('KSTREET.tod=15'); await setWeather('clear'); await sleep(3000); await place(0, 184); await js('KGAME.ext.spawn("boss", __k.hero.x + 4, __k.hero.y - 1); 1'); await sleep(1500);
+    await rush(R, '08-boss-kurogane', 8, async () => { for (let i = 0; i < 4; i++) { await key('j'); await sleep(350); } await drawSign('V'); await sleep(300); await still(S, 'boss'); await sleep(600); for (let i = 0; i < 3; i++) { await key('j'); await sleep(350); } await drawSign('Z'); }); },
   'sac': async (R, S) => { await js('KSTREET.tod=12'); await setWeather('clear'); await panel('bag'); await sleep(1200); await still(S, 'sac'); await rush(R, '09-sac-butin', 4); await closePanel(); },
   'jutsus': async (R, S) => { await panel('jutsu'); await sleep(1200); await still(S, 'jutsus'); await closePanel(); },
   'carte': async (R, S) => { await panel('map'); await sleep(1500); await still(S, 'carte'); await rush(R, '10-carte-gps', 4); await closePanel(); },

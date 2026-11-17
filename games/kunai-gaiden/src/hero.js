@@ -85,7 +85,7 @@ window.HERO = (() => {
       g.beginPath(); g.moveTo(3.6, -6.6); g.quadraticCurveTo(6.6, -3.6, 10.6, -4.2); g.lineWidth = 1; g.strokeStyle = 'rgba(0,0,0,.45)'; g.stroke(); });
   }
 
-  /* anime eye (outer corner toward +x before mirroring): thick upper lash with a flick, gradient iris, big pupil, highlights */
+  /* stylised eye (outer corner toward +x before mirroring): thick upper lash with a flick, gradient iris, big pupil, highlights */
   function eye(g, x, y, sx, m, s, iris) {
     iris = iris || ['#0a2560', '#1c6fe0', '#7cd0ff'];
     g.save(); g.translate(x, y); g.scale(m * sx * s, s);

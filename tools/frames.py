@@ -18,7 +18,7 @@ SCREENS = {
         ('combat-v', 'HERO', '05_combat'),
         ('combat-z', 'Trace une lettre, *lance ta technique*', '05_combat'),
         ('village-jour', 'Un *village vivant* à explorer', '03_village'),
-        ('nuit-orage', 'Jour, nuit… et *orages*', '05_combat'),
+        ('nuit-orage', 'Le jour tombe, *le combat continue*', '05_combat'),
         ('boss', 'Affronte *Kurogane* le déserteur', '05_combat'),
         ('dialogue', 'Des missions, des *visages attachants*', '04_personnages'),
         ('sac', 'Butin rare, épique, *légendaire*', '03_village'),
