@@ -35,6 +35,12 @@ def braise():
     s = s.replace(h1, '<h1><img src="logo.webp" alt="Braise · Étincelle" style="display:block;height:min(26vh,180px);width:auto;max-width:62vw;margin:0 auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.85))"></h1>')
     shutil.copy(os.path.join(src, 'logo.webp'), web)
     s = s.replace('</head>', '<style>@media (max-height:560px),(pointer:coarse){#title .keys{display:none}}</style></head>', 1)
+    # touch controls (touch.js): the game script exposes the few actions the keyboard/right click give on a computer
+    boot = 'setTimeout(boot,30);\n})();'; assert s.count(boot) == 1
+    s = s.replace(boot, "window.BRAISE_TOUCH={autoAct,attackNearest,dropSlot,toggleCraft:()=>{openTab=openTab?null:'tools';renderRecipes();},"
+                  "cancel:()=>{placing=null;P.target=null;},state:()=>({mode,paused,dead:P.dead,placing:!!placing,items:P.items.filter(Boolean).map(s=>s.id+':'+s.n).join(' ')}),"
+                  "zoom:f=>{userZoom=clamp(userZoom*f,.7,1.45);}};\n" + boot + '\n</script>\n<script src="touch.js"></script>\n<script>', 1)
+    shutil.copy(os.path.join(src, 'touch.js'), web)
     io.open(os.path.join(web, 'index.html'), 'w', encoding='utf-8', newline='\n').write(s)
     shutil.copy(os.path.join(src, 'ere1', 'art.js'), web); shutil.copy(os.path.join(src, 'i18n.css'), web)
     shutil.copytree(os.path.join(src, 'fonts'), os.path.join(web, 'fonts'))

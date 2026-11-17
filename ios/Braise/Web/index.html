@@ -2063,7 +2063,11 @@ function boot(){
   mode='title';languageRenderReady=true;showTitle();installSaveUI();buildEraUI();
   requestAnimationFrame(t=>{last=t;requestAnimationFrame(frame);});
 }
+window.BRAISE_TOUCH={autoAct,attackNearest,dropSlot,toggleCraft:()=>{openTab=openTab?null:'tools';renderRecipes();},cancel:()=>{placing=null;P.target=null;},state:()=>({mode,paused,dead:P.dead,placing:!!placing,items:P.items.filter(Boolean).map(s=>s.id+':'+s.n).join(' ')}),zoom:f=>{userZoom=clamp(userZoom*f,.7,1.45);}};
 setTimeout(boot,30);
 })();
+</script>
+<script src="touch.js"></script>
+<script>
 </script>
 </body></html>
