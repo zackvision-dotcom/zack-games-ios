@@ -4758,7 +4758,7 @@ window.KSEAL = (() => {
 
   function start() { if (running) return; if (!cv) { cv = document.createElement('canvas'); cv.id = 'k-cine'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv); g = cv.getContext('2d'); addEventListener('resize', () => { if (running) { clearTimeout(start.rt); start.rt = setTimeout(resize, 200); } });
       addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; }); }
-    const T = $('#k-title .box'); if (T && !T.querySelector('.kj')) { const k = document.createElement('div'); k.className = 'kj'; k.textContent = '影'; T.prepend(k); const f = document.createElement('div'); f.className = 'foot'; f.innerHTML = 'Kunai Gaiden · un jeu original'; T.appendChild(f); }
+    const T = $('#k-title .box'); if (T && !T.querySelector('.kj')) { const k = document.createElement('div'); k.className = 'kj'; k.textContent = '刃'; T.prepend(k); const f = document.createElement('div'); f.className = 'foot'; f.innerHTML = 'Kunai Gaiden · un jeu original'; T.appendChild(f); }
     running = true; document.body.classList.add('tcine'); resize(); t0 = last = performance.now(); raf = requestAnimationFrame(frame); setTimeout(() => document.body.classList.add('tin'), 60); }
   function stop() { if (!running) return; running = false; cancelAnimationFrame(raf); document.body.classList.remove('tcine', 'tin');
     // give the memory back to the game
