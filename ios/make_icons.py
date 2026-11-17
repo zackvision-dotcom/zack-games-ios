@@ -1,4 +1,5 @@
-"""App icons (1024 x 1024, opaque, no rounded corners: iOS rounds them) drawn with Pillow, supersampled 2x.
+"""OBSOLETE: the icons now come from art/<jeu>/01_icone_app_store.png (ChatGPT artwork). Running this script would overwrite them.
+   App icons (1024 x 1024, opaque, no rounded corners: iOS rounds them) drawn with Pillow, supersampled 2x.
    python make_icons.py  ->  <App>/Assets.xcassets/AppIcon.appiconset/icon-1024.png + Contents.json"""
 import json, math, os
 from PIL import Image, ImageDraw, ImageFilter
