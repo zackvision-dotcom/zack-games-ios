@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="i18n.css"><link rel="stylesheet" href="fonts/fonts.css"><script src="locales.js"></script><script src="i18n.js" defer></script></head><body><title>Braise · L’Étincelle</title>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="i18n.css"><link rel="stylesheet" href="fonts/fonts.css"><script src="locales.js"></script><script src="i18n.js" defer></script><style>@media (max-height:560px),(pointer:coarse){#title .keys{display:none}}</style></head><body><title>Braise · L’Étincelle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500;700;900&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
@@ -2049,7 +2049,7 @@ function buildSprites(){
 function showTitle(){
   let best=0;try{best=+localStorage.getItem('braise_era1_best')||0;AU.on=localStorage.getItem('hm_mute')!=='1';}catch(e){}
   $('#btnMute').classList.toggle('off',!AU.on);
-  $('#title').innerHTML=`<h1>Braise</h1><p class="tag">L’Étincelle · Ka découvre la savane et la mémoire du feu.</p><button class="big" id="btnStart">Se réveiller</button><div class="keys">${KEYS_HTML}</div>${best?`<p class="best">Ton record : ${best} jour${best>1?'s':''}.</p>`:''}`;
+  $('#title').innerHTML=`<h1><img src="logo.webp" alt="Braise · Étincelle" style="display:block;height:min(26vh,180px);width:auto;max-width:62vw;margin:0 auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.85))"></h1><p class="tag">L’Étincelle · Ka découvre la savane et la mémoire du feu.</p><button class="big" id="btnStart">Se réveiller</button><div class="keys">${KEYS_HTML}</div>${best?`<p class="best">Ton record : ${best} jour${best>1?'s':''}.</p>`:''}`;
   $('#btnStart').addEventListener('click',()=>{audioInit();if(AU.c&&AU.c.state==='suspended')AU.c.resume();$('#title').hidden=true;newGame();sfx.fanfare();});
 }
 let languageRenderReady=false;

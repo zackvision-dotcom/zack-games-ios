@@ -11,6 +11,12 @@ def kunai():
     s = io.open(os.path.join(src, 'konoha-full.html'), encoding='utf-8').read()
     for f in re.findall(r'<script src="([^"]+)"></script>', s):
         s = s.replace(f'<script src="{f}"></script>', '<script>' + io.open(os.path.join(src, f), encoding='utf-8').read() + '</script>')
+    # the painted logo (art/kunai-gaiden) on the title screen, embedded as a data URI
+    import base64
+    logo = base64.b64encode(open(os.path.join(ROOT, 'games', 'kunai-gaiden', 'logo.webp'), 'rb').read()).decode()
+    h1 = '<h1>Kunai Gaiden<em>Le village d’Aozora</em></h1>'; assert h1 in s
+    s = s.replace(h1, f'<h1><img class="k-logo" src="data:image/webp;base64,{logo}" alt="Kunai Gaiden"><em>Le village d’Aozora</em></h1>')
+    s = s.replace('</head>', '<style>#k-title h1 .k-logo{display:block;width:min(460px,72vw);height:auto;margin:0 auto -4px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}</style></head>', 1)
     io.open(out('KunaiGaiden'), 'w', encoding='utf-8', newline='\n').write(s); print('Kunai Gaiden', len(s.encode()) // 1024, 'kB')
 
 def braise():
@@ -24,6 +30,11 @@ def braise():
     if i >= 0: s = s[:i] + s[s.find('</script>', i) + 9:]
     s = s.replace('BRAISE · Ère I — développement', 'Braise · L’Étincelle').replace(' Version de développement.', '')
     s = s.replace('"../', '"').replace('<script src="i18n.js" defer></script>', '<script src="locales.js"></script><script src="i18n.js" defer></script>')
+    # the painted logo (art/braise) instead of the plain "Braise" title
+    h1 = '<h1>Braise</h1>'; assert h1 in s
+    s = s.replace(h1, '<h1><img src="logo.webp" alt="Braise · Étincelle" style="display:block;height:min(26vh,180px);width:auto;max-width:62vw;margin:0 auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.85))"></h1>')
+    shutil.copy(os.path.join(src, 'logo.webp'), web)
+    s = s.replace('</head>', '<style>@media (max-height:560px),(pointer:coarse){#title .keys{display:none}}</style></head>', 1)
     io.open(os.path.join(web, 'index.html'), 'w', encoding='utf-8', newline='\n').write(s)
     shutil.copy(os.path.join(src, 'ere1', 'art.js'), web); shutil.copy(os.path.join(src, 'i18n.css'), web)
     shutil.copytree(os.path.join(src, 'fonts'), os.path.join(web, 'fonts'))
