@@ -341,16 +341,18 @@ window.KGATE = (() => {
       g.strokeStyle = 'rgba(255,250,235,.45)'; g.lineWidth = 2; for (const yy of [17, H - 11]) { g.beginPath(); for (let x = 10; x <= W - 10; x += 4) { const y = yy + Math.sin(x / 26) * 4; x === 10 ? g.moveTo(x, y) : g.lineTo(x, y); } g.stroke(); }
       const red = (fn) => { g.save(); g.translate(3, 3); g.globalAlpha = .5; fn('rgba(60,10,6,1)'); g.restore(); fn('#d23a2c'); };
       g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `bold 86px ${JP}`;
-      red(c => { g.fillStyle = c; g.fillText('忍', W * .2, H / 2 + 4); g.fillText('火', W * .8, H / 2 + 4); });
+      red(c => { g.fillStyle = c; g.fillText('青', W * .2, H / 2 + 4); g.fillText('空', W * .8, H / 2 + 4); });
       red(c => leafMark(g, W / 2, H / 2 + 2, 40, c));
       wear(g, W, H, 40);
     });
     return T;
   }
+  // the village mark: a kunai, point down, with its ring
   function leafMark(g, cx, cy, R, col) {
-    g.save(); g.translate(cx, cy); g.strokeStyle = col; g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = R * .16;
-    g.beginPath(); for (let a = 0; a <= Math.PI * 3.1; a += .08) { const r = R * .08 + a * R * .055; g.lineTo(Math.cos(a + 2) * r, Math.sin(a + 2) * r); } g.stroke();
-    g.beginPath(); g.moveTo(R * .52, -R * .3); g.bezierCurveTo(R * .95, R * .2, R * .4, R * .85, -R * .2, R * .62); g.lineTo(-R * .95, R * .95); g.lineTo(-R * .62, R * .22); g.bezierCurveTo(-R * .9, -R * .5, -R * .1, -R * .95, R * .45, -R * .6); g.stroke();
+    g.save(); g.translate(cx, cy); g.fillStyle = col; g.strokeStyle = col; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(0, R * .95); g.lineTo(R * .3, R * .05); g.lineTo(0, -R * .12); g.lineTo(-R * .3, R * .05); g.closePath(); g.fill();
+    g.fillRect(-R * .07, -R * .62, R * .14, R * .52);
+    g.lineWidth = R * .11; g.beginPath(); g.arc(0, -R * .8, R * .17, 0, Math.PI * 2); g.stroke();
     g.restore();
   }
   function wear(g, W, H, n) { const r = rng(W + H); for (let i = 0; i < n; i++) { g.fillStyle = r() < .5 ? 'rgba(255,248,230,.35)' : 'rgba(60,40,20,.25)'; g.beginPath(); g.ellipse(r() * W, r() * H, 1 + r() * 4, .6 + r() * 2, r() * 3, 0, 7); g.fill(); } }
@@ -1277,7 +1279,7 @@ window.KMORE = (() => {
     for (const x of [-2.4, 2.4]) { S.cylinder(m(x), 0, m(.32), 0, m(5.4), red, 14, { cap: false, bias: 2 }); S.cylinder(m(x), 0, m(.42), 0, m(.6), blk, 14, { cap: false, bias: 3 }); }
     S.box(m(-3.2), m(3.2), m(-.25), m(.25), m(4.2), m(4.6), { front: red, top: red }, { bias: 4 });
     S.box(m(-3.9), m(3.9), m(-.35), m(.35), m(5.3), m(5.8), { front: red, top: red }, { bias: 5 }); S.box(m(-4.1), m(4.1), m(-.4), m(.4), m(5.8), m(6.15), { front: blk, top: blk }, { bias: 6 });
-    S.decal(m(-.45), m(.45), m(.27), m(4.6), m(5.3), mat(signTex('火', '#2a2224', '#e6c45a', 96, 96), .9, { whole: true }), { bias: 7 });
+    S.decal(m(-.45), m(.45), m(.27), m(4.6), m(5.3), mat(signTex('空', '#2a2224', '#e6c45a', 96, 96), .9, { whole: true }), { bias: 7 });
     return S; }
   function target() { const S = new ISO.Scene(), b = base(); S.cylinder(0, 0, m(.15), 0, m(1.6), b.WOOD, 8, { cap: false });
     const face = tex('target', 128, 128, (g, W, H) => { g.clearRect(0, 0, W, H); [['#f2ead6', 62], ['#c8352c', 50], ['#f2ead6', 36], ['#c8352c', 22], ['#2a2224', 9]].forEach(([c, r]) => { g.fillStyle = c; g.beginPath(); g.arc(W / 2, H / 2, r, 0, 7); g.fill(); }); g.strokeStyle = '#3a2216'; g.lineWidth = 4; g.beginPath(); g.arc(W / 2, H / 2, 62, 0, 7); g.stroke(); });

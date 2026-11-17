@@ -2064,6 +2064,7 @@ function boot(){
   requestAnimationFrame(t=>{last=t;requestAnimationFrame(frame);});
 }
 window.BRAISE_TOUCH={autoAct,attackNearest,dropSlot,toggleCraft:()=>{openTab=openTab?null:'tools';renderRecipes();},cancel:()=>{placing=null;P.target=null;},state:()=>({mode,paused,dead:P.dead,placing:!!placing,items:P.items.filter(Boolean).map(s=>s.id+':'+s.n).join(' ')}),zoom:f=>{userZoom=clamp(userZoom*f,.7,1.45);}};
+if(/[?&]shots=1/.test(location.search))window.BRAISE_DEV={P:()=>P,time:f=>{gameTime=DAY_LEN*(dayNum()-1+f);lastDay=dayNum();dayBanner=null;},give:(id,n)=>{addItem(id,n||1,P.x,P.y);invDirty=true;},fire:(dx,dy)=>mk('campfire',P.x+(dx||70),P.y+(dy||10),{fuel:85,max:90}),hyenas:(n,r)=>{r=r||260;for(let i=0;i<n;i++){const a=i/n*6.28+.4,h={x:P.x+Math.cos(a)*r,y:P.y+Math.sin(a)*r*.65};const m=newHyena(h);if(m){m.x=h.x;m.y=h.y;mobs.push(m);}}},craft:t=>{openTab=t;renderRecipes();},zoom:z=>{userZoom=z;}};
 setTimeout(boot,30);
 })();
 </script>

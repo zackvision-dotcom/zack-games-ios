@@ -2,3 +2,6 @@ ios/*.xcodeproj/
 build/
 __pycache__/
 .DS_Store
+appstore/rushes/
+appstore/stills/
+appstore/videos/

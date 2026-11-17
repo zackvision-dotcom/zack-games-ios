@@ -221,7 +221,7 @@ window.KMORE = (() => {
     for (const x of [-2.4, 2.4]) { S.cylinder(m(x), 0, m(.32), 0, m(5.4), red, 14, { cap: false, bias: 2 }); S.cylinder(m(x), 0, m(.42), 0, m(.6), blk, 14, { cap: false, bias: 3 }); }
     S.box(m(-3.2), m(3.2), m(-.25), m(.25), m(4.2), m(4.6), { front: red, top: red }, { bias: 4 });
     S.box(m(-3.9), m(3.9), m(-.35), m(.35), m(5.3), m(5.8), { front: red, top: red }, { bias: 5 }); S.box(m(-4.1), m(4.1), m(-.4), m(.4), m(5.8), m(6.15), { front: blk, top: blk }, { bias: 6 });
-    S.decal(m(-.45), m(.45), m(.27), m(4.6), m(5.3), mat(signTex('火', '#2a2224', '#e6c45a', 96, 96), .9, { whole: true }), { bias: 7 });
+    S.decal(m(-.45), m(.45), m(.27), m(4.6), m(5.3), mat(signTex('空', '#2a2224', '#e6c45a', 96, 96), .9, { whole: true }), { bias: 7 });
     return S; }
   function target() { const S = new ISO.Scene(), b = base(); S.cylinder(0, 0, m(.15), 0, m(1.6), b.WOOD, 8, { cap: false });
     const face = tex('target', 128, 128, (g, W, H) => { g.clearRect(0, 0, W, H); [['#f2ead6', 62], ['#c8352c', 50], ['#f2ead6', 36], ['#c8352c', 22], ['#2a2224', 9]].forEach(([c, r]) => { g.fillStyle = c; g.beginPath(); g.arc(W / 2, H / 2, r, 0, 7); g.fill(); }); g.strokeStyle = '#3a2216'; g.lineWidth = 4; g.beginPath(); g.arc(W / 2, H / 2, 62, 0, 7); g.stroke(); });

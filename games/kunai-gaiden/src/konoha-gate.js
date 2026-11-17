@@ -50,16 +50,18 @@ window.KGATE = (() => {
       g.strokeStyle = 'rgba(255,250,235,.45)'; g.lineWidth = 2; for (const yy of [17, H - 11]) { g.beginPath(); for (let x = 10; x <= W - 10; x += 4) { const y = yy + Math.sin(x / 26) * 4; x === 10 ? g.moveTo(x, y) : g.lineTo(x, y); } g.stroke(); }
       const red = (fn) => { g.save(); g.translate(3, 3); g.globalAlpha = .5; fn('rgba(60,10,6,1)'); g.restore(); fn('#d23a2c'); };
       g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `bold 86px ${JP}`;
-      red(c => { g.fillStyle = c; g.fillText('忍', W * .2, H / 2 + 4); g.fillText('火', W * .8, H / 2 + 4); });
+      red(c => { g.fillStyle = c; g.fillText('青', W * .2, H / 2 + 4); g.fillText('空', W * .8, H / 2 + 4); });
       red(c => leafMark(g, W / 2, H / 2 + 2, 40, c));
       wear(g, W, H, 40);
     });
     return T;
   }
+  // the village mark: a kunai, point down, with its ring
   function leafMark(g, cx, cy, R, col) {
-    g.save(); g.translate(cx, cy); g.strokeStyle = col; g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = R * .16;
-    g.beginPath(); for (let a = 0; a <= Math.PI * 3.1; a += .08) { const r = R * .08 + a * R * .055; g.lineTo(Math.cos(a + 2) * r, Math.sin(a + 2) * r); } g.stroke();
-    g.beginPath(); g.moveTo(R * .52, -R * .3); g.bezierCurveTo(R * .95, R * .2, R * .4, R * .85, -R * .2, R * .62); g.lineTo(-R * .95, R * .95); g.lineTo(-R * .62, R * .22); g.bezierCurveTo(-R * .9, -R * .5, -R * .1, -R * .95, R * .45, -R * .6); g.stroke();
+    g.save(); g.translate(cx, cy); g.fillStyle = col; g.strokeStyle = col; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(0, R * .95); g.lineTo(R * .3, R * .05); g.lineTo(0, -R * .12); g.lineTo(-R * .3, R * .05); g.closePath(); g.fill();
+    g.fillRect(-R * .07, -R * .62, R * .14, R * .52);
+    g.lineWidth = R * .11; g.beginPath(); g.arc(0, -R * .8, R * .17, 0, Math.PI * 2); g.stroke();
     g.restore();
   }
   function wear(g, W, H, n) { const r = rng(W + H); for (let i = 0; i < n; i++) { g.fillStyle = r() < .5 ? 'rgba(255,248,230,.35)' : 'rgba(60,40,20,.25)'; g.beginPath(); g.ellipse(r() * W, r() * H, 1 + r() * 4, .6 + r() * 2, r() * 3, 0, 7); g.fill(); } }
