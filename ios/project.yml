@@ -50,6 +50,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.kunaigaiden
         PRODUCT_NAME: KunaiGaiden
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone only (XcodeGen's iOS app preset would otherwise add iPad: "1,2")
 
   Braise:
     type: application
@@ -84,3 +85,4 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.braise
         PRODUCT_NAME: Braise
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone only (XcodeGen's iOS app preset would otherwise add iPad: "1,2")
