@@ -23,6 +23,7 @@ struct GameWebView: UIViewRepresentable {
         config.websiteDataStore = .default()          // keeps the save (localStorage) between launches
 
         let view = WKWebView(frame: .zero, configuration: config)
+        view.uiDelegate = context.coordinator          // shows the game's alert() / confirm() as native dialogs
         view.isOpaque = false
         view.backgroundColor = .black
         view.scrollView.backgroundColor = .black
@@ -39,4 +40,31 @@ struct GameWebView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    /// Without a UI delegate, WKWebView silently drops alert() and makes confirm() return false
+    /// (so "Recommencer" or "compte niveau max" did nothing when a save existed).
+    final class Coordinator: NSObject, WKUIDelegate {
+        private func present(_ alert: UIAlertController, from webView: WKWebView) {
+            var top = webView.window?.rootViewController
+            while let next = top?.presentedViewController { top = next }
+            top?.present(alert, animated: true)
+        }
+
+        func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String,
+                     initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+            let a = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+            a.addAction(UIAlertAction(title: "OK", style: .default) { _ in completionHandler() })
+            present(a, from: webView)
+        }
+
+        func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String,
+                     initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
+            let a = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+            a.addAction(UIAlertAction(title: "Annuler", style: .cancel) { _ in completionHandler(false) })
+            a.addAction(UIAlertAction(title: "OK", style: .default) { _ in completionHandler(true) })
+            present(a, from: webView)
+        }
+    }
 }
