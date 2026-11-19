@@ -37,6 +37,9 @@ def braise():
     s = s.replace('</head>', '<style>@media (max-height:560px),(pointer:coarse){#title .keys{display:none}}</style></head>', 1)
     # touch controls (touch.js): the game script exposes the few actions the keyboard/right click give on a computer
     boot = 'setTimeout(boot,30);\n})();'; assert s.count(boot) == 1
+    # the eight eras + Mode Deus (eras.js), inside the game's closure so it can wrap the engine's functions
+    eras = io.open(os.path.join(src, 'eras.js'), encoding='utf-8').read()
+    s = s.replace(boot, eras + chr(10) + boot, 1)
     s = s.replace(boot, "window.BRAISE_TOUCH={autoAct,attackNearest,dropSlot,toggleCraft:()=>{openTab=openTab?null:'tools';renderRecipes();},"
                   "cancel:()=>{placing=null;P.target=null;},state:()=>({mode,paused,dead:P.dead,placing:!!placing,items:P.items.filter(Boolean).map(s=>s.id+':'+s.n).join(' ')}),"
                   "zoom:f=>{userZoom=clamp(userZoom*f,.7,1.45);}};\n"
