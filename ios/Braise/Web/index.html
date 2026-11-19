@@ -2102,7 +2102,11 @@ const ERAS=[
   mobs:{antelope:'Mouton',hyena:'Molosse errant',machairodont:'Léopard échappé de l’arène',rabbit:'Lapin'},beasts:['molosse','molosses'],thin:{pine:.45},
   layout:[['colosseum',[720,-820]],['vestaTemple',[-560,-560]],['insula',[-330,230],0],['insula',[330,250],1],['aqueduct',[-260,900]]],
   intro:'Rome ouvre son amphithéâtre. Si le feu de Vesta s’éteint, la cité tombe.',end:'Le feu de Vesta brûle toujours. Livia a gardé la Braise au cœur de Rome.'},
- {n:'VI',name:'La Cathédrale',place:'Paris · Notre-Dame, 1250',heir:'—'},
+ {n:'VI',name:'La Cathédrale',place:'Paris · Notre-Dame, 1250',heir:'Ysabel',ready:true,source:'le brasero du chantier',sourceName:'Brasero du chantier',
+  names:{pine:'Peuplier',oak:'Noyer',dead:'Saule têtard mort',boulder:'Pierre de taille',tuft:'Seigle',berry:'Groseillier',carrot:'Navets',reeds:'Joncs de la Seine',sapling:'Osier',flower:'Fleur des prés',hole:'Terrier',den:'Tanière des loups',cave:'Loge des tailleurs',waterhole:'Lavoir',carcass:'Os de cochon',mushroom:'Champignon'},
+  mobs:{antelope:'Oie',hyena:'Loup affamé',machairodont:'Courtaud, le grand loup noir',rabbit:'Lapin'},beasts:['loup','loups'],thin:{pine:.4},
+  layout:[['notreDame',[-120,-900]],['timberHouse',[-320,220],0],['timberHouse',[330,240],1],['timberHouse',[-40,440],2],['crane',[520,-380]],['wallTower',[900,300]]],
+  intro:'On élève les tours de Notre-Dame. Le brasero du chantier garde le feu des bâtisseurs.',end:'La tour sud est achevée avant l’hiver. Ysabel a gardé la Braise sur le chantier.'},
  {n:'VII',name:'La Vapeur',place:'Paris · 1889',heir:'Ada'},
  {n:'VIII',name:'Le Signal',place:'Nouvelle Babel',heir:'Aïon'}
 ];
@@ -2129,6 +2133,10 @@ const LMT={
  vestaTemple:{name:'Temple de Vesta',w:270,h:300,foot:[-120,-34,120,10],draw:(g)=>ART().places.vestaTemple(g)},
  insula:{name:'Insula',w:250,h:240,foot:[-112,-36,112,6],draw:(g,v)=>ART().places.insula(g,v)},
  aqueduct:{name:'Aqueduc',w:640,h:230,foot:[-300,-30,300,6],draw:(g)=>ART().places.aqueduct(g)},
+ notreDame:{name:'Notre-Dame de Paris',w:640,h:450,foot:[-270,-60,270,20],draw:(g)=>{const L=landmarkArt('notredame');if(L){g.translate(-120,0);g.scale(1.1,1.1);(L.drawBuild||L.draw)(g,0);}}},
+ timberHouse:{name:'Maison à colombages',w:210,h:280,foot:[-82,-34,82,6],draw:(g,v)=>ART().places.timberHouse(g,v)},
+ crane:{name:'Grue à roue',w:250,h:230,foot:[-90,-24,60,6],draw:(g)=>ART().places.crane(g)},
+ wallTower:{name:'Tour de l’enceinte',w:320,h:310,foot:[-150,-40,150,10],draw:(g)=>ART().places.wallTower(g)},
  field:{name:'Champ d’amidonnier',w:330,h:90,foot:[-152,-60,156,6],draw:(g,v)=>ART().places.field(g,v)}
 };
 const BASE_NAMES={};for(const k in DEF)BASE_NAMES[k]=DEF[k].name;
