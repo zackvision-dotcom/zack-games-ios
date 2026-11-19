@@ -8,6 +8,7 @@
 4. External services: none. The game runs entirely on the device (bundled HTML5/JavaScript in a WKWebView). The only network request is an optional load of a Google Fonts typeface; if offline, a system font is used. No analytics, no tracking, no AI services, no payment, no authentication.
 5. Regional differences: none. The app works identically in every region. The in-game text is in French (stated in every App Store description).
 6. Regulated industry / third-party material: not applicable. All art, characters and content are original.
+7. Review tip: on the title screen, tap the Kunai Gaiden logo 5 times quickly to reveal "Compte niveau max (tout débloqué)": level 30 with every technique and item unlocked, to see all features quickly.
 
 ## Braise Étincelle
 
@@ -17,3 +18,4 @@
 4. External services: none. The game runs entirely on the device (bundled HTML5/JavaScript in a WKWebView). The only network request is an optional load of Google Fonts typefaces; if offline, system fonts are used. No analytics, no tracking, no AI services, no payment, no authentication.
 5. Regional differences: none. The app works identically in every region; the interface is available in 30 languages.
 6. Regulated industry / third-party material: not applicable. All art, characters and content are original.
+7. The game has eight eras, each with its own heir, wildlife, plants, buildings and a real landmark: the savanna (Olduvai), the Vézère valley (Lascaux), Salisbury Plain (Stonehenge), Giza, Rome (the Colosseum), Paris in 1250 (Notre-Dame), Paris in 1889 (the Eiffel Tower) and New Babel (the future). Finishing an era unlocks the next. Review tip: on the title screen, tap the Braise logo 5 times quickly to reveal "Mode Deus": invulnerable, every era unlocked, and a teleport button (✦, top centre) to travel between eras and places.
