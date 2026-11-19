@@ -2092,7 +2092,11 @@ const ERAS=[
   mobs:{antelope:'Cerf élaphe',hyena:'Sanglier',machairodont:'Ours brun',rabbit:'Lièvre'},beasts:['sanglier','sangliers'],
   thin:{pine:.55},layout:[['stonehenge',[620,-760]],['woodhenge',[-760,-560]],['house',[-300,220],0],['house',[300,240],1],['house',[-40,420],2],['field',[-520,520],0],['field',[560,560],1]],
   intro:'Les champs ont levé. Le foyer du village garde la flamme pour tous.',end:'Les pierres sont levées face au soleil. Oro a gardé la Braise au cœur du village.'},
- {n:'IV',name:'Le Bronze',place:'Le plateau de Gizeh',heir:'Bryn'},
+ {n:'IV',name:'Le Bronze',place:'Le plateau de Gizeh',heir:'Meret',ready:true,source:'le four de l’atelier du cuivre',sourceName:'Four du cuivre',
+  names:{pine:'Palmier dattier',oak:'Sycomore',dead:'Palmier doum mort',boulder:'Bloc de calcaire',tuft:'Orge',berry:'Vigne',carrot:'Oignons',reeds:'Papyrus du Nil',sapling:'Tamaris',flower:'Lotus',hole:'Terrier',den:'Terrier des chacals',cave:'Mastaba',waterhole:'Bassin d’irrigation',carcass:'Os de bœuf',mushroom:'Champignon'},
+  mobs:{antelope:'Gazelle',hyena:'Chacal',machairodont:'Lion du désert',rabbit:'Lièvre du Cap'},beasts:['chacal','chacals'],thin:{pine:.35},
+  layout:[['giza',[-200,-1000]],['mudHouse',[-320,220],0],['mudHouse',[320,240],1],['mudHouse',[-20,430],2],['granary',[560,40]],['sledge',[-560,-260]]],
+  intro:'Les bâtisseurs montent la grande pyramide. Le four de l’atelier garde le feu du chantier.',end:'La dernière pierre est posée. Meret a porté la Braise au sommet de la pyramide.'},
  {n:'V',name:'L’Empire',place:'Rome · Le Colisée',heir:'—'},
  {n:'VI',name:'La Cathédrale',place:'Paris · Notre-Dame, 1250',heir:'—'},
  {n:'VII',name:'La Vapeur',place:'Paris · 1889',heir:'Ada'},
@@ -2113,6 +2117,10 @@ const LMT={
  stonehenge:{name:'Stonehenge',w:760,h:250,foot:[-340,-60,340,14],draw:(g)=>{const L=landmarkArt('stonehenge');if(L){g.scale(1.25,1.25);L.draw(g,0);}}},
  woodhenge:{name:'Cercle de bois',w:320,h:150,foot:[-140,-44,140,22],draw:(g)=>ART().places.woodhenge(g)},
  house:{name:'Maison du village',w:180,h:210,foot:[-64,-30,64,6],draw:(g,v)=>ART().places.house(g,v)},
+ giza:{name:'Les pyramides de Gizeh',w:1560,h:330,foot:[-740,-70,740,30],draw:(g)=>{const L=landmarkArt('giza');if(L){g.scale(1.8,1.8);L.draw(g,0);}}},
+ mudHouse:{name:'Maison des ouvriers',w:220,h:160,foot:[-74,-34,96,6],draw:(g,v)=>ART().places.mudHouse(g,v)},
+ granary:{name:'Greniers',w:180,h:140,foot:[-76,-24,76,6],draw:(g)=>ART().places.granary(g)},
+ sledge:{name:'Bloc sur traîneau',w:260,h:100,foot:[-64,-24,72,6],draw:(g)=>ART().places.sledge(g)},
  field:{name:'Champ d’amidonnier',w:330,h:90,foot:[-152,-60,156,6],draw:(g,v)=>ART().places.field(g,v)}
 };
 const BASE_NAMES={};for(const k in DEF)BASE_NAMES[k]=DEF[k].name;
