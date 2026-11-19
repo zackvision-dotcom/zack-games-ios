@@ -22,7 +22,11 @@ const ERAS=[
   mobs:{antelope:'Renne',hyena:'Loup',machairodont:'Lion des cavernes',rabbit:'Lièvre variable'},beasts:['loup','loups'],
   layout:[['lascaux',[-560,-760]],['cliff',[980,-560],0],['cliff',[1420,-300],1],['cliff',[-1260,360],2],['cliff',[-1560,620],3],['cliff',[420,1260],4],['cliff',[-260,1420],5],['tent',[-320,210]],['tent',[330,230],1]],
   intro:'Le froid a tout recouvert. Le foyer du clan garde la dernière flamme.',end:'Le Grand Froid n’a pas éteint la Braise. Néa a peint la mémoire de la lignée sur la paroi.'},
- {n:'III',name:'La Graine',place:'Stonehenge',heir:'Oro'},
+ {n:'III',name:'La Graine',place:'La plaine de Salisbury',heir:'Oro',ready:true,source:'le foyer du village',sourceName:'Foyer du village',
+  names:{pine:'Chêne',oak:'Aubépine',dead:'Orme foudroyé',boulder:'Bloc de sarsen',tuft:'Amidonnier',berry:'Ronces à mûres',carrot:'Panais sauvage',reeds:'Roseaux de l’Avon',sapling:'Noisetier',flower:'Fleur des prés',hole:'Terrier',den:'Bauge des sangliers',cave:'Tertre funéraire',waterhole:'Mare de craie',carcass:'Os d’aurochs',mushroom:'Champignon'},
+  mobs:{antelope:'Cerf élaphe',hyena:'Sanglier',machairodont:'Ours brun',rabbit:'Lièvre'},beasts:['sanglier','sangliers'],
+  thin:{pine:.55},layout:[['stonehenge',[620,-760]],['woodhenge',[-760,-560]],['house',[-300,220],0],['house',[300,240],1],['house',[-40,420],2],['field',[-520,520],0],['field',[560,560],1]],
+  intro:'Les champs ont levé. Le foyer du village garde la flamme pour tous.',end:'Les pierres sont levées face au soleil. Oro a gardé la Braise au cœur du village.'},
  {n:'IV',name:'Le Bronze',place:'Le plateau de Gizeh',heir:'Bryn'},
  {n:'V',name:'L’Empire',place:'Rome · Le Colisée',heir:'—'},
  {n:'VI',name:'La Cathédrale',place:'Paris · Notre-Dame, 1250',heir:'—'},
@@ -40,7 +44,11 @@ const landmarkArt=id=>(window.BraiseLandmarkSets||[]).find(l=>l.id===id);
 const LMT={
  lascaux:{name:'Paroi peinte de Lascaux',w:880,h:290,foot:[-412,-40,412,8],draw:(g)=>{const L=landmarkArt('lascaux');if(L)L.draw(g,0);}},
  cliff:{name:'Falaise calcaire',w:560,h:236,foot:[-258,-40,258,6],draw:(g,v)=>ART().places.cliff(g,v)},
- tent:{name:'Tente de peaux',w:170,h:214,foot:[-64,-26,64,6],draw:(g)=>ART().places.tent(g)}
+ tent:{name:'Tente de peaux',w:170,h:214,foot:[-64,-26,64,6],draw:(g)=>ART().places.tent(g)},
+ stonehenge:{name:'Stonehenge',w:760,h:250,foot:[-340,-60,340,14],draw:(g)=>{const L=landmarkArt('stonehenge');if(L){g.scale(1.25,1.25);L.draw(g,0);}}},
+ woodhenge:{name:'Cercle de bois',w:320,h:150,foot:[-140,-44,140,22],draw:(g)=>ART().places.woodhenge(g)},
+ house:{name:'Maison du village',w:180,h:210,foot:[-64,-30,64,6],draw:(g,v)=>ART().places.house(g,v)},
+ field:{name:'Champ d’amidonnier',w:330,h:90,foot:[-152,-60,156,6],draw:(g,v)=>ART().places.field(g,v)}
 };
 const BASE_NAMES={};for(const k in DEF)BASE_NAMES[k]=DEF[k].name;
 for(const t in LMT)DEF[t]={name:LMT[t].name,sh:0};
@@ -73,7 +81,7 @@ function applyEraVisuals(i){
   for(let b=1;b<=4;b++)BCOL[b]=A.bcol[b-1].slice();
   if(E.names)for(const k in E.names)if(DEF[k])DEF[k].name=E.names[k];
   BRAISE_ART.drawKa=A.heir;
-  for(const t in LMT)if(t!=='lascaux'||landmarkArt('lascaux'))S['lm_'+t]=[0,1,2,3,4,5].map(v=>makeSprite(LMT[t].w,LMT[t].h,LMT[t].w/2,LMT[t].h-14,g=>{g.translate(LMT[t].w/2,LMT[t].h-14);LMT[t].draw(g,v);}));
+  const used=new Set((E.layout||[]).map(l=>l[0]));for(const t in LMT)if(used.has(t))S['lm_'+t]=[0,1,2,3,4,5].map(v=>makeSprite(LMT[t].w,LMT[t].h,LMT[t].w/2,LMT[t].h-14,g=>{g.translate(LMT[t].w/2,LMT[t].h-14);LMT[t].draw(g,v);}));
  }
  chunkCache.clear();
 }
@@ -95,6 +103,7 @@ const _genWorld=genWorld;
 genWorld=function(){
  _genWorld();
  const E=era();if(!E.layout||!ART())return;
+ if(E.thin){const r=mulberry(seed+77);for(const e of statics.slice())if(!e.dead&&E.thin[e.type]&&r()<E.thin[e.type])kill(e);}
  const natural=['pine','oak','dead','boulder','sapling','tuft','berry','carrot','flower','mushroom','reeds','hole','den','item'];
  for(const [type,[wx,wy],v] of E.layout){const L=LMT[type],f=L.foot;let spot=null;
   for(let t=0;t<48&&!spot;t++){const a=t*2.4,rr=t*30,x=wx+Math.cos(a)*rr,y=wy+Math.sin(a)*rr;
@@ -102,7 +111,7 @@ genWorld=function(){
    const busy=statics.some(e=>!e.dead&&(LMT[e.type]?Math.abs(e.x-x)<(LMT[e.type].w+L.w)/2+40&&Math.abs(e.y-y)<(LMT[e.type].h+L.h)/2:(['cave','waterhole','campfire','firepit','carcass'].includes(e.type)||e.sourceFire)&&Math.abs(e.x-x)<L.w/2+180&&e.y>y-L.h-120&&e.y<y+220));
    if(!busy)spot={x,y};}
   if(!spot)continue;
-  for(const e of statics.slice())if(!e.dead&&natural.includes(e.type)&&e.x>spot.x+f[0]-70&&e.x<spot.x+f[2]+70&&e.y>spot.y-L.h*.7&&e.y<spot.y+(type==='lascaux'?300:120))kill(e);
+  for(const e of statics.slice())if(!e.dead&&natural.includes(e.type)&&e.x>spot.x+f[0]-70&&e.x<spot.x+f[2]+70&&e.y>spot.y-L.h*.7&&e.y<spot.y+Math.max(120,L.h))kill(e);
   mk(type,spot.x,spot.y,{v:v||0});}
  for(const d of dens)if(!d.dead&&lmList().some(e=>inFoot(e,d.x,d.y,60)))kill(d);
 };
@@ -133,8 +142,8 @@ drawSavannaMob=function(m,dy){
  ctx.restore();
 };
 
-const _getAction=getAction;
-getAction=function(e){const a=_getAction(e);if(!a||!e)return a;const E=era();
+const _getAction0=getAction;
+getAction=function(e){const a=_getAction0(e);if(!a||!e)return a;const E=era();
  if(e.sourceFire)a.name=E.sourceName;
  else if(e.kind&&E.mobs&&E.mobs[e.kind])a.name=E.mobs[e.kind];
  return a;};
