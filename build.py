@@ -40,6 +40,8 @@ def braise():
     # the eight eras + Mode Deus (eras.js), inside the game's closure so it can wrap the engine's functions
     eras = io.open(os.path.join(src, 'eras.js'), encoding='utf-8').read()
     s = s.replace(boot, eras + chr(10) + boot, 1)
+    assert s.count('<script src="art.js"></script>') == 1
+    s = s.replace('<script src="art.js"></script>', '<script src="art.js"></script><script src="eras-art.js"></script>')
     s = s.replace(boot, "window.BRAISE_TOUCH={autoAct,attackNearest,dropSlot,toggleCraft:()=>{openTab=openTab?null:'tools';renderRecipes();},"
                   "cancel:()=>{placing=null;P.target=null;},state:()=>({mode,paused,dead:P.dead,placing:!!placing,items:P.items.filter(Boolean).map(s=>s.id+':'+s.n).join(' ')}),"
                   "zoom:f=>{userZoom=clamp(userZoom*f,.7,1.45);}};\n"
@@ -51,6 +53,14 @@ def braise():
     shutil.copy(os.path.join(src, 'touch.js'), web)
     io.open(os.path.join(web, 'index.html'), 'w', encoding='utf-8', newline='\n').write(s)
     shutil.copy(os.path.join(src, 'ere1', 'art.js'), web); shutil.copy(os.path.join(src, 'i18n.css'), web)
+    # the eras' own art (heirs, fauna, flora, places, ground) and the canonical landmarks of the lineage (ref/landmarks.js),
+    # bundled after art.js; landmarks.js expects the ink helpers as globals, so it gets them from BRAISE_ART.K
+    parts = [io.open(os.path.join(src, 'eras', 'heirs-kit.js'), encoding='utf-8').read()]
+    for f in sorted(os.listdir(os.path.join(src, 'eras'))):
+        if f.startswith('era') and f.endswith('-art.js'): parts.append(io.open(os.path.join(src, 'eras', f), encoding='utf-8').read())
+    lm = io.open(os.path.join(src, 'ref', 'landmarks.js'), encoding='utf-8').read()
+    parts.append('(function(){const {TAU,INK,ell,ink,fillInk,poly,smoothPath,blobPts,line,curve,inkLine,inkCurve,lineageMark,mulberry,vnoise,lerp}=BRAISE_ART.K;const burningTree=function(){};' + chr(10) + lm + chr(10) + '})();')
+    io.open(os.path.join(web, 'eras-art.js'), 'w', encoding='utf-8', newline=chr(10)).write(chr(10).join(parts))
     shutil.copytree(os.path.join(src, 'fonts'), os.path.join(web, 'fonts'))
     i18n = io.open(os.path.join(src, 'i18n.js'), encoding='utf-8').read()
     a = "const response=await fetch(new URL('locales/'+code+'.json',root));if(!response.ok)throw Error('Locale unavailable');cache[code]=await response.json();"

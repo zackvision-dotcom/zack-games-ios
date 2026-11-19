@@ -1,0 +1,31 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Braise · planche d'ère</title>
+<style>body{margin:0;background:#2a2620;color:#efe2c4;font:13px Georgia,serif}canvas{display:block;margin:0 auto}#bar{padding:6px;text-align:center}button{margin:2px}</style>
+</head><body><div id="bar"></div><canvas id="c"></canvas>
+<script src="../ere1/art.js"></script><script src="heirs-kit.js"></script><script src="era2-art.js"></script>
+<script>
+const q=new URLSearchParams(location.search),era=+(q.get('era')||1),A=BRAISE_ERA_ART[era],K=BRAISE_ART.K;
+const cv=document.getElementById('c'),g=cv.getContext('2d'),W=1400,H=1500;cv.width=W*1.4;cv.height=H*1.4;cv.style.width=W+'px';g.scale(1.4,1.4);
+const bg=q.get('bg')||'#c9b98e';
+function frame(t){
+ g.fillStyle=bg;g.fillRect(0,0,W,H);
+ const lab=(x,y,s)=>{g.fillStyle='#2a2016';g.font='13px Georgia';g.textAlign='center';g.fillText(s,x,y);};
+ // heirs
+ let x=80;for(const view of ['front','side','back'])for(const mv of [false,true]){g.save();g.translate(x,190);g.scale(1.2,1.2);A.heir(g,{view,moving:mv,walkT:t*9,bob:mv?Math.abs(Math.sin(t*9))*2.5:0,nearAngle:mv?-Math.sin(t*9)*.65:.1,farAngle:mv?Math.sin(t*9)*.65:-.1,weapon:!mv,mood:'calm'});g.restore();lab(x,215,view+(mv?' marche':''));x+=120;}
+ g.save();g.translate(x,190);g.scale(1.2,1.2);A.heir(g,{view:'front',action:'pick',actionT:(t%1),crouch:Math.sin((t%1)*Math.PI)*15,mood:'scared'});g.restore();lab(x,215,'récolte');
+ // fauna
+ x=110;for(const [k,f] of Object.entries(A.mobs)){for(const mv of [0,1]){g.save();g.translate(x,380);g.scale(k==='machairodont'?1.9:1.4,k==='machairodont'?1.9:1.4);if(k==='hyena')f(g,mv?t*8:0,!mv,{moving:!!mv,time:t,state:mv?'patrol':'warn'});else f(g,mv?t*8:0,{moving:!!mv,time:t,state:mv?'walk':'graze'});g.restore();lab(x,400,k+(mv?' marche':''));x+=200;}}
+ // flora
+ x=70;const F=A.flora;const row=(y,items)=>{let xx=70;for(const [n,fn,w] of items){g.save();g.translate(xx+w/2,y);fn(g);g.restore();lab(xx+w/2,y+18,n);xx+=w+20;}};
+ row(700,[['pin',g=>F.pine(g,1,101),110],['pin S',g=>F.pine(g,.78,102),90],['bouleau',g=>F.oak(g,0),120],['bouleau 2',g=>F.oak(g,1),120],['chicot',g=>F.dead(g,0),80],['touffe',g=>F.tuft(g,false),70],['touffe coupée',g=>F.tuft(g,true),70],['airelles',g=>F.berry(g,false,0),90],['cueilli',g=>F.berry(g,true,0),90],['calcaire',g=>F.boulder(g,0,0),110],['entamé',g=>F.boulder(g,0,2),90]]);
+ row(800,[['bistorte',g=>F.carrot(g),50],['laîche',g=>F.reeds(g,0),70],...[0,1,2,3,4].map(v=>['fleur '+v,g=>F.flower(g,v),40]),['saule',g=>F.sapling(g,false),60],['saule cueilli',g=>F.sapling(g,true),60]]);
+ const P=A.places;g.save();g.translate(270,1180);g.scale(1.6,1.6);P.cave(g);g.restore();lab(270,1200,'abri sous roche');
+ g.save();g.translate(700,1140);g.scale(1.45,1.45);P.waterhole(g);g.restore();lab(700,1190,'mare gelée');
+ g.save();g.translate(950,1160);P.den(g);g.restore();lab(950,1180,'tanière');
+ g.save();g.translate(1110,1160);P.carcass(g);g.restore();lab(1110,1180,'carcasse');
+ g.save();g.translate(1270,1160);P.source(g,true);g.restore();lab(1270,1180,'foyer du clan');
+ g.save();g.translate(330,1450);P.cliff(g,0);g.restore();lab(330,1470,'falaise');
+ g.save();g.translate(820,1450);P.tent(g);g.restore();lab(820,1470,'tente');
+}
+let t0=performance.now();const loop=n=>{frame((n-t0)/1000);if(!q.get('still'))requestAnimationFrame(loop);};requestAnimationFrame(loop);
+</script></body></html>

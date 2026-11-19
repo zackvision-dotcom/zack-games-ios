@@ -721,4 +721,4 @@ const ERA1 = {
   structures: [['Foyer de pierres', g => hearth(g, true, performance.now() / 1000), 'Le Grand Œuvre commence ici'], ['Foyer éteint', g => hearth(g, false), ''], ['Abri de branches', leanTo, 'Dormir, se protéger de la pluie'], ['Séchoir à viande', dryingRack, 'Viande séchée : ne pourrit pas']]
 };
 
-return {smilodon,caveMouth,waterhole,drawKa,drawBraise,acacia,baobab,tallGrass,berryShrub,flintOutcrop,tuberPlant,papyrus,carcass,termiteMound,hyena,antelope,ICONS1};})();
+return {K:{TAU,INK,clamp,lerp,mulberry,hash,vnoise,ell,ink,fillInk,poly,smoothPath,blobPts,line,curve,inkLine,inkCurve,hatch,shaded,dsEye,lineageMark,headPath,head,ears,hand,barefoot,boot,arm,torsoPath,hairTicks,brows,mouth,blush,eyes,legs4,faunaFoot,faunaJoint,drawNea,drawOro,drawBryn,drawAda,drawAion},smilodon,caveMouth,waterhole,drawKa,drawBraise,acacia,baobab,tallGrass,berryShrub,flintOutcrop,tuberPlant,papyrus,carcass,termiteMound,hyena,antelope,ICONS1};})();
