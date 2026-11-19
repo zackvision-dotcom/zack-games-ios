@@ -2097,7 +2097,11 @@ const ERAS=[
   mobs:{antelope:'Gazelle',hyena:'Chacal',machairodont:'Lion du désert',rabbit:'Lièvre du Cap'},beasts:['chacal','chacals'],thin:{pine:.35},
   layout:[['giza',[-200,-1000]],['mudHouse',[-320,220],0],['mudHouse',[320,240],1],['mudHouse',[-20,430],2],['granary',[560,40]],['sledge',[-560,-260]]],
   intro:'Les bâtisseurs montent la grande pyramide. Le four de l’atelier garde le feu du chantier.',end:'La dernière pierre est posée. Meret a porté la Braise au sommet de la pyramide.'},
- {n:'V',name:'L’Empire',place:'Rome · Le Colisée',heir:'—'},
+ {n:'V',name:'L’Empire',place:'Rome · Le Colisée',heir:'Livia',ready:true,source:'l’autel de Vesta',sourceName:'Autel de Vesta',
+  names:{pine:'Pin parasol',oak:'Olivier',dead:'Olivier brûlé',boulder:'Bloc de travertin',tuft:'Herbe des prés',berry:'Figuier',carrot:'Poireaux',reeds:'Cannes du Tibre',sapling:'Laurier',flower:'Fleur des jardins',hole:'Terrier',den:'Repaire des molosses',cave:'Portique',waterhole:'Fontaine',carcass:'Os de mouton',mushroom:'Champignon'},
+  mobs:{antelope:'Mouton',hyena:'Molosse errant',machairodont:'Léopard échappé de l’arène',rabbit:'Lapin'},beasts:['molosse','molosses'],thin:{pine:.45},
+  layout:[['colosseum',[720,-820]],['vestaTemple',[-560,-560]],['insula',[-330,230],0],['insula',[330,250],1],['aqueduct',[-260,900]]],
+  intro:'Rome ouvre son amphithéâtre. Si le feu de Vesta s’éteint, la cité tombe.',end:'Le feu de Vesta brûle toujours. Livia a gardé la Braise au cœur de Rome.'},
  {n:'VI',name:'La Cathédrale',place:'Paris · Notre-Dame, 1250',heir:'—'},
  {n:'VII',name:'La Vapeur',place:'Paris · 1889',heir:'Ada'},
  {n:'VIII',name:'Le Signal',place:'Nouvelle Babel',heir:'Aïon'}
@@ -2121,6 +2125,10 @@ const LMT={
  mudHouse:{name:'Maison des ouvriers',w:220,h:160,foot:[-74,-34,96,6],draw:(g,v)=>ART().places.mudHouse(g,v)},
  granary:{name:'Greniers',w:180,h:140,foot:[-76,-24,76,6],draw:(g)=>ART().places.granary(g)},
  sledge:{name:'Bloc sur traîneau',w:260,h:100,foot:[-64,-24,72,6],draw:(g)=>ART().places.sledge(g)},
+ colosseum:{name:'Le Colisée',w:900,h:360,foot:[-430,-60,430,40],draw:(g)=>{const L=landmarkArt('colosseum');if(L){g.scale(1.6,1.6);L.draw(g,0);}}},
+ vestaTemple:{name:'Temple de Vesta',w:270,h:300,foot:[-120,-34,120,10],draw:(g)=>ART().places.vestaTemple(g)},
+ insula:{name:'Insula',w:250,h:240,foot:[-112,-36,112,6],draw:(g,v)=>ART().places.insula(g,v)},
+ aqueduct:{name:'Aqueduc',w:640,h:230,foot:[-300,-30,300,6],draw:(g)=>ART().places.aqueduct(g)},
  field:{name:'Champ d’amidonnier',w:330,h:90,foot:[-152,-60,156,6],draw:(g,v)=>ART().places.field(g,v)}
 };
 const BASE_NAMES={};for(const k in DEF)BASE_NAMES[k]=DEF[k].name;
