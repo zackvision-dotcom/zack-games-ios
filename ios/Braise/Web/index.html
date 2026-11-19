@@ -2112,7 +2112,11 @@ const ERAS=[
   mobs:{antelope:'Pigeon',hyena:'Rat des égouts',machairodont:'Tigre échappé de la ménagerie',rabbit:'Lapin'},beasts:['rat','rats'],thin:{pine:.5},
   layout:[['eiffel',[-160,-980]],['haussmann',[-340,240],0],['haussmann',[350,260],1],['factory',[760,-300]],['morris',[200,-180]],['gasLamp',[150,-90]],['gasLamp',[-170,-110]],['gasLamp',[170,150]],['gasLamp',[-180,170]],['gasLamp',[420,-10]],['gasLamp',[-430,20]]],
   intro:'Paris ouvre son Exposition. La chaudière de la machine garde le feu de la ville.',end:'Le phare de la tour s’allume. Ada a porté la Braise jusqu’au sommet de fer.'},
- {n:'VIII',name:'Le Signal',place:'Nouvelle Babel',heir:'Aïon'}
+ {n:'VIII',name:'Le Signal',place:'Nouvelle Babel',heir:'Aïon',ready:true,source:'le cœur de fusion',sourceName:'Cœur de fusion',
+  names:{pine:'Arbre-lumière',oak:'Fougère arborescente',dead:'Arbre solaire mort',boulder:'Bloc de verre recyclé',tuft:'Herbe phosphorescente',berry:'Buisson à perles',carrot:'Racine bleue',reeds:'Fibres optiques',sapling:'Pousse greffée',flower:'Fleur lumineuse',hole:'Terrier',den:'Faille des Murmures',cave:'Capsule-abri',waterhole:'Purificateur d’eau',carcass:'Vitrine de fossiles brisée',mushroom:'Champignon'},
+  mobs:{antelope:'Robot jardinier',hyena:'Murmure',machairodont:'L’Oubli',rabbit:'Lièvre'},beasts:['murmure','murmures'],thin:{pine:.45},
+  layout:[['babel',[-60,-1050]],['glassTower',[-380,230],0],['glassTower',[380,250],1],['solarTree',[220,-200]],['solarTree',[-240,-180]],['solarTree',[480,60]],['solarTree',[-500,80]]],
+  intro:'Nouvelle Babel ne dort jamais. Le cœur de fusion garde la dernière vraie flamme.',end:'Le Signal part vers le passé. Aïon a transmis la Braise à toute la lignée.'}
 ];
 const era=()=>ERAS[eraIdx];
 const ART=()=>eraIdx&&window.BRAISE_ERA_ART?BRAISE_ERA_ART[eraIdx]:null;
@@ -2146,6 +2150,9 @@ const LMT={
  factory:{name:'Usine',w:300,h:400,foot:[-140,-40,128,6],draw:(g)=>ART().places.factory(g)},
  gasLamp:{name:'Réverbère',w:40,h:156,foot:[-7,-8,7,4],light:[-124,220],draw:(g)=>ART().places.gasLamp(g)},
  morris:{name:'Colonne Morris',w:60,h:150,foot:[-18,-12,18,4],draw:(g)=>ART().places.morris(g)},
+ babel:{name:'Nouvelle Babel',w:1040,h:700,foot:[-480,-60,480,20],draw:(g)=>{const L=landmarkArt('babel');if(L){g.scale(1.2,1.2);L.draw(g,performance.now()/1000);}}},
+ glassTower:{name:'Tour de verre',w:220,h:420,foot:[-84,-40,84,6],draw:(g,v)=>ART().places.glassTower(g,v)},
+ solarTree:{name:'Arbre solaire',w:110,h:190,foot:[-8,-8,8,4],light:[-120,200],draw:(g)=>ART().places.solarTree(g)},
  field:{name:'Champ d’amidonnier',w:330,h:90,foot:[-152,-60,156,6],draw:(g,v)=>ART().places.field(g,v)}
 };
 const BASE_NAMES={};for(const k in DEF)BASE_NAMES[k]=DEF[k].name;
@@ -2344,7 +2351,7 @@ function placesOfEra(){
  const src=statics.find(e=>e.sourceFire&&!e.dead);if(src)out.push([era().sourceName,src.x+90,src.y+40]);
  const cv=caves.find(c=>!c.dead);if(cv)out.push([DEF.cave.name,cv.x,cv.y+80]);
  const wh=waterholes.find(w=>!w.dead);if(wh)out.push([DEF.waterhole.name,wh.x,wh.y+110]);
- const seen={};for(const e of lmList()){if(['tent','gasLamp','morris'].includes(e.type))continue;seen[e.type]=(seen[e.type]||0)+1;if(seen[e.type]>2)continue;out.push([DEF[e.type].name+(seen[e.type]>1?' ('+seen[e.type]+')':''),e.x,e.y+LMT[e.type].foot[3]+70,LMT[e.type].h>200]);}
+ const seen={};for(const e of lmList()){if(['tent','gasLamp','morris','solarTree'].includes(e.type))continue;seen[e.type]=(seen[e.type]||0)+1;if(seen[e.type]>2)continue;out.push([DEF[e.type].name+(seen[e.type]>1?' ('+seen[e.type]+')':''),e.x,e.y+LMT[e.type].foot[3]+70,LMT[e.type].h>200]);}
  const den=dens.find(d=>!d.dead&&d.hyenaHome);if(den)out.push([DEF.den.name,den.x+160,den.y+60]);
  return out;
 }
