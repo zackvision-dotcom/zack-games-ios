@@ -42,7 +42,11 @@ const ERAS=[
   mobs:{antelope:'Oie',hyena:'Loup affamé',machairodont:'Courtaud, le grand loup noir',rabbit:'Lapin'},beasts:['loup','loups'],thin:{pine:.4},
   layout:[['notreDame',[-120,-900]],['timberHouse',[-320,220],0],['timberHouse',[330,240],1],['timberHouse',[-40,440],2],['crane',[520,-380]],['wallTower',[900,300]]],
   intro:'On élève les tours de Notre-Dame. Le brasero du chantier garde le feu des bâtisseurs.',end:'La tour sud est achevée avant l’hiver. Ysabel a gardé la Braise sur le chantier.'},
- {n:'VII',name:'La Vapeur',place:'Paris · 1889',heir:'Ada'},
+ {n:'VII',name:'La Vapeur',place:'Paris · 1889',heir:'Ada',ready:true,source:'la chaudière de la machine à vapeur',sourceName:'Chaudière à vapeur',
+  names:{pine:'Platane',oak:'Marronnier en fleurs',dead:'Platane taillé',boulder:'Tas de charbon',tuft:'Gazon',berry:'Framboisier',carrot:'Pommes de terre',reeds:'Massettes du canal',sapling:'Lilas',flower:'Fleur du square',hole:'Terrier',den:'Bouche d’égout',cave:'Pavillon Baltard',waterhole:'Bassin du square',carcass:'Os de cheval de fiacre',mushroom:'Champignon'},
+  mobs:{antelope:'Pigeon',hyena:'Rat des égouts',machairodont:'Tigre échappé de la ménagerie',rabbit:'Lapin'},beasts:['rat','rats'],thin:{pine:.5},
+  layout:[['eiffel',[-160,-980]],['haussmann',[-340,240],0],['haussmann',[350,260],1],['factory',[760,-300]],['morris',[200,-180]],['gasLamp',[150,-90]],['gasLamp',[-170,-110]],['gasLamp',[170,150]],['gasLamp',[-180,170]],['gasLamp',[420,-10]],['gasLamp',[-430,20]]],
+  intro:'Paris ouvre son Exposition. La chaudière de la machine garde le feu de la ville.',end:'Le phare de la tour s’allume. Ada a porté la Braise jusqu’au sommet de fer.'},
  {n:'VIII',name:'Le Signal',place:'Nouvelle Babel',heir:'Aïon'}
 ];
 const era=()=>ERAS[eraIdx];
@@ -72,6 +76,11 @@ const LMT={
  timberHouse:{name:'Maison à colombages',w:210,h:280,foot:[-82,-34,82,6],draw:(g,v)=>ART().places.timberHouse(g,v)},
  crane:{name:'Grue à roue',w:250,h:230,foot:[-90,-24,60,6],draw:(g)=>ART().places.crane(g)},
  wallTower:{name:'Tour de l’enceinte',w:320,h:310,foot:[-150,-40,150,10],draw:(g)=>ART().places.wallTower(g)},
+ eiffel:{name:'La tour Eiffel',w:440,h:720,foot:[-150,-44,150,12],draw:(g)=>{const L=landmarkArt('eiffel');if(L){g.scale(2,2);L.draw(g,0);}}},
+ haussmann:{name:'Immeuble haussmannien',w:270,h:350,foot:[-122,-40,122,6],draw:(g,v)=>ART().places.haussmann(g,v)},
+ factory:{name:'Usine',w:300,h:400,foot:[-140,-40,128,6],draw:(g)=>ART().places.factory(g)},
+ gasLamp:{name:'Réverbère',w:40,h:156,foot:[-7,-8,7,4],light:[-124,220],draw:(g)=>ART().places.gasLamp(g)},
+ morris:{name:'Colonne Morris',w:60,h:150,foot:[-18,-12,18,4],draw:(g)=>ART().places.morris(g)},
  field:{name:'Champ d’amidonnier',w:330,h:90,foot:[-152,-60,156,6],draw:(g,v)=>ART().places.field(g,v)}
 };
 const BASE_NAMES={};for(const k in DEF)BASE_NAMES[k]=DEF[k].name;
@@ -179,6 +188,9 @@ say=function(text,dur){
   const h=E.beasts;if(h)text=text.replace(/([Hh])yènes/g,(m,c)=>(c==='H'?h[1][0].toUpperCase():h[1][0])+h[1].slice(1)).replace(/([Hh])yène/g,(m,c)=>(c==='H'?h[0][0].toUpperCase():h[0][0])+h[0].slice(1));
   text=text.replace(/\bKa\b/g,E.heir);}
  _say(text,dur);};
+const _updWorld=updWorld;
+updWorld=function(dt){_updWorld(dt);if(!ART()||phase()==='day')return;
+ for(const e of statics){const L=LMT[e.type];if(e.dead||!L||!L.light||Math.abs(e.x-cam.x)>1500||Math.abs(e.y-cam.y)>1100)continue;lights.push({x:e.x,y:e.y+L.light[0],r:L.light[1]*(1+Math.sin(realTime*9+e.x)*.03),warm:.7});}};
 const _hurtPlayer=hurtPlayer;
 hurtPlayer=function(d,src,cause){if(deus)return;_hurtPlayer(d,src,cause);};
 
@@ -267,7 +279,7 @@ function placesOfEra(){
  const src=statics.find(e=>e.sourceFire&&!e.dead);if(src)out.push([era().sourceName,src.x+90,src.y+40]);
  const cv=caves.find(c=>!c.dead);if(cv)out.push([DEF.cave.name,cv.x,cv.y+80]);
  const wh=waterholes.find(w=>!w.dead);if(wh)out.push([DEF.waterhole.name,wh.x,wh.y+110]);
- const seen={};for(const e of lmList()){if(e.type==='tent')continue;seen[e.type]=(seen[e.type]||0)+1;if(seen[e.type]>2)continue;out.push([DEF[e.type].name+(seen[e.type]>1?' ('+seen[e.type]+')':''),e.x,e.y+LMT[e.type].foot[3]+70,LMT[e.type].h>200]);}
+ const seen={};for(const e of lmList()){if(['tent','gasLamp','morris'].includes(e.type))continue;seen[e.type]=(seen[e.type]||0)+1;if(seen[e.type]>2)continue;out.push([DEF[e.type].name+(seen[e.type]>1?' ('+seen[e.type]+')':''),e.x,e.y+LMT[e.type].foot[3]+70,LMT[e.type].h>200]);}
  const den=dens.find(d=>!d.dead&&d.hyenaHome);if(den)out.push([DEF.den.name,den.x+160,den.y+60]);
  return out;
 }
