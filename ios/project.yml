@@ -86,3 +86,36 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.braise
         PRODUCT_NAME: Braise
         TARGETED_DEVICE_FAMILY: "1"   # iPhone only (XcodeGen's iOS app preset would otherwise add iPad: "1,2")
+
+  GullStreet:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: GullStreet/Assets.xcassets
+      - path: GullStreet/Web
+        type: folder
+    info:
+      path: GullStreet/Info.plist
+      properties:
+        CFBundleDisplayName: Gull Street
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.simulation-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.gullstreet
+        PRODUCT_NAME: GullStreet
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
