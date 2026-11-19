@@ -31,6 +31,12 @@ try {
   await shot('era' + ERA + '-0-camp');
   const places = await js('BRAISE_ERAS.places()');
   for (let i = 1; i < places.length; i++) { await js(`(()=>{const p=BRAISE_ERAS.places()[${i}];BRAISE_ERAS.teleport(p[1],p[2]);})()`); await sleep(2200); await shot('era' + ERA + '-' + i + '-' + places[i][0].replace(/[^a-zA-Zéèàù]+/g, '_')); }
+  // the saved era must come back after a restart, and "Continuer" must resume it
+  await cmd('Page.navigate', { url: 'http://localhost:8772/index.html?touch=1' }); await sleep(4000);
+  console.log('after reload', await js('JSON.stringify({era:BRAISE_ERAS.era(),buttons:[...document.querySelectorAll("#title button")].map(b=>b.textContent.trim()).slice(0,5)})'));
+  await js('(()=>{const b=[...document.querySelectorAll("#title button")].find(b=>/continuer/i.test(b.textContent));if(b)b.click();return !!b;})()'); await sleep(3000);
+  console.log('continued', await js('JSON.stringify({era:BRAISE_ERAS.era(),cave:BRAISE_ERAS.places().map(p=>p[0]).slice(1,3),badge:(document.getElementById("emberStatus")||{}).textContent})'));
+  await shot('era' + ERA + '-reload');
   console.log(logs.length ? logs.join('\n') : 'no errors');
 } catch (e) { console.error('ERROR', e.message); console.log(logs.join('\n')); process.exitCode = 1; }
 finally { try { ws.close(); } catch (e) {} chrome.kill(); }
