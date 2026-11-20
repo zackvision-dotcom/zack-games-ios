@@ -118,6 +118,7 @@ h3 small{font-weight:700;color:var(--ink);opacity:.75;font-size:13px}
 #title .tgull{width:64px;height:86px;object-fit:contain;animation:bob 2s ease-in-out infinite;image-rendering:pixelated}
 #title .big{max-width:280px}
 .evt{background:var(--paperHi);border-radius:999px;padding:4px 14px;font-weight:900;border:3px solid var(--wood)}.evt .pd{width:22px;height:26px}
+#title .tlogo{width:min(92vw,460px);filter:drop-shadow(0 6px 4px rgba(60,30,10,.35));animation:bob 3s ease-in-out infinite}
 </style>
 </head>
 <body>
@@ -127,7 +128,27 @@ h3 small{font-weight:700;color:var(--ink);opacity:.75;font-size:13px}
 <div id="modal"></div>
 <div id="toasts"></div>
 <div id="title"></div>
-<script>window.ECO={"version":1,"day":{"seconds":150,"spawnShare":0.75,"baseVisitors":6,"visitorsPerDay":1.3,"maxVisitors":46,"repPerHappy":0.5,"repMax":14},"walker":{"budgetMin":8,"budgetMax":20,"budgetPerDay":0.55,"speedMin":26,"speedMax":38,"patienceMin":9,"patienceMax":16,"tasteMin":0.5,"tasteMax":1.5},"mood":{"start":50,"wantFound":22,"wantMissed":-12,"priceWeight":20,"priceNeutral":0.75,"waitFree":3,"waitPerSecond":-1,"tooExpensive":-8,"charmCap":20,"tipAt":65,"tipShare":0.2,"happyAt":70,"sadBelow":40},"price":{"low":0.8,"normal":1,"high":1.3},"levels":{"priceMult":[1,1.25,1.5],"serveMult":[1,0.8,0.6],"queue":[2,3,4],"upgradeCost":[1.5,3]},"shops":[{"id":"bakery","icon":"🥐","color":"#f2b880","unlockDay":1,"cost":40,"price":6,"serve":2.2},{"id":"icecream","icon":"🍦","color":"#f6a5c0","unlockDay":1,"cost":60,"price":8,"serve":2.0},{"id":"fish","icon":"🐟","color":"#8cc7e8","unlockDay":2,"cost":80,"price":12,"serve":2.8},{"id":"florist","icon":"💐","color":"#c9a7e8","unlockDay":2,"cost":90,"price":10,"serve":2.4},{"id":"cafe","icon":"☕","color":"#c8a07a","unlockDay":3,"cost":110,"price":9,"serve":2.0},{"id":"bazaar","icon":"🧺","color":"#e8d27a","unlockDay":4,"cost":130,"price":14,"serve":3.0},{"id":"crepe","icon":"🥞","color":"#f4c76e","unlockDay":5,"cost":150,"price":11,"serve":2.6},{"id":"books","icon":"📚","color":"#9fc79a","unlockDay":6,"cost":180,"price":16,"serve":3.2},{"id":"toys","icon":"🧸","color":"#f0a07a","unlockDay":7,"cost":210,"price":18,"serve":3.0},{"id":"grocery","icon":"🍎","color":"#a6d98c","unlockDay":8,"cost":230,"price":10,"serve":2.2},{"id":"tea","icon":"🍵","color":"#b7d8b0","unlockDay":9,"cost":260,"price":13,"serve":2.6},{"id":"souvenir","icon":"🐚","color":"#f2d0a8","unlockDay":10,"cost":300,"price":20,"serve":3.2}],"districts":[{"id":"top","lots":[0,1,2,3,4,5,6,7],"stars":0,"cost":0},{"id":"market","lots":[8,9,10,11,12,13],"stars":9,"cost":250},{"id":"quay","lots":[14,15,16,17,18,19],"stars":24,"cost":700}],"decos":[{"id":"bench","icon":"🪑","cost":15,"charm":3,"unlockDay":1},{"id":"tree","icon":"🌳","cost":20,"charm":4,"unlockDay":1},{"id":"tulips","icon":"🌷","cost":12,"charm":2,"unlockDay":1},{"id":"lamp","icon":"🏮","cost":25,"charm":4,"unlockDay":2},{"id":"sunflower","icon":"🌻","cost":14,"charm":3,"unlockDay":2},{"id":"pine","icon":"🌲","cost":22,"charm":4,"unlockDay":2},{"id":"palm","icon":"🌴","cost":35,"charm":5,"unlockDay":3},{"id":"pot","icon":"🪴","cost":16,"charm":3,"unlockDay":3},{"id":"daisy","icon":"🌼","cost":12,"charm":2,"unlockDay":3},{"id":"anchor","icon":"⚓","cost":30,"charm":4,"unlockDay":4},{"id":"buoy","icon":"🛟","cost":28,"charm":4,"unlockDay":4},{"id":"net","icon":"🎣","cost":26,"charm":4,"unlockDay":4},{"id":"kite","icon":"🪁","cost":30,"charm":4,"unlockDay":5},{"id":"balloons","icon":"🎈","cost":18,"charm":3,"unlockDay":5},{"id":"bow","icon":"🎀","cost":18,"charm":3,"unlockDay":5},{"id":"bike","icon":"🚲","cost":34,"charm":4,"unlockDay":6},{"id":"parasol","icon":"⛱️","cost":40,"charm":5,"unlockDay":6},{"id":"rose","icon":"🌹","cost":16,"charm":3,"unlockDay":6},{"id":"hibiscus","icon":"🌺","cost":18,"charm":3,"unlockDay":7},{"id":"cactus","icon":"🌵","cost":20,"charm":3,"unlockDay":7},{"id":"mushroom","icon":"🍄","cost":22,"charm":3,"unlockDay":7},{"id":"wheat","icon":"🌾","cost":14,"charm":2,"unlockDay":8},{"id":"log","icon":"🪵","cost":12,"charm":2,"unlockDay":8},{"id":"rock","icon":"🪨","cost":10,"charm":2,"unlockDay":8},{"id":"amphora","icon":"🏺","cost":45,"charm":6,"unlockDay":9},{"id":"bucket","icon":"🪣","cost":12,"charm":2,"unlockDay":9},{"id":"chime","icon":"🎐","cost":30,"charm":4,"unlockDay":9},{"id":"carp","icon":"🎏","cost":32,"charm":4,"unlockDay":10},{"id":"boat","icon":"🛶","cost":50,"charm":6,"unlockDay":10},{"id":"crab","icon":"🦀","cost":24,"charm":3,"unlockDay":11},{"id":"shell","icon":"🐚","cost":20,"charm":3,"unlockDay":11},{"id":"maple","icon":"🍁","cost":22,"charm":3,"unlockDay":12},{"id":"fountain","icon":"⛲","cost":90,"charm":9,"unlockDay":12},{"id":"lantern","icon":"💡","cost":26,"charm":3,"unlockDay":13},{"id":"clover","icon":"🍀","cost":18,"charm":3,"unlockDay":14},{"id":"tent","icon":"🎪","cost":70,"charm":7,"unlockDay":15},{"id":"statue","icon":"🗿","cost":60,"charm":6,"unlockDay":16},{"id":"lighthouse","icon":"🗼","cost":0,"shells":25,"charm":10,"unlockDay":1},{"id":"xmastree","icon":"🎄","cost":0,"shells":8,"charm":8,"unlockDay":1,"event":"xmas"},{"id":"snowman","icon":"⛄","cost":0,"shells":6,"charm":7,"unlockDay":1,"event":"xmas"},{"id":"gift","icon":"🎁","cost":40,"charm":4,"unlockDay":1,"event":"xmas"},{"id":"star","icon":"🌟","cost":0,"shells":12,"charm":9,"unlockDay":1,"pass":true}],"inhabitants":[{"id":"mirabelle","species":"rabbit","color":"#f3e6d8","want":"bakery","day":1},{"id":"otto","species":"otter","color":"#a77b5a","want":"fish","day":2},{"id":"renata","species":"fox","color":"#e8894a","want":"florist","day":2},{"id":"pistache","species":"mouse","color":"#c9c3bb","want":"icecream","day":1},{"id":"gaston","species":"bear","color":"#9a6b4b","want":"cafe","day":3},{"id":"lulu","species":"duck","color":"#fff3b0","want":"bazaar","day":4},{"id":"basile","species":"hedgehog","color":"#b89470","want":"crepe","day":5},{"id":"capucine","species":"cat","color":"#f2c49b","want":"books","day":6},{"id":"filou","species":"raccoon","color":"#9a9aa6","want":"toys","day":7},{"id":"nuage","species":"sheep","color":"#fbf7f0","want":"grocery","day":8},{"id":"hector","species":"otter","color":"#7d5a43","want":"tea","day":9},{"id":"praline","species":"rabbit","color":"#e9b9a8","want":"souvenir","day":10},{"id":"marin","species":"duck","color":"#d9e9f2","want":"fish","day":12},{"id":"sorbet","species":"cat","color":"#ffffff","want":"icecream","day":14},{"id":"noisette","species":"mouse","color":"#b48a68","want":"bakery","day":16},{"id":"barnabe","species":"bear","color":"#6e4f3a","want":"grocery","day":18},{"id":"zephyr","species":"fox","color":"#f0b27a","want":"tea","day":20},{"id":"pompon","species":"sheep","color":"#f0e4d4","want":"toys","day":22},{"id":"maestro","species":"raccoon","color":"#7f7f8c","want":"books","day":25},{"id":"noel","species":"hedgehog","color":"#c9a27e","want":"souvenir","day":1,"event":"xmas"}],"species":["rabbit","otter","fox","mouse","bear","duck","hedgehog","cat","raccoon","sheep"],"speciesColors":{"rabbit":["#f3e6d8","#e0cbb8","#cfc6c0"],"otter":["#a77b5a","#8d6a50"],"fox":["#e8894a","#d9773a"],"mouse":["#c9c3bb","#b5aca3"],"bear":["#9a6b4b","#83593d"],"duck":["#fff3b0","#f6f6f6"],"hedgehog":["#b89470","#a07e5c"],"cat":["#f2c49b","#9c9c9c","#3e3a3a"],"raccoon":["#9a9aa6"],"sheep":["#fbf7f0"]},"objectives":{"count":60,"earn":{"base":30,"perDay":14,"perDay2":0.35},"happy":{"base":55,"perDay":0.5,"max":80},"third":["serve","types","decos","vip"],"serve":{"base":6,"perDay":1.1},"types":{"base":2,"per":0.3,"max":12},"decos":{"base":1,"per":0.5,"max":20},"starShells":1,"threeStarBonus":2},"chest":{"coinsBase":10,"coinsPerDay":3,"shellChance":0.3,"shellsMax":3,"decoEvery":3},"quests":[{"id":"serve","target":20,"coins":40,"shells":0},{"id":"earn","target":200,"coins":0,"shells":2},{"id":"deco","target":1,"coins":30,"shells":0},{"id":"happy","target":10,"coins":50,"shells":0},{"id":"upgrade","target":1,"coins":0,"shells":1},{"id":"days","target":2,"coins":60,"shells":0}],"login":[{"coins":50},{"shells":2},{"coins":100},{"deco":"lamp"},{"shells":3},{"coins":200},{"shells":8}],"ads":{"interstitialFromDay":3,"interstitialGapSec":180,"vipSpend":3},"start":{"coins":120,"shells":3},"store":[{"id":"starter","price":"1,99 €","coins":500,"shells":30,"decos":["palm","fountain","lamp"],"once":true},{"id":"shells20","price":"0,99 €","shells":20},{"id":"shells120","price":"4,99 €","shells":120},{"id":"shells260","price":"9,99 €","shells":260},{"id":"shells600","price":"19,99 €","shells":600},{"id":"facades","price":"2,99 €","skin":"marine","once":true},{"id":"pass","price":"4,99 €/mois","pass":true},{"id":"noads","price":"3,99 €","noAds":true,"once":true}],"shellExchange":{"shells":5,"coins":150}};window.GS_VERSION="1.0";window.GS_PRIVACY="<h4>Politique de confidentialité — Gull Street</h4>\n<p>Gull Street fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Gull Street convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Gull Street</h4>\n<p>Gull Street works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Gull Street suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>window.ECO={"version":1,"day":{"seconds":150,"spawnShare":0.75,"baseVisitors":6,"visitorsPerDay":1.3,"maxVisitors":46,"repPerHappy":0.5,"repMax":14},"walker":{"budgetMin":8,"budgetMax":20,"budgetPerDay":0.55,"speedMin":26,"speedMax":38,"patienceMin":9,"patienceMax":16,"tasteMin":0.5,"tasteMax":1.5},"mood":{"start":50,"wantFound":22,"wantMissed":-12,"priceWeight":20,"priceNeutral":0.75,"waitFree":3,"waitPerSecond":-1,"tooExpensive":-8,"charmCap":20,"tipAt":65,"tipShare":0.2,"happyAt":70,"sadBelow":40},"price":{"low":0.8,"normal":1,"high":1.3},"levels":{"priceMult":[1,1.25,1.5],"serveMult":[1,0.8,0.6],"queue":[2,3,4],"upgradeCost":[1.5,3]},"shops":[{"id":"bakery","icon":"🥐","color":"#f2b880","unlockDay":1,"cost":40,"price":6,"serve":2.2},{"id":"icecream","icon":"🍦","color":"#f6a5c0","unlockDay":1,"cost":60,"price":8,"serve":2.0},{"id":"fish","icon":"🐟","color":"#8cc7e8","unlockDay":2,"cost":80,"price":12,"serve":2.8},{"id":"florist","icon":"💐","color":"#c9a7e8","unlockDay":2,"cost":90,"price":10,"serve":2.4},{"id":"cafe","icon":"☕","color":"#c8a07a","unlockDay":3,"cost":110,"price":9,"serve":2.0},{"id":"bazaar","icon":"🧺","color":"#e8d27a","unlockDay":4,"cost":130,"price":14,"serve":3.0},{"id":"crepe","icon":"🥞","color":"#f4c76e","unlockDay":5,"cost":150,"price":11,"serve":2.6},{"id":"books","icon":"📚","color":"#9fc79a","unlockDay":6,"cost":180,"price":16,"serve":3.2},{"id":"toys","icon":"🧸","color":"#f0a07a","unlockDay":7,"cost":210,"price":18,"serve":3.0},{"id":"grocery","icon":"🍎","color":"#a6d98c","unlockDay":8,"cost":230,"price":10,"serve":2.2},{"id":"tea","icon":"🍵","color":"#b7d8b0","unlockDay":9,"cost":260,"price":13,"serve":2.6},{"id":"souvenir","icon":"🐚","color":"#f2d0a8","unlockDay":10,"cost":300,"price":20,"serve":3.2}],"districts":[{"id":"top","lots":[0,1,2,3,4,5,6,7],"stars":0,"cost":0},{"id":"market","lots":[8,9,10,11,12,13],"stars":9,"cost":250},{"id":"quay","lots":[14,15,16,17,18,19],"stars":24,"cost":700}],"decos":[{"id":"bench","icon":"🪑","cost":15,"charm":3,"unlockDay":1},{"id":"tree","icon":"🌳","cost":20,"charm":4,"unlockDay":1},{"id":"tulips","icon":"🌷","cost":12,"charm":2,"unlockDay":1},{"id":"lamp","icon":"🏮","cost":25,"charm":4,"unlockDay":2},{"id":"sunflower","icon":"🌻","cost":14,"charm":3,"unlockDay":2},{"id":"pine","icon":"🌲","cost":22,"charm":4,"unlockDay":2},{"id":"palm","icon":"🌴","cost":35,"charm":5,"unlockDay":3},{"id":"pot","icon":"🪴","cost":16,"charm":3,"unlockDay":3},{"id":"daisy","icon":"🌼","cost":12,"charm":2,"unlockDay":3},{"id":"anchor","icon":"⚓","cost":30,"charm":4,"unlockDay":4},{"id":"buoy","icon":"🛟","cost":28,"charm":4,"unlockDay":4},{"id":"net","icon":"🎣","cost":26,"charm":4,"unlockDay":4},{"id":"kite","icon":"🪁","cost":30,"charm":4,"unlockDay":5},{"id":"balloons","icon":"🎈","cost":18,"charm":3,"unlockDay":5},{"id":"bow","icon":"🎀","cost":18,"charm":3,"unlockDay":5},{"id":"bike","icon":"🚲","cost":34,"charm":4,"unlockDay":6},{"id":"parasol","icon":"⛱️","cost":40,"charm":5,"unlockDay":6},{"id":"rose","icon":"🌹","cost":16,"charm":3,"unlockDay":6},{"id":"hibiscus","icon":"🌺","cost":18,"charm":3,"unlockDay":7},{"id":"cactus","icon":"🌵","cost":20,"charm":3,"unlockDay":7},{"id":"mushroom","icon":"🍄","cost":22,"charm":3,"unlockDay":7},{"id":"wheat","icon":"🌾","cost":14,"charm":2,"unlockDay":8},{"id":"log","icon":"🪵","cost":12,"charm":2,"unlockDay":8},{"id":"rock","icon":"🪨","cost":10,"charm":2,"unlockDay":8},{"id":"amphora","icon":"🏺","cost":45,"charm":6,"unlockDay":9},{"id":"bucket","icon":"🪣","cost":12,"charm":2,"unlockDay":9},{"id":"chime","icon":"🎐","cost":30,"charm":4,"unlockDay":9},{"id":"carp","icon":"🎏","cost":32,"charm":4,"unlockDay":10},{"id":"boat","icon":"🛶","cost":50,"charm":6,"unlockDay":10},{"id":"crab","icon":"🦀","cost":24,"charm":3,"unlockDay":11},{"id":"shell","icon":"🐚","cost":20,"charm":3,"unlockDay":11},{"id":"maple","icon":"🍁","cost":22,"charm":3,"unlockDay":12},{"id":"fountain","icon":"⛲","cost":90,"charm":9,"unlockDay":12},{"id":"lantern","icon":"💡","cost":26,"charm":3,"unlockDay":13},{"id":"clover","icon":"🍀","cost":18,"charm":3,"unlockDay":14},{"id":"tent","icon":"🎪","cost":70,"charm":7,"unlockDay":15},{"id":"statue","icon":"🗿","cost":60,"charm":6,"unlockDay":16},{"id":"lighthouse","icon":"🗼","cost":0,"shells":25,"charm":10,"unlockDay":1},{"id":"xmastree","icon":"🎄","cost":0,"shells":8,"charm":8,"unlockDay":1,"event":"xmas"},{"id":"snowman","icon":"⛄","cost":0,"shells":6,"charm":7,"unlockDay":1,"event":"xmas"},{"id":"gift","icon":"🎁","cost":40,"charm":4,"unlockDay":1,"event":"xmas"},{"id":"star","icon":"🌟","cost":0,"shells":12,"charm":9,"unlockDay":1,"pass":true}],"inhabitants":[{"id":"mirabelle","species":"rabbit","color":"#f3e6d8","want":"bakery","day":1},{"id":"otto","species":"otter","color":"#a77b5a","want":"fish","day":2},{"id":"renata","species":"fox","color":"#e8894a","want":"florist","day":2},{"id":"pistache","species":"mouse","color":"#c9c3bb","want":"icecream","day":1},{"id":"gaston","species":"bear","color":"#9a6b4b","want":"cafe","day":3},{"id":"lulu","species":"duck","color":"#fff3b0","want":"bazaar","day":4},{"id":"basile","species":"hedgehog","color":"#b89470","want":"crepe","day":5},{"id":"capucine","species":"cat","color":"#f2c49b","want":"books","day":6},{"id":"filou","species":"raccoon","color":"#9a9aa6","want":"toys","day":7},{"id":"nuage","species":"sheep","color":"#fbf7f0","want":"grocery","day":8},{"id":"hector","species":"otter","color":"#7d5a43","want":"tea","day":9},{"id":"praline","species":"rabbit","color":"#e9b9a8","want":"souvenir","day":10},{"id":"marin","species":"duck","color":"#d9e9f2","want":"fish","day":12},{"id":"sorbet","species":"cat","color":"#ffffff","want":"icecream","day":14},{"id":"noisette","species":"mouse","color":"#b48a68","want":"bakery","day":16},{"id":"barnabe","species":"bear","color":"#6e4f3a","want":"grocery","day":18},{"id":"zephyr","species":"fox","color":"#f0b27a","want":"tea","day":20},{"id":"pompon","species":"sheep","color":"#f0e4d4","want":"toys","day":22},{"id":"maestro","species":"raccoon","color":"#7f7f8c","want":"books","day":25},{"id":"noel","species":"hedgehog","color":"#c9a27e","want":"souvenir","day":1,"event":"xmas"}],"species":["rabbit","otter","fox","mouse","bear","duck","hedgehog","cat","raccoon","sheep"],"speciesColors":{"rabbit":["#f3e6d8","#e0cbb8","#cfc6c0"],"otter":["#a77b5a","#8d6a50"],"fox":["#e8894a","#d9773a"],"mouse":["#c9c3bb","#b5aca3"],"bear":["#9a6b4b","#83593d"],"duck":["#fff3b0","#f6f6f6"],"hedgehog":["#b89470","#a07e5c"],"cat":["#f2c49b","#9c9c9c","#3e3a3a"],"raccoon":["#9a9aa6"],"sheep":["#fbf7f0"]},"objectives":{"count":60,"earn":{"base":30,"perDay":14,"perDay2":0.35},"happy":{"base":55,"perDay":0.5,"max":80},"third":["serve","types","decos","vip"],"serve":{"base":6,"perDay":1.1},"types":{"base":2,"per":0.3,"max":12},"decos":{"base":1,"per":0.5,"max":20},"starShells":1,"threeStarBonus":2},"chest":{"coinsBase":10,"coinsPerDay":3,"shellChance":0.3,"shellsMax":3,"decoEvery":3},"quests":[{"id":"serve","target":20,"coins":40,"shells":0},{"id":"earn","target":200,"coins":0,"shells":2},{"id":"deco","target":1,"coins":30,"shells":0},{"id":"happy","target":10,"coins":50,"shells":0},{"id":"upgrade","target":1,"coins":0,"shells":1},{"id":"days","target":2,"coins":60,"shells":0}],"login":[{"coins":50},{"shells":2},{"coins":100},{"deco":"lamp"},{"shells":3},{"coins":200},{"shells":8}],"ads":{"interstitialFromDay":3,"interstitialGapSec":180,"vipSpend":3},"start":{"coins":120,"shells":3},"store":[{"id":"starter","price":"1,99 €","coins":500,"shells":30,"decos":["palm","fountain","lamp"],"once":true},{"id":"shells20","price":"0,99 €","shells":20},{"id":"shells120","price":"4,99 €","shells":120},{"id":"shells260","price":"9,99 €","shells":260},{"id":"shells600","price":"19,99 €","shells":600},{"id":"facades","price":"2,99 €","skin":"marine","once":true},{"id":"pass","price":"4,99 €/mois","pass":true},{"id":"noads","price":"3,99 €","noAds":true,"once":true}],"shellExchange":{"shells":5,"coins":150}};window.GS_VERSION="1.0";window.GS_SPR={"logo": "assets/logo.png", "map_street": "assets/map_street.png", "npc_bear_0": "assets/npc_bear_0.png", "npc_bear_1": "assets/npc_bear_1.png", "npc_cat_0": "assets/npc_cat_0.png", "npc_cat_1": "assets/npc_cat_1.png", "npc_duck_0": "assets/npc_duck_0.png", "npc_duck_1": "assets/npc_duck_1.png", "npc_fox_0": "assets/npc_fox_0.png", "npc_fox_1": "assets/npc_fox_1.png", "npc_hedgehog_0": "assets/npc_hedgehog_0.png", "npc_hedgehog_1": "assets/npc_hedgehog_1.png", "npc_mouse_0": "assets/npc_mouse_0.png", "npc_mouse_1": "assets/npc_mouse_1.png", "npc_otter_0": "assets/npc_otter_0.png", "npc_otter_1": "assets/npc_otter_1.png", "npc_rabbit_0": "assets/npc_rabbit_0.png", "npc_rabbit_1": "assets/npc_rabbit_1.png", "npc_raccoon_0": "assets/npc_raccoon_0.png", "npc_raccoon_1": "assets/npc_raccoon_1.png", "npc_sheep_0": "assets/npc_sheep_0.png", "npc_sheep_1": "assets/npc_sheep_1.png", "shop_bakery": "assets/shop_bakery.png", "shop_bazaar": "assets/shop_bazaar.png", "shop_books": "assets/shop_books.png", "shop_cafe": "assets/shop_cafe.png", "shop_crepe": "assets/shop_crepe.png", "shop_fish": "assets/shop_fish.png", "shop_florist": "assets/shop_florist.png", "shop_grocery": "assets/shop_grocery.png", "shop_icecream": "assets/shop_icecream.png", "shop_souvenir": "assets/shop_souvenir.png", "shop_tea": "assets/shop_tea.png", "shop_toys": "assets/shop_toys.png", "ui_bakery": "assets/ui_bakery.png", "ui_bazaar": "assets/ui_bazaar.png", "ui_books": "assets/ui_books.png", "ui_box": "assets/ui_box.png", "ui_cafe": "assets/ui_cafe.png", "ui_check": "assets/ui_check.png", "ui_chest": "assets/ui_chest.png", "ui_close": "assets/ui_close.png", "ui_coin": "assets/ui_coin.png", "ui_crepe": "assets/ui_crepe.png", "ui_fish": "assets/ui_fish.png", "ui_florist": "assets/ui_florist.png", "ui_flower": "assets/ui_flower.png", "ui_grocery": "assets/ui_grocery.png", "ui_happy": "assets/ui_happy.png", "ui_icecream": "assets/ui_icecream.png", "ui_lock": "assets/ui_lock.png", "ui_map": "assets/ui_map.png", "ui_meh": "assets/ui_meh.png", "ui_paw": "assets/ui_paw.png", "ui_plus": "assets/ui_plus.png", "ui_quests": "assets/ui_quests.png", "ui_sad": "assets/ui_sad.png", "ui_settings": "assets/ui_settings.png", "ui_shell": "assets/ui_shell.png", "ui_shopfront": "assets/ui_shopfront.png", "ui_smile": "assets/ui_smile.png", "ui_souvenir": "assets/ui_souvenir.png", "ui_star": "assets/ui_star.png", "ui_tea": "assets/ui_tea.png", "ui_toys": "assets/ui_toys.png"};window.GS_MAP={
+  "w": 941, "h": 1672,
+  "note": "Coordinates in pixels of sprites/map_street.png (ChatGPT painted street). lots: [x, y, district, width, baseY]",
+  "path": [[640, 470], [560, 560], [470, 660], [430, 760], [430, 860], [445, 960], [455, 1060], [460, 1160], [450, 1260], [420, 1360], [380, 1460], [360, 1560], [350, 1672]],
+  "lots": [
+    [125, 1094, "top", 216, 1150],
+    [765, 1101, "top", 232, 1158],
+    [731, 1270, "top", 264, 1326],
+    [178, 842, "top", 240, 898],
+    [758, 842, "top", 224, 898],
+    [224, 598, "market", 224, 642],
+    [801, 622, "market", 200, 672]
+  ],
+  "slots": [
+    [478, 430, "market"], [790, 460, "market"], [330, 700, "top"], [600, 720, "top"], [300, 990, "top"],
+    [610, 985, "top"], [300, 1240, "top"], [590, 1190, "top"], [560, 1430, "top"], [230, 1390, "top"]
+  ],
+  "lamps": [[448, 405], [383, 470], [598, 900]],
+  "sea": [470, 150, 470, 170]
+}
+;window.GS_PRIVACY="<h4>Politique de confidentialité — Gull Street</h4>\n<p>Gull Street fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Gull Street convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Gull Street</h4>\n<p>Gull Street works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Gull Street suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
 <script>// Gull Street — texts. UI and shop names in 6 languages; deco names and inhabitant stories in FR/EN (others fall back to EN).
 window.I18N = (() => {
   const L = ['fr', 'en', 'es', 'de', 'pt', 'it'];
@@ -504,8 +525,14 @@ function face(g, col, kind) {
   }
   g.globalAlpha = 0.6; g.fillStyle = C.coral; for (const s of [-1, 1]) { circ(g, s * 5.4, 2, 1.5); g.fill(); } g.globalAlpha = 1;
 }
-function icon(id, size = 20) { return cached('i:' + id + size, () => { const s = size / 20; return sprite(size, size, size / 2, size / 2, g => { g.scale(s, s); PICTO[id](g); }, id.length * 13); }); }
-function iconURL(id, size = 40) { return cached('u:' + id + size, () => icon(id, size).c.toDataURL()); }
+const UIALIAS = { shell: 'souvenir', pricey: 'sad', angry: 'sad', full: 'meh', settings: 'settings' };
+function uiImg(id) { return (typeof EXT !== 'undefined') && (EXT['ui_' + id] || (id === 'shell' && EXT.ui_shell) || (UIALIAS[id] && EXT['ui_' + UIALIAS[id]])) || null; }
+function icon(id, size = 20) {
+  const e = uiImg(id);
+  if (e) return cached('ie:' + id + size, () => { const k = 3, m = Math.max(e.w, e.h), w = size * e.w / m, h = size * e.h / m, c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k); const g = c.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(e.c, 0, 0, c.width, c.height); return { c, w, h, ox: w / 2, oy: h / 2 }; });
+  return cached('i:' + id + size, () => { const s = size / 20; return sprite(size, size, size / 2, size / 2, g => { g.scale(s, s); PICTO[id](g); }, id.length * 13); });
+}
+function iconURL(id, size = 40) { const e = uiImg(id); return cached((e ? 'ue:' : 'u:') + id + size, () => icon(id, size).c.toDataURL()); }
 
 // ---------- shops: front facades like the mock-up's modular building tiles ----------
 const STYLE = {
@@ -837,14 +864,47 @@ function poster(w, h) {
   return c;
 }
 
-return { C, R, plot, icon, iconURL, shop, critter, critterURL, deco, decoURL, world, drawSea, boat, gull, poster, PICTO };
+// ---------- painted sprites (cut from ChatGPT sheets): used instead of the drawn ones when present ----------
+// window.GS_SPR = { name: url }. Each image is resampled once to 3x its on-screen size, anchored bottom-centre.
+const EXT = {}, EXT_SIZE = { shop: [104, 0], plot: [96, 0], npc: [0, 36], deco: [0, 38], tree: [0, 58], ui: [0, 0], tile: [0, 0], boat: [72, 0], gull: [30, 0] };
+function setExtSize(kind, w, h) { EXT_SIZE[kind] = [w, h]; }
+function loadExt(map, done) {
+  const names = Object.keys(map || {}); let left = names.length; if (!left) { done && done(); return; }
+  names.forEach(n => { const im = new Image(); im.onload = () => { EXT[n] = prep(n, im); if (--left === 0 && done) done(); }; im.onerror = () => { if (--left === 0 && done) done(); }; im.src = map[n]; });
+}
+function prep(name, im) {
+  const kind = name.split('_')[0], [tw, th] = EXT_SIZE[kind] || [0, 40];
+  if (kind === 'tile' || kind === 'ui' || kind === 'map') return { c: im, w: im.width, h: im.height, ox: im.width / 2, oy: im.height / 2, raw: true };
+  const s = kind === 'npc' ? 0.15 : kind === 'deco' ? 0.2 : tw ? tw / im.width : th / im.height, w = im.width * s, h = im.height * s, k = 3;
+  const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w * k)); c.height = Math.max(1, Math.round(h * k));
+  const g = c.getContext('2d'); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  // step down by halves for a clean downscale of big painted sheets
+  let src = im, sw = im.width, sh = im.height;
+  while (sw / 2 > c.width) { const t = document.createElement('canvas'); t.width = Math.round(sw / 2); t.height = Math.round(sh / 2); const q = t.getContext('2d'); q.imageSmoothingQuality = 'high'; q.drawImage(src, 0, 0, t.width, t.height); src = t; sw = t.width; sh = t.height; }
+  g.drawImage(src, 0, 0, c.width, c.height);
+  return { c, w, h, ox: w / 2, oy: kind === 'plot' ? h / 2 : h, ext: true };
+}
+const ext = n => EXT[n] || null;
+const _shop = shop, _deco = deco, _critter = critter, _plot = plot, _boat = boat, _gull = gull;
+const TREES = { tree: 1, pine: 1, palm: 1, maple: 1, xmastree: 1, lighthouse: 1, fountain: 1, tent: 1 };
+const shopX = (type, lvl, skin, side) => ext(`shop_${type}_${lvl}`) || (lvl >= 2 && ext(`shop_${type}_2`)) || ext(`shop_${type}`) || _shop(type, lvl, skin, side);
+const decoX = id => ext('deco_' + id) || ext('tree_' + id) || _deco(id);
+const critterX = (sp, tint, frame, acc, pid) => (pid && (ext(`npc_${pid}_${frame % 2}`) || ext('npc_' + pid))) || ext(`npc_${sp}_${frame % 2}`) || ext('npc_' + sp) || _critter(sp, tint, frame, acc);
+const plotX = open => ext(open ? 'plot_open' : 'plot_locked') || _plot(open);
+const boatX = col => ext('boat_' + (col === C.coral ? 0 : 1)) || _boat(col);
+const gullX = f => ext('gull_' + (f % 2)) || _gull(f);
+const decoURLX = id => { const e = ext('deco_' + id) || ext('tree_' + id); return e ? cached('xu' + id, () => e.c.toDataURL()) : decoURL(id); };
+const critterURLX = (sp, tint, acc, pid) => { const e = (pid && ext('npc_' + pid + '_0')) || (pid && ext('npc_' + pid)) || ext('npc_' + sp + '_0') || ext('npc_' + sp); return e ? e.c.toDataURL() : critterURL(sp, tint, acc); };
+
+return { C, R, plot: plotX, icon, iconURL, shop: shopX, critter: critterX, critterURL: critterURLX, deco: decoX, decoURL: decoURLX, world, drawSea, boat: boatX, gull: gullX, poster, PICTO, loadExt, ext, setExtSize };
 })();
 </script>
 <script>// Gull Street — a cozy harbour shop street. Plain canvas + DOM, no dependencies.
 (() => {
 'use strict';
 const ECO = window.ECO, I = window.I18N, t = I.t;
-const W = 390, WORLD_H = 1640, STREET_TOP = 40, STREET_END = 1430, SEA_Y = 1500;
+const MAP = window.GS_MAP && window.GS_SPR && window.GS_SPR.map_street ? window.GS_MAP : null, MF = MAP ? 390 / MAP.w : 1;
+const W = 390, WORLD_H = MAP ? Math.round(MAP.h * MF) : 1640, STREET_TOP = MAP ? MAP.path[0][1] * MF : 40, STREET_END = MAP ? MAP.path[MAP.path.length - 1][1] * MF : 1430, SEA_Y = MAP ? 1e9 : 1500;
 const TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), lerp = (a, b, k) => a + (b - a) * k;
 const rnd = (a, b) => a + Math.random() * (b - a), pickR = a => a[Math.floor(Math.random() * a.length)];
 const SHOP = Object.fromEntries(ECO.shops.map(s => [s.id, s])), DECO = Object.fromEntries(ECO.decos.map(d => [d.id, d]));
@@ -854,14 +914,23 @@ const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.ge
 const isXmas = () => { const d = new Date(); return d.getMonth() === 11 || (d.getMonth() === 0 && d.getDate() <= 6) || /xmas/.test(location.search); };
 
 // ---------- geometry ----------
-const streetX = y => 195 + 34 * Math.sin(y / 230 + 0.6);
+const streetX = !MAP ? (y => 195 + 34 * Math.sin(y / 230 + 0.6)) : (y => {
+  const P = MAP.path; y /= MF; if (y <= P[0][1]) return P[0][0] * MF;
+  for (let i = 1; i < P.length; i++) if (y <= P[i][1]) { const a = P[i - 1], b = P[i], k = (y - a[1]) / (b[1] - a[1] || 1); return (a[0] + (b[0] - a[0]) * k) * MF; }
+  return P[P.length - 1][0] * MF;
+});
 const LOTS = [], SLOTS = [];
+if (MAP) {
+  MAP.lots.forEach((l, i) => { const x = l[0] * MF, y = l[1] * MF; LOTS.push({ i, x, y, side: x < streetX(y) ? -1 : 1, district: l[2], w: (l[3] || 200) * MF, base: (l[4] || l[1] + 50) * MF }); });
+  MAP.slots.forEach((s, i) => SLOTS.push({ i, x: s[0] * MF, y: s[1] * MF, district: s[2] }));
+} else {
 for (let i = 0; i < 20; i++) {
   const r = Math.floor(i / 2), side = i % 2 ? 1 : -1, y = 150 + r * 128 + (r >= 4 ? 30 : 0) + (r >= 7 ? 30 : 0);
   LOTS.push({ i, y, side, x: streetX(y) + side * 104, district: ECO.districts.find(d => d.lots.includes(i)).id });
 }
 for (let r = 0; r < 10; r++) for (const side of [-1, 1]) for (const off of [74, 132]) {
   const y = LOTS[r * 2].y + 64; SLOTS.push({ i: SLOTS.length, y, x: clamp(streetX(y) + side * off, 18, W - 18), district: LOTS[r * 2].district });
+}
 }
 
 // ---------- save ----------
@@ -1152,11 +1221,11 @@ async function nextDay() {
 
 // ---------- canvas ----------
 const cv = document.getElementById('cv'); let cx = cv.getContext('2d');
-let scale = 1, viewH = 800, dpr = 1;
+let scale = 1, viewH = 800, viewW = W, dpr = 1; const CAMY0 = MAP ? 0 : -110;
 function resize() {
   dpr = Math.min(3, window.devicePixelRatio || 1); const w = innerWidth, h = innerHeight;
   cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.width = w + 'px'; cv.style.height = h + 'px';
-  scale = w / W; viewH = h / scale; G.camY = clamp(G.camY, -110, WORLD_H - viewH);
+  scale = MAP ? Math.max(w / W, h / WORLD_H) : w / W; viewH = h / scale; viewW = w / scale; G.camX = clamp(G.camX || 0, 0, Math.max(0, W - viewW)); G.camY = clamp(G.camY, CAMY0, Math.max(CAMY0, WORLD_H - viewH));
 }
 addEventListener('resize', resize);
 
@@ -1171,6 +1240,15 @@ function worldCanvas() {
   return WORLD;
 }
 function drawWorld() {
+  if (MAP && A.ext('map_street')) {
+    cx.drawImage(A.ext('map_street').c, 0, 0, W, WORLD_H);
+    if (MAP.sea) { const [sx, sy, sw, sh] = MAP.sea.map(v => v * MF); for (let k = 0; k < 26; k++) { const x = sx + ((k * 97 + G.t * (6 + k % 4 * 3)) % sw), y = sy + (k * 53) % sh, a = 0.5 + 0.5 * Math.sin(G.t * 3 + k); cx.fillStyle = `rgba(255,250,220,${a * 0.8})`; cx.fillRect(x, y, 3 + k % 3, 1); } }
+    for (const L of LOTS) drawLot(L);
+    for (const s of SLOTS) drawSlot(s);
+    if (G.phase !== 'day' && MAP.lamps) for (const [lx, ly] of MAP.lamps) { const k = G.phase === 'evening' ? 0.55 : 0.12; const gr = cx.createRadialGradient(lx * MF, ly * MF, 0, lx * MF, ly * MF, 26); gr.addColorStop(0, `rgba(255,214,120,${k})`); gr.addColorStop(1, 'rgba(255,214,120,0)'); cx.fillStyle = gr; cx.fillRect(lx * MF - 26, ly * MF - 26, 52, 52); }
+    return;
+  }
+  if (MAP) { cx.fillStyle = '#8fc04a'; cx.fillRect(0, 0, W, WORLD_H); return; }
   const y0 = G.camY, y1 = G.camY + viewH, wc = worldCanvas(), k = wc.width / W;
   const sy = Math.max(0, y0), ey = Math.min(SEA_Y + 12, y1);
   if (ey > sy) cx.drawImage(wc, 0, sy * k, wc.width, (ey - sy) * k, 0, sy, W, ey - sy);
@@ -1197,16 +1275,19 @@ function drawLot(L) {
   const lot = S.lots[L.i], open = districtOpen(L.district), x = L.x, y = L.y;
   const hl = (G.sel && G.sel.kind === 'lot' && G.sel.i === L.i) || (G.moving != null && G.phase === 'morning' && open);
   if (!lot) {
-    blit(A.plot(open), x, y);
-    if (open && G.phase === 'morning') { if (hl) { cx.fillStyle = 'rgba(255,248,234,.35)'; rr(x - 44, y - 30, 88, 64, 8); cx.fill(); } blit(A.icon('plus', 16), x + 1, y - 21); }
+    if (!MAP) blit(A.plot(open), x, y);
+    if (MAP && !open) { cx.fillStyle = 'rgba(40,60,50,.32)'; cx.beginPath(); cx.ellipse(x, y, L.w * 0.42, L.w * 0.2, 0, 0, TAU); cx.fill(); }
+    if (MAP && open && G.phase === 'morning') { cx.fillStyle = PC.woodDk || '#7e4a2a'; cx.fillRect(x - 1.5, y - 6, 3, 16); cx.fillStyle = '#d8955a'; rr(x - 12, y - 20, 24, 16, 3); cx.fill(); cx.strokeStyle = '#7e4a2a'; cx.lineWidth = 1.5; cx.stroke(); }
+    if (open && G.phase === 'morning') { if (hl) { cx.fillStyle = 'rgba(255,248,234,.35)'; rr(x - 44, y - 30, 88, 64, 8); cx.fill(); } blit(A.icon('plus', 16), x + 1, MAP ? y - 12 : y - 21); }
     if (!open) blit(A.icon('lock', 22), x, y - 2);
     if (G.tutLot === L.i) { cx.strokeStyle = PC.coral; cx.lineWidth = 4; cx.globalAlpha = 0.5 + 0.5 * Math.sin(G.t * 5); rr(x - 51, y - 45, 102, 86, 19); cx.stroke(); cx.globalAlpha = 1; }
     return;
   }
   cx.fillStyle = 'rgba(53,90,40,.28)'; cx.beginPath(); cx.ellipse(x + 3, y + 35, 50, 6, 0, 0, TAU); cx.fill();
-  blit(A.shop(lot.type, lot.lvl, S.skin, L.side), x, y + 34);
+  if (MAP) { const sp = A.shop(lot.type, lot.lvl, S.skin, L.side), k = L.w * 0.92 / sp.w; cx.save(); if (L.side > 0 && sp.ext) { cx.translate(2 * x, 0); cx.scale(-1, 1); } blit(sp, x, L.base, k); cx.restore(); }
+  else blit(A.shop(lot.type, lot.lvl, S.skin, L.side), x, y + 34);
   // price tag (paper pill, coin, price) on the street side
-  const px = x - L.side * 30, py = y + 44, txt = String(shopPrice(lot));
+  const px = x - L.side * 30, py = MAP ? L.base + 8 : y + 44, txt = String(shopPrice(lot));
   cx.font = '800 11px ui-rounded, system-ui'; const tw = cx.measureText(txt).width + 22;
   cx.fillStyle = PC.coral; rr(px - tw / 2 + 1.2, py - 8 + 1.2, tw, 16, 8); cx.globalAlpha = 0.5; cx.fill(); cx.globalAlpha = 1;
   cx.fillStyle = lot.price === 'low' ? '#d8ecd0' : lot.price === 'high' ? '#f8d3c6' : PC.paperHi; rr(px - tw / 2, py - 8, tw, 16, 8); cx.fill();
@@ -1230,7 +1311,7 @@ function drawWalkers() {
     const fr = moving ? Math.floor(w.phase * 7) % 4 : 0;
     const acc = w.person ? { kind: 'scarf', outfit: PEOPLE[w.person].scarf || PC.coral, crown: false } : w.vip ? { crown: true } : w.hat ? { hat: w.hat } : null;
     cx.fillStyle = 'rgba(60,50,40,.25)'; cx.beginPath(); cx.ellipse(w.x, w.y + 6, 9, 3, 0, 0, TAU); cx.fill();
-    blit(A.critter(w.sp, w.tint, fr, acc), w.x, w.y + 6);
+    blit(A.critter(w.sp, w.tint, fr, acc, w.person), w.x, w.y + 6);
     // bubble: story text, a mood, or the wants still to find
     let story = null;
     if (w.story && S.met[w.person]) { const st = I.story(w.person); w.storyT = (w.storyT || 0) + 1 / 60; const k = Math.floor(w.storyT / 1.8); if (k < 3) story = st[k]; else w.story = 0; }
@@ -1269,12 +1350,12 @@ function drawLight() {
 
 // ---------- input: drag to scroll, tap to act ----------
 let drag = null, vel = 0;
-cv.addEventListener('pointerdown', e => { audioInit(); drag = { y: e.clientY, x: e.clientX, cam: G.camY, moved: false, t: performance.now(), ly: e.clientY }; vel = 0; });
+cv.addEventListener('pointerdown', e => { audioInit(); drag = { y: e.clientY, x: e.clientX, cam: G.camY, camx: G.camX || 0, moved: false, t: performance.now(), ly: e.clientY }; vel = 0; });
 addEventListener('pointermove', e => {
   if (!drag) return; const dy = e.clientY - drag.y; if (Math.abs(dy) > 8 || Math.abs(e.clientX - drag.x) > 8) drag.moved = true;
-  if (drag.moved) { const now = performance.now(); vel = (drag.ly - e.clientY) / scale / Math.max(1, now - drag.t) * 16; drag.t = now; drag.ly = e.clientY; G.camY = clamp(drag.cam - dy / scale, -110, WORLD_H - viewH); }
+  if (drag.moved) { const now = performance.now(); vel = (drag.ly - e.clientY) / scale / Math.max(1, now - drag.t) * 16; drag.t = now; drag.ly = e.clientY; G.camY = clamp(drag.cam - dy / scale, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); G.camX = clamp(drag.camx - (e.clientX - drag.x) / scale, 0, Math.max(0, W - viewW)); }
 });
-addEventListener('pointerup', e => { if (!drag) return; const d = drag; drag = null; if (!d.moved) tapAt(e.clientX / scale, e.clientY / scale + G.camY); });
+addEventListener('pointerup', e => { if (!drag) return; const d = drag; drag = null; if (!d.moved) tapAt(e.clientX / scale + (G.camX || 0), e.clientY / scale + G.camY); });
 function tapAt(x, y) {
   if (G.phase === 'title') return;
   if (G.phase === 'day' || G.phase === 'evening') {
@@ -1364,8 +1445,8 @@ hud.addEventListener('click', e => {
   if (a === 'tland') landModal();
   if (a === 'tshops' || a === 'tdeco') {
     if (G.phase !== 'morning') return toast(t('morningOnly'));
-    if (a === 'tshops') { const i = LOTS.findIndex(L => !S.lots[L.i] && districtOpen(L.district)); if (i < 0) return toast(t('noSpot')); G.camY = clamp(LOTS[i].y - viewH * 0.35, -110, WORLD_H - viewH); onLot(i); }
-    else { const i = SLOTS.findIndex(s => !S.slots[s.i] && districtOpen(s.district)); if (i < 0) return toast(t('noSpot')); G.camY = clamp(SLOTS[i].y - viewH * 0.35, -110, WORLD_H - viewH); onSlot(i); }
+    if (a === 'tshops') { const i = LOTS.findIndex(L => !S.lots[L.i] && districtOpen(L.district)); if (i < 0) return toast(t('noSpot')); G.camY = clamp(LOTS[i].y - viewH * 0.35, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); G.camX = clamp(LOTS[i].x - viewW / 2, 0, Math.max(0, W - viewW)); onLot(i); }
+    else { const i = SLOTS.findIndex(s => !S.slots[s.i] && districtOpen(s.district)); if (i < 0) return toast(t('noSpot')); G.camY = clamp(SLOTS[i].y - viewH * 0.35, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); G.camX = clamp(SLOTS[i].x - viewW / 2, 0, Math.max(0, W - viewW)); onSlot(i); }
   }
 });
 function landModal() {
@@ -1556,13 +1637,13 @@ function consentModal(fromSettings) {
 function titleScreen() {
   G.phase = 'title'; refreshHud();
   const el = $('#title'); el.style.backgroundImage = `url(${A.poster(Math.min(innerWidth, 520), innerHeight).toDataURL()})`;
-  el.innerHTML = fx(`<div class="logo"><img class="tgull" src="${A.critterURL('duck', '#fdf4de', { kind: 'scarf', outfit: '#e8664a' })}" alt=""><h1><span>Gull</span><span>Street</span></h1><p>${t('subtitle')}</p></div>
+  el.innerHTML = fx(`<div class="logo"><img class="tgull" src="${A.critterURL('duck', '#fdf4de', { kind: 'scarf', outfit: '#e8664a' })}" alt="">${window.GS_SPR && window.GS_SPR.logo ? `<img class="tlogo" src="${window.GS_SPR.logo}" alt="Gull Street">` : '<h1><span>Gull</span><span>Street</span></h1>'}<p>${t('subtitle')}</p></div>
     <button class="b1 big" data-play>${S.totals.days ? t('continue') : t('play')}</button>${isXmas() ? `<div class="evt">${decoImg('xmastree')} ${t('xmas')}</div>` : ''}`);
   el.classList.add('on');
   el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.bell(); el.classList.remove('on'); S.consent == null ? consentModal(false) : afterConsent(); };
 }
 function afterConsent() {
-  Ads.init(); ensureQuests(); G.phase = 'morning'; G.camY = -90; refreshHud(); tutTargets(); track('session_start', { day: S.day });
+  Ads.init(); ensureQuests(); G.phase = 'morning'; G.camY = MAP ? WORLD_H : -90; G.camX = MAP ? (W - viewW) / 2 : 0; resize(); refreshHud(); tutTargets(); track('session_start', { day: S.day });
   if (S.login.pending && S.totals.days) setTimeout(questsModal, 500);
 }
 function tutTargets() {
@@ -1574,18 +1655,18 @@ function tutTargets() {
 let last = performance.now();
 function frame(now) {
   const rdt = Math.min(0.05, (now - last) / 1000); last = now; G.t += rdt;
-  if (!drag && Math.abs(vel) > 0.05) { G.camY = clamp(G.camY + vel, -110, WORLD_H - viewH); vel *= 0.92; }
+  if (!drag && Math.abs(vel) > 0.05) { G.camY = clamp(G.camY + vel, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); vel *= 0.92; }
   if (G.phase === 'day') { const steps = G.speed; for (let k = 0; k < steps; k++) updateDay(rdt); if (now - lastTimerUpdate > 250) { lastTimerUpdate = now; const bar = hud.querySelector('.timer i'); if (bar) bar.style.width = clamp(G.dayT / dayLen(), 0, 1) * 100 + '%'; const hc = $('#hc'); if (hc) hc.textContent = S.coins; if ((G.hudTick = (G.hudTick || 0) + 1) % 4 === 0 && !sheet.classList.contains('on')) refreshHud(); } }
   musicTick();
-  cx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, -G.camY * dpr * scale); cx.imageSmoothingEnabled = false;
+  cx.setTransform(dpr * scale, 0, 0, dpr * scale, -(G.camX || 0) * dpr * scale, -G.camY * dpr * scale); cx.imageSmoothingEnabled = !!MAP;
   cx.fillStyle = PC.paper; cx.fillRect(0, G.camY, W, viewH);
   drawWorld(); drawWalkers(); drawBirds(); drawFloats(rdt); drawLight();
   requestAnimationFrame(frame);
 }
 // ---------- boot ----------
-resize(); titleScreen(); requestAnimationFrame(frame);
+resize(); A.loadExt(window.GS_SPR, () => { WORLD = null; if (G.phase === 'title') titleScreen(); else refreshHud(); }); titleScreen(); requestAnimationFrame(frame);
 // test hooks (used by tools/play-test.mjs)
-window.GS = { S: () => S, G, startDay, nextDay, tapAt, endDay, save, setDay: d => { S.day = d; save(); refreshHud(); }, cam: y => { G.camY = clamp(y, -110, WORLD_H - viewH); }, LOTS, SLOTS,
+window.GS = { S: () => S, G, startDay, nextDay, tapAt, endDay, save, setDay: d => { S.day = d; save(); refreshHud(); }, cam: y => { G.camY = clamp(y, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); }, LOTS, SLOTS,
   play: () => { $('#title [data-play]')?.click(); } };
 })();
 </script>
