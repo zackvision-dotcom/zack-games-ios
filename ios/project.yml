@@ -152,3 +152,67 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.coralstack
         PRODUCT_NAME: CoralStack
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  CrumbleCrew:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: CrumbleCrew/Assets.xcassets
+      - path: CrumbleCrew/Web
+        type: folder
+    info:
+      path: CrumbleCrew/Info.plist
+      properties:
+        CFBundleDisplayName: Crumble Crew
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.casual-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.crumblecrew
+        PRODUCT_NAME: CrumbleCrew
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  CircuitCaper:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: CircuitCaper/Assets.xcassets
+      - path: CircuitCaper/Web
+        type: folder
+    info:
+      path: CircuitCaper/Info.plist
+      properties:
+        CFBundleDisplayName: Circuit Caper
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.puzzle-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.circuitcaper
+        PRODUCT_NAME: CircuitCaper
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later

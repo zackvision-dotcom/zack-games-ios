@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1a1638">
+<title>Circuit Caper</title>
+<style>
+:root{--ink:#1a1028;--paper:#fff6e6;--deep:#1a1028;--violet:#6a4aa0;--gold:#ffd34d;--red:#ff4a3a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#1a1638;font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#cv{position:fixed;inset:0;display:block;touch-action:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
+.b1,.b2,.b3{border-radius:16px;padding:11px 14px;font-weight:900;border:3px solid var(--deep);transition:transform .08s;display:block;width:100%;margin-top:8px}
+.b1{background:linear-gradient(#ff8a6a,#e0403a);color:#fff;text-shadow:0 2px 0 rgba(26,16,40,.5);box-shadow:inset 0 2px 0 rgba(255,255,255,.4),0 4px 0 var(--deep)}
+.b2{background:var(--paper);box-shadow:0 4px 0 var(--deep)}.b3{background:#f4d0c8;color:#8a2a1a;box-shadow:0 4px 0 var(--deep)}
+.b1:active,.b2:active{transform:translateY(3px)}.b1:disabled{filter:grayscale(.8);opacity:.6}.big{font-size:19px;padding:13px}
+.row2{display:flex;gap:8px}.row2>*{flex:1}
+#game{display:none}#game.on{display:block}
+#hud{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:6px;padding:calc(env(safe-area-inset-top) + 8px) 10px 6px}
+#hud .title{flex:1;color:#fff;font-weight:900;font-size:14px;text-shadow:0 2px 0 #000;line-height:1.1}
+#hud .coin{background:var(--paper);border:3px solid var(--deep);border-radius:999px;padding:3px 10px;font-weight:900;box-shadow:0 3px 0 var(--deep)}
+.rb{width:38px;height:38px;border-radius:50%;background:var(--paper);border:3px solid var(--deep);box-shadow:0 3px 0 var(--deep);font-size:17px;position:relative;flex:none}
+.rb.dot::after{content:'';position:absolute;right:-2px;top:-2px;width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid #fff}
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 12px calc(env(safe-area-inset-bottom) + 10px);background:linear-gradient(rgba(26,16,40,0),rgba(26,16,40,.85) 30%)}
+.wirecount{color:#fff;font-weight:800;text-align:center;font-size:14px}.wirecount small{opacity:.75}
+.press{display:block;margin:0 auto 4px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ff8a7a,#d0201a);border:5px solid var(--deep);box-shadow:0 6px 0 var(--deep);color:#fff;font-weight:900;font-size:17px;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.press:active{transform:translateY(5px);box-shadow:0 1px 0 var(--deep)}
+#rico{position:fixed;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 58px);z-index:6;display:flex;align-items:flex-start;gap:6px;pointer-events:none;opacity:0;transform:translateY(-10px);transition:.25s}
+#rico.on{opacity:1;transform:none}#rico .rf{width:46px;height:46px;flex:none;border-radius:50%;background:#c9c9d2;border:3px solid var(--deep);display:grid;place-items:center;font-size:28px}
+#rico .rt{background:var(--paper);border:3px solid var(--deep);border-radius:4px 16px 16px 16px;padding:7px 11px;font-weight:800;font-size:13.5px;box-shadow:0 3px 0 var(--deep);max-width:310px}
+#mapv{position:fixed;inset:0;z-index:4;display:none;padding:calc(env(safe-area-inset-top) + 70px) 16px 20px;overflow:auto}#mapv.on{display:block}
+#mapv h2{color:#fff;text-shadow:0 2px 0 #000;text-align:center}#mapv h2 small{color:var(--gold)}
+#mapv .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:420px;margin:0 auto}
+.lv{aspect-ratio:1;border-radius:18px;background:linear-gradient(#fff6e6,#e8d4b8);border:3px solid var(--deep);box-shadow:0 4px 0 var(--deep);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.lv b{font-size:24px}.lv span{font-size:12px;color:#d09a10;letter-spacing:-1px}.lv.lock{filter:grayscale(1);opacity:.55}.lv.boss{grid-column:span 4;aspect-ratio:auto;padding:12px;background:linear-gradient(#ffe27a,#f0a020)}
+#modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(10,6,20,.6);padding:18px}#modal.on{display:flex}
+.card{background:var(--paper);border:4px solid var(--deep);border-radius:22px;padding:16px;max-width:380px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 8px 0 rgba(0,0,0,.35);animation:pop .35s cubic-bezier(.3,1.6,.5,1);text-align:center}
+.card.wide{max-width:460px}@keyframes pop{from{transform:scale(.6);opacity:0}}.card h2{margin:4px 0 8px}
+.stars{font-size:52px;letter-spacing:6px}.st{color:#cbb;display:inline-block}.st.on{color:#ffc21a;text-shadow:0 3px 0 var(--deep);animation:stamp .4s cubic-bezier(.3,1.8,.5,1)}@keyframes stamp{from{transform:scale(2.4) rotate(-20deg)}}
+.starlist{text-align:left;margin:4px auto 8px;max-width:240px;font-weight:800;font-size:14px;color:#999}.starlist .ok{color:#2a8a4a}
+.gain{font-size:28px;font-weight:900;color:#c07a10}
+.safe{position:fixed;inset:0;z-index:35;background:rgba(10,6,20,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:20px}
+.safe p{font-weight:800}.safe .dots{display:flex;gap:10px;margin-top:14px}.safe .dots i{width:20px;height:20px;border-radius:50%;background:#444;border:2px solid #fff}.safe .dots i.on{background:#3aff7a}
+.safe.shake{animation:shk .3s}@keyframes shk{25%,75%{transform:translateX(-8px)}50%{transform:translateX(8px)}}
+.jp{font-size:54px;color:var(--gold);-webkit-text-stroke:2px var(--deep);animation:stamp .5s cubic-bezier(.3,1.8,.5,1)}
+.room{font-size:40px;min-height:64px;background:linear-gradient(#e8c8a8,#c99a7a);border:3px solid var(--deep);border-radius:14px;padding:6px;letter-spacing:4px}
+.decos{display:grid;grid-template-columns:1fr 1fr;gap:6px}.deco{background:#fff;border:2px solid #e2c89a;border-radius:12px;padding:6px;display:flex;flex-direction:column;align-items:center;font-size:12px}
+.deco .di{font-size:30px}.deco.own{background:#eaffea}.deco .b1{margin-top:4px;padding:5px;font-size:13px}
+.sitem{display:flex;align-items:center;gap:8px;text-align:left;background:#fff;border:2px solid #e2c89a;border-radius:12px;padding:6px 8px;margin-bottom:6px}.sitem span{flex:1;font-weight:800}.sitem small{display:block;font-weight:600;color:#7a5a3a}.sitem .b1{width:auto;margin:0;padding:6px 10px}
+.login{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.lg{background:#fff;border:2px solid #e2c89a;border-radius:10px;padding:4px 1px;font-size:14px;display:flex;flex-direction:column;align-items:center}.lg small{font-size:9px}.lg b{font-size:10px}.lg.got{opacity:.45}.lg.now{border-color:var(--red);background:#ffe9e0}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:800;border-bottom:1px solid #e2c89a}.sw input{width:22px;height:22px}.ver{font-size:11px;color:#8a6a4a;margin-top:8px}.legal{font-size:13px;text-align:left}
+.confirm{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(10,6,20,.55);padding:20px}
+#toasts{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 190px);left:0;right:0;z-index:20;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;padding:0 14px}
+.toast{background:var(--paper);border:3px solid var(--deep);border-radius:14px;padding:7px 14px;font-weight:800;box-shadow:0 3px 0 var(--deep);animation:pop .3s;transition:opacity .4s;text-align:center;font-size:14px}.toast.out{opacity:0}
+.adov{position:fixed;inset:0;z-index:50;background:#111;display:flex;align-items:center;justify-content:center}.adbox{color:#fff;text-align:center}.adart{font-size:60px;margin:20px}.adcount{font-size:40px;font-weight:900}
+#title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 50px) 24px calc(env(safe-area-inset-bottom) + 40px)}
+#title.on{display:flex}#title .logo{text-align:center}#title .logo img{width:min(90vw,440px)}
+#title h1{font-size:60px;margin:0;line-height:.9;color:#fff;-webkit-text-stroke:3px var(--deep);text-shadow:0 6px 0 var(--deep)}#title h1 span{color:var(--gold)}
+#title p{color:#ffe9c0;font-weight:800;text-shadow:0 2px 3px #000}#title .hero{font-size:110px;animation:sneak 3s ease-in-out infinite}@keyframes sneak{50%{transform:translateX(16px) rotate(4deg)}}#title .b1{max-width:320px}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="game"><div id="hud"></div><div id="rico"><div class="rf">🦝</div><div class="rt"></div></div><div id="bar"></div></div>
+<div id="mapv"></div><div id="modal"></div><div id="toasts"></div><div id="title"></div>
+<script>window.CC_VERSION="1.0";window.CC_SPR={};window.CC_PRIVACY="<h4>Politique de confidentialité — Circuit Caper</h4>\n<p>Circuit Caper fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Circuit Caper convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Circuit Caper</h4>\n<p>Circuit Caper works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Circuit Caper suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// Circuit Caper — the heist simulation (shared by the game and tools/solve.mjs). Pure logic, no drawing.
+// A level is a building seen in cross-section: floors (0 = ground) of `w` tiles. Rico follows his route on his own;
+// the player only rewires the devices (source -> target) before the heist and may press remote buttons during it.
+(function (root) {
+  const DT = 0.05, RICO_SPEED = 2.2, GUARD_SPEED = 1.1, SIGHT = 3.2, TRAP_OPEN = 1.4, STUCK = 3.5, ELEV_TIME = 1.2;
+  const SOURCES = ['sw', 'btn', 'cam'], TARGETS = ['door', 'lamp', 'trap', 'elev'];
+  function make(L, wires, presses) {
+    const s = {
+      L, t: 0, wires: Object.assign({}, wires), presses: (presses || []).slice().sort((a, b) => a.t - b.t), done: null, why: '', alarm: false,
+      rico: { f: L.start.f, x: L.start.x, step: 0, wait: 0, loot: 0, inElev: null, dir: 1, detour: null },
+      doors: L.doors.map(d => ({ ...d, open: !!d.open })), lamps: L.lamps.map(l => ({ ...l, on: l.on !== false })),
+      guards: L.guards.map(g => ({ ...g, dir: g.dir || 1, ko: false, fall: 0, wait: 0 })), cams: L.cams.map(c => ({ ...c, seeing: false, off: false })),
+      traps: L.traps.map(tr => ({ ...tr, open: 0 })), elevs: L.elevs.map(e => ({ ...e, at: e.at != null ? e.at : e.floors[0], move: 0, from: 0 })),
+      sws: L.sws.map(w => ({ ...w, hit: false })), btns: L.btns.map(b => ({ ...b })), loot: L.loot.map(o => ({ ...o, got: false })), events: [],
+    };
+    return s;
+  }
+  const byId = (s, id) => s.doors.find(o => o.id === id) || s.lamps.find(o => o.id === id) || s.traps.find(o => o.id === id) || s.elevs.find(o => o.id === id);
+  function emit(s, src) {
+    const tgt = s.wires[src];
+    if (tgt == null) return;
+    if (tgt === 'alarm') { s.alarm = true; s.events.push({ k: 'alarm', src }); return; }
+    const o = byId(s, tgt); if (!o) return; s.events.push({ k: 'signal', src, tgt });
+    if (o.id[0] === 'D') o.open = !o.open;
+    else if (o.id[0] === 'L') o.on = !o.on;
+    else if (o.id[0] === 'T') { o.open = TRAP_OPEN; for (const g of s.guards) if (!g.ko && g.f === o.f && Math.abs(g.x - o.x) < 0.5) { g.ko = true; g.fall = 1; s.events.push({ k: 'ko', id: g.id }); } }
+    else if (o.id[0] === 'E') { if (!o.move && !o.pending) o.pending = 0.5; }
+  }
+  const lit = (s, f, x) => { for (const l of s.lamps) if (l.f === f && x >= l.x0 - 0.5 && x <= l.x1 + 0.5) return l.on; return true; };
+  // a closed door between a and b on floor f
+  const blocked = (s, f, a, b) => s.doors.some(d => !d.open && d.f === f && d.x > Math.min(a, b) - 0.01 && d.x < Math.max(a, b) + 0.01 && Math.abs(d.x - a) > 0.05);
+  function sees(s, f, x, dir, range, tx, tf) {
+    if (tf !== f) return false; const dx = tx - x; if (Math.sign(dx) !== dir && Math.abs(dx) > 0.3) return false;
+    if (Math.abs(dx) > range) return false; if (!lit(s, tf, tx)) return Math.abs(dx) < 0.6; if (blocked(s, f, x, tx)) return false; return true;
+  }
+  function step(s) {
+    if (s.done) return; s.t += DT; const r = s.rico, L = s.L;
+    while (s.presses.length && s.presses[0].t <= s.t) { const p = s.presses.shift(); emit(s, p.id); }
+    // elevators
+    for (const e of s.elevs) if (e.pending > 0) { e.pending -= DT; if (e.pending <= 0) { e.pending = 0; e.from = e.at; e.at = e.floors[0] === e.at ? e.floors[1] : e.floors[0]; e.move = ELEV_TIME; } }
+    for (const e of s.elevs) if (e.move > 0) { e.move -= DT; if (e.move <= 0) { e.move = 0; if (r.inElev === e.id) { r.f = e.at; } for (const g of s.guards) if (!g.ko && Math.abs(g.x - e.x) < 0.4 && g.f === e.from) g.f = e.at; } }
+    // traps
+    for (const tr of s.traps) if (tr.open > 0) { tr.open -= DT;
+      for (const g of s.guards) if (!g.ko && g.f === tr.f && Math.abs(g.x - tr.x) < 0.5) { g.ko = true; g.fall = 1; s.events.push({ k: 'ko', id: g.id }); }
+      if (r.f === tr.f && Math.abs(r.x - tr.x) < 0.45 && !r.inElev) { s.done = 'fail'; s.why = 'fell'; return; } }
+    // Rico follows his route
+    const st = L.route[r.step];
+    if (!st) { s.done = 'win'; return; }
+    let moved = false;
+    if (st.go != null || r.detour) {
+      let target = r.detour ? r.detour.to : st.go;
+      if (st.go != null && st.ifOpen && !r.detour && r.detourChecked !== r.step) { r.detourChecked = r.step; const d = s.doors.find(o => o.id === st.ifOpen); if (!d || !d.open) { r.step++; return; } }
+      const dir = Math.sign(target - r.x);
+      if (Math.abs(target - r.x) < 0.02) { r.x = target; r.step++; r.wait = 0; }
+      else { const nx = r.x + dir * RICO_SPEED * DT, stop = s.doors.find(d => !d.open && d.f === r.f && ((dir > 0 && d.x > r.x + 0.01 && d.x <= nx + 0.35) || (dir < 0 && d.x < r.x - 0.01 && d.x >= nx - 0.35)));
+        if (stop) { r.wait += DT; if (r.wait > STUCK) { s.done = 'fail'; s.why = 'stuck'; return; } }
+        else { r.x = Math.abs(target - nx) < RICO_SPEED * DT ? target : nx; r.dir = dir; r.wait = 0; moved = true; } }
+    } else if (st.elev) {
+      const e = s.elevs.find(o => o.id === st.elev);
+      if (!r.inElev) { if (e.at === r.f && !e.move && Math.abs(r.x - e.x) < 0.6) { r.inElev = e.id; r.x = e.x; r.wait = 0; } else { r.wait += DT; if (r.wait > STUCK * 2) { s.done = 'fail'; s.why = 'stuck'; return; } } }
+      else if (!e.move && r.f === st.to) { r.inElev = null; r.step++; r.wait = 0; }
+      else if (!e.move) { r.wait += DT; if (r.wait > STUCK * 2) { s.done = 'fail'; s.why = 'stuck'; return; } }
+    } else if (st.wait) { r.wait += DT; if (r.wait >= st.wait) { r.wait = 0; r.step++; } }
+    // switches and loot under Rico's feet
+    for (const w of s.sws) { const on = w.f === r.f && Math.abs(w.x - r.x) < 0.3; if (on && !w.hit) { w.hit = true; emit(s, w.id); } if (!on) w.hit = false; }
+    for (const o of s.loot) if (!o.got && o.f === r.f && Math.abs(o.x - r.x) < 0.35) { o.got = true; r.loot++; s.events.push({ k: 'loot', o }); }
+    for (const c of s.cams) { const v = !c.off && sees(s, c.f, c.x, c.dir, c.range || 3, r.x, r.f) && !r.inElev; if (v && !c.seeing) { c.seeing = true; emit(s, c.id); } if (!v) c.seeing = false; }
+    // guards patrol; closed doors turn them around
+    for (const g of s.guards) { if (g.ko) continue; if (g.a === g.b) { /* static */ } else {
+      const nx = g.x + g.dir * GUARD_SPEED * DT, door = s.doors.find(d => !d.open && d.f === g.f && ((g.dir > 0 && d.x > g.x && d.x <= nx + 0.4) || (g.dir < 0 && d.x < g.x && d.x >= nx - 0.4)));
+      if (g.wait > 0) g.wait -= DT; else if (door || nx > g.b || nx < g.a) { g.dir = -g.dir; g.wait = 0.6; } else g.x = nx; }
+      if (sees(s, g.f, g.x, g.dir, SIGHT, r.x, r.f) && !r.inElev) { s.done = 'fail'; s.why = 'seen'; s.by = g.id; return; } }
+    if (s.alarm) { s.done = 'fail'; s.why = 'alarm'; return; }
+    if (s.t > 120) { s.done = 'fail'; s.why = 'stuck'; }
+  }
+  function run(L, wires, presses) { const s = make(L, wires, presses); while (!s.done) step(s); return s; }
+  function defaults(L) { const w = {}; for (const c of L.cams) w[c.id] = 'alarm'; return w; }
+  function stars(L, s, wires) { if (s.done !== 'win') return 0; const changed = Object.keys(wires).filter(k => wires[k] !== defaults(L)[k]).length; return 1 + (s.rico.loot >= L.loot.length ? 1 : 0) + (changed <= L.par ? 1 : 0); }
+  const api = { DT, make, step, run, defaults, stars, SOURCES, TARGETS, sees, lit, RICO_SPEED };
+  root.CCORE = api; if (typeof module !== 'undefined') module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Circuit Caper — world 1 (the museum): 15 levels + the big vault. Positions in tiles; floor 0 is the ground floor.
+// ids: S switch (Rico steps on it), B remote button (the player taps it during the heist), C camera (a source: wired to the alarm by default),
+//      D door, L lamp (lights a span of a floor), T trapdoor, E elevator.  route: Rico's plan, step by step.
+(function (root) {
+  const lv = (o) => Object.assign({ floors: 1, w: 9, doors: [], lamps: [], guards: [], cams: [], traps: [], elevs: [], sws: [], btns: [], loot: [], par: 1 }, o);
+  const LEVELS = [
+    lv({ id: 1, name: ['La porte close', 'The locked door'], start: { f: 0, x: 0 }, route: [{ go: 8 }], doors: [{ id: 'D1', f: 0, x: 5 }], sws: [{ id: 'S1', f: 0, x: 2 }], loot: [{ f: 0, x: 3 }, { f: 0, x: 7 }],
+      tip: ['Glisse ton doigt de l’interrupteur jusqu’à la porte : Rico l’ouvrira en marchant dessus.', 'Drag from the switch to the door: Rico will open it by stepping on the switch.'] }),
+    lv({ id: 2, name: ['Dans le noir', 'In the dark'], start: { f: 0, x: 0 }, route: [{ go: 5 }], guards: [{ id: 'G1', f: 0, x: 8, a: 8, b: 8, dir: -1 }], lamps: [{ id: 'L1', f: 0, x0: 3, x1: 8 }], sws: [{ id: 'S1', f: 0, x: 1 }], loot: [{ f: 0, x: 4 }],
+      tip: ['Le garde voit loin quand c’est éclairé. Éteins la lampe !', 'The guard sees far when it is lit. Turn the lamp off!'] }),
+    lv({ id: 3, name: ['Caméra complice', 'Friendly camera'], start: { f: 0, x: 0 }, route: [{ go: 8 }], doors: [{ id: 'D1', f: 0, x: 6 }], cams: [{ id: 'C1', f: 0, x: 2, dir: 1, range: 3 }], loot: [{ f: 0, x: 4 }, { f: 0, x: 7 }],
+      tip: ['Une caméra qui voit Rico déclenche l’alarme… sauf si tu la rebranches ailleurs.', 'A camera that spots Rico sets off the alarm… unless you rewire it elsewhere.'] }),
+    lv({ id: 4, name: ['La trappe', 'The trapdoor'], start: { f: 0, x: 0 }, route: [{ go: 8 }], guards: [{ id: 'G1', f: 0, x: 5, a: 5, b: 5, dir: -1 }], traps: [{ id: 'T1', f: 0, x: 5 }], sws: [{ id: 'S1', f: 0, x: 1 }], loot: [{ f: 0, x: 3 }, { f: 0, x: 7 }],
+      tip: ['Une trappe sous le garde… et un interrupteur sur le chemin.', 'A trapdoor under the guard… and a switch on the way.'] }),
+    lv({ id: 5, name: ['Le bon moment', 'Perfect timing'], w: 10, start: { f: 0, x: 0 }, route: [{ go: 1 }, { wait: 7 }, { go: 9 }], guards: [{ id: 'G1', f: 0, x: 8, a: 5, b: 8, dir: -1 }], lamps: [{ id: 'L1', f: 0, x0: 0, x1: 3, on: false }], traps: [{ id: 'T1', f: 0, x: 6 }], btns: [{ id: 'B1' }], loot: [{ f: 0, x: 7 }],
+      tip: ['Pendant le casse, touche le bouton quand le garde passe sur la trappe.', 'During the heist, tap the button when the guard walks over the trapdoor.'] }),
+    lv({ id: 6, name: ['Ascenseur', 'Going up'], floors: 2, start: { f: 0, x: 0 }, route: [{ go: 4 }, { elev: 'E1', to: 1 }, { go: 8 }], elevs: [{ id: 'E1', x: 4, floors: [0, 1], at: 0 }], sws: [{ id: 'S1', f: 0, x: 4 }], loot: [{ f: 0, x: 2 }, { f: 1, x: 6 }],
+      tip: ['L’ascenseur bouge quand il reçoit un signal.', 'The elevator moves when it gets a signal.'] }),
+    lv({ id: 7, name: ['Double détente', 'Double trouble'], start: { f: 0, x: 0 }, route: [{ go: 5 }], doors: [{ id: 'D1', f: 0, x: 3 }], guards: [{ id: 'G1', f: 0, x: 8, a: 8, b: 8, dir: -1 }], lamps: [{ id: 'L1', f: 0, x0: 4, x1: 8 }], sws: [{ id: 'S1', f: 0, x: 1 }, { id: 'S2', f: 0, x: 4.4 }], loot: [{ f: 0, x: 2 }, { f: 0, x: 5 }], par: 2 }),
+    lv({ id: 8, name: ['L’œil et la trappe', 'Eye and trap'], w: 10, start: { f: 0, x: 0 }, route: [{ go: 9 }], guards: [{ id: 'G1', f: 0, x: 6, a: 6, b: 6, dir: -1 }], traps: [{ id: 'T1', f: 0, x: 6 }], cams: [{ id: 'C1', f: 0, x: 1, dir: 1, range: 2.5 }], loot: [{ f: 0, x: 4 }, { f: 0, x: 8 }] }),
+    lv({ id: 9, name: ['Ronde de nuit', 'Night round'], w: 10, start: { f: 0, x: 0 }, route: [{ go: 2 }, { wait: 7 }, { go: 9 }], guards: [{ id: 'G1', f: 0, x: 8, a: 4, b: 8, dir: -1 }], lamps: [{ id: 'L1', f: 0, x0: 0, x1: 9 }], traps: [{ id: 'T1', f: 0, x: 6 }], sws: [{ id: 'S1', f: 0, x: 1 }], btns: [{ id: 'B1' }], loot: [{ f: 0, x: 5 }, { f: 0, x: 8 }], par: 1 }),
+    lv({ id: 10, name: ['Le détour', 'The detour'], floors: 2, start: { f: 0, x: 0 }, route: [{ go: 3 }, { go: 6, ifOpen: 'D2' }, { go: 3 }, { go: 7 }, { elev: 'E1', to: 1 }, { go: 1 }],
+      doors: [{ id: 'D2', f: 0, x: 4.5 }], elevs: [{ id: 'E1', x: 7, floors: [0, 1], at: 0 }], sws: [{ id: 'S1', f: 0, x: 2 }, { id: 'S2', f: 0, x: 7 }], loot: [{ f: 0, x: 6 }, { f: 1, x: 3 }], par: 2 }),
+    lv({ id: 11, name: ['Couloir surveillé', 'Watched hallway'], w: 10, start: { f: 0, x: 0 }, route: [{ go: 9 }], doors: [{ id: 'D1', f: 0, x: 7 }], cams: [{ id: 'C1', f: 0, x: 3, dir: 1, range: 3 }, { id: 'C2', f: 0, x: 9, dir: -1, range: 2.5 }], lamps: [{ id: 'L1', f: 0, x0: 6, x1: 9 }], loot: [{ f: 0, x: 5 }, { f: 0, x: 8 }], par: 2 }),
+    lv({ id: 12, name: ['Deux gardes', 'Two guards'], w: 10, start: { f: 0, x: 0 }, route: [{ go: 9 }], guards: [{ id: 'G1', f: 0, x: 4, a: 4, b: 4, dir: -1 }, { id: 'G2', f: 0, x: 8, a: 8, b: 8, dir: -1 }], traps: [{ id: 'T1', f: 0, x: 4 }, { id: 'T2', f: 0, x: 8 }], sws: [{ id: 'S1', f: 0, x: 0.5 }], cams: [{ id: 'C1', f: 0, x: 2, dir: 1, range: 2.5 }], loot: [{ f: 0, x: 6 }, { f: 0, x: 9 }], par: 2 }),
+    lv({ id: 13, name: ['L’étage du dessus', 'Upstairs'], floors: 2, w: 9, start: { f: 0, x: 0 }, route: [{ go: 7 }, { elev: 'E1', to: 1 }, { go: 1 }],
+      doors: [{ id: 'D1', f: 0, x: 4 }], elevs: [{ id: 'E1', x: 7, floors: [0, 1], at: 0 }], sws: [{ id: 'S1', f: 0, x: 2 }, { id: 'S2', f: 0, x: 7 }], cams: [{ id: 'C1', f: 1, x: 4, dir: 1, range: 3 }],
+      guards: [{ id: 'G1', f: 1, x: 2, a: 2, b: 2, dir: 1 }], traps: [{ id: 'T1', f: 1, x: 2 }], loot: [{ f: 0, x: 5 }, { f: 1, x: 5 }], par: 3 }),
+    lv({ id: 14, name: ['Panne générale', 'Blackout'], w: 10, start: { f: 0, x: 0 }, route: [{ go: 9 }], guards: [{ id: 'G1', f: 0, x: 9, a: 9, b: 9, dir: -1 }], lamps: [{ id: 'L1', f: 0, x0: 0, x1: 4 }, { id: 'L2', f: 0, x0: 5, x1: 9 }],
+      cams: [{ id: 'C1', f: 0, x: 1, dir: 1, range: 2.5 }], traps: [{ id: 'T1', f: 0, x: 9 }], sws: [{ id: 'S1', f: 0, x: 0.5 }], loot: [{ f: 0, x: 4 }, { f: 0, x: 7 }], par: 1 }),
+    lv({ id: 15, name: ['La galerie', 'The gallery'], floors: 2, w: 10, start: { f: 0, x: 0 }, route: [{ go: 8 }, { elev: 'E1', to: 1 }, { go: 2 }],
+      doors: [{ id: 'D1', f: 0, x: 5 }], elevs: [{ id: 'E1', x: 8, floors: [0, 1], at: 0 }], btns: [{ id: 'B1' }], sws: [{ id: 'S1', f: 0, x: 1 }, { id: 'S2', f: 0, x: 8 }],
+      cams: [{ id: 'C1', f: 0, x: 3, dir: 1, range: 2 }], guards: [{ id: 'G1', f: 1, x: 6, a: 3, b: 7, dir: 1 }], traps: [{ id: 'T1', f: 1, x: 5 }], lamps: [{ id: 'L1', f: 1, x0: 0, x1: 9 }], loot: [{ f: 0, x: 7 }, { f: 1, x: 4 }], par: 3 }),
+    lv({ id: 16, boss: true, name: ['Le grand coffre', 'The big vault'], floors: 3, w: 10, start: { f: 0, x: 0 }, route: [{ go: 8 }, { elev: 'E1', to: 1 }, { go: 2 }, { elev: 'E2', to: 2 }, { go: 7 }],
+      doors: [{ id: 'D1', f: 0, x: 4 }, { id: 'D2', f: 2, x: 5 }], elevs: [{ id: 'E1', x: 8, floors: [0, 1], at: 0 }, { id: 'E2', x: 2, floors: [1, 2], at: 1 }],
+      sws: [{ id: 'S1', f: 0, x: 2 }, { id: 'S2', f: 0, x: 8 }, { id: 'S3', f: 1, x: 2 }, { id: 'S4', f: 2, x: 3 }], cams: [{ id: 'C1', f: 1, x: 9, dir: -1, range: 2.5 }],
+      guards: [{ id: 'G1', f: 1, x: 4, a: 4, b: 4, dir: 1 }, { id: 'G2', f: 2, x: 9, a: 9, b: 9, dir: -1 }], traps: [{ id: 'T1', f: 1, x: 4 }], lamps: [{ id: 'L1', f: 2, x0: 3, x1: 9 }],
+      btns: [{ id: 'B1' }], loot: [{ f: 0, x: 6 }, { f: 1, x: 6 }, { f: 2, x: 6 }], par: 6, check: { S1: 'D1', S2: 'E1', C1: 'T1', S3: 'E2', S4: 'L1', B1: 'D2' } }),
+  ];
+  root.CLEVELS = LEVELS; if (typeof module !== 'undefined') module.exports = LEVELS;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// generated by tools/solve.mjs: one winning wiring per level (for the hint)
+window.CSOL = {"1":{"w":{"S1":"D1"},"pr":[]},"2":{"w":{"S1":"L1"},"pr":[]},"3":{"w":{"C1":"D1"},"pr":[]},"4":{"w":{"S1":"T1"},"pr":[]},"5":{"w":{"B1":"T1"},"pr":[{"id":"B1","t":0.5}]},"6":{"w":{"S1":"E1"},"pr":[]},"7":{"w":{"S1":"D1","S2":"L1"},"pr":[]},"8":{"w":{"C1":"T1"},"pr":[]},"9":{"w":{"B1":"T1"},"pr":[{"id":"B1","t":0.5}]},"10":{"w":{"S1":"D2","S2":"E1"},"pr":[]},"11":{"w":{"C1":"D1","C2":"L1"},"pr":[]},"12":{"w":{"S1":"T1","C1":"T2"},"pr":[]},"13":{"w":{"S1":"D1","S2":"E1","C1":"T1"},"pr":[]},"14":{"w":{"C1":"T1"},"pr":[]},"15":{"w":{"S2":"T1","B1":"E1","C1":"D1"},"pr":[{"id":"B1","t":3.5}]},"16":{"w":{"S1":"D1","S2":"E1","C1":"T1","S3":"E2","S4":"L1","B1":"D2"},"pr":[{"id":"B1","t":0.5}]}};
+</script>
+<script>// Circuit Caper — UI texts [fr, en].
+window.I18N = (() => {
+  const L = ['fr', 'en'];
+  const T = {
+    subtitle: ['Rebranche tout. Vole tout.', 'Rewire it all. Steal it all.'], play: ['Jouer', 'Play'], cont: ['Continuer', 'Continue'],
+    world1: ['Monde 1 · Le musée', 'World 1 · The museum'], level: ['Niveau', 'Level'], boss: ['Le grand coffre', 'The big vault'],
+    plan: ['Plan', 'Plan'], heist: ['Lancer le casse !', 'Start the heist!'], reset: ['Effacer les fils', 'Clear wires'], back: ['Retour', 'Back'],
+    wires: ['Fils', 'Wires'], par: ['objectif', 'par'], hint: ['Indice', 'Hint'], hintAd: ['Indice (pub)', 'Hint (ad)'], hintTxt: ['Rico chuchote : branche « {a} » sur « {b} ».', 'Rico whispers: wire “{a}” to “{b}”.'],
+    press: ['APPUIE !', 'PRESS!'], speed: ['Vitesse', 'Speed'],
+    win: ['Casse réussi !', 'Heist done!'], fail: ['Raté !', 'Busted!'], retry: ['Rejouer', 'Retry'], next: ['Suivant ▶', 'Next ▶'], map: ['Carte', 'Map'],
+    why_seen: ['Un garde a repéré Rico.', 'A guard spotted Rico.'], why_alarm: ['L’alarme a sonné !', 'The alarm went off!'], why_fell: ['Rico est tombé dans la trappe…', 'Rico fell through the trapdoor…'], why_stuck: ['Rico est bloqué : le chemin reste fermé.', 'Rico is stuck: the way stays shut.'],
+    star1: ['Sorti', 'Escaped'], star2: ['Tout le butin', 'All the loot'], star3: ['Fils ≤ objectif', 'Wires ≤ par'],
+    safe: ['Le coffre-fort', 'The safe'], safeTxt: ['Touche quand l’aiguille est dans le vert !', 'Tap when the needle is in the green!'], jackpot: ['JACKPOT !', 'JACKPOT!'],
+    loot: ['butin', 'loot'], double: ['▶ Butin ×2', '▶ Loot ×2'],
+    hideout: ['La planque', 'The hideout'], hideTxt: ['Décore la planque de Rico avec ton butin.', 'Decorate Rico’s hideout with your loot.'], buy: ['Acheter', 'Buy'], owned: ['Exposé', 'On display'],
+    login: ['Cadeau du jour', 'Daily gift'], day: ['Jour', 'Day'], claim: ['Récupérer', 'Claim'], close: ['Fermer', 'Close'],
+    settings: ['Réglages', 'Settings'], sound: ['Sons', 'Sounds'], music: ['Musique', 'Music'], vibration: ['Vibrations', 'Vibrations'], language: ['Langue', 'Language'],
+    privacy: ['Confidentialité', 'Privacy'], adChoices: ['Choix publicitaires', 'Ad choices'], resetGame: ['Effacer la partie', 'Erase game'], resetSure: ['Tout effacer ? C’est définitif.', 'Erase everything? This cannot be undone.'],
+    consentTitle: ['Tes données', 'Your data'], consentText: ['Le jeu est gratuit grâce à la pub. Acceptes-tu des pubs personnalisées ? Tu peux changer d’avis dans les réglages.', 'The game is free thanks to ads. Do you accept personalised ads? You can change your mind in settings.'],
+    accept: ['Accepter', 'Accept'], refuse: ['Refuser', 'Refuse'], ok: ['OK', 'OK'], cancel: ['Annuler', 'Cancel'], testAd: ['Pub de test', 'Test ad'], testBuy: ['Achat de test : rien n’est payé.', 'Test purchase: nothing is charged.'],
+    shop: ['Boutique', 'Shop'], sNoAds: ['Sans pub', 'No ads'], sStarter: ['Pack de démarrage', 'Starter pack'], sStarterSub: ['Costume de Rico + 500 de butin', 'Rico outfit + 500 loot'], sCostume: ['Costume « Gentleman »', '“Gentleman” outfit'], restore: ['Restaurer les achats', 'Restore purchases'], restored: ['Achats restaurés', 'Purchases restored'],
+    noAdsSub: ['Plus aucune pub imposée', 'No more forced ads'], costumeSub: ['Haut-de-forme et monocle pour Rico', 'Top hat and monocle for Rico'],
+    locked: ['Termine le niveau précédent', 'Finish the previous level'], tutWire: ['Glisse du doigt d’un appareil à un autre pour les relier.', 'Drag from one device to another to connect them.'],
+    dev_S: ['Interrupteur', 'Switch'], dev_B: ['Bouton', 'Button'], dev_C: ['Caméra', 'Camera'], dev_D: ['Porte', 'Door'], dev_L: ['Lampe', 'Lamp'], dev_T: ['Trappe', 'Trapdoor'], dev_E: ['Ascenseur', 'Elevator'], alarm: ['Alarme', 'Alarm'],
+    // Rico
+    r_hello: ['Salut, moi c’est Rico ! Je vole les tableaux kitsch des milliardaires ridicules. Et un jour, je retrouverai la bague de Mamie.', 'Hi, I’m Rico! I steal tacky paintings from ridiculous billionaires. And one day, I’ll find Granny’s ring.'],
+    r_plan: ['Toi tu câbles, moi je marche. Deal ?', 'You do the wiring, I do the walking. Deal?'],
+    r_cam: ['Tu es sûr·e pour la caméra ?', 'Are you sure about that camera?'],
+    r_go: ['C’est parti, sur la pointe des pattes…', 'Here we go, tiptoeing…'],
+    r_loot: ['Oh, du kitsch ! Je prends.', 'Ooh, tacky! I’ll take it.'], r_ko: ['Bonne nuit, monsieur le garde !', 'Good night, mister guard!'],
+    r_win: ['Du grand art ! On file.', 'A masterpiece! Let’s scram.'], r_win2: ['Trop facile. Enfin… grâce à toi.', 'Too easy. Well… thanks to you.'],
+    r_seen: ['Oups, il m’a vu…', 'Oops, he saw me…'], r_alarm: ['Aïe aïe aïe, l’alarme !', 'Uh-oh, the alarm!'], r_fell: ['Qui a mis une trappe ICI ?', 'Who put a trapdoor HERE?'], r_stuck: ['Euh… la porte est toujours fermée.', 'Erm… the door’s still shut.'],
+    r_hint: ['Psst, j’ai une idée…', 'Psst, I’ve got an idea…'], r_safe: ['À toi : écoute les crans…', 'Your turn: listen to the clicks…'], r_jackpot: ['JACKPOT ! Mamie serait fière.', 'JACKPOT! Granny would be proud.'],
+    r_boss: ['Le grand coffre… La bague de Mamie est peut-être dedans.', 'The big vault… Granny’s ring might be in there.'], r_ring: ['LA BAGUE DE MAMIE ! …Ah non, c’est une copie. La suite au musée suivant !', 'GRANNY’S RING! …Oh no, it’s a fake. To be continued in the next museum!'],
+    r_deco: ['Superbe ! Ma planque a de la classe.', 'Gorgeous! My hideout has class.'], r_back: ['Te revoilà ! J’ai repéré un nouveau coup.', 'You’re back! I’ve spotted a new job.'],
+    r_retry: ['On recommence, j’ai le temps.', 'Again, I’ve got time.'],
+  };
+  let lang = 'fr'; const idx = () => Math.max(0, L.indexOf(lang));
+  const t = (k, v) => { const e = T[k]; let s = e ? (e[idx()] || e[1] || e[0]) : k; if (v) for (const n in v) s = s.split('{' + n + '}').join(v[n]); return s; };
+  const detect = () => { const l = (navigator.language || 'fr').slice(0, 2); return L.includes(l) ? l : 'en'; };
+  return { t, set: l => { lang = L.includes(l) ? l : 'en'; document.documentElement.lang = lang; }, get lang() { return lang; }, langs: L, names: { fr: 'Français', en: 'English' }, detect, pick: a => a[idx()] || a[1] };
+})();
+</script>
+<script>// Shared "juice": flying coins, confetti, pops, dust and hearts (DOM + CSS only, cheap on phones).
+window.JUICE = (() => {
+  const css = `
+.jz{position:fixed;z-index:60;pointer-events:none;left:0;top:0;will-change:transform,opacity}
+.jz-coin{width:26px;height:26px;object-fit:contain;transition:transform .7s cubic-bezier(.55,-0.25,.4,1),opacity .7s}
+.jz-conf{width:8px;height:12px;border-radius:2px;animation:jzfall var(--d) cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes jzfall{0%{transform:translate(var(--x0),var(--y0)) rotate(0)}100%{transform:translate(var(--x1),var(--y1)) rotate(var(--r));opacity:0}}
+.jz-dust{width:10px;height:10px;border-radius:50%;background:rgba(255,248,230,.95);animation:jzdust .6s ease-out forwards}
+@keyframes jzdust{0%{transform:translate(var(--x0),var(--y0)) scale(.6);opacity:1}100%{transform:translate(var(--x1),var(--y1)) scale(1.8);opacity:0}}
+.jz-heart{font-size:20px;animation:jzheart 1.1s ease-out forwards}
+@keyframes jzheart{0%{transform:translate(var(--x0),var(--y0)) scale(.4);opacity:0}25%{opacity:1;transform:translate(var(--x0),calc(var(--y0) - 14px)) scale(1.2)}100%{transform:translate(var(--x0),calc(var(--y0) - 54px)) scale(1);opacity:0}}
+.jz-pop{animation:jzpop .45s cubic-bezier(.3,1.6,.5,1)}@keyframes jzpop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+.jz-bump{animation:jzbump .35s ease-out}@keyframes jzbump{40%{transform:scale(1.25)}}
+.jz-flash{position:fixed;inset:0;z-index:58;pointer-events:none;background:radial-gradient(circle at var(--fx) var(--fy),rgba(255,240,180,.75),rgba(255,240,180,0) 45%);animation:jzflash .7s ease-out forwards}@keyframes jzflash{to{opacity:0}}
+`;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+  const center = el => { if (!el) return [innerWidth / 2, innerHeight / 2]; const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  const mk = (cls, html = '') => { const d = document.createElement(html === 'img' ? 'img' : 'div'); d.className = 'jz ' + cls; if (html && html !== 'img') d.innerHTML = html; document.body.appendChild(d); return d; };
+  // coins (or any icon) flying from an element to a counter, which bumps on arrival
+  function fly(fromEl, toEl, src, n = 6, done) {
+    const [x0, y0] = center(fromEl), [x1, y1] = center(toEl);
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-coin', 'img'); c.src = src; const ox = (Math.random() - 0.5) * 50, oy = (Math.random() - 0.5) * 40;
+      c.style.transform = `translate(${x0 - 13 + ox}px,${y0 - 13 + oy}px) scale(.6)`;
+      setTimeout(() => { c.style.transform = `translate(${x1 - 13}px,${y1 - 13}px) scale(.9)`; c.style.opacity = '.4'; }, 30 + i * 55);
+      setTimeout(() => { c.remove(); if (i === n - 1) { bump(toEl); done && done(); } }, 780 + i * 55);
+    }
+  }
+  function bump(el) { if (!el) return; el.classList.remove('jz-bump'); void el.offsetWidth; el.classList.add('jz-bump'); }
+  function confetti(n = 70) {
+    const cols = ['#f0705a', '#ffd34d', '#2b9db0', '#7ef0c0', '#f4a0b4', '#b7a3d8'];
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-conf'); const x0 = innerWidth / 2 + (Math.random() - 0.5) * 80, y0 = innerHeight * 0.35;
+      c.style.background = cols[i % cols.length];
+      c.style.setProperty('--x0', x0 + 'px'); c.style.setProperty('--y0', y0 + 'px');
+      c.style.setProperty('--x1', x0 + (Math.random() - 0.5) * innerWidth * 1.1 + 'px'); c.style.setProperty('--y1', y0 + innerHeight * (0.4 + Math.random() * 0.5) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg'); c.style.setProperty('--d', (1.2 + Math.random() * 1.1) + 's');
+      setTimeout(() => c.remove(), 2600);
+    }
+  }
+  function dust(el, n = 10) {
+    const [x, y] = center(el);
+    for (let i = 0; i < n; i++) { const d = mk('jz-dust'), a = Math.random() * Math.PI * 2, r = 26 + Math.random() * 30;
+      d.style.setProperty('--x0', x - 5 + 'px'); d.style.setProperty('--y0', y + 10 + 'px'); d.style.setProperty('--x1', x - 5 + Math.cos(a) * r + 'px'); d.style.setProperty('--y1', y + 10 + Math.sin(a) * r * 0.5 + 'px'); setTimeout(() => d.remove(), 650); }
+  }
+  function heart(x, y, ch = '❤️') { const h = mk('jz-heart', ch); h.style.setProperty('--x0', x - 10 + 'px'); h.style.setProperty('--y0', y + 'px'); setTimeout(() => h.remove(), 1150); }
+  function pop(el) { if (!el) return; el.classList.remove('jz-pop'); void el.offsetWidth; el.classList.add('jz-pop'); }
+  function flash(el) { const [x, y] = center(el); const f = mk('jz-flash'); f.style.setProperty('--fx', x + 'px'); f.style.setProperty('--fy', y + 'px'); setTimeout(() => f.remove(), 750); }
+  return { fly, bump, confetti, dust, heart, pop, flash };
+})();
+</script>
+<script>// Circuit Caper — rewire the building, then watch Rico pull the heist. Canvas for the building, DOM for the interface.
+(() => {
+'use strict';
+const C = window.CCORE, LV = window.CLEVELS, SOL = window.CSOL || {}, I = window.I18N, t = I.t, SPR = window.CC_SPR || {};
+const TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a);
+const $ = s => document.querySelector(s);
+function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+
+// ---------- save ----------
+const KEY = 'circuitcaper.save.v1';
+const fresh = () => ({ v: 1, stars: {}, coins: 0, deco: [], fails: {}, hints: {}, lang: I.detect(), sound: true, music: true, vib: true, consent: null, owned: {}, outfit: '', lastAdAt: 0, levelsPlayed: 0, login: { last: '', streak: 0, pending: false }, seenTips: {} });
+let S; try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+I.set(S.lang);
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const track = (ev, d) => { try { console.debug('[ga]', ev, d || ''); } catch (e) {} };
+const unlocked = id => id === 1 || (S.stars[id - 1] || 0) > 0;
+const DECO = [['cat', 150, '🖼️'], ['vase', 250, '🏺'], ['flamingo', 400, '🦩'], ['chandelier', 600, '💡'], ['rug', 800, '🧶'], ['record', 1000, '💿'], ['globe', 1400, '🌍'], ['armor', 1900, '🛡️'], ['aquarium', 2500, '🐠'], ['throne', 3500, '👑']];
+const DECO_NAMES = { cat: ['Portrait de chat kitsch', 'Tacky cat portrait'], vase: ['Vase doré', 'Golden vase'], flamingo: ['Flamant en plâtre', 'Plaster flamingo'], chandelier: ['Lustre en toc', 'Fake chandelier'], rug: ['Tapis « persan »', '“Persian” rug'], record: ['Disque d’or', 'Gold record'], globe: ['Globe ancien', 'Antique globe'], armor: ['Armure rouillée', 'Rusty armor'], aquarium: ['Aquarium', 'Aquarium'], throne: ['Trône en carton', 'Cardboard throne'] };
+
+// ---------- audio ----------
+const AU = { ctx: null, master: null, noise: null, next: 0, step: 0, music: null };
+function audioInit() {
+  if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+  try { AU.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+  AU.master = AU.ctx.createGain(); AU.master.gain.value = 0.55; AU.master.connect(AU.ctx.destination); AU.music = AU.ctx.createGain(); AU.music.gain.value = 0.1; AU.music.connect(AU.master);
+  const len = AU.ctx.sampleRate * 0.5, b = AU.ctx.createBuffer(1, len, AU.ctx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; AU.noise = b;
+}
+function tone(f, dur, type = 'sine', vol = 0.2, when = 0, dest, slide) { if (!AU.ctx) return; const c = AU.ctx, o = c.createOscillator(), g = c.createGain(), t0 = c.currentTime + when; o.type = type; o.frequency.setValueAtTime(f, t0); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t0 + dur); g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + 0.005); g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur); o.connect(g); g.connect(dest || AU.master); o.start(t0); o.stop(t0 + dur + 0.05); }
+function noise(dur, freq, q, vol, when = 0, type = 'bandpass') { if (!AU.ctx) return; const c = AU.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(), t0 = c.currentTime + when; s.buffer = AU.noise; f.type = type; f.frequency.value = freq; f.Q.value = q; g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + dur); s.connect(f); f.connect(g); g.connect(AU.master); s.start(t0); s.stop(t0 + dur + 0.02); }
+const SFX = {
+  zap() { if (S.sound) { noise(0.12, 3500, 3, 0.25); tone(880, 0.12, 'square', 0.05, 0, null, 1760); } },
+  plug() { if (S.sound) { tone(600, 0.06, 'square', 0.08); tone(900, 0.08, 'square', 0.06, 0.05); } },
+  unplug() { if (S.sound) tone(500, 0.12, 'square', 0.06, 0, null, 200); },
+  step() { if (S.sound) noise(0.04, 900, 2, 0.06); },
+  door() { if (S.sound) { noise(0.25, 300, 1, 0.3, 0, 'lowpass'); tone(140, 0.2, 'triangle', 0.15); } },
+  click() { if (S.sound) noise(0.03, 4000, 5, 0.2); },
+  coin() { if (S.sound) { tone(1320, 0.1, 'triangle', 0.14); tone(1980, 0.18, 'sine', 0.08, 0.05); } },
+  thud() { if (S.sound) { noise(0.35, 200, 0.8, 0.6, 0, 'lowpass'); tone(80, 0.3, 'sine', 0.4, 0, null, 40); } },
+  alarm() { if (S.sound) for (let i = 0; i < 4; i++) { tone(880, 0.18, 'sawtooth', 0.08, i * 0.36); tone(660, 0.18, 'sawtooth', 0.08, i * 0.36 + 0.18); } },
+  fanfare() { if (S.sound) [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, i > 4 ? 0.6 : 0.22, 'square', 0.06, i * 0.09)); },
+  star(i) { if (S.sound) { tone(784 * Math.pow(1.26, i), 0.35, 'triangle', 0.15); noise(0.1, 6000, 2, 0.1); } },
+  sad() { if (S.sound) { tone(392, 0.25, 'triangle', 0.12); tone(311, 0.45, 'triangle', 0.12, 0.2); } },
+  tick() { if (S.sound) noise(0.02, 5000, 8, 0.25); },
+};
+function musicTick() {
+  if (!AU.ctx || !S.music || G.mode === 'title') return; const c = AU.ctx; if (AU.next < c.currentTime) AU.next = c.currentTime + 0.05;
+  const bass = [110, 110, 131, 98], heist = G.mode === 'heist';
+  while (AU.next < c.currentTime + 0.4) { const s = AU.step++, w = AU.next - c.currentTime;
+    if (s % 2 === 0) tone(bass[(s >> 3) % 4] * (s % 4 === 2 ? 1.5 : 1), 0.22, 'triangle', 0.5, w, AU.music);   // sneaky walking bass
+    if (heist && s % 4 === 3) noise(0.03, 7000, 6, 0.05, w);
+    if (s % 16 === 6) tone(bass[(s >> 3) % 4] * 4, 0.3, 'sine', 0.25, w, AU.music);
+    AU.next += heist ? 0.17 : 0.24; }
+}
+const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
+
+// ---------- ads & store (test overlays on the web) ----------
+const Ads = {
+  async rewarded(kind) { track('ad_rewarded', { kind }); return testAd(); },
+  async interstitial() { if (S.owned.noads || S.levelsPlayed < 6) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); await testAd(); }
+};
+function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart">🦝💰🦝</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 700); }); }
+const STORE = [{ id: 'noads', price: '3,99 €' }, { id: 'starter', price: '1,99 €' }, { id: 'costume', price: '1,99 €' }];
+
+// ---------- layout ----------
+const cv = $('#cv'), cx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1, TS = 40, FH = 140, OX = 10, BASE = 0, TOPY = 0;
+const G = { mode: 'title', lvl: null, wires: {}, s: null, acc: 0, speed: 1, slow: 0, drag: null, fx: [], floats: [], hl: null, flash: 0, shake: 0, safe: null, evN: 0, t: 0, tipShown: false };
+function layout() {
+  DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  const L = G.lvl; if (!L) return; const top = ($('#hud')?.offsetHeight || 70) + 40, bottom = ($('#bar')?.offsetHeight || 120) + 70;
+  TS = Math.min(48, (W - 20) / L.w); FH = Math.min(TS * 3.4, (H - top - bottom) / L.floors); OX = (W - TS * L.w) / 2;
+  BASE = top + FH * L.floors + Math.max(0, (H - top - bottom - FH * L.floors) / 2); TOPY = BASE - FH * L.floors;
+}
+const X = x => OX + (x + 0.5) * TS, FY = f => BASE - f * FH;
+function sockets() {   // every wirable device and where its plug is drawn
+  const L = G.lvl, list = [];
+  L.sws.forEach(o => list.push({ id: o.id, src: true, x: X(o.x), y: FY(o.f) - 8 }));
+  L.cams.forEach(o => list.push({ id: o.id, src: true, x: X(o.x) - o.dir * 6, y: FY(o.f) - FH + 18 }));
+  L.btns.forEach((o, i) => list.push({ id: o.id, src: true, x: OX + 22 + i * 46, y: TOPY - 26 }));
+  L.doors.forEach(o => list.push({ id: o.id, x: X(o.x), y: FY(o.f) - FH * 0.62 }));
+  L.lamps.forEach(o => list.push({ id: o.id, x: X((o.x0 + o.x1) / 2), y: FY(o.f) - FH + 12 }));
+  L.traps.forEach(o => list.push({ id: o.id, x: X(o.x), y: FY(o.f) + 7 }));
+  L.elevs.forEach(o => list.push({ id: o.id, x: X(o.x) + TS * 0.42, y: FY(Math.max(...o.floors)) - FH + 16 }));
+  if (L.cams.length) list.push({ id: 'alarm', x: OX + TS * L.w - 22, y: TOPY - 26 });
+  return list;
+}
+const sock = id => sockets().find(s => s.id === id);
+const devName = id => id === 'alarm' ? t('alarm') : t('dev_' + id[0]) + (id.length > 1 && /\d/.test(id[1]) && +id.slice(1) > 1 ? ' ' + id.slice(1) : '');
+
+// ---------- drawing ----------
+const COLORS = ['#ff6a3a', '#3ac0ff', '#ffd34d', '#b46aff', '#3aff9a', '#ff5ab4'];
+const wireCol = id => COLORS[Math.max(0, sockets().filter(s => s.src).findIndex(s => s.id === id)) % COLORS.length];
+function rr(x, y, w, h, r) { cx.beginPath(); cx.moveTo(x + r, y); cx.arcTo(x + w, y, x + w, y + h, r); cx.arcTo(x + w, y + h, x, y + h, r); cx.arcTo(x, y + h, x, y, r); cx.arcTo(x, y, x + w, y, r); cx.closePath(); }
+function draw() {
+  cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#1a1638'); g.addColorStop(1, '#2c2250'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+  // night city behind
+  cx.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 0; i < 40; i++) { const x = (i * 97) % W, y = (i * 53) % (H * 0.3); cx.fillRect(x, y, 1.5, 1.5); }
+  if (!G.lvl || G.mode === 'title' || G.mode === 'map') return;
+  const L = G.lvl, s = G.s || G.preview;
+  cx.save(); if (G.shake > 0) cx.translate(rnd(-1, 1) * G.shake * 6, rnd(-1, 1) * G.shake * 6);
+  // building shell
+  cx.fillStyle = '#5a3d6a'; rr(OX - 10, TOPY - 14, TS * L.w + 20, FH * L.floors + 26, 10); cx.fill();
+  for (let f = 0; f < L.floors; f++) {
+    const y0 = FY(f) - FH, y1 = FY(f);
+    const wall = cx.createLinearGradient(0, y0, 0, y1); wall.addColorStop(0, '#f3dcc0'); wall.addColorStop(1, '#e2c39e'); cx.fillStyle = wall; cx.fillRect(OX, y0, TS * L.w, FH);
+    cx.fillStyle = 'rgba(160,90,90,.18)'; for (let x = 0; x < L.w; x++) cx.fillRect(OX + x * TS + TS * 0.45, y0 + 6, 3, FH - 16);   // wallpaper stripes
+    // paintings (decor)
+    for (let x = 1; x < L.w; x += 3) { cx.fillStyle = '#c99a3a'; cx.fillRect(X(x) - 10, y0 + FH * 0.25, 20, 16); cx.fillStyle = ['#7ab8e0', '#e08a7a', '#9ae07a'][x % 3]; cx.fillRect(X(x) - 7, y0 + FH * 0.25 + 3, 14, 10); }
+    cx.fillStyle = '#6b4a3a'; cx.fillRect(OX - 4, y1, TS * L.w + 8, 8);   // floor
+    cx.fillStyle = '#8a6a5a'; for (let x = 0; x < L.w; x++) cx.fillRect(OX + x * TS + 2, y1 + 2, TS - 4, 2);
+  }
+  // exit sign at the end of the route
+  const last = (() => { let f = L.start.f, x = L.start.x; for (const st of L.route) { if (st.go != null && !st.ifOpen) x = st.go; if (st.elev) f = st.to; } return { f, x }; })();
+  cx.fillStyle = '#2aa84a'; rr(X(last.x) - 15, FY(last.f) - FH + 4, 30, 13, 3); cx.fill(); cx.fillStyle = '#fff'; cx.font = '800 9px system-ui'; cx.textAlign = 'center'; cx.fillText('EXIT', X(last.x), FY(last.f) - FH + 14);
+  // darkness per lamp span
+  for (const l of (s ? s.lamps : L.lamps.map(o => ({ ...o, on: o.on !== false })))) {
+    const y0 = FY(l.f) - FH; if (l.on) { const rg = cx.createRadialGradient(X((l.x0 + l.x1) / 2), y0 + 14, 4, X((l.x0 + l.x1) / 2), y0 + 14, TS * (l.x1 - l.x0 + 1) * 0.7); rg.addColorStop(0, 'rgba(255,240,160,.35)'); rg.addColorStop(1, 'rgba(255,240,160,0)'); cx.fillStyle = rg; cx.fillRect(OX + (l.x0) * TS, y0, (l.x1 - l.x0 + 1) * TS, FH); }
+    else { cx.fillStyle = 'rgba(15,10,40,.62)'; cx.fillRect(OX + l.x0 * TS, y0, (l.x1 - l.x0 + 1) * TS, FH); }
+    const lx = X((l.x0 + l.x1) / 2); cx.strokeStyle = '#333'; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(lx, y0); cx.lineTo(lx, y0 + 8); cx.stroke(); cx.fillStyle = l.on ? '#ffe27a' : '#6a6a7a'; cx.beginPath(); cx.arc(lx, y0 + 12, 6, Math.PI, 0); cx.fill();
+  }
+  // traps
+  for (const tr of (s ? s.traps : L.traps)) { const x = X(tr.x), y = FY(tr.f); cx.fillStyle = tr.open > 0 ? '#120a10' : '#8a5a3a'; cx.fillRect(x - TS * 0.42, y, TS * 0.84, 8); cx.strokeStyle = '#3a2418'; cx.lineWidth = 1.5; cx.strokeRect(x - TS * 0.42, y, TS * 0.84, 8); if (!(tr.open > 0)) { cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x, y + 8); cx.stroke(); } }
+  // elevators
+  for (const e of (s ? s.elevs : L.elevs)) {
+    const x = X(e.x), fTop = Math.max(...e.floors), fBot = Math.min(...e.floors); cx.fillStyle = 'rgba(60,40,70,.35)'; cx.fillRect(x - TS * 0.45, FY(fTop) - FH, TS * 0.9, FH * (fTop - fBot + 1));
+    let fy = FY(e.at); if (s && e.move > 0) { const k = 1 - e.move / 1.2; fy = FY(e.from) + (FY(e.at) - FY(e.from)) * (k * k * (3 - 2 * k)); }
+    cx.fillStyle = '#9aa0b8'; rr(x - TS * 0.42, fy - FH * 0.78, TS * 0.84, FH * 0.78, 4); cx.fill(); cx.strokeStyle = '#4a4a5a'; cx.lineWidth = 2; cx.stroke(); cx.strokeStyle = '#333'; cx.beginPath(); cx.moveTo(x, FY(fTop) - FH); cx.lineTo(x, fy - FH * 0.78); cx.stroke();
+  }
+  // doors
+  for (const d of (s ? s.doors : L.doors.map(o => ({ ...o, open: !!o.open })))) { const x = X(d.x), y = FY(d.f); if (d.open) { cx.strokeStyle = '#7a4a2a'; cx.lineWidth = 3; cx.strokeRect(x - TS * 0.32, y - FH * 0.72, TS * 0.64, FH * 0.72); cx.fillStyle = 'rgba(122,74,42,.25)'; cx.fillRect(x - TS * 0.32, y - FH * 0.72, TS * 0.14, FH * 0.72); } else { cx.fillStyle = '#8a5a32'; rr(x - TS * 0.32, y - FH * 0.72, TS * 0.64, FH * 0.72, 3); cx.fill(); cx.fillStyle = '#ffd34d'; cx.beginPath(); cx.arc(x + TS * 0.18, y - FH * 0.36, 2.5, 0, TAU); cx.fill(); cx.strokeStyle = '#5a3a1a'; cx.lineWidth = 2; cx.stroke(); } }
+  // switches
+  for (const w of L.sws) { const x = X(w.x), y = FY(w.f); cx.fillStyle = '#4a4a5a'; rr(x - 9, y - 5, 18, 5, 2); cx.fill(); cx.strokeStyle = '#d0302a'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(x, y - 4); cx.lineTo(x + 6, y - 12); cx.stroke(); cx.fillStyle = '#ff5a3a'; cx.beginPath(); cx.arc(x + 6, y - 12, 3, 0, TAU); cx.fill(); }
+  // loot
+  for (const o of (s ? s.loot : L.loot)) { if (o.got) continue; const x = X(o.x), y = FY(o.f) - 14 + Math.sin(G.t * 3 + o.x) * 2; cx.font = '18px system-ui'; cx.textAlign = 'center'; cx.fillText(['💎', '🖼️', '🏺', '👑'][(o.x | 0) % 4], x, y); }
+  // cameras and their cones
+  for (const c of (s ? s.cams : L.cams)) { const x = X(c.x), y = FY(c.f) - FH + 18, lit = !s || C.lit(s, c.f, c.x + c.dir); const len = (c.range || 3) * TS;
+    cx.fillStyle = c.seeing ? 'rgba(255,60,60,.35)' : 'rgba(255,80,80,.16)'; cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x + c.dir * len, FY(c.f) - 2); cx.lineTo(x + c.dir * len * 0.2, FY(c.f) - 2); cx.closePath(); cx.fill();
+    cx.fillStyle = '#3a3a48'; rr(x - 9, y - 6, 18, 11, 3); cx.fill(); cx.fillStyle = c.seeing ? '#ff3a3a' : '#ff8a8a'; cx.beginPath(); cx.arc(x + c.dir * 7, y, 3, 0, TAU); cx.fill(); }
+  // guards
+  for (const gd of (s ? s.guards : L.guards.map(o => ({ ...o, ko: false })))) drawGuard(gd, s);
+  // Rico
+  drawRico(s ? s.rico : { x: L.start.x, f: L.start.f, dir: 1 }, s);
+  // the remote buttons and the alarm box (above the building)
+  for (const b of L.btns) { const so = sock(b.id); cx.fillStyle = '#2a2a3a'; rr(so.x - 18, so.y - 16, 36, 32, 8); cx.fill(); cx.fillStyle = '#ff3a3a'; cx.beginPath(); cx.arc(so.x, so.y, 10, 0, TAU); cx.fill(); }
+  if (L.cams.length) { const so = sock('alarm'); cx.fillStyle = '#2a2a3a'; rr(so.x - 20, so.y - 16, 40, 32, 8); cx.fill(); cx.font = '18px system-ui'; cx.textAlign = 'center'; cx.fillText('🚨', so.x, so.y + 6); }
+  drawWires();
+  cx.restore();
+  // effects
+  for (const f of G.fx) { f.t += 1 / 60; const k = f.t / f.d; if (f.kind === 'spark') { const a = sock(f.a), b = sock(f.b); if (!a || !b) continue; const p = bez(a, b, clamp(k, 0, 1)); cx.fillStyle = '#fff'; cx.shadowColor = f.col; cx.shadowBlur = 12; cx.beginPath(); cx.arc(p.x, p.y, 5, 0, TAU); cx.fill(); cx.shadowBlur = 0; } if (f.kind === 'ring') { cx.strokeStyle = `rgba(255,220,120,${1 - k})`; cx.lineWidth = 4; cx.beginPath(); cx.arc(f.x, f.y, 10 + k * 40, 0, TAU); cx.stroke(); } }
+  G.fx = G.fx.filter(f => f.t < f.d);
+  for (const f of G.floats) { f.t += 1 / 60; const a = clamp(1.3 - f.t / f.d * 1.3, 0, 1); cx.globalAlpha = a; cx.font = '900 16px system-ui'; cx.textAlign = 'center'; cx.lineWidth = 4; cx.strokeStyle = 'rgba(30,20,40,.9)'; cx.strokeText(f.s, f.x, f.y - f.t * 30); cx.fillStyle = f.col || '#ffd34d'; cx.fillText(f.s, f.x, f.y - f.t * 30); cx.globalAlpha = 1; }
+  G.floats = G.floats.filter(f => f.t < f.d);
+  if (G.flash > 0) { cx.fillStyle = `rgba(255,40,40,${G.flash * 0.35})`; cx.fillRect(0, 0, W, H); G.flash -= 0.02; }
+  if (G.shake > 0) G.shake = Math.max(0, G.shake - 0.03);
+}
+function bez(a, b, k) { const mx = (a.x + b.x) / 2, my = Math.max(a.y, b.y) + 40; const u = 1 - k; return { x: u * u * a.x + 2 * u * k * mx + k * k * b.x, y: u * u * a.y + 2 * u * k * my + k * k * b.y }; }
+function cable(a, b, col, dash) { cx.strokeStyle = 'rgba(0,0,0,.35)'; cx.lineWidth = 6; cx.setLineDash(dash ? [6, 6] : []); cx.beginPath(); cx.moveTo(a.x, a.y + 2); cx.quadraticCurveTo((a.x + b.x) / 2, Math.max(a.y, b.y) + 42, b.x, b.y + 2); cx.stroke(); cx.strokeStyle = col; cx.lineWidth = 3.5; cx.beginPath(); cx.moveTo(a.x, a.y); cx.quadraticCurveTo((a.x + b.x) / 2, Math.max(a.y, b.y) + 40, b.x, b.y); cx.stroke(); cx.setLineDash([]); }
+function drawWires() {
+  const list = sockets(), wires = G.s ? G.s.wires : G.wires;
+  for (const k in wires) { const a = list.find(s => s.id === k), b = list.find(s => s.id === wires[k]); if (a && b) cable(a, b, wires[k] === 'alarm' ? 'rgba(255,90,90,.7)' : wireCol(k), wires[k] === 'alarm'); }
+  if (G.drag) cable(G.drag.a, { x: G.drag.x, y: G.drag.y }, wireCol(G.drag.a.id));
+  if (G.mode !== 'plan') return;
+  for (const so of list) { const hl = G.hl && (G.hl.a === so.id || G.hl.b === so.id); cx.fillStyle = so.src ? wireCol(so.id) : so.id === 'alarm' ? '#ff5a5a' : '#fff'; cx.strokeStyle = '#1a1028'; cx.lineWidth = 2.5;
+    const r = hl ? 9 + Math.sin(G.t * 8) * 3 : 7; cx.beginPath(); cx.arc(so.x, so.y, r, 0, TAU); cx.fill(); cx.stroke(); if (so.src) { cx.fillStyle = '#1a1028'; cx.beginPath(); cx.arc(so.x, so.y, 2.5, 0, TAU); cx.fill(); } }
+}
+function drawGuard(g, s) {
+  if (g.ko) { if (g.fall > 0) g.fall -= 0.02; if (g.fall <= 0) return; }
+  const x = X(g.x), y = FY(g.f) + (g.ko ? (1 - g.fall) * 30 : 0), d = g.dir || 1, lit = !s || C.lit(s, g.f, g.x + d * 1.5);
+  if (!g.ko) { const len = 3.2 * TS; cx.fillStyle = lit ? 'rgba(255,230,120,.22)' : 'rgba(255,230,120,.06)'; cx.beginPath(); cx.moveTo(x + d * 8, y - 30); cx.lineTo(x + d * len, y - 42); cx.lineTo(x + d * len, y); cx.closePath(); cx.fill(); }
+  cx.save(); cx.translate(x, y); cx.scale(d, 1); if (g.ko) cx.globalAlpha = Math.max(0, g.fall);
+  const k = TS / 44, walk = s && g.a !== g.b && !g.ko ? Math.sin(G.t * 9) * 3 : 0;
+  cx.fillStyle = 'rgba(0,0,0,.2)'; cx.beginPath(); cx.ellipse(0, 0, 13 * k, 3.5 * k, 0, 0, TAU); cx.fill();
+  cx.fillStyle = '#2a3a6a'; cx.fillRect(-6 * k, -14 * k, 5 * k, 14 * k + walk * 0.3); cx.fillRect(1 * k, -14 * k, 5 * k, 14 * k - walk * 0.3);   // legs
+  cx.fillStyle = '#3a5aa0'; rr(-11 * k, -38 * k, 22 * k, 26 * k, 7 * k); cx.fill();   // body (a bulldog guard)
+  cx.fillStyle = '#c99a6a'; cx.beginPath(); cx.arc(2 * k, -46 * k, 11 * k, 0, TAU); cx.fill(); cx.fillStyle = '#a07a50'; cx.beginPath(); cx.ellipse(9 * k, -43 * k, 6 * k, 5 * k, 0, 0, TAU); cx.fill();
+  cx.fillStyle = '#111'; cx.beginPath(); cx.arc(7 * k, -49 * k, 1.8 * k, 0, TAU); cx.fill(); cx.beginPath(); cx.arc(13 * k, -44 * k, 2 * k, 0, TAU); cx.fill();
+  cx.fillStyle = '#1a2a5a'; rr(-10 * k, -60 * k, 22 * k, 8 * k, 3 * k); cx.fill(); cx.fillRect(4 * k, -54 * k, 12 * k, 3 * k); cx.fillStyle = '#ffd34d'; cx.fillRect(-1 * k, -58 * k, 4 * k, 4 * k);   // cap
+  cx.fillStyle = '#ffe27a'; cx.fillRect(10 * k, -30 * k, 8 * k, 4 * k);   // flashlight
+  if (g.ko) { cx.font = `${14 * k}px system-ui`; cx.fillText('💫', -6 * k, -64 * k); }
+  cx.restore();
+}
+function drawRico(r, s) {
+  const x = X(r.x), y = FY(r.f), d = r.dir || 1, k = TS / 44, moving = s && !s.done && G.mode === 'heist', bob = moving ? Math.abs(Math.sin(G.t * 12)) * 2 : 0;
+  cx.save(); cx.translate(x, y - bob); cx.scale(d, 1); if (s && s.done === 'fail' && s.why === 'fell') cx.globalAlpha = 0.3;
+  cx.fillStyle = 'rgba(0,0,0,.2)'; cx.beginPath(); cx.ellipse(0, bob, 12 * k, 3.5 * k, 0, 0, TAU); cx.fill();
+  // tail with stripes
+  cx.save(); cx.translate(-10 * k, -14 * k); cx.rotate(-0.6 + Math.sin(G.t * 6) * 0.15); for (let i = 0; i < 4; i++) { cx.fillStyle = i % 2 ? '#3a3a3a' : '#9a9aa2'; cx.beginPath(); cx.ellipse(-i * 6 * k, 0, 6 * k, 5 * k, 0, 0, TAU); cx.fill(); } cx.restore();
+  cx.fillStyle = '#8a8a92'; rr(-9 * k, -30 * k, 18 * k, 28 * k, 8 * k); cx.fill();   // body
+  cx.fillStyle = '#2a2a32'; cx.fillRect(-8 * k, -20 * k, 16 * k, 6 * k);   // striped sweater
+  cx.fillStyle = '#9a9aa2'; cx.beginPath(); cx.arc(2 * k, -38 * k, 11 * k, 0, TAU); cx.fill();   // head
+  cx.fillStyle = '#9a9aa2'; cx.beginPath(); cx.moveTo(-6 * k, -45 * k); cx.lineTo(-3 * k, -54 * k); cx.lineTo(1 * k, -46 * k); cx.fill(); cx.beginPath(); cx.moveTo(4 * k, -46 * k); cx.lineTo(8 * k, -54 * k); cx.lineTo(10 * k, -44 * k); cx.fill();
+  cx.fillStyle = '#1a1a22'; rr(-4 * k, -42 * k, 17 * k, 6 * k, 3 * k); cx.fill();   // the bandit mask
+  cx.fillStyle = '#fff'; cx.beginPath(); cx.arc(3 * k, -39 * k, 2 * k, 0, TAU); cx.arc(9 * k, -39 * k, 2 * k, 0, TAU); cx.fill();
+  cx.fillStyle = '#eee'; cx.beginPath(); cx.ellipse(10 * k, -33 * k, 5 * k, 3.5 * k, 0, 0, TAU); cx.fill(); cx.fillStyle = '#111'; cx.beginPath(); cx.arc(14 * k, -34 * k, 2 * k, 0, TAU); cx.fill();
+  if (S.outfit === 'costume') { cx.fillStyle = '#111'; cx.fillRect(-6 * k, -60 * k, 14 * k, 12 * k); cx.fillRect(-9 * k, -50 * k, 20 * k, 3 * k); }
+  // loot sack
+  cx.fillStyle = '#c9a26a'; cx.beginPath(); cx.arc(-12 * k, -26 * k, (7 + Math.min(4, (r.loot || 0) * 2)) * k, 0, TAU); cx.fill(); cx.fillStyle = '#7a5a2a'; cx.font = `${8 * k}px system-ui`; cx.fillText('$', -15 * k, -23 * k);
+  cx.restore();
+}
+
+// ---------- plan mode: drag wires ----------
+function hitSocket(x, y, filter) { let best = null, bd = 30; for (const so of sockets()) { if (filter && !filter(so)) continue; const d = Math.hypot(so.x - x, so.y - y); if (d < bd) { bd = d; best = so; } } return best; }
+cv.addEventListener('pointerdown', e => {
+  audioInit();
+  if (G.mode === 'heist') { const b = hitSocket(e.clientX, e.clientY, so => so.id[0] === 'B'); if (b) pressBtn(b.id); return; }
+  if (G.mode !== 'plan') return;
+  const so = hitSocket(e.clientX, e.clientY, x => x.src); if (!so) return;
+  G.drag = { a: so, x: e.clientX, y: e.clientY, moved: false }; cv.setPointerCapture(e.pointerId); SFX.click();
+});
+cv.addEventListener('pointermove', e => { if (!G.drag) return; G.drag.x = e.clientX; G.drag.y = e.clientY; if (Math.hypot(e.clientX - G.drag.a.x, e.clientY - G.drag.a.y) > 12) G.drag.moved = true; });
+const endDrag = e => {
+  const d = G.drag; if (!d) return; G.drag = null;
+  const tgt = hitSocket(d.x, d.y, so => !so.src && (so.id !== 'alarm' || d.a.id[0] === 'C'));
+  const def = C.defaults(G.lvl)[d.a.id];
+  if (tgt) { G.wires[d.a.id] = tgt.id; SFX.plug(); buzz(10); G.fx.push({ kind: 'ring', x: tgt.x, y: tgt.y, t: 0, d: 0.4 }); if (d.a.id[0] === 'C' && tgt.id === 'alarm') {} else if (S.tipWire !== 1) { S.tipWire = 1; save(); } }
+  else if (!d.moved) { if (def) G.wires[d.a.id] = def; else delete G.wires[d.a.id]; SFX.unplug(); }
+  if (d.a.id[0] === 'C' && G.wires[d.a.id] !== 'alarm' && !G.camSaid) { G.camSaid = 1; rico('r_cam'); }
+  renderBar();
+};
+cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', () => { G.drag = null; });
+const changed = () => Object.keys(G.wires).filter(k => G.wires[k] !== C.defaults(G.lvl)[k]).length;
+
+// ---------- heist ----------
+function startHeist() {
+  G.mode = 'heist'; G.s = C.make(G.lvl, G.wires, []); G.acc = 0; G.evN = 0; G.slow = 0; G.speed = 1; S.levelsPlayed++; renderBar(); rico('r_go'); SFX.click(); track('heist', { lvl: G.lvl.id });
+}
+function pressBtn(id) { if (!G.s || G.s.done) return; G.s.presses.push({ id, t: G.s.t }); G.s.presses.sort((a, b) => a.t - b.t); SFX.click(); buzz(15); const so = sock(id); G.fx.push({ kind: 'ring', x: so.x, y: so.y, t: 0, d: 0.4 }); }
+function heistTick(dt) {
+  const s = G.s; if (!s || s.done) return;
+  const sp = (G.slow > 0 ? 0.3 : 1) * G.speed; if (G.slow > 0) G.slow -= dt;
+  G.acc += dt * sp; while (G.acc >= C.DT && !s.done) { G.acc -= C.DT; const before = { x: s.rico.x }; C.step(s); if (Math.floor(s.t * 4) !== Math.floor((s.t - C.DT) * 4) && Math.abs(s.rico.x - before.x) > 0) SFX.step(); }
+  while (G.evN < s.events.length) { const ev = s.events[G.evN++];
+    if (ev.k === 'signal') { G.fx.push({ kind: 'spark', a: ev.src, b: ev.tgt, t: 0, d: 0.35, col: wireCol(ev.src) }); SFX.zap(); const tg = ev.tgt[0]; setTimeout(() => tg === 'D' ? SFX.door() : tg === 'T' ? SFX.thud() : SFX.click(), 250); }
+    if (ev.k === 'loot') { SFX.coin(); buzz(8); G.floats.push({ x: X(ev.o.x), y: FY(ev.o.f) - 30, s: '+💰', t: 0, d: 1 }); if (!G.lootSaid) { G.lootSaid = 1; rico('r_loot'); } }
+    if (ev.k === 'ko') { G.slow = 0.9; G.shake = 0.6; SFX.thud(); buzz([20, 40, 60]); rico('r_ko'); }
+    if (ev.k === 'alarm') { SFX.alarm(); G.flash = 1; } }
+  if (s.done) setTimeout(() => s.done === 'win' ? win() : fail(), s.done === 'win' ? 500 : 900);
+}
+function fail() {
+  if (G.mode !== 'heist') return; G.mode = 'fail'; const id = G.lvl.id; S.fails[id] = (S.fails[id] || 0) + 1; save(); SFX.sad(); buzz([30, 30, 30]);
+  if (G.s.why === 'seen') { G.shake = 0.5; }
+  rico('r_' + G.s.why);
+  openModal(`<h2>${t('fail')}</h2><p>${t('why_' + G.s.why)}</p>${S.fails[id] >= 2 ? `<button class="b2" data-hint>💡 ${t('hint')}</button>` : ''}<button class="b1 big" data-retry>↻ ${t('retry')}</button>`);
+  modal.querySelector('[data-retry]').onclick = () => { closeModal(); toPlan(); rico('r_retry'); };
+  const h = modal.querySelector('[data-hint]'); if (h) h.onclick = () => { closeModal(); toPlan(); showHint(); };
+}
+function showHint() {
+  const sol = SOL[G.lvl.id]; if (!sol) return; const def = C.defaults(G.lvl);
+  const k = Object.keys(sol.w).find(k => sol.w[k] !== def[k] && G.wires[k] !== sol.w[k]) || Object.keys(sol.w)[0]; if (!k) return;
+  G.hl = { a: k, b: sol.w[k] }; rico('r_hint'); toast('💡 ' + t('hintTxt', { a: devName(k), b: devName(sol.w[k]) }) + (sol.pr && sol.pr.length ? ` (⏱ ${sol.pr[0].t}s)` : ''));
+}
+function win() {
+  if (G.mode !== 'heist') return; G.mode = 'win'; const L = G.lvl, st = C.stars(L, G.s, G.wires);
+  rico(Math.random() < 0.5 ? 'r_win' : 'r_win2'); SFX.fanfare(); JUICE.confetti(50);
+  safeGame(mult => {
+    const base = (40 + L.id * 12) * st * mult, prev = S.stars[L.id] || 0; S.stars[L.id] = Math.max(prev, st); S.coins += Math.round(base); save();
+    openModal(`<h2>${L.boss ? t('jackpot') : t('win')}</h2><div class="stars">${[0, 1, 2].map(i => `<span class="st" data-i="${i}">★</span>`).join('')}</div>
+      <div class="starlist">${[t('star1'), t('star2'), t('star3') + ` (${changed()}/${L.par})`].map((s, i) => `<div class="${i < st ? 'ok' : ''}">${i < st ? '✔' : '✖'} ${s}</div>`).join('')}</div>
+      <div class="gain">+${Math.round(base)} 💰</div><button class="b2" data-double>${t('double')}</button><button class="b1 big" data-next>${t('next')}</button>`, 'wincard');
+    modal.querySelectorAll('.st').forEach((el, i) => { if (i < st) setTimeout(() => { el.classList.add('on'); SFX.star(i); buzz(20); }, 300 + i * 350); });
+    const dbl = modal.querySelector('[data-double]'); dbl.onclick = async () => { dbl.disabled = true; if (await Ads.rewarded('double')) { S.coins += Math.round(base); save(); JUICE.confetti(40); SFX.coin(); dbl.remove(); renderHud(); } else dbl.disabled = false; };
+    modal.querySelector('[data-next]').onclick = async () => { closeModal(); await Ads.interstitial(); const nx = LV.find(l => l.id === L.id + 1); if (L.boss) { rico('r_ring'); mapScreen(); } else if (nx) startLevel(nx); else mapScreen(); };
+    renderHud();
+  });
+}
+// the safe: a needle spins, tap when it is inside the green notch (3 notches)
+function safeGame(done) {
+  const el = div('safe', `<h2>${t('safe')}</h2><p>${t('safeTxt')}</p><canvas width="240" height="240"></canvas><div class="dots"><i></i><i></i><i></i></div>`); document.body.appendChild(el); rico('r_safe');
+  const c2 = el.querySelector('canvas').getContext('2d'); let a = 0, hits = 0, tries = 0, target = rnd(1, 5), sp = 3.2, alive = true, lastTick = 0;
+  const loop = () => { if (!alive) return; a = (a + sp / 60) % TAU; if (Math.floor(a * 6) !== lastTick) { lastTick = Math.floor(a * 6); SFX.tick(); }
+    c2.clearRect(0, 0, 240, 240); c2.fillStyle = '#4a4a5a'; c2.beginPath(); c2.arc(120, 120, 110, 0, TAU); c2.fill(); c2.fillStyle = '#c0c4d0'; c2.beginPath(); c2.arc(120, 120, 96, 0, TAU); c2.fill();
+    c2.strokeStyle = '#3aff7a'; c2.lineWidth = 16; c2.beginPath(); c2.arc(120, 120, 84, target - 0.28, target + 0.28); c2.stroke();
+    for (let i = 0; i < 24; i++) { const q = i / 24 * TAU; c2.strokeStyle = '#333'; c2.lineWidth = 2; c2.beginPath(); c2.moveTo(120 + Math.cos(q) * 92, 120 + Math.sin(q) * 92); c2.lineTo(120 + Math.cos(q) * 80, 120 + Math.sin(q) * 80); c2.stroke(); }
+    c2.strokeStyle = '#d0302a'; c2.lineWidth = 5; c2.beginPath(); c2.moveTo(120, 120); c2.lineTo(120 + Math.cos(a) * 88, 120 + Math.sin(a) * 88); c2.stroke(); c2.fillStyle = '#333'; c2.beginPath(); c2.arc(120, 120, 14, 0, TAU); c2.fill();
+    requestAnimationFrame(loop); };
+  loop();
+  el.onpointerdown = () => { tries++; const d = Math.abs(((a - target + Math.PI * 3) % TAU) - Math.PI); if (d < 0.3) { hits++; el.querySelectorAll('.dots i')[hits - 1].classList.add('on'); SFX.zap(); buzz(25); target = rnd(0, TAU); sp *= 1.25; } else { buzz(8); SFX.click(); el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+    if (hits >= 3 || tries >= 6) { alive = false; const mult = 1 + hits * 0.25; if (hits >= 3) { SFX.fanfare(); JUICE.confetti(90); rico('r_jackpot'); el.innerHTML = `<h1 class="jp">${t('jackpot')}</h1>`; } setTimeout(() => { el.remove(); done(mult); }, hits >= 3 ? 1300 : 300); } };
+}
+
+// ---------- screens ----------
+const modal = $('#modal');
+function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); }
+function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
+function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row2"><button class="b2" data-v="0">${t('cancel')}</button><button class="b1" data-v="1">${t('ok')}</button></div></div>`); el.onclick = e => { const v = e.target.dataset.v; if (v != null) { el.remove(); res(v === '1'); } }; document.body.appendChild(el); }); }
+function toast(s) { const box = $('#toasts'); while (box.children.length >= 2) box.firstChild.remove(); const el = div('toast', s); box.appendChild(el); setTimeout(() => el.classList.add('out'), 3800); setTimeout(() => el.remove(), 4300); }
+let ricoT = 0;
+function rico(key) { const el = $('#rico'); el.querySelector('.rt').textContent = t(key); el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); clearTimeout(ricoT); ricoT = setTimeout(() => el.classList.remove('on'), 3800); }
+function renderHud() {
+  $('#hud').innerHTML = `<button class="rb" data-a="map">🗺️</button><div class="title">${G.lvl && G.mode !== 'map' ? `${G.lvl.boss ? '🏆 ' : t('level') + ' ' + G.lvl.id + ' · '}${I.pick(G.lvl.name)}` : t('world1')}</div><div class="coin">💰 <b>${S.coins}</b></div><button class="rb" data-a="hide">🛋️</button><button class="rb ${S.login.pending ? 'dot' : ''}" data-a="gift">🎁</button><button class="rb" data-a="set">⚙️</button>`;
+}
+function renderBar() {
+  const bar = $('#bar'); if (G.mode === 'plan') {
+    bar.innerHTML = `<div class="wirecount">🔌 ${t('wires')} <b>${changed()}</b> <small>(${t('par')} ${G.lvl.par})</small></div><div class="row2"><button class="b2" data-a="clear">${t('reset')}</button>${(S.fails[G.lvl.id] || 0) >= 2 ? `<button class="b2" data-a="hint">💡 ${t('hint')}</button>` : `<button class="b2" data-a="hintad">💡 ${t('hintAd')}</button>`}</div><button class="b1 big" data-a="go">🦝 ${t('heist')}</button>`;
+  } else if (G.mode === 'heist') {
+    bar.innerHTML = `${G.lvl.btns.length ? `<button class="press" data-a="press">${t('press')}</button>` : ''}<div class="row2"><button class="b2" data-a="abort">↻ ${t('retry')}</button><button class="b2" data-a="speed">⏩ ×${G.speed}</button></div>`;
+  } else bar.innerHTML = '';
+}
+$('#bar').addEventListener('click', async e => {
+  const a = e.target.closest('[data-a]')?.dataset.a; if (!a) return; audioInit();
+  if (a === 'go') startHeist();
+  if (a === 'clear') { G.wires = C.defaults(G.lvl); G.hl = null; SFX.unplug(); renderBar(); }
+  if (a === 'hint') showHint();
+  if (a === 'hintad') { if (await Ads.rewarded('hint')) showHint(); }
+  if (a === 'press') pressBtn(G.lvl.btns[0].id);
+  if (a === 'abort') toPlan();
+  if (a === 'speed') { G.speed = G.speed === 1 ? 2 : 1; renderBar(); }
+});
+$('#hud').addEventListener('click', e => { const a = e.target.closest('[data-a]')?.dataset.a; if (!a) return; audioInit(); SFX.click(); if (a === 'map') mapScreen(); if (a === 'hide') hideout(); if (a === 'gift') giftModal(); if (a === 'set') settingsModal(); });
+function toPlan() { G.mode = 'plan'; G.s = null; G.preview = null; layout(); renderBar(); }
+function startLevel(L) {
+  closeModal(); $('#mapv').classList.remove('on'); G.lvl = L; G.wires = C.defaults(L); G.hl = null; G.camSaid = 0; G.lootSaid = 0; G.mode = 'plan'; G.s = null;
+  $('#game').classList.add('on'); renderHud(); renderBar(); layout();
+  if (L.tip && !S.seenTips[L.id]) { S.seenTips[L.id] = 1; save(); setTimeout(() => toast('💡 ' + I.pick(L.tip)), 400); }
+  if (L.id === 1 && !S.stars[1]) { setTimeout(() => rico('r_plan'), 300); G.hl = { a: 'S1', b: 'D1' }; }
+  if (L.boss) setTimeout(() => rico('r_boss'), 300);
+}
+function mapScreen() {
+  G.mode = 'map'; closeModal(); renderHud(); $('#bar').innerHTML = ''; const m = $('#mapv');
+  const total = Object.values(S.stars).reduce((a, b) => a + b, 0);
+  m.innerHTML = `<h2>${t('world1')} <small>★ ${total}/${LV.length * 3}</small></h2><div class="grid">${LV.map(L => { const u = unlocked(L.id), st = S.stars[L.id] || 0; return `<button class="lv ${u ? '' : 'lock'} ${L.boss ? 'boss' : ''}" data-l="${L.id}"><b>${L.boss ? '🏆' : L.id}</b><span>${u ? '★'.repeat(st) + '☆'.repeat(3 - st) : '🔒'}</span></button>`; }).join('')}</div>`;
+  m.classList.add('on');
+  m.querySelectorAll('[data-l]').forEach(b => b.onclick = () => { const L = LV.find(l => l.id === +b.dataset.l); if (!unlocked(L.id)) { toast(t('locked')); return; } SFX.click(); startLevel(L); });
+}
+function hideout() {
+  const items = DECO.map(([id, cost, ico]) => { const own = S.deco.includes(id); return `<div class="deco ${own ? 'own' : ''}"><span class="di">${ico}</span><b>${I.pick(DECO_NAMES[id])}</b>${own ? `<small>${t('owned')}</small>` : `<button class="b1" data-d="${id}" ${S.coins >= cost ? '' : 'disabled'}>💰 ${cost}</button>`}</div>`; }).join('');
+  openModal(`<h2>🛋️ ${t('hideout')}</h2><div class="room">${S.deco.map(id => `<span>${DECO.find(d => d[0] === id)[2]}</span>`).join('') || '🦝'}</div><p>${t('hideTxt')}</p><div class="decos">${items}</div>
+    <h3>${t('shop')}</h3>${STORE.map(it => `<div class="sitem"><span>${{ noads: t('sNoAds'), starter: t('sStarter'), costume: t('sCostume') }[it.id]}<small>${{ noads: t('noAdsSub'), starter: t('sStarterSub'), costume: t('costumeSub') }[it.id]}</small></span>${S.owned[it.id] ? '✔' : `<button class="b1" data-buy="${it.id}">${it.price}</button>`}</div>`).join('')}
+    <button class="b2" data-restore>${t('restore')}</button><button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  modal.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const d = DECO.find(x => x[0] === b.dataset.d); if (S.coins < d[1]) return; S.coins -= d[1]; S.deco.push(d[0]); save(); SFX.fanfare(); JUICE.confetti(40); rico('r_deco'); renderHud(); hideout(); });
+  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { const it = STORE.find(x => x.id === b.dataset.buy); if (await confirmBox(t('testBuy') + `<br><b>${it.price}</b>`)) { S.owned[it.id] = true; if (it.id === 'starter') { S.coins += 500; S.outfit = 'costume'; } if (it.id === 'costume') S.outfit = 'costume'; save(); SFX.fanfare(); renderHud(); hideout(); } });
+  modal.querySelector('[data-restore]').onclick = () => toast(t('restored'));
+  modal.querySelector('[data-close]').onclick = closeModal;
+}
+const LOGIN = [50, 80, 120, 160, 220, 300, 600];
+function ensureLogin() { if (S.login.last !== today()) { const y = new Date(Date.now() - 864e5), ys = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); S.login.streak = S.login.last === ys ? (S.login.streak % 7) + 1 : 1; S.login.last = today(); S.login.pending = true; save(); } }
+function giftModal() {
+  const k = S.login.streak;
+  openModal(`<h2>${t('login')}</h2><div class="login">${LOGIN.map((v, i) => `<div class="lg ${i < k - (S.login.pending ? 1 : 0) ? 'got' : ''} ${i === k - 1 && S.login.pending ? 'now' : ''}"><small>${t('day')} ${i + 1}</small>💰<b>${v}</b></div>`).join('')}</div>${S.login.pending ? `<button class="b1 big" data-claim>${t('claim')}</button>` : ''}<button class="b2" data-close>${t('close')}</button>`);
+  const c = modal.querySelector('[data-claim]'); if (c) c.onclick = () => { S.coins += LOGIN[k - 1]; S.login.pending = false; save(); SFX.fanfare(); JUICE.confetti(50); renderHud(); giftModal(); };
+  modal.querySelector('[data-close]').onclick = closeModal;
+}
+function settingsModal() {
+  const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
+  openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}<label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
+    <button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('resetGame')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Circuit Caper ${window.CC_VERSION || ''}</div>`);
+  modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
+  modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); renderHud(); renderBar(); settingsModal(); };
+  modal.querySelector('[data-consent]').onclick = () => consentModal(true);
+  modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.CC_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = settingsModal; };
+  modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
+  modal.querySelector('[data-close]').onclick = closeModal;
+}
+function consentModal(fromSettings) {
+  openModal(`<h2>${t('consentTitle')}</h2><p>${t('consentText')}</p><div class="row2"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>`);
+  modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); fromSettings ? settingsModal() : (closeModal(), begin()); });
+}
+function titleScreen() {
+  G.mode = 'title'; const el = $('#title');
+  el.innerHTML = `<div class="logo">${SPR.logo ? `<img src="${SPR.logo}" alt="Circuit Caper">` : '<h1>Circuit<br><span>Caper</span></h1>'}<p>${t('subtitle')}</p></div><div class="hero">🦝</div><button class="b1 big" data-play>${Object.keys(S.stars).length ? t('cont') : t('play')}</button>`;
+  el.classList.add('on'); el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.fanfare(); el.classList.remove('on'); S.consent == null ? consentModal(false) : begin(); };
+}
+function begin() {
+  ensureLogin(); $('#game').classList.add('on'); renderHud();
+  const next = LV.find(L => !S.stars[L.id] && unlocked(L.id));
+  if (!Object.keys(S.stars).length) { startLevel(LV[0]); setTimeout(() => rico('r_hello'), 100); setTimeout(() => rico('r_plan'), 4200); }
+  else { mapScreen(); setTimeout(() => rico('r_back'), 300); if (S.login.pending) setTimeout(giftModal, 600); }
+}
+addEventListener('resize', layout);
+let last = performance.now();
+function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; G.t += dt; if (G.mode === 'heist') heistTick(dt); musicTick(); draw(); requestAnimationFrame(frame); }
+window.CAPER = { G, S: () => S, startLevel, LV, startHeist, pressBtn, toPlan, C };
+titleScreen(); requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
