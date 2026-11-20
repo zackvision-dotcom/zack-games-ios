@@ -10,7 +10,7 @@ on:
         description: "Which game"
         required: true
         type: choice
-        options: [KunaiGaiden, Braise, GullStreet]
+        options: [KunaiGaiden, Braise, GullStreet, CoralStack]
         default: KunaiGaiden
       marketing_version:
         description: "Version shown on the App Store (CFBundleShortVersionString)"

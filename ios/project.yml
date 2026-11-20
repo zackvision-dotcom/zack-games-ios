@@ -119,3 +119,36 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.gullstreet
         PRODUCT_NAME: GullStreet
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+
+  CoralStack:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: CoralStack/Assets.xcassets
+      - path: CoralStack/Web
+        type: folder
+    info:
+      path: CoralStack/Info.plist
+      properties:
+        CFBundleDisplayName: Coral Stack
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.puzzle-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.coralstack
+        PRODUCT_NAME: CoralStack
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later

@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1d6f86">
+<title>Coral Stack</title>
+<style>
+:root{--ink:#16424f;--paper:#fff7e6;--deep:#0f4a5c;--teal:#2b9db0;--coral:#f0705a;--sand:#f3d9a0;--gold:#f4c94a;--sab:env(safe-area-inset-bottom)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#7fd6d6;font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:none;overscroll-behavior:none}
+#cv{position:fixed;inset:0;display:block}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
+.b1,.b2,.b3{border-radius:16px;padding:10px 16px;font-weight:900;border:3px solid var(--deep);transition:transform .08s}
+.b1{background:linear-gradient(#ff9a7e,#f0705a);color:#fff;text-shadow:0 2px 0 rgba(15,74,92,.45);box-shadow:inset 0 2px 0 rgba(255,255,255,.45),0 3px 0 var(--deep)}
+.b2{background:var(--paper);box-shadow:0 3px 0 var(--deep)}
+.b3{background:#ffd9d0;color:#a8403a;box-shadow:0 3px 0 var(--deep)}
+.b1:active,.b2:active,.b3:active{transform:translateY(2px);box-shadow:0 1px 0 var(--deep)}
+button:disabled{opacity:.45;filter:grayscale(.5)}
+.big{display:block;width:100%;font-size:19px;padding:12px;margin-top:10px}
+#hud{position:fixed;inset:0;pointer-events:none}#hud>*{pointer-events:auto}
+.pill,.goalbox,.card,#sheet,.toast,.tabs button,.quest,.sitem,.lg,.tut,.pack{background:var(--paper);border:3px solid var(--deep);box-shadow:inset 0 0 0 2px #fff,0 3px 0 rgba(15,74,92,.6)}
+.top{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:10px;right:10px;display:flex;gap:8px;align-items:center}
+.pill{border-radius:999px;padding:4px 5px 4px 10px;font-size:15px;font-weight:900;display:flex;align-items:center;gap:6px}
+.pill.tide{background:linear-gradient(#5fc4d4,#2b9db0);color:#fff;padding-right:12px;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.plus{width:24px;height:24px;border-radius:50%;background:linear-gradient(#8fe3a0,#3fae6a);color:#fff;font-weight:900;font-size:18px;line-height:20px;border:2px solid #22744a;padding:0}
+.gear{margin-left:auto;width:44px;height:44px;border-radius:50%;background:var(--paper);border:3px solid var(--deep);font-size:22px}
+.goalbox{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 56px);border-radius:14px;padding:6px 10px;font-size:13px;font-weight:700}
+.goalbox b{color:#c24f3c}.goalbox small{opacity:.7}
+.tidebar{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 92px);height:8px;border-radius:9px;background:rgba(255,247,230,.7);overflow:hidden;border:2px solid var(--deep)}
+.tidebar i{display:block;height:100%;background:linear-gradient(90deg,#7ef0c0,#2b9db0)}
+.tabs{position:absolute;left:6px;right:6px;bottom:calc(env(safe-area-inset-bottom) + 6px);display:flex;gap:5px}
+.tabs button{flex:1;border-radius:14px;padding:4px 0;display:flex;flex-direction:column;align-items:center;font-size:21px;position:relative}
+.tabs button span{font-size:10px;font-weight:900}
+#drawerbar.hot{background:#c9f2ff;transform:scale(1.08)}
+.badge{position:absolute;top:-6px;right:-3px;background:var(--coral);color:#fff;border-radius:999px;font-size:11px;min-width:18px;height:18px;line-height:15px;font-weight:900;border:2px solid #fff}
+.tut{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 76px);border-color:var(--coral);border-radius:14px;padding:9px 12px;font-weight:800;font-size:14px;animation:bob 1.6s ease-in-out infinite;pointer-events:none}
+@keyframes bob{50%{translate:0 -6px}}
+#sheet{position:fixed;left:0;right:0;bottom:0;max-height:62%;overflow:auto;border-radius:20px 20px 0 0;border-bottom:0;padding:6px 14px calc(env(safe-area-inset-bottom) + 14px);transform:translateY(105%);transition:transform .22s;z-index:5}
+#sheet.on{transform:none}
+.grip{width:44px;height:5px;border-radius:9px;background:rgba(15,74,92,.35);margin:4px auto 8px}
+h2,h3{margin:4px 0 10px;color:var(--deep)}
+h2{background:var(--teal);color:#fff;border-radius:10px;padding:5px 12px;font-size:18px;display:inline-block}
+.ci{width:44px;height:60px;vertical-align:middle;border-radius:8px}
+.info{display:flex;gap:12px;align-items:flex-start}.info .ci{width:88px;height:120px}.info p{margin:4px 0 8px;font-weight:800}
+.mini .rrow,.book .rrow{margin-bottom:6px}
+.rrow{display:flex;align-items:center;flex-wrap:wrap;gap:2px;background:#fff;border-radius:12px;padding:3px 6px;border:2px solid rgba(15,74,92,.25)}
+.rrow .ci{width:30px;height:41px}.rrow i{font-style:normal;font-weight:900;color:var(--teal);margin:0 2px}.rrow .w{font-size:22px}
+.book{max-height:52vh;overflow:auto}
+.hintbox{background:#fff3c4;border-radius:12px;padding:6px 8px;margin-bottom:10px;border:2px dashed var(--coral)}.hintbox b{display:block;font-size:12px;color:#c24f3c}
+.pack{display:flex;gap:8px;align-items:center;border-radius:14px;padding:6px 8px;margin-bottom:8px}.pack.off{opacity:.55}.pack .pi{flex:1;font-size:13px}.pack small{display:block;font-size:10.5px;opacity:.8;line-height:1.3}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:6px}
+#modal{position:fixed;inset:0;background:rgba(10,40,55,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:8}
+#modal.on{display:flex}
+.card{border-radius:20px;padding:12px 14px;width:100%;max-width:400px;max-height:92%;overflow:auto}.card.wide{max-width:520px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.stats div{background:#fff;border-radius:12px;padding:6px 8px;font-weight:800;font-size:13px;display:flex;justify-content:space-between;border:2px solid rgba(15,74,92,.2)}
+.msg{font-weight:800}
+.ads{display:flex;flex-direction:column;gap:7px;margin-bottom:8px}.ads button{font-size:13px;text-align:left}
+.packrow{display:flex;gap:6px}.packrow button{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px}.packrow .ci{width:40px;height:54px}
+.login{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
+.lg{border-radius:10px;text-align:center;font-size:12px;padding:4px 0;font-weight:900;border-width:2px}.lg small{display:block;font-size:9px;font-weight:700}.lg.got{background:#d8f2e4}.lg.now{background:var(--gold)}
+.quest,.sitem{display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:14px;padding:7px 10px;margin-bottom:8px;font-weight:900}
+.quest small,.sitem small{display:block;font-weight:700;opacity:.75;font-size:12px}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:800}.sw input{width:22px;height:22px;accent-color:var(--coral)}.sw select{font:inherit;padding:4px;border-radius:10px;border:2px solid var(--deep);background:#fff}
+.card>.b2,.card>.b3{display:block;width:100%;margin-top:8px}
+.row{display:flex;gap:8px}.row>button{flex:1}
+.note{font-size:12px;background:#fff0b8;border-radius:10px;padding:5px 9px;margin-bottom:8px;font-weight:800}
+.ver{text-align:center;font-size:11px;opacity:.6;margin-top:8px}.legal{font-size:13px;line-height:1.45}
+#toasts{position:fixed;top:calc(env(safe-area-inset-top) + 110px);left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;z-index:9}
+.toast{border-radius:999px;padding:6px 14px;font-weight:900;font-size:14px;transition:opacity .4s,transform .4s;max-width:92%;text-align:center}.toast.out{opacity:0;transform:translateY(-10px)}
+.confirm{position:fixed;inset:0;background:rgba(10,40,55,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.adov{position:fixed;inset:0;background:#0f4a5c;z-index:30;display:flex;align-items:center;justify-content:center}.adbox{text-align:center;color:#fff}.adtag{background:var(--gold);color:var(--deep);font-weight:900;border-radius:8px;padding:4px 10px;display:inline-block}.adart{font-size:60px;margin:20px}.adcount{font-size:28px;font-weight:900}
+#title{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:flex-end;gap:16px;padding:24px 24px calc(env(safe-area-inset-bottom) + 40px);background:radial-gradient(circle at 50% 20%,#bff3ee,#4fbccc 45%,#1d6f86);z-index:10}
+#title.on{display:flex}
+#title .logo{position:absolute;top:calc(env(safe-area-inset-top) + 10%);left:16px;right:16px;text-align:center}
+#title .logo img{width:100%;max-width:420px}
+#title h1{font-size:64px;line-height:.9;margin:0;color:#fff;text-shadow:0 4px 0 #0f4a5c}
+#title p{display:inline-block;margin:14px 0 0;font-weight:900;font-size:16px;background:var(--paper);border-radius:999px;padding:4px 14px;border:3px solid var(--deep)}
+#title .hero{position:absolute;top:calc(env(safe-area-inset-top) + 40%);left:50%;transform:translateX(-50%);width:min(72vw,340px);border-radius:50%;border:6px solid #fff7e6;box-shadow:0 8px 0 rgba(15,74,92,.5),0 0 0 10px rgba(255,255,255,.25);animation:bob 3s ease-in-out infinite}
+#title .big{max-width:280px}.evt{background:var(--paper);border-radius:999px;padding:4px 14px;font-weight:900;border:3px solid var(--deep)}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="hud"></div><div id="sheet"></div><div id="modal"></div><div id="toasts"></div><div id="title"></div>
+<script>window.CARDS={"version":1,"tide":{"seconds":150,"shellsPerTide":2,"interstitialFromTide":4,"interstitialGapSec":180},"start":{"shells":3,"cards":["diver","diver","rock","seabed","vent","wreck","seaweed","seaweed","oxygen","oxygen"],"maxCards":120},"cards":{"diver":{"fam":"creature","fr":"Plongeur","en":"Diver","worker":1,"sell":0,"art":[0,0]},"crab":{"fam":"creature","fr":"Crabe","en":"Crab","worker":1.2,"sell":3,"art":[0,1]},"octopus":{"fam":"creature","fr":"Poulpe","en":"Octopus","worker":1.3,"sell":4,"art":[0,2]},"seahorse":{"fam":"creature","fr":"Hippocampe","en":"Seahorse","worker":1.1,"sell":4,"art":[0,3]},"turtle":{"fam":"creature","fr":"Tortue","en":"Turtle","worker":0.8,"sell":5,"art":[0,4]},"puffer":{"fam":"creature","fr":"Poisson-globe","en":"Pufferfish","worker":1,"sell":4,"art":[0,5]},"rock":{"fam":"node","fr":"Rocher","en":"Rock","uses":4,"art":[0,6]},"seabed":{"fam":"node","fr":"Champ d'algues","en":"Seaweed bed","uses":6,"art":[0,7]},"coralpatch":{"fam":"node","fr":"Massif de corail","en":"Coral patch","uses":4,"art":[0,8]},"sandbank":{"fam":"node","fr":"Banc de sable","en":"Sandbank","uses":4,"art":[0,9]},"wreck":{"fam":"node","fr":"Épave","en":"Shipwreck","uses":4,"art":[0,10]},"musselbed":{"fam":"node","fr":"Banc de moules","en":"Mussel bed","uses":4,"art":[0,11]},"vent":{"fam":"node","fr":"Source de bulles","en":"Bubble vent","uses":0,"art":[0,12]},"seaweed":{"fam":"res","fr":"Algue","en":"Seaweed","food":1,"sell":1,"art":[0,13]},"coral":{"fam":"res","fr":"Corail","en":"Coral","sell":2,"art":[0,14]},"stone":{"fam":"res","fr":"Pierre","en":"Stone","sell":1,"art":[0,15]},"sand":{"fam":"res","fr":"Sable","en":"Sand","sell":1,"art":[0,16]},"pearl":{"fam":"res","fr":"Perle","en":"Pearl","sell":6,"art":[0,17]},"oxygen":{"fam":"res","fr":"Bulle d'oxygène","en":"Oxygen bubble","oxy":1,"sell":1,"art":[0,18]},"kelpcake":{"fam":"res","fr":"Galette d'algues","en":"Kelp cake","food":2,"sell":2,"art":[0,19]},"fish":{"fam":"res","fr":"Poisson","en":"Fish","food":2,"sell":2,"art":[0,20]},"sponge":{"fam":"res","fr":"Éponge","en":"Sponge","sell":2,"art":[0,21]},"driftwood":{"fam":"res","fr":"Bois flotté","en":"Driftwood","sell":1,"art":[0,22]},"rope":{"fam":"res","fr":"Corde","en":"Rope","sell":2,"art":[0,23]},"glass":{"fam":"res","fr":"Verre","en":"Glass","sell":3,"art":[1,0]},"scrap":{"fam":"res","fr":"Ferraille","en":"Scrap","sell":1,"art":[1,1]},"ink":{"fam":"res","fr":"Encre","en":"Ink","sell":3,"art":[1,2]},"urchin":{"fam":"res","fr":"Oursin","en":"Sea urchin","food":1,"sell":3,"art":[1,3]},"mussel":{"fam":"res","fr":"Moule","en":"Mussel","food":1,"sell":1,"art":[1,4]},"crystal":{"fam":"res","fr":"Cristal","en":"Crystal","sell":8,"art":[1,5]},"shell":{"fam":"res","fr":"Coquillage","en":"Shell","coin":1,"art":[1,6]},"hut":{"fam":"building","fr":"Cabane","en":"Hut","sell":4,"art":[1,7]},"airpump":{"fam":"building","fr":"Pompe à air","en":"Air pump","produce":["oxygen",25],"sell":6,"art":[1,8]},"kelpfarm":{"fam":"building","fr":"Serre à algues","en":"Kelp farm","produce":["seaweed",20],"sell":5,"art":[1,9]},"workshop":{"fam":"building","fr":"Atelier","en":"Workshop","sell":4,"art":[1,10]},"kitchen":{"fam":"building","fr":"Cuisine","en":"Kitchen","sell":4,"art":[1,11]},"glassworks":{"fam":"building","fr":"Verrerie","en":"Glassworks","sell":5,"art":[1,12]},"dock":{"fam":"building","fr":"Ponton du sous-marin","en":"Submarine dock","sell":8,"art":[1,13]},"pearlfarm":{"fam":"building","fr":"Ferme perlière","en":"Pearl farm","produce":["pearl",40],"sell":8,"art":[1,14]},"school":{"fam":"building","fr":"École des plongeurs","en":"Diving school","sell":6,"art":[1,15]},"market":{"fam":"building","fr":"Marché","en":"Market","sell":5,"art":[1,16]},"lanternhouse":{"fam":"building","fr":"Maison-lanterne","en":"Lantern house","sell":10,"art":[1,17],"unlock":"reef"},"airbell":{"fam":"building","fr":"Grande cloche à air","en":"Great air bell","produce":["oxygen",12],"sell":20,"art":[1,18],"unlock":"trench"},"net":{"fam":"item","fr":"Filet","en":"Net","sell":3,"art":[1,19]},"lantern":{"fam":"item","fr":"Lanterne","en":"Lantern","sell":5,"art":[1,20]},"jar":{"fam":"item","fr":"Bocal","en":"Jar","sell":3,"art":[1,21]},"helmet":{"fam":"item","fr":"Casque","en":"Helmet","sell":8,"art":[1,22]},"flippers":{"fam":"item","fr":"Palmes","en":"Flippers","sell":6,"art":[1,23]},"tank":{"fam":"item","fr":"Bouteille d'oxygène","en":"Oxygen tank","oxy":3,"sell":5,"art":[2,0]},"wrap":{"fam":"item","fr":"Wrap d'algues","en":"Seaweed wrap","food":3,"sell":4,"art":[2,1]},"soup":{"fam":"item","fr":"Soupe","en":"Soup","food":4,"sell":5,"art":[2,2]},"goldpearl":{"fam":"rare","fr":"Perle dorée","en":"Golden pearl","sell":25,"art":[2,3]},"chest":{"fam":"rare","fr":"Coffre au trésor","en":"Treasure chest","open":["pearl","crystal","goldpearl","oldcoin","glass","helmet"],"art":[2,4]},"oldcoin":{"fam":"rare","fr":"Pièce ancienne","en":"Old coin","coin":10,"art":[2,5]},"starcoral":{"fam":"rare","fr":"Corail étoilé","en":"Star coral","sell":30,"art":[2,6]},"submarine":{"fam":"rare","fr":"Sous-marin","en":"Submarine","art":[2,7]},"santahat":{"fam":"rare","fr":"Bonnet de Noël","en":"Christmas hat","sell":6,"art":[2,11],"event":"xmas"},"garland":{"fam":"rare","fr":"Guirlande de corail","en":"Coral garland","sell":6,"art":[2,12],"event":"xmas"}},"recipes":[{"id":"r_stone","in":["W","rock"],"keep":["W","rock"],"time":5,"out":["stone"]},{"id":"r_seaweed","in":["W","seabed"],"keep":["W","seabed"],"time":4,"out":["seaweed"]},{"id":"r_coral","in":["W","coralpatch"],"keep":["W","coralpatch"],"time":5,"out":[["coral",65],["sponge",20],["shell",15]]},{"id":"r_sand","in":["W","sandbank"],"keep":["W","sandbank"],"time":4,"out":[["sand",85],["shell",15]]},{"id":"r_wreck","in":["W","wreck"],"keep":["W","wreck"],"time":6,"out":[["driftwood",50],["scrap",40],["oldcoin",10]]},{"id":"r_mussel","in":["W","musselbed"],"keep":["W","musselbed"],"time":5,"out":[["mussel",80],["pearl",20]]},{"id":"r_oxygen","in":["W","vent"],"keep":["W","vent"],"time":6,"out":["oxygen"]},{"id":"r_fish","in":["W","net"],"keep":["W","net"],"time":6,"out":[["fish",85],["shell",15]]},{"id":"r_ink","in":["octopus","seaweed"],"keep":["octopus"],"time":5,"out":["ink"]},{"id":"r_cake","in":["W","seaweed","seaweed"],"keep":["W"],"time":4,"out":["kelpcake"]},{"id":"r_wrap","in":["kitchen","seaweed","mussel"],"keep":["kitchen"],"time":5,"out":["wrap"]},{"id":"r_soup","in":["kitchen","fish","seaweed"],"keep":["kitchen"],"time":6,"out":["soup"]},{"id":"r_urchin","in":["kitchen","urchin","urchin"],"keep":["kitchen"],"time":5,"out":["soup"]},{"id":"r_glass","in":["glassworks","sand"],"keep":["glassworks"],"time":6,"out":["glass"]},{"id":"r_rope","in":["workshop","seaweed","seaweed"],"keep":["workshop"],"time":5,"out":["rope"]},{"id":"r_net","in":["workshop","rope","rope"],"keep":["workshop"],"time":6,"out":["net"]},{"id":"r_jar","in":["workshop","glass"],"keep":["workshop"],"time":5,"out":["jar"]},{"id":"r_lantern","in":["workshop","jar","ink"],"keep":["workshop"],"time":6,"out":["lantern"]},{"id":"r_helmet","in":["workshop","glass","scrap"],"keep":["workshop"],"time":8,"out":["helmet"]},{"id":"r_flippers","in":["workshop","rope","sponge"],"keep":["workshop"],"time":6,"out":["flippers"]},{"id":"r_tank","in":["workshop","scrap","scrap","glass"],"keep":["workshop"],"time":8,"out":["tank"]},{"id":"r_gold","in":["pearlfarm","pearl","pearl","pearl"],"keep":["pearlfarm"],"time":10,"out":["goldpearl"]},{"id":"r_star","in":["glassworks","crystal","coral","coral"],"keep":["glassworks"],"time":12,"out":["starcoral"]},{"id":"r_hut","in":["W","stone","stone","driftwood"],"keep":["W"],"time":8,"out":["hut"]},{"id":"r_kelpfarm","in":["W","seaweed","seaweed","seaweed","sand"],"keep":["W"],"time":8,"out":["kelpfarm"]},{"id":"r_workshop","in":["W","driftwood","driftwood","stone"],"keep":["W"],"time":8,"out":["workshop"]},{"id":"r_glassworks","in":["W","stone","stone","scrap"],"keep":["W"],"time":8,"out":["glassworks"]},{"id":"r_kitchen","in":["W","stone","stone","coral"],"keep":["W"],"time":8,"out":["kitchen"]},{"id":"r_airpump","in":["W","scrap","scrap","glass"],"keep":["W"],"time":10,"out":["airpump"]},{"id":"r_pearlfarm","in":["W","mussel","mussel","coral","coral"],"keep":["W"],"time":10,"out":["pearlfarm"]},{"id":"r_market","in":["W","coral","coral","driftwood","driftwood"],"keep":["W"],"time":10,"out":["market"]},{"id":"r_school","in":["W","hut","coral","driftwood","driftwood"],"keep":["W"],"time":12,"out":["school"]},{"id":"r_baby","in":["school","diver","diver"],"keep":["school","diver","diver"],"time":20,"out":["diver"]},{"id":"r_dock","in":["W","driftwood","driftwood","driftwood","rope","rope"],"keep":["W"],"time":12,"out":["dock"]},{"id":"r_sub","in":["dock","diver","diver"],"keep":["dock","diver","diver"],"time":45,"out":[["pearl",20],["crystal",15],["chest",15],["goldpearl",8],["octopus",12],["turtle",10],["oldcoin",20]],"count":2,"expedition":1},{"id":"r_lanternhouse","in":["W","lantern","lantern","stone","stone"],"keep":["W"],"time":12,"out":["lanternhouse"]},{"id":"r_airbell","in":["W","glass","glass","glass","scrap","scrap","rope","rope"],"keep":["W"],"time":20,"out":["airbell"]}],"packs":[{"id":"lagoon","price":3,"count":3,"zone":"lagoon","fr":"Paquet du Lagon","en":"Lagoon pack","art":[2,8],"odds":[["rock",14],["seabed",12],["sandbank",14],["coralpatch",12],["wreck",12],["musselbed",8],["seaweed",10],["stone",6],["driftwood",6],["diver",4],["oxygen",2]]},{"id":"reef","price":8,"count":3,"zone":"reef","fr":"Paquet du Récif","en":"Reef pack","art":[2,9],"odds":[["coralpatch",14],["musselbed",12],["wreck",10],["crab",10],["octopus",8],["seahorse",8],["sponge",10],["pearl",8],["glass",8],["vent",6],["diver",6]]},{"id":"trench","price":15,"count":4,"zone":"trench","fr":"Paquet de la Fosse","en":"Trench pack","art":[2,10],"odds":[["crystal",14],["urchin",14],["turtle",8],["puffer",8],["vent",10],["scrap",14],["oldcoin",10],["chest",8],["pearl",8],["wreck",6]]}],"zones":{"lagoon":{"fr":"Le Lagon","en":"The Lagoon"},"reef":{"fr":"Le Récif","en":"The Reef"},"trench":{"fr":"La Fosse","en":"The Trench"}},"goals":[{"k":"make","c":"stone","n":2,"shells":2},{"k":"make","c":"kelpcake","n":1,"shells":2},{"k":"make","c":"hut","n":1,"shells":3},{"k":"buy","n":1,"shells":2},{"k":"make","c":"workshop","n":1,"shells":3},{"k":"make","c":"rope","n":2,"shells":3},{"k":"make","c":"kitchen","n":1,"shells":3},{"k":"make","c":"net","n":1,"shells":3},{"k":"make","c":"glassworks","n":1,"shells":4},{"k":"make","c":"glass","n":3,"shells":4},{"k":"make","c":"airpump","n":1,"shells":5},{"k":"make","c":"market","n":1,"shells":5},{"k":"make","c":"school","n":1,"shells":5},{"k":"pop","n":4,"shells":6},{"k":"make","c":"lantern","n":2,"shells":6},{"k":"make","c":"lanternhouse","n":1,"shells":10},{"k":"make","c":"dock","n":1,"shells":8},{"k":"make","c":"pearlfarm","n":1,"shells":8},{"k":"recipes","n":25,"shells":10},{"k":"make","c":"airbell","n":1,"shells":20},{"k":"make","c":"starcoral","n":1,"shells":20},{"k":"pop","n":8,"shells":15}],"quests":[{"id":"make","target":15,"shells":3},{"id":"discover","target":1,"shells":3},{"id":"tides","target":3,"shells":4},{"id":"sell","target":10,"shells":3},{"id":"buy","target":2,"shells":3}],"login":[{"shells":3},{"card":"oxygen"},{"shells":5},{"card":"chest"},{"shells":8},{"card":"pearl"},{"shells":15}],"store":[{"id":"starter","price":"1,99 €","shells":30,"cards":["octopus","crab","chest"],"once":true},{"id":"shells40","price":"0,99 €","shells":40},{"id":"shells250","price":"4,99 €","shells":250},{"id":"shells600","price":"9,99 €","shells":600},{"id":"theme","price":"2,99 €","theme":"night","once":true},{"id":"noads","price":"3,99 €","noAds":true,"once":true}]};window.CS_VERSION="1.0";window.CS_SPR={"art_0_00": "assets/art_0_00.png", "art_0_01": "assets/art_0_01.png", "art_0_02": "assets/art_0_02.png", "art_0_03": "assets/art_0_03.png", "art_0_04": "assets/art_0_04.png", "art_0_05": "assets/art_0_05.png", "art_0_06": "assets/art_0_06.png", "art_0_07": "assets/art_0_07.png", "art_0_08": "assets/art_0_08.png", "art_0_09": "assets/art_0_09.png", "art_0_10": "assets/art_0_10.png", "art_0_11": "assets/art_0_11.png", "art_0_12": "assets/art_0_12.png", "art_0_13": "assets/art_0_13.png", "art_0_14": "assets/art_0_14.png", "art_0_15": "assets/art_0_15.png", "art_0_16": "assets/art_0_16.png", "art_0_17": "assets/art_0_17.png", "art_0_18": "assets/art_0_18.png", "art_0_19": "assets/art_0_19.png", "art_0_20": "assets/art_0_20.png", "art_0_21": "assets/art_0_21.png", "art_0_22": "assets/art_0_22.png", "art_0_23": "assets/art_0_23.png", "art_1_00": "assets/art_1_00.png", "art_1_01": "assets/art_1_01.png", "art_1_02": "assets/art_1_02.png", "art_1_03": "assets/art_1_03.png", "art_1_04": "assets/art_1_04.png", "art_1_05": "assets/art_1_05.png", "art_1_06": "assets/art_1_06.png", "art_1_07": "assets/art_1_07.png", "art_1_08": "assets/art_1_08.png", "art_1_09": "assets/art_1_09.png", "art_1_10": "assets/art_1_10.png", "art_1_11": "assets/art_1_11.png", "art_1_12": "assets/art_1_12.png", "art_1_13": "assets/art_1_13.png", "art_1_14": "assets/art_1_14.png", "art_1_15": "assets/art_1_15.png", "art_1_16": "assets/art_1_16.png", "art_1_17": "assets/art_1_17.png", "art_1_18": "assets/art_1_18.png", "art_1_19": "assets/art_1_19.png", "art_1_20": "assets/art_1_20.png", "art_1_21": "assets/art_1_21.png", "art_1_22": "assets/art_1_22.png", "art_1_23": "assets/art_1_23.png", "art_2_00": "assets/art_2_00.png", "art_2_01": "assets/art_2_01.png", "art_2_02": "assets/art_2_02.png", "art_2_03": "assets/art_2_03.png", "art_2_04": "assets/art_2_04.png", "art_2_05": "assets/art_2_05.png", "art_2_06": "assets/art_2_06.png", "art_2_07": "assets/art_2_07.png", "art_2_08": "assets/art_2_08.png", "art_2_09": "assets/art_2_09.png", "art_2_10": "assets/art_2_10.png", "art_2_11": "assets/art_2_11.png", "art_2_12": "assets/art_2_12.png", "art_2_13": "assets/art_2_13.png", "frame_building": "assets/frame_building.png", "frame_creature": "assets/frame_creature.png", "frame_node": "assets/frame_node.png", "frame_rare": "assets/frame_rare.png", "frame_res": "assets/frame_res.png", "hero": "assets/hero.png", "logo": "assets/logo.png"};window.CS_PRIVACY="<h4>Politique de confidentialité — Coral Stack</h4>\n<p>Coral Stack fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Coral Stack convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Coral Stack</h4>\n<p>Coral Stack works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Coral Stack suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// Coral Stack — UI texts in 6 languages; card names come from cards.json (FR/EN, others fall back to EN).
+window.I18N = (() => {
+  const L = ['fr', 'en', 'es', 'de', 'pt', 'it'];
+  const T = {
+    subtitle: ['Bâtis ta colonie sous la mer', 'Build an Undersea Colony', 'Construye tu colonia submarina', 'Bau deine Unterwasserkolonie', 'Construa sua colônia submarina', 'Costruisci la tua colonia sottomarina'],
+    play: ['Plonger', 'Dive in', 'Sumergirse', 'Abtauchen', 'Mergulhar', 'Tuffati'],
+    cont: ['Continuer', 'Continue', 'Continuar', 'Weiter', 'Continuar', 'Continua'],
+    tide: ['Marée', 'Tide', 'Marea', 'Gezeit', 'Maré', 'Marea'],
+    tideEnd: ['Fin de la marée', 'End of the tide', 'Fin de la marea', 'Ende der Gezeit', 'Fim da maré', 'Fine della marea'],
+    fed: ['Habitants nourris', 'Residents fed', 'Habitantes alimentados', 'Bewohner versorgt', 'Moradores alimentados', 'Abitanti nutriti'],
+    asleep: ['endormi', 'asleep', 'dormido', 'schläft', 'dormindo', 'addormentato'],
+    sleepers: ['{n} habitant(s) se sont endormis : il manquait de l’oxygène ou un repas. Ils dormiront pendant la prochaine marée.', '{n} resident(s) fell asleep: they lacked oxygen or a meal. They will sleep through the next tide.', '{n} habitante(s) se durmieron por falta de oxígeno o comida.', '{n} Bewohner sind eingeschlafen: Sauerstoff oder Essen fehlte.', '{n} morador(es) adormeceram: faltou oxigênio ou comida.', '{n} abitante/i si sono addormentati: mancava ossigeno o cibo.'],
+    allFed: ['Tout le monde a respiré et mangé !', 'Everyone breathed and ate!', '¡Todos respiraron y comieron!', 'Alle haben geatmet und gegessen!', 'Todos respiraram e comeram!', 'Tutti hanno respirato e mangiato!'],
+    oxygen: ['Oxygène', 'Oxygen', 'Oxígeno', 'Sauerstoff', 'Oxigênio', 'Ossigeno'],
+    food: ['Repas', 'Meals', 'Comida', 'Essen', 'Refeições', 'Pasti'],
+    residents: ['Habitants', 'Residents', 'Habitantes', 'Bewohner', 'Moradores', 'Abitanti'],
+    nextTide: ['Marée suivante', 'Next tide', 'Siguiente marea', 'Nächste Gezeit', 'Próxima maré', 'Marea successiva'],
+    packs: ['Paquets de cartes', 'Card packs', 'Sobres de cartas', 'Kartenpacks', 'Pacotes de cartas', 'Pacchetti di carte'],
+    buy: ['Acheter', 'Buy', 'Comprar', 'Kaufen', 'Comprar', 'Compra'],
+    odds: ['Chances', 'Odds', 'Probabilidades', 'Chancen', 'Chances', 'Probabilità'],
+    lockedZone: ['Débloqué par : {s}', 'Unlocked by: {s}', 'Se desbloquea con: {s}', 'Freigeschaltet durch: {s}', 'Desbloqueado por: {s}', 'Sbloccato da: {s}'],
+    freePack: ['Paquet gratuit', 'Free pack', 'Sobre gratis', 'Gratis-Pack', 'Pacote grátis', 'Pacchetto gratis'],
+    wake: ['Réveiller les dormeurs', 'Wake the sleepers', 'Despertar a los dormidos', 'Schläfer wecken', 'Acordar quem dorme', 'Sveglia chi dorme'],
+    finishNow: ['Finir tout de suite', 'Finish now', 'Terminar ya', 'Sofort fertig', 'Terminar já', 'Finisci subito'],
+    watch: ['Pub', 'Ad', 'Anuncio', 'Werbung', 'Anúncio', 'Pub'],
+    testAd: ['Publicité de test', 'Test advert', 'Anuncio de prueba', 'Testwerbung', 'Anúncio de teste', 'Pubblicità di prova'],
+    book: ['Recettes', 'Recipes', 'Recetas', 'Rezepte', 'Receitas', 'Ricette'],
+    bookTitle: ['Livre de recettes', 'Recipe book', 'Libro de recetas', 'Rezeptbuch', 'Livro de receitas', 'Libro delle ricette'],
+    hint: ['Indice', 'Hint', 'Pista', 'Tipp', 'Dica', 'Indizio'],
+    shop: ['Boutique', 'Shop', 'Tienda', 'Shop', 'Loja', 'Negozio'],
+    quests: ['Défis', 'Challenges', 'Retos', 'Aufgaben', 'Desafios', 'Sfide'],
+    drawer: ['Tiroir', 'Drawer', 'Cajón', 'Schublade', 'Gaveta', 'Cassetto'],
+    drawerHint: ['Glisse une carte ici pour la ranger', 'Drop a card here to store it', 'Suelta una carta aquí para guardarla', 'Karte hier ablegen zum Aufbewahren', 'Solte uma carta aqui para guardar', 'Trascina qui una carta per riporla'],
+    settings: ['Réglages', 'Settings', 'Ajustes', 'Einstellungen', 'Ajustes', 'Impostazioni'],
+    sound: ['Sons', 'Sounds', 'Sonidos', 'Töne', 'Sons', 'Suoni'], music: ['Musique', 'Music', 'Música', 'Musik', 'Música', 'Musica'],
+    vibration: ['Vibrations', 'Vibration', 'Vibración', 'Vibration', 'Vibração', 'Vibrazione'], language: ['Langue', 'Language', 'Idioma', 'Sprache', 'Idioma', 'Lingua'],
+    restore: ['Restaurer les achats', 'Restore purchases', 'Restaurar compras', 'Käufe wiederherstellen', 'Restaurar compras', 'Ripristina acquisti'],
+    restored: ['Achats restaurés', 'Purchases restored', 'Compras restauradas', 'Käufe wiederhergestellt', 'Compras restauradas', 'Acquisti ripristinati'],
+    privacy: ['Confidentialité', 'Privacy', 'Privacidad', 'Datenschutz', 'Privacidade', 'Privacy'],
+    adChoices: ['Choix publicitaires', 'Ad choices', 'Opciones de anuncios', 'Werbe-Einstellungen', 'Escolhas de anúncios', 'Scelte pubblicitarie'],
+    reset: ['Effacer la partie', 'Erase progress', 'Borrar partida', 'Spielstand löschen', 'Apagar progresso', 'Cancella partita'],
+    resetSure: ['Tout effacer ? C’est définitif.', 'Erase everything? This cannot be undone.', '¿Borrar todo? No se puede deshacer.', 'Alles löschen? Endgültig.', 'Apagar tudo? Não tem volta.', 'Cancellare tutto? È definitivo.'],
+    close: ['Fermer', 'Close', 'Cerrar', 'Schließen', 'Fechar', 'Chiudi'], cancel: ['Annuler', 'Cancel', 'Cancelar', 'Abbrechen', 'Cancelar', 'Annulla'], ok: ['OK', 'OK', 'OK', 'OK', 'OK', 'OK'],
+    consentTitle: ['Tes données, ton choix', 'Your data, your choice', 'Tus datos, tu elección', 'Deine Daten, deine Wahl', 'Seus dados, sua escolha', 'I tuoi dati, la tua scelta'],
+    consentText: ['Coral Stack est gratuit grâce à quelques pubs, toujours au choix sauf entre deux marées. Acceptes-tu des pubs personnalisées ? Tu peux changer d’avis dans les réglages.', 'Coral Stack is free thanks to a few ads, always optional except between two tides. Do you accept personalised ads? You can change this in settings.', 'Coral Stack es gratis gracias a algunos anuncios, siempre opcionales salvo entre mareas. ¿Aceptas anuncios personalizados?', 'Coral Stack ist dank weniger Werbung kostenlos, freiwillig außer zwischen den Gezeiten. Personalisierte Werbung erlauben?', 'Coral Stack é grátis graças a alguns anúncios, opcionais exceto entre marés. Aceita anúncios personalizados?', 'Coral Stack è gratis grazie a poche pubblicità, facoltative tranne tra le maree. Accetti pubblicità personalizzate?'],
+    accept: ['Accepter', 'Accept', 'Aceptar', 'Akzeptieren', 'Aceitar', 'Accetta'], refuse: ['Refuser', 'Decline', 'Rechazar', 'Ablehnen', 'Recusar', 'Rifiuta'],
+    newRecipe: ['Nouvelle recette : {s} !', 'New recipe: {s}!', '¡Nueva receta: {s}!', 'Neues Rezept: {s}!', 'Nova receita: {s}!', 'Nuova ricetta: {s}!'],
+    goal: ['Objectif', 'Goal', 'Objetivo', 'Ziel', 'Objetivo', 'Obiettivo'],
+    gMake: ['Fabrique {n} × {s}', 'Make {n} × {s}', 'Fabrica {n} × {s}', 'Stelle {n} × {s} her', 'Faça {n} × {s}', 'Crea {n} × {s}'],
+    gBuy: ['Ouvre un paquet de cartes', 'Open a card pack', 'Abre un sobre', 'Öffne ein Kartenpack', 'Abra um pacote', 'Apri un pacchetto'],
+    gPop: ['Atteins {n} habitants', 'Reach {n} residents', 'Llega a {n} habitantes', 'Erreiche {n} Bewohner', 'Chegue a {n} moradores', 'Raggiungi {n} abitanti'],
+    gRecipes: ['Découvre {n} recettes', 'Discover {n} recipes', 'Descubre {n} recetas', 'Entdecke {n} Rezepte', 'Descubra {n} receitas', 'Scopri {n} ricette'],
+    goalDone: ['Objectif réussi ! +{n} coquillages', 'Goal done! +{n} shells', '¡Objetivo! +{n} conchas', 'Ziel erreicht! +{n} Muscheln', 'Objetivo! +{n} conchas', 'Obiettivo! +{n} conchiglie'],
+    freeMode: ['Mode libre : bâtis la colonie de tes rêves', 'Free mode: build your dream colony', 'Modo libre', 'Freies Spiel', 'Modo livre', 'Modalità libera'],
+    zoneOpen: ['Nouvelle zone : {s} ! Ses paquets sont en vente.', 'New zone: {s}! Its packs are on sale.', '¡Nueva zona: {s}!', 'Neue Zone: {s}!', 'Nova zona: {s}!', 'Nuova zona: {s}!'],
+    noShells: ['Pas assez de coquillages', 'Not enough shells', 'No hay conchas', 'Nicht genug Muscheln', 'Conchas insuficientes', 'Conchiglie insufficienti'],
+    tapOpen: ['Touche pour ouvrir', 'Tap to open', 'Toca para abrir', 'Zum Öffnen tippen', 'Toque para abrir', 'Tocca per aprire'],
+    sold: ['Vendu : +{n}', 'Sold: +{n}', 'Vendido: +{n}', 'Verkauft: +{n}', 'Vendido: +{n}', 'Venduto: +{n}'],
+    tut1: ['Glisse un plongeur sur le champ d’algues pour récolter.', 'Drag a diver onto the seaweed bed to harvest.', 'Arrastra un buzo sobre las algas.', 'Zieh einen Taucher auf das Algenfeld.', 'Arraste um mergulhador até as algas.', 'Trascina un sub sulle alghe.'],
+    tut2: ['Empile deux algues sur un plongeur : il cuisine une galette.', 'Stack two seaweeds on a diver: he cooks a kelp cake.', 'Apila dos algas sobre un buzo.', 'Staple zwei Algen auf einen Taucher.', 'Empilhe duas algas num mergulhador.', 'Impila due alghe su un sub.'],
+    tut3: ['À la fin de la marée, chacun prend une bulle d’oxygène et un repas. La source de bulles en fabrique !', 'At the end of the tide, everyone needs an oxygen bubble and a meal. The bubble vent makes oxygen!', 'Al final de la marea, cada uno necesita oxígeno y comida.', 'Am Ende der Gezeit braucht jeder Sauerstoff und Essen.', 'No fim da maré, todos precisam de oxigênio e comida.', 'A fine marea servono ossigeno e cibo.'],
+    login: ['Cadeau du jour', 'Daily gift', 'Regalo diario', 'Tagesgeschenk', 'Presente do dia', 'Regalo del giorno'], claim: ['Récupérer', 'Claim', 'Recoger', 'Abholen', 'Pegar', 'Ritira'],
+    day: ['Jour', 'Day', 'Día', 'Tag', 'Dia', 'Giorno'], done: ['Fait', 'Done', 'Hecho', 'Erledigt', 'Feito', 'Fatto'],
+    qmake: ['Fabriquer {n} cartes', 'Make {n} cards', 'Fabricar {n} cartas', '{n} Karten herstellen', 'Fazer {n} cartas', 'Crea {n} carte'],
+    qdiscover: ['Découvrir une recette', 'Discover a recipe', 'Descubrir una receta', 'Ein Rezept entdecken', 'Descobrir uma receita', 'Scopri una ricetta'],
+    qtides: ['Finir {n} marées', 'Finish {n} tides', 'Terminar {n} mareas', '{n} Gezeiten beenden', 'Terminar {n} marés', 'Finisci {n} maree'],
+    qsell: ['Gagner {n} coquillages au marché', 'Earn {n} shells at the market', 'Ganar {n} conchas en el mercado', '{n} Muscheln am Markt verdienen', 'Ganhar {n} conchas no mercado', 'Guadagna {n} conchiglie al mercato'],
+    qbuy: ['Ouvrir {n} paquets', 'Open {n} packs', 'Abrir {n} sobres', '{n} Packs öffnen', 'Abrir {n} pacotes', 'Apri {n} pacchetti'],
+    testBuy: ['Achat de test : aucun paiement réel. Valider ?', 'Test purchase: no real payment. Confirm?', 'Compra de prueba: sin pago real. ¿Confirmar?', 'Testkauf: keine echte Zahlung. Bestätigen?', 'Compra de teste: sem pagamento. Confirmar?', 'Acquisto di prova: nessun pagamento. Confermi?'],
+    owned: ['Acquis', 'Owned', 'Comprado', 'Gekauft', 'Comprado', 'Acquistato'],
+    sStarter: ['Pack de démarrage', 'Starter pack', 'Pack inicial', 'Starterpaket', 'Pacote inicial', 'Pacchetto iniziale'],
+    sShells: ['{n} coquillages', '{n} shells', '{n} conchas', '{n} Muscheln', '{n} conchas', '{n} conchiglie'],
+    sTheme: ['Thème « Nuit bioluminescente »', '“Bioluminescent night” theme', 'Tema noche bioluminiscente', 'Thema „Leuchtende Nacht“', 'Tema noite bioluminescente', 'Tema notte bioluminescente'],
+    sNoAds: ['Sans pub', 'No ads', 'Sin anuncios', 'Werbefrei', 'Sem anúncios', 'Senza pubblicità'],
+    sNoAdsSub: ['Plus de pubs entre les marées (les bonus restent)', 'No more ads between tides (bonuses stay)', 'Sin anuncios entre mareas', 'Keine Werbung zwischen Gezeiten', 'Sem anúncios entre marés', 'Niente pubblicità tra le maree'],
+    webNote: ['Version de test', 'Test version', 'Versión de prueba', 'Testversion', 'Versão de teste', 'Versione di prova'],
+    paused: ['Pause', 'Paused', 'Pausa', 'Pause', 'Pausa', 'Pausa'],
+    sellHere: ['Pose des cartes sur le marché pour les vendre', 'Drop cards on the market to sell them', 'Suelta cartas en el mercado para venderlas', 'Karten auf den Markt legen zum Verkaufen', 'Solte cartas no mercado para vender', 'Metti le carte sul mercato per venderle'],
+    boardFull: ['Plateau plein : vends au marché ou range des cartes dans le tiroir', 'Board full: sell at the market or store cards in the drawer', 'Tablero lleno: vende o guarda cartas', 'Brett voll: verkaufen oder in die Schublade legen', 'Tabuleiro cheio: venda ou guarde cartas', 'Tavolo pieno: vendi o riponi carte'],
+    xmas: ['Noël sous la mer', 'Christmas under the sea', 'Navidad bajo el mar', 'Weihnachten unter Wasser', 'Natal no fundo do mar', 'Natale sotto il mare']
+  };
+  let lang = 'fr'; const idx = () => L.indexOf(lang);
+  const pick = (row, i) => row ? (row[i] ?? row[1] ?? row[0]) : '';
+  function t(key, vars) { let s = pick(T[key], idx()) || key; if (vars) for (const k in vars) s = s.replace('{' + k + '}', vars[k]); return s; }
+  return { langs: L, names: { fr: 'Français', en: 'English', es: 'Español', de: 'Deutsch', pt: 'Português', it: 'Italiano' },
+    set(l) { if (L.includes(l)) lang = l; }, get lang() { return lang; },
+    detect() { const n = (navigator.language || 'fr').slice(0, 2).toLowerCase(); return L.includes(n) ? n : 'en'; },
+    t, name: c => (lang === 'fr' ? c.fr : c.en) };
+})();
+</script>
+<script>// Coral Stack — painted assets cut from the ChatGPT sheets (window.CS_SPR = { name: url }).
+// art_<sheet>_<index>, frame_<family>, board, logo. Everything falls back to drawn cards when missing.
+window.CSART = (() => {
+  const IMG = {}; let ready = false;
+  function load(done) {
+    const map = window.CS_SPR || {}, names = Object.keys(map); let left = names.length;
+    if (!left) { done && done(); return; }
+    names.forEach(n => { const im = new Image(); im.onload = () => { IMG[n] = im; fin(); }; im.onerror = fin; im.src = map[n]; });
+    function fin() { if (--left === 0) { ready = true; done && done(); } }
+  }
+  const art = id => { const c = window.CARDS.cards[id]; return c && c.art && IMG[`art_${c.art[0]}_${String(c.art[1]).padStart(2, '0')}`] || null; };
+  const frame = fam => IMG['frame_' + fam] || null;
+  const board = () => IMG.board || null;
+  let LOGO = null;
+  const logoURL = () => { if (!IMG.logo) return null; if (!LOGO) { const c = document.createElement('canvas'); c.width = IMG.logo.width; c.height = IMG.logo.height; c.getContext('2d').drawImage(IMG.logo, 0, 0); LOGO = c.toDataURL(); } return LOGO; };
+  const heroURL = () => (window.CS_SPR || {}).hero || null;
+  return { load, art, frame, board, logoURL, heroURL, get ready() { return ready; } };
+})();
+</script>
+<script>// Coral Stack — stack cards to build an undersea colony. Plain canvas + DOM, no dependencies.
+(() => {
+'use strict';
+const D = window.CARDS, I = window.I18N, t = I.t, CARD = D.cards;
+const TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a);
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+const isXmas = () => { const d = new Date(); return d.getMonth() === 11 || (d.getMonth() === 0 && d.getDate() <= 6) || /xmas/.test(location.search); };
+const BW = 390, BH = 1100, CW = 66, CH = 95, OFF = 27; // board, card size, stack offset
+const FAM = { creature: ['#f08a6b', '#b8503a'], res: ['#f2d79a', '#b48a4a'], node: ['#8fc98a', '#4c8a4a'], building: ['#6cc3c9', '#2b7f86'], item: ['#b9a6e0', '#6c5aa0'], rare: ['#f4d36b', '#b08a1c'], pack: ['#5fb3d6', '#2a6f96'] };
+const PACKCARD = Object.fromEntries(D.packs.map(p => ['pack_' + p.id, { fam: 'pack', fr: p.fr, en: p.en, art: p.art, pack: p.id }]));
+Object.assign(CARD, PACKCARD);
+const name = id => I.name(CARD[id]);
+const isCreature = id => CARD[id].fam === 'creature';
+
+// ---------- save ----------
+const KEY = 'coralstack.save.v1';
+let uid = 1;
+function fresh() {
+  return { v: 1, tide: 1, tideT: 0, shells: D.start.shells, stacks: [], drawer: [], discovered: {}, made: {}, goal: 0, goalProg: 0, packsOpened: 0,
+    zones: { lagoon: true }, lang: I.detect(), sound: true, music: true, vib: true, consent: null, tut: 0, quests: null, login: { last: '', streak: 0, pending: false },
+    owned: {}, theme: '', lastAdAt: 0, freePackTide: 0, totals: { tides: 0, made: 0 } };
+}
+let S;
+function load() { try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); } }
+function save() { try { S.stacks = G.stacks.map(s => ({ x: s.x, y: s.y, cards: s.cards.map(c => ({ id: c.id, asleep: c.asleep || 0, uses: c.uses })), pt: s.pt || {} })); localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+load(); I.set(S.lang);
+const track = (ev, data) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
+
+// ---------- audio (synthesised) ----------
+const AU = { ctx: null, master: null, music: null, next: 0, step: 0 };
+function audioInit() {
+  if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+  try { AU.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+  AU.master = AU.ctx.createGain(); AU.master.gain.value = 0.5; AU.master.connect(AU.ctx.destination);
+  AU.music = AU.ctx.createGain(); AU.music.gain.value = 0.14; AU.music.connect(AU.master);
+}
+function tone(f, dur, type = 'sine', vol = 0.2, when = 0, dest) {
+  if (!AU.ctx) return; const c = AU.ctx, o = c.createOscillator(), g = c.createGain(), t0 = c.currentTime + when;
+  o.type = type; o.frequency.setValueAtTime(f, t0); g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + 0.01); g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+  o.connect(g); g.connect(dest || AU.master); o.start(t0); o.stop(t0 + dur + 0.05); return o;
+}
+const SFX = {
+  plop() { if (!S.sound) return; const o = tone(320, 0.14, 'sine', 0.22); if (o) o.frequency.exponentialRampToValueAtTime(720, AU.ctx.currentTime + 0.1); },
+  bubble() { if (!S.sound) return; [0, 0.06, 0.12].forEach((w, i) => { const o = tone(500 + i * 180, 0.1, 'sine', 0.1, w); if (o) o.frequency.exponentialRampToValueAtTime(900 + i * 200, AU.ctx.currentTime + w + 0.08); }); },
+  chime() { if (S.sound) [784, 988, 1319, 1568].forEach((f, i) => tone(f, 0.5, 'triangle', 0.13, i * 0.08)); },
+  coin() { if (S.sound) { tone(1320, 0.12, 'triangle', 0.15); tone(1760, 0.18, 'triangle', 0.12, 0.06); } },
+  pick() { if (S.sound) tone(540, 0.06, 'sine', 0.1); },
+  sad() { if (S.sound) { tone(330, 0.25, 'sine', 0.1); tone(262, 0.35, 'sine', 0.1, 0.15); } }
+};
+const SCALE = [392, 440, 523, 587, 659, 784];
+function musicTick() {
+  if (!AU.ctx || !S.music) return; const c = AU.ctx; if (AU.next < c.currentTime) AU.next = c.currentTime + 0.05;
+  while (AU.next < c.currentTime + 0.5) { const st = AU.step++, pat = [0, 2, 4, 3, 1, 4, 5, 2]; tone(SCALE[pat[st % 8]] / (st % 16 < 8 ? 2 : 1), 1.4, 'sine', 0.5, AU.next - c.currentTime, AU.music); if (st % 4 === 0) tone(SCALE[0] / 4, 2.2, 'triangle', 0.3, AU.next - c.currentTime, AU.music); AU.next += 0.7; }
+}
+const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
+
+// ---------- ads & purchases (same adapters as Gull Street: AdMob/RevenueCat via Capacitor, test overlays otherwise) ----------
+const AdMob = () => window.Capacitor?.Plugins?.AdMob;
+const AD_IDS = { ios: { rewarded: 'ca-app-pub-3940256099942544/1712485313', inter: 'ca-app-pub-3940256099942544/4411468910' }, android: { rewarded: 'ca-app-pub-3940256099942544/5224354917', inter: 'ca-app-pub-3940256099942544/1033173712' } };
+const Ads = {
+  async init() { const A = AdMob(); if (!A) return; try { await A.initialize({ initializeForTesting: true }); if (window.Capacitor.getPlatform() === 'ios') await A.requestTrackingAuthorization(); const info = await A.requestConsentInfo(); if (info.isConsentFormAvailable && info.status === 'REQUIRED') await A.showConsentForm(); } catch (e) {} },
+  ids() { return AD_IDS[window.Capacitor?.getPlatform?.() === 'android' ? 'android' : 'ios']; },
+  async rewarded(kind) { track('ad_rewarded', { kind }); const A = AdMob(); if (A) { try { await A.prepareRewardVideoAd({ adId: this.ids().rewarded, isTesting: true, npa: S.consent !== true }); await A.showRewardVideoAd(); return true; } catch (e) { return false; } } return testAd(); },
+  async interstitial() { if (S.owned.noads || S.tide < D.tide.interstitialFromTide) return; const now = Date.now(); if (now - S.lastAdAt < D.tide.interstitialGapSec * 1000) return; S.lastAdAt = now; track('ad_interstitial'); const A = AdMob(); if (A) { try { await A.prepareInterstitial({ adId: this.ids().inter, isTesting: true, npa: S.consent !== true }); await A.showInterstitial(); } catch (e) {} return; } await testAd(); }
+};
+function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart">🫧🐙🫧</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 800); }); }
+const Store = {
+  async buy(it) { track('iap_start', { id: it.id }); const P = window.Capacitor?.Plugins?.Purchases; if (P) { try { await P.purchaseStoreProduct({ product: { identifier: 'coralstack.' + it.id } }); grant(it); return true; } catch (e) { return false; } } const ok = await confirmBox(t('testBuy') + `<br><b>${storeName(it)} — ${it.price}</b>`); if (ok) grant(it); return ok; },
+  async restore() { const P = window.Capacitor?.Plugins?.Purchases; if (P) { try { await P.restorePurchases(); } catch (e) {} } toast(t('restored')); }
+};
+const storeName = it => ({ starter: t('sStarter'), theme: t('sTheme'), noads: t('sNoAds') }[it.id] || t('sShells', { n: it.shells }));
+function grant(it) { if (it.shells) S.shells += it.shells; (it.cards || []).forEach(id => spawn(id, null)); if (it.theme) S.theme = it.theme; if (it.noAds) S.owned.noads = true; if (it.once) S.owned[it.id] = true; save(); SFX.chime(); refreshHud(); }
+
+// ---------- board state ----------
+const G = { phase: 'title', t: 0, stacks: [], drag: null, cam: { x: 0, y: 0, z: 1 }, pops: [], bubbles: [], paused: false, tideOver: false };
+let nextUid = 1;
+const mkCard = (id, extra = {}) => Object.assign({ id, uid: nextUid++, uses: CARD[id].uses || 0, asleep: 0 }, extra);
+function restore() {
+  G.stacks = [];
+  if (S.stacks && S.stacks.length) S.stacks.forEach(s => G.stacks.push({ x: s.x, y: s.y, cards: s.cards.map(c => mkCard(c.id, { uses: c.uses, asleep: c.asleep })), pt: s.pt || {}, timer: 0 }));
+  else { D.start.cards.forEach((id, i) => { const x = 40 + (i % 4) * 82, y = 300 + Math.floor(i / 4) * 120; G.stacks.push({ x, y, cards: [mkCard(id)], pt: {}, timer: 0 }); }); }
+}
+function freeSpot(x, y) {
+  for (let r = 0; r < 600; r += 14) for (let a = 0; a < TAU; a += 0.6) {
+    const px = clamp(x + Math.cos(a) * r, 6, BW - CW - 6), py = clamp(y + Math.sin(a) * r * 1.2, 70, BH - CH - 10);
+    if (!G.stacks.some(s => Math.abs(s.x - px) < CW - 8 && Math.abs(s.y - py) < CH - 8 + (s.cards.length - 1) * OFF)) return [px, py];
+  }
+  return [clamp(x, 6, BW - CW - 6), clamp(y, 70, BH - CH)];
+}
+function spawn(id, from, opts = {}) {
+  const fx = from ? from.x + CW + 8 : -G.cam.x + 160, fy = from ? from.y : -G.cam.y + 300;
+  const [x, y] = freeSpot(fx, fy);
+  const st = { x, y, cards: [mkCard(id)], pt: {}, timer: 0, pop: 0.0001 };
+  G.stacks.push(st); G.pops.push({ st, sx: from ? from.x + 10 : x, sy: from ? from.y : y, t: 0 });
+  if (!opts.silent) SFX.bubble();
+  return st;
+}
+
+// ---------- recipes ----------
+function match(stack) {
+  const cs = stack.cards; if (cs.length < 2) return null;
+  const base = CARD[cs[0].id];
+  if (cs[0].id === 'market') return cs.length > 1 && cs.slice(1).every(c => sellable(c.id)) ? { market: true, time: 1.2 } : null;
+  for (const r of D.recipes) {
+    if (r.in.length !== cs.length) continue;
+    const pool = cs.slice(); let worker = null, ok = true;
+    for (const tok of r.in) {
+      let k = -1;
+      if (tok === 'W') k = pool.findIndex(c => isCreature(c.id) && !c.asleep && !r.in.includes(c.id));
+      else k = pool.findIndex(c => c.id === tok && !(isCreature(c.id) && c.asleep));
+      if (k < 0) { ok = false; break; }
+      if (tok === 'W' || isCreature(tok)) worker = worker || pool[k];
+      pool.splice(k, 1);
+    }
+    if (ok) return { r, worker, time: r.time / (worker ? (CARD[worker.id].worker || 1) : 1) };
+  }
+  return null;
+}
+const sellable = id => !isCreature(id) && (CARD[id].sell || CARD[id].coin) && CARD[id].fam !== 'pack';
+function pickOut(out) {
+  if (typeof out === 'string') return out;
+  const tot = out.reduce((a, o) => a + o[1], 0); let x = Math.random() * tot; for (const o of out) { x -= o[1]; if (x <= 0) return o[0]; } return out[0][0];
+}
+function complete(stack, m) {
+  if (m.market) {
+    let n = 0; for (const c of stack.cards.slice(1)) n += CARD[c.id].sell || CARD[c.id].coin || 0;
+    stack.cards = stack.cards.slice(0, 1); S.shells += n; floatText(stack.x + CW / 2, stack.y, t('sold', { n }) + ' 🐚'); SFX.coin(); questProg('sell', n); refreshHud(); return;
+  }
+  const r = m.r, keepIds = r.keep.slice(), kept = [], gone = [];
+  for (const c of stack.cards) {
+    let k = keepIds.findIndex(tok => tok === c.id || (tok === 'W' && isCreature(c.id)));
+    if (k >= 0) { keepIds.splice(k, 1); kept.push(c); } else gone.push(c);
+  }
+  // nodes wear out
+  for (const c of kept) if (CARD[c.id].fam === 'node' && CARD[c.id].uses) { c.uses--; if (c.uses <= 0) { kept.splice(kept.indexOf(c), 1); floatText(stack.x + CW / 2, stack.y + 10, '…'); } }
+  stack.cards = kept;
+  const n = r.count || 1;
+  for (let i = 0; i < n; i++) { const id = pickOut(r.out.length === 1 ? r.out[0] : r.out); spawn(id, stack); made(id); }
+  if (!S.discovered[r.id]) { S.discovered[r.id] = 1; const outName = name(typeof r.out[0] === 'string' ? r.out[0] : r.out[0][0]); toast('📖 ' + t('newRecipe', { s: outName })); SFX.chime(); questProg('discover', 1); track('recipe', { id: r.id }); checkUnlocks(); }
+  if (!stack.cards.length) G.stacks.splice(G.stacks.indexOf(stack), 1);
+  buzz(12);
+}
+function made(id) { S.made[id] = (S.made[id] || 0) + 1; S.totals.made++; questProg('make', 1); if (CARD[id].unlock && !S.zones[CARD[id].unlock]) { S.zones[CARD[id].unlock] = true; toast('🌊 ' + t('zoneOpen', { s: I.name(D.zones[CARD[id].unlock]) })); } checkGoal(); }
+function checkUnlocks() { refreshHud(); }
+
+// ---------- goals & quests ----------
+function goalText(g) { return g.k === 'make' ? t('gMake', { n: g.n, s: name(g.c) }) : g.k === 'buy' ? t('gBuy') : g.k === 'pop' ? t('gPop', { n: g.n }) : t('gRecipes', { n: g.n }); }
+function goalValue(g) { return g.k === 'make' ? (S.made[g.c] || 0) - (S.goalBase || 0) : g.k === 'buy' ? S.packsOpened : g.k === 'pop' ? countCreatures() : Object.keys(S.discovered).length; }
+function checkGoal() {
+  const g = D.goals[S.goal]; if (!g) return;
+  if (goalValue(g) >= g.n) { S.shells += g.shells; toast('⭐ ' + t('goalDone', { n: g.shells })); SFX.chime(); S.goal++; const ng = D.goals[S.goal]; S.goalBase = ng && ng.k === 'make' ? (S.made[ng.c] || 0) : 0; save(); refreshHud(); }
+}
+function countCreatures() { let n = 0; for (const s of G.stacks) for (const c of s.cards) if (isCreature(c.id)) n++; return n; }
+function ensureQuests() {
+  if (S.quests && S.quests.date === today()) return;
+  S.quests = { date: today(), list: D.quests.slice().sort(() => Math.random() - 0.5).slice(0, 3).map(q => ({ id: q.id, p: 0, claimed: false })) };
+  if (S.login.last !== today()) { const y = new Date(Date.now() - 864e5), ys = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); S.login.streak = S.login.last === ys ? (S.login.streak % 7) + 1 : 1; S.login.last = today(); S.login.pending = true; }
+}
+function questProg(id, n) { if (S.quests) for (const q of S.quests.list) if (q.id === id && !q.claimed) q.p += n; }
+
+// ---------- tides ----------
+function update(dt) {
+  if (G.phase !== 'play' || G.paused) return;
+  S.tideT += dt;
+  let total = 0; for (const s of G.stacks) total += s.cards.length;
+  const full = total >= (D.start.maxCards || 120);
+  if (full && !G.fullWarned) { G.fullWarned = true; toast('🫧 ' + t('boardFull')); } else if (!full) G.fullWarned = false;
+  for (const s of G.stacks.slice()) {
+    if (G.drag && G.drag.stack === s) continue;
+    const m = match(s);
+    if (m && (!full || m.market)) { if (s.recipeKey !== key(s)) { s.recipeKey = key(s); s.timer = 0; } s.timer += dt; s.need = m.time; if (s.timer >= m.time) { s.timer = 0; s.recipeKey = null; complete(s, m); } }
+    else { s.timer = 0; s.recipeKey = null; s.need = 0; }
+    // buildings produce on their own
+    for (const c of s.cards) { const p = CARD[c.id].produce; if (!p || full) continue; s.pt[c.uid] = (s.pt[c.uid] || 0) + dt; if (s.pt[c.uid] >= p[1]) { s.pt[c.uid] = 0; spawn(p[0], s, { silent: true }); } }
+  }
+  if (S.tideT >= D.tide.seconds && !G.tideOver) endTide();
+}
+const key = s => s.cards.map(c => c.uid).join(',');
+function endTide() {
+  G.tideOver = true; G.phase = 'tide';
+  const creatures = []; for (const s of G.stacks) for (const c of s.cards) if (isCreature(c.id)) creatures.push(c);
+  const cards = []; for (const s of G.stacks) for (const c of s.cards) cards.push([s, c]);
+  let oxyPool = 0, foodPool = 0; const oxyCards = cards.filter(([, c]) => CARD[c.id].oxy), foodCards = cards.filter(([, c]) => CARD[c.id].food && !isCreature(c.id));
+  // spend whole cards until each creature has 1 oxygen and 1 meal
+  let need = creatures.length; const used = new Set();
+  const spend = (list, prop) => { let got = 0; for (const [s, c] of list.sort((a, b) => CARD[a[1].id][prop] - CARD[b[1].id][prop])) { if (got >= need) break; got += CARD[c.id][prop]; used.add(c); } return got; };
+  oxyPool = spend(oxyCards, 'oxy'); foodPool = spend(foodCards, 'food');
+  for (const s of G.stacks) s.cards = s.cards.filter(c => !used.has(c));
+  G.stacks = G.stacks.filter(s => s.cards.length);
+  let ok = Math.min(oxyPool, foodPool, creatures.length), sleepers = 0;
+  creatures.forEach((c, i) => { if (i < ok) c.asleep = 0; else { c.asleep = 1; sleepers++; } });
+  S.shells += D.tide.shellsPerTide; S.totals.tides++; questProg('tides', 1);
+  if (sleepers) SFX.sad(); else SFX.chime();
+  track('tide_end', { tide: S.tide, creatures: creatures.length, sleepers });
+  save(); tideModal(creatures.length, ok, sleepers, oxyPool, foodPool);
+}
+async function nextTide() {
+  closeModal(); S.tide++; S.tideT = 0; G.tideOver = false; G.phase = 'play'; save();
+  await Ads.interstitial(); refreshHud();
+}
+
+// ---------- packs ----------
+function zoneOpen(z) { return !!S.zones[z]; }
+function buyPack(p, free) {
+  if (!free) { if (S.shells < p.price) return toast(t('noShells')); S.shells -= p.price; }
+  spawn('pack_' + p.id, null); questProg('buy', 1); save(); refreshHud(); track('pack_buy', { id: p.id, free: !!free });
+}
+function openPack(stack, card) {
+  const p = D.packs.find(x => 'pack_' + x.id === card.id);
+  stack.cards.splice(stack.cards.indexOf(card), 1); if (!stack.cards.length) G.stacks.splice(G.stacks.indexOf(stack), 1);
+  for (let i = 0; i < p.count; i++) setTimeout(() => spawn(pickOut(p.odds), stack), i * 160);
+  if (isXmas() && Math.random() < 0.25) setTimeout(() => spawn(Math.random() < 0.5 ? 'santahat' : 'garland', stack), p.count * 160);
+  S.packsOpened++; checkGoal(); SFX.chime(); save();
+}
+function openChest(stack, card) {
+  stack.cards.splice(stack.cards.indexOf(card), 1); if (!stack.cards.length) G.stacks.splice(G.stacks.indexOf(stack), 1);
+  for (let i = 0; i < 3; i++) setTimeout(() => spawn(pickOut(CARD.chest.open.map(id => [id, 1])), stack), i * 160); SFX.chime();
+}
+
+// ---------- canvas ----------
+const cv = document.getElementById('cv'); const cx = cv.getContext('2d');
+let dpr = 1, SW = 390, SH = 800, scale = 1;
+function resize() { dpr = Math.min(3, devicePixelRatio || 1); SW = innerWidth; SH = innerHeight; cv.width = SW * dpr; cv.height = SH * dpr; cv.style.width = SW + 'px'; cv.style.height = SH + 'px'; scale = SW / BW; clampCam(); }
+addEventListener('resize', resize);
+function clampCam() { const z = G.cam.z * scale, vw = SW / z, vh = SH / z; G.cam.x = clamp(G.cam.x, Math.min(0, -(BW - vw)), 0); G.cam.y = clamp(G.cam.y, Math.min(0, -(BH - vh + 90)), 40); }
+const toWorld = (sx, sy) => { const z = G.cam.z * scale; return [sx / z - G.cam.x, sy / z - G.cam.y]; };
+const A = () => window.CSART;
+function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+// card faces are rendered once per card type into a cache
+const FACE = new Map();
+const FRAMEOF = { creature: 'creature', res: 'res', node: 'node', building: 'building', item: 'rare', rare: 'rare', pack: 'building' };
+function face(id, asleep) {
+  const k = id + (asleep ? 'z' : '') + S.theme + (A() && A().ready ? 'a' : '') + I.lang;
+  if (FACE.has(k)) return FACE.get(k);
+  const R = 3, c = document.createElement('canvas'); c.width = CW * R; c.height = CH * R; const g = c.getContext('2d'); g.scale(R, R);
+  g.imageSmoothingQuality = 'high';
+  const card = CARD[id], [col, dk] = FAM[card.fam] || FAM.res, night = S.theme === 'night';
+  const frame = A() && A().frame(FRAMEOF[card.fam] || 'res'), art = A() && A().art(id);
+  const cxm = CW / 2, cym = CH * 0.43, rad = CH * 0.215;
+  if (frame) {
+    // window background: soft lagoon wash, then the painted illustration, then the painted frame on top
+    const wg = g.createRadialGradient(cxm, cym - rad * 0.3, 2, cxm, cym, rad * 1.1); wg.addColorStop(0, night ? '#1d4b6e' : '#e9fbf6'); wg.addColorStop(1, night ? '#0b2236' : '#9fdcd8');
+    g.fillStyle = wg; g.beginPath(); g.arc(cxm, cym, rad + 2, 0, TAU); g.fill();
+    if (art) { const sc = Math.min((rad * 1.9) / art.width, (rad * 1.9) / art.height); g.save(); g.beginPath(); g.arc(cxm, cym, rad + 1, 0, TAU); g.clip(); g.drawImage(art, cxm - art.width * sc / 2, cym - art.height * sc / 2 + 1, art.width * sc, art.height * sc); g.restore(); }
+    else { g.font = '24px system-ui'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(EMO[id] || '❔', cxm, cym); }
+    g.drawImage(frame, 0, 0, CW, CH);
+    if (night) { g.fillStyle = 'rgba(10,30,60,.35)'; g.fillRect(0, 0, CW, CH); }
+  } else {
+    g.fillStyle = 'rgba(0,30,40,.25)'; rr(g, 2, 3, CW - 2, CH - 2, 14); g.fill();
+    const gr = g.createLinearGradient(0, 0, 0, CH); gr.addColorStop(0, col); gr.addColorStop(1, dk); g.fillStyle = gr; rr(g, 0, 0, CW - 2, CH - 3, 14); g.fill();
+    g.fillStyle = '#fff7e6'; g.beginPath(); g.arc(cxm, cym, rad, 0, TAU); g.fill();
+    g.font = '24px system-ui'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(EMO[id] || '❔', cxm, cym);
+  }
+  // name in the parchment band
+  g.fillStyle = '#3b2a20'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  let fs = 8.4, nm = name(id); g.font = `800 ${fs}px ui-rounded, system-ui, sans-serif`;
+  while (g.measureText(nm).width > CW * 0.6 && fs > 6) { fs -= 0.4; g.font = `800 ${fs}px ui-rounded, system-ui, sans-serif`; }
+  while (g.measureText(nm).width > CW * 0.62 && nm.length > 3) nm = nm.slice(0, -2) + '…';
+  g.fillText(nm, cxm, CH * 0.838);
+  const badge = (x, y, txt, bg, ic) => { g.fillStyle = bg; g.beginPath(); g.arc(x, y, 7, 0, TAU); g.fill(); g.strokeStyle = '#fff7e6'; g.lineWidth = 1.4; g.stroke(); g.fillStyle = '#fff'; g.font = '900 7.6px system-ui'; g.fillText(txt, x, y + 0.3); };
+  if (card.food) badge(9, CH * 0.62, card.food, '#e0884a');
+  if (card.oxy) badge(CW - 9, CH * 0.62, card.oxy, '#3aa0d6');
+  if (card.sell && !isCreature(id)) { g.fillStyle = 'rgba(255,247,230,.9)'; rr(g, cxm - 9, CH * 0.885, 18, 8, 4); g.fill(); g.fillStyle = '#7a5a2a'; g.font = '800 6.4px system-ui'; g.fillText(card.sell + ' 🐚', cxm, CH * 0.885 + 4.2); }
+  if (asleep) { g.fillStyle = 'rgba(20,40,70,.45)'; g.beginPath(); g.arc(cxm, cym, rad + 2, 0, TAU); g.fill(); g.fillStyle = '#fff'; g.font = '900 15px system-ui'; g.fillText('Zz', cxm + 9, cym - 8); }
+  FACE.set(k, c); return c;
+}
+const EMO = { diver: '🤿', crab: '🦀', octopus: '🐙', seahorse: '🐴', turtle: '🐢', puffer: '🐡', rock: '🪨', seabed: '🌿', coralpatch: '🪸', sandbank: '🏖️', wreck: '⚓', musselbed: '🦪', vent: '♨️', seaweed: '🌱', coral: '🪸', stone: '🧱', sand: '⏳', pearl: '⚪', oxygen: '🫧', kelpcake: '🥮', fish: '🐟', sponge: '🧽', driftwood: '🪵', rope: '🪢', glass: '🔷', scrap: '🔩', ink: '🖋️', urchin: '🦔', mussel: '🦪', crystal: '💎', shell: '🐚', hut: '🛖', airpump: '⛽', kelpfarm: '🌾', workshop: '🔨', kitchen: '🍳', glassworks: '🏺', dock: '🛳️', pearlfarm: '🦪', school: '🏫', market: '🏪', lanternhouse: '🏮', airbell: '🔔', net: '🥅', lantern: '🏮', jar: '🫙', helmet: '⛑️', flippers: '🩴', tank: '🧯', wrap: '🌯', soup: '🍲', goldpearl: '🟡', chest: '🧰', oldcoin: '🪙', starcoral: '🌟', submarine: '🚢', santahat: '🎅', garland: '🎄', pack_lagoon: '🎁', pack_reef: '🎁', pack_trench: '🎁' };
+
+let BOARD = null;
+function paintedBoard() {
+  if (BOARD) return BOARD; if (!(A() && A().ready)) return null;
+  const R = 2, c = document.createElement('canvas'); c.width = BW * R; c.height = BH * R; const g = c.getContext('2d'); g.scale(R, R);
+  let seed = 7; const rn = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const gr = g.createLinearGradient(0, 0, 0, BH); gr.addColorStop(0, '#9ad9d2'); gr.addColorStop(0.35, '#cfe5c8'); gr.addColorStop(1, '#efd9a6'); g.fillStyle = gr; g.fillRect(0, 0, BW, BH);
+  // watercolour washes
+  for (let i = 0; i < 70; i++) { const x = rn() * BW, y = rn() * BH, r = 30 + rn() * 110; const w = g.createRadialGradient(x, y, 0, x, y, r); const col = ['rgba(120,200,200,', 'rgba(250,235,190,', 'rgba(255,255,255,', 'rgba(150,190,150,'][i % 4]; w.addColorStop(0, col + '0.22)'); w.addColorStop(1, col + '0)'); g.fillStyle = w; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); }
+  // sand ripples
+  g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 1.2;
+  for (let y = 40; y < BH; y += 26) { g.beginPath(); for (let x = -10; x <= BW + 10; x += 8) { const yy = y + Math.sin(x / 34 + y * 0.07) * 5 + Math.sin(x / 11 + y) * 1.2; x < 0 ? g.moveTo(x, yy) : g.lineTo(x, yy); } g.stroke(); }
+  g.strokeStyle = 'rgba(150,120,70,.12)'; g.lineWidth = 1;
+  for (let y = 52; y < BH; y += 26) { g.beginPath(); for (let x = -10; x <= BW + 10; x += 8) { const yy = y + Math.sin(x / 34 + y * 0.07) * 5; x < 0 ? g.moveTo(x, yy) : g.lineTo(x, yy); } g.stroke(); }
+  // pebbles and paper grain
+  for (let i = 0; i < 260; i++) { g.fillStyle = `rgba(${120 + rn() * 80 | 0},${110 + rn() * 70 | 0},${90 + rn() * 60 | 0},${0.12 + rn() * 0.2})`; g.beginPath(); g.ellipse(rn() * BW, rn() * BH, 1 + rn() * 3, 0.8 + rn() * 2, rn() * 3, 0, Math.PI * 2); g.fill(); }
+  // painted props along the edges, from the ChatGPT illustrations
+  const props = ['seabed', 'coralpatch', 'rock', 'shell', 'sponge', 'musselbed', 'coral', 'seaweed', 'urchin', 'shell', 'seabed', 'coralpatch'];
+  for (let i = 0; i < 26; i++) {
+    const im = A().art(props[i % props.length]); if (!im) continue;
+    const left = i % 2 === 0, sz = 34 + rn() * 26, x = left ? -8 + rn() * 22 : BW - sz + 8 - rn() * 22, y = 60 + (i / 26) * (BH - 120) + rn() * 30;
+    const sc = sz / Math.max(im.width, im.height); g.globalAlpha = 0.9; g.drawImage(im, x, y, im.width * sc, im.height * sc); g.globalAlpha = 1;
+  }
+  return (BOARD = c);
+}
+function draw() {
+  const z = G.cam.z * scale;
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // board background
+  const bg = (A() && A().board()) || paintedBoard();
+  cx.setTransform(dpr * z, 0, 0, dpr * z, dpr * z * G.cam.x, dpr * z * G.cam.y);
+  if (bg) cx.drawImage(bg, 0, 0, BW, BH);
+  else { const gr = cx.createLinearGradient(0, 0, 0, BH); gr.addColorStop(0, S.theme === 'night' ? '#0b2a45' : '#7fd6d6'); gr.addColorStop(1, S.theme === 'night' ? '#061629' : '#e9d9a8'); cx.fillStyle = gr; cx.fillRect(0, 0, BW, BH); }
+  if (S.theme === 'night') { cx.fillStyle = 'rgba(5,20,45,.55)'; cx.fillRect(0, 0, BW, BH); }
+  // light rays
+  cx.save(); cx.globalAlpha = 0.08 + 0.03 * Math.sin(G.t * 0.7); cx.fillStyle = '#fff';
+  for (let k = 0; k < 5; k++) { const x = 40 + k * 80 + Math.sin(G.t * 0.3 + k) * 20; cx.beginPath(); cx.moveTo(x, -10); cx.lineTo(x + 40, -10); cx.lineTo(x + 140, BH); cx.lineTo(x + 70, BH); cx.closePath(); cx.fill(); }
+  cx.restore();
+  // ambient bubbles
+  if (G.bubbles.length < 26) G.bubbles.push({ x: Math.random() * BW, y: BH + 10, v: rnd(10, 26), r: rnd(1.5, 4), w: Math.random() * 6 });
+  cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 1;
+  for (const b of G.bubbles) { b.y -= b.v / 60; b.x += Math.sin(G.t * 2 + b.w) * 0.25; cx.beginPath(); cx.arc(b.x, b.y, b.r, 0, TAU); cx.stroke(); }
+  G.bubbles = G.bubbles.filter(b => b.y > -10);
+  // stacks
+  const order = G.stacks.slice().sort((a, b) => (a === G.drag?.stack) - (b === G.drag?.stack) || a.y - b.y);
+  for (const s of order) drawStack(s);
+  // pops & floats
+  for (const f of G.floats) { f.t += 1 / 60; cx.globalAlpha = clamp(1.6 - f.t, 0, 1); cx.font = '900 13px ui-rounded, system-ui'; cx.textAlign = 'center'; cx.lineWidth = 3; cx.strokeStyle = '#fff'; cx.strokeText(f.s, f.x, f.y - f.t * 24); cx.fillStyle = '#1d5f73'; cx.fillText(f.s, f.x, f.y - f.t * 24); cx.globalAlpha = 1; }
+  G.floats = G.floats.filter(f => f.t < 1.6);
+}
+G.floats = [];
+function floatText(x, y, s) { G.floats.push({ x, y, s, t: 0 }); }
+function drawStack(s) {
+  let px = s.x, py = s.y, sc = 1;
+  const p = G.pops.find(p => p.st === s);
+  if (p) { p.t += 1 / 60; const k = Math.min(1, p.t / 0.35), e = 1 - Math.pow(1 - k, 3); px = p.sx + (s.x - p.sx) * e; py = p.sy + (s.y - p.sy) * e - Math.sin(k * Math.PI) * 30; sc = 0.6 + 0.4 * e; if (k >= 1) G.pops.splice(G.pops.indexOf(p), 1); }
+  const lift = G.drag && G.drag.stack === s ? 1.06 : 1;
+  cx.save(); cx.translate(px + CW / 2, py + CH / 2); cx.scale(sc * lift, sc * lift); cx.translate(-CW / 2, -CH / 2);
+  s.cards.forEach((c, i) => { const f = face(c.id, c.asleep); if (i > 0) { const pc = s.cards[i - 1]; cx.font = '800 7.5px ui-rounded, system-ui'; const nm = name(pc.id), tw = Math.min(CW - 8, cx.measureText(nm).width + 10); cx.fillStyle = 'rgba(255,247,230,.95)'; rr(cx, CW / 2 - tw / 2, i * OFF - 9, tw, 11, 5.5); cx.fill(); cx.fillStyle = '#3b2a20'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText(nm, CW / 2, i * OFF - 3.4, CW - 12); } const bob = isCreature(c.id) && !c.asleep && s.need ? Math.sin(G.t * 10 + c.uid) * 1.2 : 0; cx.drawImage(f, 0, i * OFF + bob, CW, CH); if (CARD[c.id].uses && CARD[c.id].fam === 'node') { cx.fillStyle = 'rgba(30,60,40,.8)'; cx.font = '800 8px system-ui'; cx.textAlign = 'right'; cx.fillText('×' + c.uses, CW - 8, i * OFF + 31); } });
+  // one progress bar per stack
+  if (s.need) { const k = clamp(s.timer / s.need, 0, 1); cx.fillStyle = 'rgba(0,40,60,.55)'; rr(cx, 4, -9, CW - 10, 7, 3.5); cx.fill(); cx.fillStyle = '#7ef0c0'; rr(cx, 5, -8, (CW - 12) * k, 5, 2.5); cx.fill(); }
+  // building production ring
+  for (const c of s.cards) { const pr = CARD[c.id].produce; if (pr) { const k = (s.pt[c.uid] || 0) / pr[1]; cx.strokeStyle = '#ffe9a8'; cx.lineWidth = 2.4; cx.beginPath(); cx.arc(CW - 10, 10, 6, -Math.PI / 2, -Math.PI / 2 + TAU * k); cx.stroke(); } }
+  if (G.tutTarget && G.tutTarget === s.cards[0].id && G.phase === 'play') { cx.strokeStyle = '#ffd34d'; cx.lineWidth = 3; cx.globalAlpha = 0.5 + 0.5 * Math.sin(G.t * 6); rr(cx, -3, -3, CW + 4, CH + 4 + (s.cards.length - 1) * OFF, 15); cx.stroke(); cx.globalAlpha = 1; }
+  cx.restore();
+}
+
+// ---------- input: drag stacks, tap cards, pan & pinch the board ----------
+const ptrs = new Map(); let pan = null, pinch = null;
+cv.addEventListener('pointerdown', e => {
+  audioInit(); cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (ptrs.size === 2) { G.drag = null; const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), z: G.cam.z }; return; }
+  if (G.phase !== 'play' && G.phase !== 'tide') return;
+  const [wx, wy] = toWorld(e.clientX, e.clientY), hit = hitCard(wx, wy);
+  if (hit) {
+    const { stack, idx } = hit; let st = stack;
+    if (idx > 0) { st = { x: stack.x, y: stack.y + idx * OFF, cards: stack.cards.splice(idx), pt: {}, timer: 0 }; G.stacks.push(st); stack.timer = 0; }
+    G.drag = { stack: st, ox: wx - st.x, oy: wy - st.y, sx: e.clientX, sy: e.clientY, moved: false, tapCard: st.cards[0], from: idx > 0 ? stack : null };
+    SFX.pick();
+  } else pan = { sx: e.clientX, sy: e.clientY, cx: G.cam.x, cy: G.cam.y };
+});
+cv.addEventListener('pointermove', e => {
+  if (!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (pinch && ptrs.size === 2) { const [a, b] = [...ptrs.values()]; G.cam.z = clamp(pinch.z * Math.hypot(a[0] - b[0], a[1] - b[1]) / pinch.d, 0.7, 1.7); clampCam(); return; }
+  const z = G.cam.z * scale;
+  if (G.drag) { const d = G.drag; if (Math.hypot(e.clientX - d.sx, e.clientY - d.sy) > 7) d.moved = true; const [wx, wy] = toWorld(e.clientX, e.clientY); d.stack.x = wx - d.ox; d.stack.y = wy - d.oy; drawerHover(e.clientY); }
+  else if (pan) { G.cam.x = pan.cx + (e.clientX - pan.sx) / z; G.cam.y = pan.cy + (e.clientY - pan.sy) / z; clampCam(); }
+});
+const endPtr = e => {
+  ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null;
+  if (G.drag) {
+    const d = G.drag, s = d.stack; G.drag = null; $('#drawerbar').classList.remove('hot');
+    if (!d.moved) { if (d.from) { d.from.cards.push(...s.cards); G.stacks.splice(G.stacks.indexOf(s), 1); } tapCard(d.from || s, d.tapCard); return; }
+    if (e.clientY > SH - 64 - (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab')) || 0) && toDrawer(s)) return;
+    drop(s);
+  }
+  pan = null;
+};
+cv.addEventListener('pointerup', endPtr); cv.addEventListener('pointercancel', endPtr);
+function hitCard(wx, wy) {
+  const list = G.stacks.slice().sort((a, b) => b.y - a.y);
+  for (const s of list) for (let i = s.cards.length - 1; i >= 0; i--) { const y = s.y + i * OFF; if (wx >= s.x && wx <= s.x + CW && wy >= y && wy <= y + CH) return { stack: s, idx: i }; }
+  return null;
+}
+function drop(s) {
+  // snap onto the stack whose top card is under the dragged card
+  let best = null, bd = 1e9;
+  for (const o of G.stacks) { if (o === s) continue; const tx = o.x, ty = o.y + (o.cards.length - 1) * OFF, dx = Math.abs(s.x - tx), dy = Math.abs(s.y - ty); if (dx < CW * 0.7 && dy < CH * 0.7 && dx + dy < bd) { bd = dx + dy; best = o; } }
+  if (best && best.cards.length + s.cards.length <= 9) { best.cards.push(...s.cards); G.stacks.splice(G.stacks.indexOf(s), 1); SFX.plop(); buzz(8); tutCheck(best); return; }
+  s.x = clamp(s.x, 4, BW - CW - 4); s.y = clamp(s.y, 60, BH - CH - 8);
+  SFX.plop();
+}
+function tapCard(stack, card) {
+  if (!card) return;
+  if (CARD[card.id].pack) return openPack(stack, card);
+  if (card.id === 'chest') return openChest(stack, card);
+  if (CARD[card.id].coin) { stack.cards.splice(stack.cards.indexOf(card), 1); if (!stack.cards.length) G.stacks.splice(G.stacks.indexOf(stack), 1); S.shells += CARD[card.id].coin; floatText(stack.x + CW / 2, stack.y, '+' + CARD[card.id].coin + ' 🐚'); SFX.coin(); refreshHud(); return; }
+  infoSheet(card);
+}
+function toDrawer(s) { if (s.cards.some(c => CARD[c.id].fam === 'creature')) return false; S.drawer.push(...s.cards.map(c => c.id)); G.stacks.splice(G.stacks.indexOf(s), 1); SFX.bubble(); refreshHud(); return true; }
+function drawerHover(y) { $('#drawerbar').classList.toggle('hot', y > SH - 70); }
+
+// ---------- DOM UI ----------
+const $ = s => document.querySelector(s);
+function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
+const hud = $('#hud'), sheet = $('#sheet'), modal = $('#modal');
+function toast(s) { const el = div('toast', s); $('#toasts').appendChild(el); setTimeout(() => el.classList.add('out'), 2300); setTimeout(() => el.remove(), 2800); }
+function openSheet(html) { sheet.innerHTML = '<div class="grip"></div>' + html; sheet.classList.add('on'); }
+function closeSheet() { sheet.classList.remove('on'); }
+function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); }
+function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
+function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row"><button class="b2" data-v="0">${t('cancel')}</button><button class="b1" data-v="1">${t('ok')}</button></div></div>`); el.onclick = e => { const v = e.target.dataset.v; if (v != null) { el.remove(); res(v === '1'); } }; document.body.appendChild(el); }); }
+const cardImg = id => `<img class="ci" src="${faceURL(id)}" alt="">`;
+const URLS = new Map(); function faceURL(id) { const k = id + (A() && A().ready ? 'a' : ''); if (!URLS.has(k)) URLS.set(k, face(id, 0).toDataURL()); return URLS.get(k); }
+function refreshHud() {
+  if (G.phase === 'title') { hud.innerHTML = ''; return; }
+  const g = D.goals[S.goal], left = Math.max(0, Math.ceil(D.tide.seconds - S.tideT));
+  hud.innerHTML = `
+  <div class="top"><div class="pill">🐚 <b id="hs">${S.shells}</b><button class="plus" data-a="shop">+</button></div>
+    <div class="pill tide">🌊 ${t('tide')} ${S.tide} · <b id="ht">${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}</b></div>
+    <button class="gear" data-a="settings">⚙️</button></div>
+  <div class="goalbox">${g ? `<b>${t('goal')}</b> ${goalText(g)} <small>(${Math.min(goalValue(g), g.n)}/${g.n})</small>` : t('freeMode')}</div>
+  <div class="tidebar"><i id="tb" style="width:${clamp(S.tideT / D.tide.seconds, 0, 1) * 100}%"></i></div>
+  <nav class="tabs"><button data-a="packs">🎁<span>${t('packs').split(' ')[0]}</span></button><button data-a="book">📖<span>${t('book')}</span></button>
+    <button id="drawerbar" data-a="drawer">🗄️<span>${t('drawer')}${S.drawer.length ? ' · ' + S.drawer.length : ''}</span></button>
+    <button data-a="quests">📜<span>${t('quests')}</span>${questBadge()}</button><button data-a="shop">🛍️<span>${t('shop')}</span></button></nav>
+  ${tutHtml()}`;
+}
+function questBadge() { const n = (S.quests?.list || []).filter(q => !q.claimed && q.p >= D.quests.find(x => x.id === q.id).target).length + (S.login.pending ? 1 : 0); return n ? `<span class="badge">${n}</span>` : ''; }
+function tutHtml() { const k = ['tut1', 'tut2', 'tut3'][S.tut]; return k && G.phase === 'play' ? `<div class="tut">👉 ${t(k)}</div>` : ''; }
+function tutCheck(stack) {
+  const ids = stack.cards.map(c => c.id);
+  if (S.tut === 0 && ids.includes('seabed') && ids.some(isCreature)) { S.tut = 1; G.tutTarget = null; refreshHud(); }
+  else if (S.tut === 1 && ids.filter(i => i === 'seaweed').length >= 2 && ids.some(isCreature)) { S.tut = 2; refreshHud(); setTimeout(() => { if (S.tut === 2) { S.tut = 3; refreshHud(); } }, 9000); }
+}
+hud.addEventListener('click', e => {
+  const a = e.target.closest('[data-a]')?.dataset.a; if (!a) return; audioInit(); SFX.pick();
+  if (a === 'packs') packsSheet(); if (a === 'book') bookModal(); if (a === 'drawer') drawerSheet(); if (a === 'quests') questsModal(); if (a === 'shop') storeModal(); if (a === 'settings') settingsModal();
+});
+function infoSheet(card) {
+  const c = CARD[card.id], uses = D.recipes.filter(r => S.discovered[r.id] && r.in.includes(card.id));
+  openSheet(`<div class="info">${cardImg(card.id)}<div><h3>${name(card.id)}${card.asleep ? ' · 💤 ' + t('asleep') : ''}</h3>
+    <p>${c.food ? '🍽️ ' + c.food + ' ' : ''}${c.oxy ? '🫧 ' + c.oxy + ' ' : ''}${c.sell ? '🐚 ' + c.sell + ' ' : ''}${c.uses ? '⛏️ ×' + card.uses : ''}${c.produce ? '⏱️ ' + name(c.produce[0]) + ' / ' + c.produce[1] + ' s' : ''}</p>
+    ${uses.length ? `<div class="mini">${uses.map(r => recipeRow(r)).join('')}</div>` : ''}</div></div>`);
+}
+function recipeRow(r, hidden) {
+  const ins = r.in.map(i => i === 'W' ? '<span class="w">🤿</span>' : (hidden && !S.made[i] && !D.start.cards.includes(i) ? '❔' : cardImg(i))).join('<i>+</i>');
+  const out = typeof r.out[0] === 'string' ? r.out[0] : r.out[0][0];
+  return `<div class="rrow">${ins}<i>→</i>${hidden ? '❔' : cardImg(out)}</div>`;
+}
+function bookModal() {
+  const known = D.recipes.filter(r => S.discovered[r.id]), next = D.recipes.find(r => !S.discovered[r.id] && r.in.every(i => i === 'W' || S.made[i] || D.start.cards.includes(i) || isCreature(i)));
+  openModal(`<h2>${t('bookTitle')} · ${known.length}/${D.recipes.length}</h2>
+    ${next ? `<div class="hintbox"><b>${t('hint')}</b>${recipeRow(next, true)}</div>` : ''}
+    <div class="book">${known.map(r => recipeRow(r)).join('') || '…'}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  modal.querySelector('[data-close]').onclick = closeModal;
+}
+function packsSheet() {
+  const rows = D.packs.map(p => { const open = zoneOpen(p.zone), tot = p.odds.reduce((a, o) => a + o[1], 0);
+    return `<div class="pack ${open ? '' : 'off'}">${cardImg('pack_' + p.id)}<div class="pi"><b>${I.name(p)}</b><small>${open ? p.count + ' ' + t('packs').split(' ')[0].toLowerCase() + ' · ' + t('odds') + ' : ' + p.odds.map(o => name(o[0]) + ' ' + Math.round(o[1] / tot * 100) + ' %').join(', ') : t('lockedZone', { s: name(p.zone === 'reef' ? 'lanternhouse' : 'airbell') })}</small></div>
+    <button class="b1" data-buy="${p.id}" ${open ? '' : 'disabled'}>${p.price} 🐚</button></div>`; }).join('');
+  openSheet(`<h3>${t('packs')}</h3>${rows}`);
+  sheet.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => { buyPack(D.packs.find(p => p.id === b.dataset.buy)); closeSheet(); });
+}
+function drawerSheet() {
+  if (!S.drawer.length) return openSheet(`<h3>${t('drawer')}</h3><p>${t('drawerHint')}</p>`);
+  openSheet(`<h3>${t('drawer')}</h3><div class="dgrid">${S.drawer.map((id, i) => `<button data-d="${i}">${cardImg(id)}</button>`).join('')}</div>`);
+  sheet.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const id = S.drawer.splice(+b.dataset.d, 1)[0]; spawn(id, null); refreshHud(); drawerSheet(); });
+}
+function tideModal(n, ok, sleepers, oxy, food) {
+  const canFree = S.freePackTide !== S.tide;
+  openModal(`<h2>${t('tideEnd')} ${S.tide}</h2>
+    <div class="stats"><div>🤿 ${t('residents')}<b>${n}</b></div><div>🫧 ${t('oxygen')}<b>${Math.min(oxy, n)}/${n}</b></div><div>🍽️ ${t('food')}<b>${Math.min(food, n)}/${n}</b></div><div>✅ ${t('fed')}<b>${ok}/${n}</b></div></div>
+    <p class="msg">${sleepers ? '💤 ' + t('sleepers', { n: sleepers }) : '🎉 ' + t('allFed')} · +${D.tide.shellsPerTide} 🐚</p>
+    <div class="ads">${canFree ? `<button class="b2" data-ad="pack">▶ ${t('watch')} · ${t('freePack')}</button>` : ''}${sleepers ? `<button class="b2" data-ad="wake">▶ ${t('watch')} · ${t('wake')}</button>` : ''}</div>
+    <h3>${t('packs')}</h3><div class="packrow">${D.packs.filter(p => zoneOpen(p.zone)).map(p => `<button class="b2" data-buy="${p.id}">${cardImg('pack_' + p.id)}<span>${p.price} 🐚</span></button>`).join('')}</div>
+    <button class="b1 big" data-next>${t('nextTide')} ▶</button>`, 'tidecard');
+  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => buyPack(D.packs.find(p => p.id === b.dataset.buy)));
+  modal.querySelectorAll('[data-ad]').forEach(b => b.onclick = async () => {
+    b.disabled = true; if (!(await Ads.rewarded(b.dataset.ad))) { b.disabled = false; return; }
+    if (b.dataset.ad === 'pack') { S.freePackTide = S.tide; buyPack(D.packs.filter(p => zoneOpen(p.zone)).pop(), true); }
+    if (b.dataset.ad === 'wake') { for (const s of G.stacks) for (const c of s.cards) c.asleep = 0; toast('☀️'); }
+    b.remove(); save();
+  });
+  modal.querySelector('[data-next]').onclick = nextTide;
+}
+function questsModal() {
+  ensureQuests(); const L = D.login, k = S.login.streak;
+  const loginRow = L.map((r, i) => `<div class="lg ${i < k - (S.login.pending ? 1 : 0) ? 'got' : ''} ${i === k - 1 && S.login.pending ? 'now' : ''}"><small>${t('day')} ${i + 1}</small>${r.shells ? r.shells + '🐚' : EMO[r.card]}</div>`).join('');
+  const qs = S.quests.list.map((q, i) => { const d = D.quests.find(x => x.id === q.id), done = q.p >= d.target; return `<div class="quest"><span>${t('q' + q.id, { n: d.target })}<small>${Math.min(q.p, d.target)}/${d.target}</small></span>${q.claimed ? `<b>${t('done')}</b>` : `<button class="b1" data-q="${i}" ${done ? '' : 'disabled'}>${d.shells}🐚</button>`}</div>`; }).join('');
+  openModal(`<h2>${t('login')}</h2><div class="login">${loginRow}</div>${S.login.pending ? `<button class="b1" data-login>${t('claim')}</button>` : ''}<h2>${t('quests')}</h2>${qs}<button class="b2 big" data-close>${t('close')}</button>`);
+  const lb = modal.querySelector('[data-login]'); if (lb) lb.onclick = () => { const r = L[k - 1]; if (r.shells) S.shells += r.shells; if (r.card) spawn(r.card, null); S.login.pending = false; save(); SFX.chime(); refreshHud(); questsModal(); };
+  modal.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { const q = S.quests.list[+b.dataset.q], d = D.quests.find(x => x.id === q.id); q.claimed = true; S.shells += d.shells; save(); SFX.coin(); refreshHud(); questsModal(); });
+  modal.querySelector('[data-close]').onclick = closeModal;
+}
+function storeModal() {
+  const items = D.store.map(it => { const own = it.once && S.owned[it.id]; const sub = it.id === 'starter' ? `${it.shells}🐚 · ${it.cards.map(c => EMO[c]).join('')}` : it.id === 'noads' ? t('sNoAdsSub') : it.id === 'theme' ? '🌌' : '🐚';
+    return `<div class="sitem"><span>${storeName(it)}<small>${sub}</small></span>${own ? `<b>${t('owned')}</b>` : `<button class="b1" data-buy="${it.id}">${it.price}</button>`}</div>`; }).join('');
+  openModal(`<h2>${t('shop')}</h2><div class="note">${t('webNote')} · ${t('testBuy').split(':')[0]}</div>${items}<button class="b2 big" data-close>${t('close')}</button>`);
+  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { if (await Store.buy(D.store.find(x => x.id === b.dataset.buy))) storeModal(); });
+  modal.querySelector('[data-close]').onclick = closeModal;
+}
+function settingsModal() {
+  const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
+  openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
+    <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
+    ${S.owned.theme ? `<label class="sw"><span>${t('sTheme')}</span><input type="checkbox" data-theme ${S.theme === 'night' ? 'checked' : ''}></label>` : ''}
+    <button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button>
+    <button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Coral Stack ${window.CS_VERSION || ''}</div>`);
+  modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
+  modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); FACE.clear(); URLS.clear(); save(); refreshHud(); settingsModal(); };
+  const th = modal.querySelector('[data-theme]'); if (th) th.onchange = () => { S.theme = th.checked ? 'night' : ''; FACE.clear(); save(); };
+  modal.querySelector('[data-restore]').onclick = () => Store.restore();
+  modal.querySelector('[data-consent]').onclick = () => consentModal(true);
+  modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.CS_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = settingsModal; };
+  modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
+  modal.querySelector('[data-close]').onclick = closeModal;
+}
+function consentModal(fromSettings) {
+  openModal(`<h2>${t('consentTitle')}</h2><p>${t('consentText')}</p><div class="row"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>`);
+  modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); fromSettings ? settingsModal() : (closeModal(), startPlay()); });
+}
+
+// ---------- title & loop ----------
+function titleScreen() {
+  G.phase = 'title'; refreshHud();
+  const el = $('#title'), logo = A() && A().logoURL && A().logoURL();
+  el.innerHTML = `<div class="logo">${logo ? `<img src="${logo}" alt="Coral Stack">` : `<h1>Coral<br>Stack</h1>`}<p>${t('subtitle')}</p></div>${A() && A().heroURL && A().heroURL() ? `<img class="hero" src="${A().heroURL()}" alt="">` : ''}<button class="b1 big" data-play>${S.totals.tides || S.stacks.length ? t('cont') : t('play')}</button>${isXmas() ? `<div class="evt">🎄 ${t('xmas')}</div>` : ''}`;
+  el.classList.add('on');
+  el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null ? consentModal(false) : startPlay(); };
+}
+function startPlay() {
+  Ads.init(); ensureQuests(); restore(); G.phase = 'play'; G.cam = { x: 0, y: -160, z: 1 }; clampCam(); G.tutTarget = S.tut === 0 ? 'seabed' : null; refreshHud();
+  if (S.login.pending && S.totals.tides) setTimeout(questsModal, 500);
+  track('session_start', { tide: S.tide });
+}
+document.addEventListener('visibilitychange', () => { G.paused = document.hidden; if (document.hidden && G.phase === 'play') save(); });
+let last = performance.now(), hudTick = 0;
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now; G.t += dt;
+  update(dt * (G.speed || 1)); musicTick(); draw();
+  if (G.phase === 'play' && (hudTick += dt) > 0.5) { hudTick = 0; const left = Math.max(0, Math.ceil(D.tide.seconds - S.tideT)); const ht = $('#ht'); if (ht) ht.textContent = Math.floor(left / 60) + ':' + String(left % 60).padStart(2, '0'); const tb = $('#tb'); if (tb) tb.style.width = clamp(S.tideT / D.tide.seconds, 0, 1) * 100 + '%'; const hs = $('#hs'); if (hs) hs.textContent = S.shells; if ((G.goalTick = (G.goalTick || 0) + 1) % 4 === 0) { checkGoal(); const gb = $('.goalbox small'), g = D.goals[S.goal]; if (gb && g) gb.textContent = `(${Math.min(goalValue(g), g.n)}/${g.n})`; } if (G.tideT2 !== S.tide) { G.tideT2 = S.tide; } }
+  if (G.phase === 'play' && (G.saveTick = (G.saveTick || 0) + dt) > 10) { G.saveTick = 0; save(); }
+  requestAnimationFrame(frame);
+}
+resize(); titleScreen(); requestAnimationFrame(frame);
+if (A() && A().load) A().load(() => { FACE.clear(); URLS.clear(); BOARD = null; if (G.phase === 'title') titleScreen(); else refreshHud(); });
+window.CS = { S: () => S, G, D, startPlay, endTide, nextTide, spawn, match, drop, tapCard, complete, save, stacks: () => G.stacks, speed: v => { G.speed = v; } };
+})();
+</script>
+
+</body>
+</html>
