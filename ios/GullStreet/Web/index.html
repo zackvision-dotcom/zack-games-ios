@@ -79,7 +79,7 @@ h3 small{font-weight:700;color:var(--ink);opacity:.75;font-size:13px}
 .card.wide{max-width:520px}
 .card p{line-height:1.45;font-weight:700}
 .card a{color:var(--ink);display:block;text-align:center;margin-top:10px}
-.stars{text-align:center;letter-spacing:6px}.stars .pi{width:46px;height:46px;filter:grayscale(1) opacity(.25)}.stars .on .pi{filter:none;animation:pop .4s}
+.stars{text-align:center;letter-spacing:6px}.stars .pi{width:46px;height:46px;filter:grayscale(1) opacity(.25)}.stars .on .pi{filter:none;animation:pop .45s backwards}.stars .on:nth-child(2) .pi{animation-delay:.3s}.stars .on:nth-child(3) .pi{animation-delay:.6s}
 @keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.25)}}
 .objs div{padding:3px 0;font-size:14px;font-weight:700}.objs .ok{font-weight:900}
 .stat{display:flex;justify-content:space-between;border-bottom:2px dotted rgba(184,116,63,.4);padding:4px 0;font-weight:800}
@@ -466,6 +466,7 @@ window.I18N = (() => {
     quay: ['Le Quai', 'The quay', 'El muelle', 'Der Kai', 'O cais', 'Il molo'],
     tooExpensive: ['Trop cher !', 'Too pricey!', '¡Muy caro!', 'Zu teuer!', 'Muito caro!', 'Troppo caro!'],
     newShop: ['Nouvelle boutique : {s}', 'New shop: {s}', 'Nueva tienda: {s}', 'Neuer Laden: {s}', 'Nova loja: {s}', 'Nuovo negozio: {s}'],
+    bonusHint: ['Touche les pièces et les cœurs au-dessus des boutiques !', 'Tap the coins and hearts above the shops!', '¡Toca las monedas y los corazones sobre las tiendas!', 'Tippe auf die Münzen und Herzen über den Läden!', 'Toque nas moedas e corações sobre as lojas!', 'Tocca le monete e i cuori sopra i negozi!'],
     newDistrict: ['Nouveau quartier : {s}', 'New district: {s}', 'Nuevo barrio: {s}', 'Neues Viertel: {s}', 'Novo bairro: {s}', 'Nuovo quartiere: {s}'],
     continue: ['Continuer', 'Continue', 'Continuar', 'Weiter', 'Continuar', 'Continua'],
     tabShops: ['Boutiques', 'Shops', 'Tiendas', 'Läden', 'Lojas', 'Negozi'],
@@ -1263,7 +1264,8 @@ function grant(item) {
 }
 
 // ---------- game state ----------
-const G = { phase: 'title', t: 0, dayT: 0, speed: 1, walkers: [], floats: [], spawnAt: [], stats: null, camY: 0, moving: null, sel: null, tip: null, snow: [] };
+const G = { phase: 'title', t: 0, dayT: 0, speed: 1, walkers: [], floats: [], spawnAt: [], stats: null, camY: 0, moving: null, sel: null, tip: null, snow: [],
+  bonuses: [], bursts: [], builtAt: {}, combo: 0, comboT: -9, zoom: 1, zoomTo: 1, zoomF: null };
 const dayLen = () => ECO.day.seconds;
 function unlockedShops() { return ECO.shops.filter(s => s.unlockDay <= S.day); }
 function shopPrice(lot) { const s = SHOP[lot.type]; return Math.round(s.price * ECO.levels.priceMult[lot.lvl - 1] * ECO.price[lot.price]); }
@@ -1370,7 +1372,50 @@ function buy(w, lot) {
   questProgress('serve', 1); questProgress('earn', pay + tip);
   floatText(w.x, w.y - 30, '+' + (pay + tip) + ' 🪙', '#8a5a00'); SFX.coin();
   if (w.person && lot.type === PEOPLE[w.person].want && !S.met[w.person]) { S.met[w.person] = true; w.story = 1; w.storyT = 0; toast('📖 ' + t('newFriend') + ' — ' + I.person(w.person)); SFX.bell(); track('inhabitant_met', { id: w.person }); }
-  leaveShop(w); refreshHud();
+  dropBonus(w.shop, lot); leaveShop(w); refreshHud();
+}
+// ---------- day bonuses: now and then a sale leaves a coin or a heart above the shop; tap it before it fades ----------
+// coin: a small extra (about a third of the shop's price); heart: cheers up the customers queuing there (or a coin if nobody waits).
+// Taps less than BONUS.comboGap seconds apart chain a small combo (+1 per step, at most +3).
+const BONUS = { chance: 0.25, firstSales: 2, gap: 4, life: 5, comboGap: 3.5, heart: 0.35, cheer: 6, opening: 3 };
+function dropBonus(i, lot, opening) {
+  if (G.phase !== 'day' || G.bonusGap > 0 || G.bonuses.some(b => b.lot === i)) return;
+  if (!opening) { G.daySales = (G.daySales || 0) + 1; if (G.daySales > BONUS.firstSales && Math.random() > BONUS.chance) return; }
+  const L = LOTS[i]; G.bonusGap = BONUS.gap;
+  G.bonuses.push({ lot: i, x: L.x + rnd(-10, 10), y: (MAP ? L.y : L.y - 20) - 34, kind: Math.random() < BONUS.heart ? 'heart' : 'coin', n: Math.max(2, Math.ceil(shopPrice(lot) * 0.3)), t: 0 });
+  if (!S.bonusSeen) { S.bonusSeen = true; toast('👉 ' + t('bonusHint')); }
+}
+function grabBonus(b) {
+  G.bonuses.splice(G.bonuses.indexOf(b), 1);
+  G.combo = G.t - G.comboT < BONUS.comboGap ? G.combo + 1 : 1; G.comboT = G.t;
+  const extra = Math.min(3, G.combo - 1), q = (G.queues && G.queues[b.lot]) || [];
+  if (b.kind === 'heart' && q.length) {
+    for (const w of q) { w.extra += BONUS.cheer + extra; say(w, '😍', 1.4); }
+    floatText(b.x, b.y - 8, '+' + q.length, PC.coral, 'heart'); SFX.bell();
+  } else {
+    const n = b.n + extra; S.coins += n; if (G.stats) G.stats.tips += n; questProgress('earn', n);
+    floatText(b.x, b.y - 8, '+' + n, '#8a5a00'); SFX.coin();
+  }
+  if (G.combo >= 2) floatText(b.x + 22, b.y - 26, 'combo ×' + G.combo, PC.coral, null);
+  G.bursts.push({ x: b.x, y: b.y, t: 0, kind: b.kind }); buzz(12); track('bonus', { kind: b.kind, combo: G.combo });
+}
+function drawBonuses(dt) {
+  for (const b of G.bonuses) {
+    b.t += dt; const a = b.t, pop = a < 0.35 ? 1 - Math.pow(1 - a / 0.35, 3) * 1.0 + Math.sin(a / 0.35 * Math.PI) * 0.25 : 1;
+    const fade = b.t > BONUS.life - 1 ? (Math.sin(b.t * 18) > 0 ? 1 : 0.45) : 1, y = b.y + Math.sin(G.t * 4 + b.x) * 2.5;
+    cx.globalAlpha = 0.5 * (1 - (G.t * 1.4 % 1)); cx.strokeStyle = b.kind === 'heart' ? PC.coral : '#f8c51c'; cx.lineWidth = 2.5;
+    cx.beginPath(); cx.arc(b.x, y, 15 + 9 * (G.t * 1.4 % 1), 0, TAU); cx.stroke();
+    cx.globalAlpha = fade; cx.save(); cx.translate(b.x, y); cx.scale(pop, pop);
+    cx.fillStyle = 'rgba(60,40,20,.25)'; cx.beginPath(); cx.arc(1, 2, 15, 0, TAU); cx.fill();
+    cx.fillStyle = PC.paperHi; cx.beginPath(); cx.arc(0, 0, 15, 0, TAU); cx.fill(); cx.strokeStyle = b.kind === 'heart' ? PC.coral : '#d9a21a'; cx.lineWidth = 2.2; cx.stroke();
+    blit(A.icon(b.kind === 'heart' ? 'heart' : 'coin', 20), 0, 0); cx.restore(); cx.globalAlpha = 1;
+  }
+  G.bonuses = G.bonuses.filter(b => b.t < BONUS.life);
+  for (const p of G.bursts) {
+    p.t += dt; const k = p.t / 0.5; cx.globalAlpha = clamp(1 - k, 0, 1); cx.fillStyle = p.kind === 'heart' ? PC.coral : '#f8c51c';
+    for (let j = 0; j < 8; j++) { const an = j / 8 * TAU, r = 6 + k * 26; cx.beginPath(); cx.arc(p.x + Math.cos(an) * r, p.y + Math.sin(an) * r, 3 * (1 - k) + 1, 0, TAU); cx.fill(); }
+  }
+  cx.globalAlpha = 1; G.bursts = G.bursts.filter(p => p.t < 0.5);
 }
 function finishWalker(w) {
   const M = ECO.mood; const missed = w.wants.filter(x => !w.got.includes(x)).length;
@@ -1382,18 +1427,20 @@ function finishWalker(w) {
   if (m < M.sadBelow) SFX.sad();
 }
 function say(w, s, dur) { w.bubble = s; w.bubbleT = dur; }
-function floatText(x, y, s, col) { G.floats.push({ x, y, s, col, t: 0 }); }
+function floatText(x, y, s, col, ic = 'coin') { if (ic === 'coin') s = String(s).replace(/s*🪙/g, '');   // the painted coin icon is drawn next to the text (the emoji is missing on older systems)
+  G.floats.push({ x, y, s, col, t: 0, ic }); }
 
 // ---------- day flow ----------
 function startDay() {
   if (G.phase !== 'morning') return;
   if (!S.lots.some(Boolean)) { toast(t('tut1')); return; }
-  G.phase = 'day'; G.dayT = 0; G.walkers = []; G.queues = {}; G.speed = 1;
+  G.phase = 'day'; G.dayT = 0; G.walkers = []; G.queues = {}; G.speed = 1; G.bonuses = []; G.daySales = 0; G.bonusGap = 0; G.combo = 0; G.openBonus = false;
   G.stats = { income: 0, tips: 0, served: 0, happy: 0, moods: [], vip: 0, moodAvg: 0 };
   S.lots.forEach(l => { if (l) l.sales = 0; });
   const D = ECO.day, rep = Math.min(D.repMax, (S.lastHappy || 0) * D.repPerHappy);
   const n = Math.round(Math.min(D.maxVisitors, D.baseVisitors + S.day * D.visitorsPerDay + rep));
   G.spawnAt = []; for (let i = 0; i < n; i++) G.spawnAt.push({ t: (i + Math.random() * 0.8) / n * dayLen() * D.spawnShare });
+  for (let i = 0; i < Math.min(3, n); i++) G.spawnAt[i].t = Math.min(G.spawnAt[i].t, i * 1.2);   // opening: a few visitors were already waiting at the top of the street
   // one inhabitant per day (if any is due), plus the VIP bought with an ad
   const due = ECO.inhabitants.filter(p => p.day <= S.day && !S.met[p.id] && (!p.event || (p.event === 'xmas' && isXmas())));
   const metList = Object.keys(S.met);
@@ -1404,7 +1451,9 @@ function startDay() {
   closeSheet(); refreshHud(); track('day_start', { day: S.day, visitors: n });
 }
 function updateDay(dt) {
-  G.dayT += dt;
+  G.dayT += dt; G.bonusGap -= dt;
+  // opening coin: a few seconds after the street opens, one coin pops above a shop (the day starts with something to tap)
+  if (!G.openBonus && G.dayT >= BONUS.opening) { G.openBonus = true; const own = LOTS.filter(L => S.lots[L.i]); if (own.length) { const L = pickR(own); dropBonus(L.i, S.lots[L.i], true); } }
   while (G.spawnAt.length && G.spawnAt[0].t <= G.dayT) {
     const s = G.spawnAt.shift(); const p = s.person && PEOPLE[s.person];
     G.walkers.push(makeWalker(p ? { species: p.species, color: p.color, person: p.id, want: p.want } : { vip: s.vip }));
@@ -1414,7 +1463,7 @@ function updateDay(dt) {
   if (G.dayT >= dayLen() && !G.spawnAt.length && G.walkers.every(w => w.state === 'done')) endDay();
 }
 function endDay() {
-  G.phase = 'evening'; const st = G.stats;
+  G.phase = 'evening'; G.bonuses = []; const st = G.stats;
   st.moodAvg = st.moods.length ? Math.round(st.moods.reduce((a, b) => a + b, 0) / st.moods.length) : 0;
   const objs = objectivesFor(S.day), res = objs.map(o => ({ o, v: objValue(o, st), ok: objValue(o, st) >= o.n }));
   const stars = res.filter(r => r.ok).length, prev = S.stars[S.day] || 0;
@@ -1442,7 +1491,12 @@ let scale = 1, viewH = 800, viewW = W, dpr = 1; const CAMY0 = MAP ? 0 : -110;
 function resize() {
   dpr = Math.min(3, window.devicePixelRatio || 1); const w = innerWidth, h = innerHeight;
   cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.width = w + 'px'; cv.style.height = h + 'px';
-  scale = MAP ? Math.max(w / W, h / WORLD_H) : w / W; viewH = h / scale; viewW = w / scale; G.camX = clamp(G.camX || 0, 0, Math.max(0, W - viewW)); G.camY = clamp(G.camY, CAMY0, Math.max(CAMY0, WORLD_H - viewH));
+  applyScale();
+}
+// camera zoom (1 in the game; the BETA IA video scenes may move closer to the street with GS.zoom)
+function applyScale() {
+  const w = innerWidth, h = innerHeight;
+  scale = (MAP ? Math.max(w / W, h / WORLD_H) : w / W) * G.zoom; viewH = h / scale; viewW = w / scale; G.camX = clamp(G.camX || 0, 0, Math.max(0, W - viewW)); G.camY = clamp(G.camY, CAMY0, Math.max(CAMY0, WORLD_H - viewH));
 }
 addEventListener('resize', resize);
 
@@ -1501,8 +1555,17 @@ function drawLot(L) {
     return;
   }
   cx.fillStyle = 'rgba(53,90,40,.28)'; cx.beginPath(); cx.ellipse(x + 3, y + 35, 50, 6, 0, 0, TAU); cx.fill();
+  // just built or upgraded: the shop springs up from the ground with a puff of dust
+  const age = G.builtAt[L.i] != null ? G.t - G.builtAt[L.i] : 9, by = MAP ? L.base : y + 34;
+  if (age < 0.7) {
+    const u = clamp(age / 0.45, 0, 1), sy = u < 1 ? 1 - Math.pow(1 - u, 3) + Math.sin(u * Math.PI) * 0.22 : 1 + Math.sin((age - 0.45) / 0.25 * Math.PI) * -0.06, sx = 1 + (1 - sy) * 0.5;
+    cx.globalAlpha = clamp(1 - age / 0.7, 0, 1) * 0.8; cx.fillStyle = PC.paperHi;
+    for (let j = 0; j < 7; j++) { const an = Math.PI + j / 6 * Math.PI, r = 18 + age * 70; cx.beginPath(); cx.arc(x + Math.cos(an) * r * 1.4, by - 4 + Math.sin(an) * r * 0.35, 7 - age * 6, 0, TAU); cx.fill(); }
+    cx.globalAlpha = 1; cx.save(); cx.translate(x, by); cx.scale(sx, Math.max(0.05, sy)); cx.translate(-x, -by);
+  }
   if (MAP) { const sp = A.shop(lot.type, lot.lvl, S.skin, L.side), k = L.w * 0.92 / sp.w; cx.save(); if (L.side > 0 && sp.ext) { cx.translate(2 * x, 0); cx.scale(-1, 1); } blit(sp, x, L.base, k); cx.restore(); }
   else blit(A.shop(lot.type, lot.lvl, S.skin, L.side), x, y + 34);
+  if (age < 0.7) cx.restore();
   // price tag (paper pill, coin, price) on the street side
   const px = x - L.side * 30, py = MAP ? L.base + 8 : y + 44, txt = String(shopPrice(lot));
   cx.font = '800 11px ui-rounded, system-ui'; const tw = cx.measureText(txt).width + 22;
@@ -1551,7 +1614,7 @@ function drawFloats(dt) {
   for (const f of G.floats) {
     f.t += dt; const y = f.y - f.t * 26; cx.globalAlpha = clamp(1.4 - f.t, 0, 1);
     cx.font = '900 13px ui-rounded, system-ui'; cx.textAlign = 'left'; cx.textBaseline = 'middle'; const tw = cx.measureText(f.s).width;
-    blit(A.icon('coin', 13), f.x - tw / 2 - 5, y); cx.lineWidth = 3; cx.strokeStyle = PC.paperHi; cx.strokeText(f.s, f.x - tw / 2 + 3, y); cx.fillStyle = PC.coralDk; cx.fillText(f.s, f.x - tw / 2 + 3, y);
+    if (f.ic) blit(A.icon(f.ic, 13), f.x - tw / 2 - 5, y); cx.lineWidth = 3; cx.strokeStyle = PC.paperHi; cx.strokeText(f.s, f.x - tw / 2 + 3, y); cx.fillStyle = PC.coralDk; cx.fillText(f.s, f.x - tw / 2 + 3, y);
   }
   cx.globalAlpha = 1; G.floats = G.floats.filter(f => f.t < 1.4);
 }
@@ -1575,6 +1638,10 @@ addEventListener('pointermove', e => {
 addEventListener('pointerup', e => { if (!drag) return; const d = drag; drag = null; if (!d.moved) tapAt(e.clientX / scale + (G.camX || 0), e.clientY / scale + G.camY); });
 function tapAt(x, y) {
   if (G.phase === 'title') return;
+  if (G.phase === 'day') {
+    let bb = null, bd = 28; for (const b of G.bonuses) { const d = Math.hypot(b.x - x, b.y - y); if (d < bd) { bd = d; bb = b; } }
+    if (bb) { grabBonus(bb); return; }
+  }
   if (G.phase === 'day' || G.phase === 'evening') {
     let best = null, bd = 26; for (const w of G.walkers) { const d = Math.hypot(w.x - x, w.y - 6 - y); if (d < bd) { bd = d; best = w; } }
     if (best) { showWalker(best); SFX.tap(); return; }
@@ -1685,7 +1752,7 @@ function buildSheet(i) {
   openSheet(`<h3>${t('shopPick')}</h3><div class="list">${list}</div>`);
   sheet.querySelectorAll('[data-build]').forEach(b => b.onclick = () => {
     const s = SHOP[b.dataset.build]; if (S.coins < s.cost) return toast(t('noMoney'));
-    S.coins -= s.cost; S.lots[i] = { type: s.id, lvl: 1, price: 'normal', sales: 0 }; save(); SFX.build(); buzz(15);
+    S.coins -= s.cost; S.lots[i] = { type: s.id, lvl: 1, price: 'normal', sales: 0 }; G.builtAt[i] = G.t; save(); SFX.build(); buzz(15);
     track('shop_built', { type: s.id, lot: i, day: S.day });
     if (S.tut === 0 || S.tut === 1) S.tut = 2; else if (S.tut === 2 && S.lots.filter(Boolean).length >= 2) S.tut = 3;
     closeSheet(); refreshHud(); tutTargets();
@@ -1702,7 +1769,7 @@ function shopSheet(i) {
     </div>`);
   sheet.querySelectorAll('[data-price]').forEach(b => b.onclick = () => { lot.price = b.dataset.price; save(); shopSheet(i); });
   const ub = sheet.querySelector('[data-up]'); if (ub) ub.onclick = () => {
-    if (S.coins < up) return toast(t('noMoney')); S.coins -= up; lot.lvl++; questProgress('upgrade', 1); save(); SFX.build(); buzz(20); track('shop_upgrade', { type: lot.type, lvl: lot.lvl }); shopSheet(i); refreshHud();
+    if (S.coins < up) return toast(t('noMoney')); S.coins -= up; lot.lvl++; G.builtAt[i] = G.t; questProgress('upgrade', 1); save(); SFX.build(); buzz(20); track('shop_upgrade', { type: lot.type, lvl: lot.lvl }); shopSheet(i); refreshHud();
   };
   sheet.querySelector('[data-move]').onclick = () => { G.moving = i; closeSheet(); toast(t('moveHint')); };
   sheet.querySelector('[data-sell]').onclick = async () => { if (!(await confirmBox(t('sell') + ' ' + I.shop(s.id) + ' ?'))) return; S.coins += Math.round(s.cost / 2); S.lots[i] = null; save(); closeSheet(); refreshHud(); };
@@ -1874,12 +1941,18 @@ function tutTargets() {
 let last = performance.now();
 function frame(now) {
   const rdt = Math.min(0.05, (now - last) / 1000); last = now; G.t += rdt;
+  if (G.zoom !== G.zoomTo || G.zoomF) {   // only ever set by GS.zoom (BETA IA scenes): ease the zoom and slide the camera to the focus point
+    const c = [(G.camX || 0) + viewW / 2, G.camY + viewH / 2], f = G.zoomF || c, k = Math.min(1, rdt * 3.5);
+    G.zoom = Math.abs(G.zoomTo - G.zoom) < 0.004 ? G.zoomTo : lerp(G.zoom, G.zoomTo, k); applyScale();
+    const tx = clamp(lerp(c[0], f[0], k) - viewW / 2, 0, Math.max(0, W - viewW)), ty = clamp(lerp(c[1], f[1], k) - viewH / 2, CAMY0, Math.max(CAMY0, WORLD_H - viewH));
+    const done = G.zoom === G.zoomTo && Math.abs(tx - (G.camX || 0)) < 0.3 && Math.abs(ty - G.camY) < 0.3; G.camX = tx; G.camY = ty; if (done) G.zoomF = null;
+  }
   if (!drag && Math.abs(vel) > 0.05) { G.camY = clamp(G.camY + vel, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); vel *= 0.92; }
   if (G.phase === 'day') { const steps = G.speed; for (let k = 0; k < steps; k++) updateDay(rdt); if (now - lastTimerUpdate > 250) { lastTimerUpdate = now; const bar = hud.querySelector('.timer i'); if (bar) bar.style.width = clamp(G.dayT / dayLen(), 0, 1) * 100 + '%'; const hc = $('#hc'); if (hc) hc.textContent = S.coins; if ((G.hudTick = (G.hudTick || 0) + 1) % 4 === 0 && !sheet.classList.contains('on')) refreshHud(); } }
   musicTick();
   cx.setTransform(dpr * scale, 0, 0, dpr * scale, -(G.camX || 0) * dpr * scale, -G.camY * dpr * scale); cx.imageSmoothingEnabled = !!MAP;
   cx.fillStyle = PC.paper; cx.fillRect(0, G.camY, W, viewH);
-  drawWorld(); drawWalkers(); drawBirds(); drawFloats(rdt); drawLight();
+  drawWorld(); drawWalkers(); drawBirds(); drawFloats(rdt); drawLight(); drawBonuses(rdt);
   requestAnimationFrame(frame);
 }
 // ---------- boot ----------
@@ -1889,6 +1962,7 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
   play: () => { $('#title [data-play]')?.click(); },
   // BETA IA hooks (src/beta-game.js): sounds, world→screen mapping, the day simulation step for off-camera fast-forward
   SFX, view: () => ({ scale, camX: G.camX || 0, camY: G.camY, viewW, viewH, W, H: WORLD_H, CAMY0 }), tick: dt => { if (G.phase === 'day') updateDay(dt); },
+  zoom: (k, wx, wy) => { G.zoomTo = k; G.zoomF = wx != null ? [wx, wy] : null; }, BONUS,
   shopPrice, objectivesFor, totalStars, ECO_SHOP: SHOP, DECO };
 })();
 </script>
@@ -1944,13 +2018,30 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
   async function closeSheet(A) {
     for (let k = 0; k < 3 && sheetOn() && A.running(); k++) { const p = emptySpot(); if (!p) break; await A.wait(A.jitter(300, 500)); await A.tap(p[0], p[1], 'fermer le panneau'); await A.wait(350); }
   }
+  // scrolls the open sheet (like a finger flick) until element el sits fully inside it
+  async function inSheet(A, el) {
+    const sh = $('#sheet'), r = el.getBoundingClientRect(), s = sh.getBoundingClientRect();
+    const d = r.bottom > s.bottom - 12 ? r.bottom - s.bottom + 24 : r.top < s.top + 30 ? r.top - s.top - 40 : 0; if (!d) return;
+    const x = s.left + s.width * A.jitter(0.75, 0.85), y0 = clampN(s.top + s.height * 0.7, s.top + 40, innerHeight - 30), y1 = clampN(y0 - Math.abs(d), s.top + 20, y0 - 30);
+    // the finger flicks the list (synthetic touches cannot scroll natively, so the list follows the finger)
+    const fling = A.drag(x, d > 0 ? y0 : y1, x, d > 0 ? y1 : y0, 'défiler le panneau', 480);
+    const from = sh.scrollTop; await A.realWait(200); const t0 = performance.now(), dur = 480;
+    for (let k = 0; k < 1;) { k = Math.min(1, (performance.now() - t0) / dur); sh.scrollTop = from + d * (1 - Math.pow(1 - k, 3)); await new Promise(r => requestAnimationFrame(r)); }
+    await fling; await A.wait(200);
+  }
   async function waitFor(A, cond, ms) { const end = performance.now() + ms; while (A.running() && !cond() && performance.now() < end) await A.wait(100); return cond(); }
   async function waitAds(A) { if (adOn()) { await waitFor(A, () => !adOn(), 9000); await A.wait(400); } }
 
-  async function tapLot(A, i, label) {
-    const L = GS.LOTS[i]; await bringIntoView(A, L.y);
-    const [x, y] = scr(L.x + A.jitter(-8, 8), L.y - 8 + A.jitter(-5, 5)); if (!onStreet(x, y)) return false;
-    await A.tap(x, y, label); await A.wait(380); return true;
+  // which lot the game would pick for a tap at this screen point (same test as the game's tapAt)
+  const hitLot = (sx, sy) => { const [x, y] = world(sx, sy), L = GS.LOTS.find(L => Math.abs(x - L.x) < 50 && Math.abs(y - L.y) < 46); return L ? L.i : -1; };
+  // taps lot i, and only lot i: a jittered point that would land on a neighbour (or on a locked district) is never tapped
+  async function tapLot(A, i, label, locked = false) {
+    const L = GS.LOTS[i]; if (!locked && !openDistrict(L.district)) return false; await bringIntoView(A, L.y);
+    for (const [dx, dy] of [[A.jitter(-8, 8), A.jitter(-13, -3)], [0, -8], [0, 0]]) {
+      const [x, y] = scr(L.x + dx, L.y + dy); if (!onStreet(x, y) || hitLot(x, y) !== i) continue;
+      await A.tap(x, y, label); await A.wait(380); return true;
+    }
+    return false;
   }
   async function tapSlot(A, i, label) {
     const s = GS.SLOTS[i]; await bringIntoView(A, s.y);
@@ -1959,10 +2050,14 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
   }
 
   // ---- morning actions, each one through the real UI ----
-  async function build(A, L, type) {
-    await closeSheet(A); await A.think(); await tapLot(A, L.i, 'emplacement libre');
-    await waitFor(A, () => !!vis(`#sheet [data-build="${type}"]`), 1500); const b = vis(`#sheet [data-build="${type}"]`); if (!b) { await closeSheet(A); return false; }
-    await A.wait(A.jitter(350, 700)); await A.tapEl(b, 'construire ' + type); await A.wait(300);
+  // the sheet lists every shop: the wanted one may sit below the fold, so it is scrolled into view first (never tapped unaffordable)
+  async function build(A, L, type, quick = false) {
+    if (!type || !GS.ECO_SHOP[type] || GS.ECO_SHOP[type].cost > S().coins || S().lots[L.i]) return false;
+    await closeSheet(A); await (quick ? A.wait(A.jitter(250, 450)) : A.think()); if (!(await tapLot(A, L.i, 'emplacement libre'))) return false;
+    const sel = `#sheet [data-build="${type}"]:not([disabled])`;
+    await waitFor(A, () => sheetOn() && !!$(sel), 1500); const b = sheetOn() && $(sel); if (!b) { await closeSheet(A); return false; }
+    await A.wait(A.jitter(300, 500)); await inSheet(A, b); if (!vis(sel)) { await closeSheet(A); return false; }
+    await A.wait(A.jitter(250, 500)); await A.tapEl(b, 'construire ' + type); await A.wait(300);
     if (S().lots[L.i] && S().lots[L.i].type === type) { A.mark('nouvelle boutique : ' + type); A.ev('boutique', { type, lot: L.i }); await A.wait(900); return true; }
     await closeSheet(A); return false;
   }
@@ -1987,7 +2082,7 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
   }
   async function unlock(A, D) {
     const L = GS.LOTS.find(L => L.district === D.id); if (!L) return false;
-    await closeSheet(A); await A.think(); await tapLot(A, L.i, 'quartier fermé');
+    await closeSheet(A); await A.think(); await tapLot(A, L.i, 'quartier fermé', true);
     await waitFor(A, () => !!vis('#sheet [data-unlock]:not([disabled])'), 1200); const b = vis('#sheet [data-unlock]:not([disabled])'); if (!b) { await closeSheet(A); return false; }
     await A.wait(A.jitter(500, 800)); await A.tapEl(b, 'débloquer ' + D.id); await A.wait(1200);
     return openDistrict(D.id);
@@ -2011,16 +2106,39 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
     }
     await closeSheet(A); return n;
   }
-  async function openStreet(A, x2 = true) {
+  async function openStreet(A, x2 = true, quick = false) {
     if (G.phase !== 'morning') return;
     if (!S().lots.some(Boolean)) return;
-    await closeSheet(A); await A.think(); await A.tapEl('#hud [data-a="open"]', 'ouvrir la rue'); await A.wait(700);
+    await closeSheet(A); await (quick ? A.wait(A.jitter(300, 500)) : A.think()); await A.tapEl('#hud [data-a="open"]', 'ouvrir la rue'); await A.wait(quick ? 450 : 700);
     A.ev('journee', { jour: S().day });
-    if (x2 && G.phase === 'day') { await A.wait(A.jitter(900, 1500)); await A.tapEl('#hud [data-a="speed"]', 'vitesse ×2'); }
+    if (x2 && G.phase === 'day') { await A.wait(quick ? A.jitter(350, 550) : A.jitter(900, 1500)); await A.tapEl('#hud [data-a="speed"]', 'vitesse ×2'); }
   }
   async function watchDay(A, untilMs) {
     const end = untilMs ? performance.now() + untilMs : Infinity;
     while (A.running() && G.phase === 'day' && performance.now() < end) await A.wait(300);
+  }
+  // the day, played: tap the coins and hearts that pop above the shops (combos when quick), and now and then a customer
+  const onScreen = (wx, wy) => { const [x, y] = scr(wx, wy); return y > 120 && y < innerHeight - 150 && x > 16 && x < innerWidth - 16 && onStreet(x, y); };
+  async function dayPlay(A, untilMs, walkerEvery = 0) {
+    const end = untilMs ? performance.now() + untilMs : Infinity; let lastW = performance.now(), grabs = 0;
+    while (A.running() && G.phase === 'day' && performance.now() < end) {
+      if (sheetOn()) { await A.wait(A.jitter(900, 1300)); await closeSheet(A); continue; }
+      const b = G.bonuses.find(b => b.t > 0.25 && b.t < GS.BONUS.life - 1 && onScreen(b.x, b.y));
+      if (b) {
+        await A.wait(A.jitter(120, 320)); if (!G.bonuses.includes(b)) continue;
+        const [x, y] = scr(b.x, b.y); await A.tap(x, y, b.kind === 'heart' ? 'cœur' : 'pièce');
+        if (!G.bonuses.includes(b)) { grabs++; A.ev('bonus', { kind: b.kind, combo: G.combo, pieces: S().coins });
+          A.mark(G.combo >= 2 ? 'combo ×' + G.combo : b.kind === 'heart' ? 'cœur touché' : 'pièce ramassée'); }
+        await A.wait(A.jitter(250, 450)); continue;
+      }
+      if (walkerEvery && performance.now() - lastW > walkerEvery) {
+        const w = G.walkers.filter(w => (w.state === 'queue' || w.state === 'walk') && w.alpha > 0.9 && onScreen(w.x, w.y - 6))
+          .filter(w => !G.bonuses.some(b => Math.hypot(b.x - w.x, b.y - w.y) < 50)).sort((a, b) => (a.state === 'queue' ? 0 : 1) - (b.state === 'queue' ? 0 : 1))[0];
+        if (w) { lastW = performance.now(); const [x, y] = scr(w.x, w.y - 6); await A.tap(x, y, 'client'); A.ev('client_touche', { espece: w.sp }); continue; }
+      }
+      await A.wait(100);
+    }
+    return grabs;
   }
   // end of day: let the stars pop and the chest land, then "Next day" (never the ad buttons)
   async function afterSummary(A) {
@@ -2039,7 +2157,7 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
     if (G.phase === 'morning') { await morning(A); await openStreet(A); }
     // vitesse > 1: the game caps its own step per frame, so the day itself runs as a time-lapse (simulation unchanged)
     if (G.phase === 'day' && A.opts.vitesse > 1) G.speed = Math.round(2 * A.opts.vitesse);
-    if (G.phase === 'day') await watchDay(A);
+    if (G.phase === 'day') await dayPlay(A);
     if (G.phase === 'evening' || modalOn()) await afterSummary(A);
   }
   // title -> consent (refused for clean takes) -> the street
@@ -2067,11 +2185,11 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
   }
 
   // ---- starting saves (off camera): a real fast-forward of the economy, day after day, with a simple buying plan ----
-  function autoBuy(s, keep = 0) {
+  function autoBuy(s, keep = 0, leaveFree = 0) {
     const stars = GS.totalStars();
     for (const D of ECO.districts) if (!s.districts[D.id] && stars >= D.stars && s.coins >= D.cost + 80 && GS.LOTS.some(L => L.district === D.id)) { s.coins -= D.cost; s.districts[D.id] = true; }
     for (let k = 0; k < 8; k++) {
-      const L = freeLots()[0]; if (!L) break; const have = ownedTypes();
+      const L = freeLots().length > leaveFree ? freeLots()[0] : null; if (!L) break; const have = ownedTypes();
       const sh = ECO.shops.filter(x => x.unlockDay <= s.day && !have.has(x.id) && x.cost <= s.coins - keep).sort((a, b) => b.cost - a.cost)[0]; if (!sh) break;
       s.coins -= sh.cost; s.lots[L.i] = { type: sh.id, lvl: 1, price: 'normal', sales: 0 };
     }
@@ -2093,10 +2211,19 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
     while (G.phase === 'day' && !(stopAt && G.dayT >= stopAt)) { GS.tick(0.1); if (++n % 250 === 0) await slice(); if (n > 30000) break; }
     G.floats.length = 0;
   }
-  async function fastForward(days) {
+  // the very end of a day: every customer left is already walking out at the bottom of the street (the stars come within ~2 s)
+  async function simDayEnd() {
+    GS.startDay(); G.speed = 1; let n = 0; const exitY = Math.max(...GS.LOTS.map(L => L.y)) + 40;
+    // the last customers have shopped and walk out; the empty minutes that follow on the day's clock are skipped (off camera)
+    const nearlyOver = () => !G.spawnAt.length && G.walkers.every(w => w.state === 'done' || (w.state === 'walk' && w.y > exitY)) && G.walkers.some(w => w.state === 'walk');
+    while (G.phase === 'day' && !nearlyOver()) { GS.tick(0.05); if (++n % 400 === 0) await slice(); if (n > 60000) break; }
+    if (G.phase === 'day') G.dayT = Math.max(G.dayT, ECO.day.seconds - 0.5);
+    G.floats.length = 0;
+  }
+  async function fastForward(days, leaveFree = 0) {
     const s = S();
     while (s.day < days) {
-      autoBuy(s); await simDay();
+      autoBuy(s, 0, leaveFree); await simDay();
       s.lastAdAt = Date.now(); await GS.nextDay(); await slice();   // the morning after (no interstitial: an ad was "just seen")
     }
     G.tutLot = null; G.tutPick = null; GS.save();   // the tutorial is long over in these saves
@@ -2116,11 +2243,14 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
       const sc = A.opts.scene;
       if (sc === 'onboarding') return;                 // onboarding always starts on the title screen of a new game
       await start(A);
+      // boucle builds two shops on camera and moment builds the shop unlocked by the next day: their saves keep lots free
+      const leave = sc === 'boucle' ? 2 : sc === 'moment' ? 1 : 0;
       if (sc !== 'progression') {                      // progression always shows the empty street filling up
-        if (save === 'milieu') await fastForward(8); else if (save === 'avance') await fastForward(20);
+        // moment films day 7 (its third goal is decorations, which a grown street meets) so the next morning unlocks a shop
+        if (save === 'milieu') await fastForward(sc === 'moment' ? 7 : 8, leave); else if (save === 'avance') await fastForward(20, leave);
       }
-      if (sc === 'moment') {                           // a busy day almost over: the scene films the last customers and the stars
-        autoBuy(S()); await simDay(ECO.day.seconds - 13);
+      if (sc === 'moment') {                           // a busy day at its very end: the last customers walk out, then the stars
+        autoBuy(S(), 0, leave); S().lastAdAt = Date.now(); await simDayEnd(); G.speed = 0;   // frozen until the camera rolls
       }
       if (A.opts.ui === 'propre') S().owned.noads = true;
       await A.wait(2600); tidy(); GS.save();           // toasts of the fast-forward fade off camera
@@ -2141,7 +2271,22 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
         while (A.running()) await playDay(A);
       },
       // the satisfying core: a morning of building, then the street opens and customers shop and tip
-      async boucle(A) { watch(A); await waitAds(A); await clearModal(A); await morning(A, 3); await openStreet(A); await watchDay(A, 13000); },
+      // two new shops spring up, the street opens in ×2, the camera moves closer and the robot taps the coins, hearts and customers
+      async boucle(A) {
+        watch(A); await waitAds(A); await clearModal(A);
+        for (let k = 0; k < 2 && A.running() && G.phase === 'morning'; k++) {
+          const have = ownedTypes(), coins = S().coins, L = freeLots()[0];
+          const can = ECO.shops.filter(x => x.unlockDay <= S().day && !have.has(x.id) && x.cost <= coins).sort((a, b) => a.cost - b.cost);
+          if (!L || !can.length) break;
+          await build(A, L, can[0].id, true);   // the cheapest new kind: it leaves coins for a second one and sits at the top of the list
+        }
+        await openStreet(A, true, true);
+        if (G.phase !== 'day') return;
+        A.mark('la rue ouvre');
+        const lots = GS.LOTS.filter(L => S().lots[L.i]), xs = lots.map(L => L.x), fy = lots.reduce((a, L) => a + L.y, 0) / lots.length;
+        GS.zoom(1.3, (Math.min(...xs) + Math.max(...xs)) / 2, fy + 10);                   // closer to the shops, so the inhabitants read well on a phone
+        await dayPlay(A, 0, 7000);
+      },
       // before/after: the empty street fills up, day after day (days run as a time-lapse)
       async progression(A) {
         watch(A); A.speed(Math.max(2, A.opts.vitesse));
@@ -2153,10 +2298,15 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
         }
       },
       // the wow: the last customers of a busy day, the stars pop, the chest, a new morning
+      // (the player had set ×2 earlier that day), then the shop unlocked by the new morning, built at once
       async moment(A) {
-        watch(A); await A.wait(250);
-        if (vis('#hud [data-a="speed"]') && G.speed === 1) await A.tapEl('#hud [data-a="speed"]', 'vitesse ×2');
-        await watchDay(A, 15000); await afterSummary(A); await A.wait(500);
+        watch(A); if (G.phase === 'day') { G.speed = 2; GS.setDay(S().day); }   // setDay redraws the HUD (×2, not the ×0 of the freeze)
+        await dayPlay(A, 6000);
+        if (!(await waitFor(A, () => !!vis('#modal [data-next]'), 4000))) return;
+        await A.wait(A.jitter(1700, 1900)); await A.tapEl('#modal [data-next]', 'jour suivant'); await A.wait(600); await waitAds(A);
+        const L = freeLots()[0], nw = ECO.shops.filter(x => x.unlockDay === S().day && x.cost <= S().coins)[0];
+        if (L && nw) await build(A, L, nw.id, true);
+        await A.wait(1500);
       },
       // plays on until stopped (long tests, balance, memory)
       async idle(A) { watch(A); while (A.running()) await playDay(A); },
