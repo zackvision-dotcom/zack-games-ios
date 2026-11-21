@@ -110,7 +110,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
     ],
     postcards: 10,
     login: [40, 60, 90, 120, 160, 220, 400],
-    store: [{ id: 'noads', price: '3,99 €' }, { id: 'starter', price: '1,99 €' }, { id: 'paint', price: '1,99 €' }],
+    store: [{ id: 'noads', price: '3,99 €', once: true }, { id: 'starter', price: '1,99 €', once: true }, { id: 'paint', price: '1,99 €', once: true }, { id: 'coins', price: '0,99 €', coins: 500 }],
     // event cards: two choices; effects: coins, fuel, hp, mood (all passengers), card (postcard), pass (recruit a passenger), time
     events: [
       { id: 'hitch', t: ['Un auto-stoppeur', 'A hitchhiker'], d: ['Un jeune homme lève le pouce sous le soleil.', 'A young man thumbs a ride in the sun.'], a: [['Le prendre', 'Pick him up'], { coins: 30, mood: 1 }], b: [['Continuer', 'Drive on'], {}] },
@@ -159,7 +159,7 @@ window.I18N = (() => {
     welcome: ['{s} monte à bord !', '{s} hops on board!'], garageTxt: ['Une amélioration à la fois. Elle se fait même quand tu ne joues pas.', 'One upgrade at a time. It keeps going while you are away.'], garageDone: ['Amélioration terminée !', 'Upgrade done!'], back: ['Retour', 'Back'],
     pauseT: ['Pause', 'Pause'], resume: ['Reprendre', 'Resume'], login: ['Cadeau du jour', 'Daily gift'], day: ['Jour', 'Day'], claim: ['Récupérer', 'Claim'], close: ['Fermer', 'Close'],
     shop: ['Boutique', 'Shop'], s_noads: ['Sans pub', 'No ads'], sd_noads: ['Plus aucune pub imposée', 'No more forced ads'], s_starter: ['Pack de démarrage', 'Starter pack'], sd_starter: ['300 pièces pour le voyage', '300 coins for the trip'],
-    s_paint: ['Peinture « Menthe »', '“Mint” paint'], sd_paint: ['Un van vert menthe', 'A mint-green van'], testBuy: ['Achat de test : rien n’est payé.', 'Test purchase: nothing is charged.'], testAd: ['Pub de test', 'Test ad'],
+    s_paint: ['Peinture « Menthe »', '“Mint” paint'], sd_paint: ['Un van vert menthe', 'A mint-green van'], testBuy: ['Achat de test : rien n’est payé.', 'Test purchase: nothing is charged.'], s_coins: ['Tirelire de route', 'Road piggy bank'], sd_coins: ['+{n} pièces pour le garage', '+{n} coins for the garage'], restore: ['Restaurer les achats', 'Restore purchases'], restored: ['Achats restaurés', 'Purchases restored'], buyFail: ['L’achat n’a pas abouti. Rien n’a été payé.', 'The purchase did not go through. Nothing was charged.'], buyPending: ['Achat en attente de validation', 'Purchase waiting for approval'], testAd: ['Pub de test', 'Test ad'],
     settings: ['Réglages', 'Settings'], sound: ['Sons', 'Sounds'], music: ['Musique', 'Music'], vibration: ['Vibrations', 'Vibrations'], language: ['Langue', 'Language'], privacy: ['Confidentialité', 'Privacy'],
     reset: ['Effacer la partie', 'Erase game'], resetSure: ['Tout effacer ? C’est définitif.', 'Erase everything? This cannot be undone.'], ok: ['OK', 'OK'], cancel: ['Annuler', 'Cancel'],
     consentTitle: ['Tes données', 'Your data'], consentText: ['Le jeu est gratuit grâce à la pub. Acceptes-tu des pubs personnalisées ? Tu peux changer d’avis dans les réglages.', 'The game is free thanks to ads. Do you accept personalised ads? You can change your mind in settings.'], accept: ['Accepter', 'Accept'], refuse: ['Refuser', 'Refuse'],
@@ -568,9 +568,38 @@ function giftModal() {
   const c = modal.querySelector('[data-claim]'); if (c) c.onclick = () => { S.coins += D.login[k - 1]; S.login.pending = false; save(); SFX.fanfare(); JUICE.confetti(50); renderHud(); giftModal(); };
   modal.querySelector('[data-close]').onclick = () => G.mode === 'map' ? mapScreen() : menuModal();
 }
+// Real purchases go through Apple (StoreKit 2) via the iOS shell's `store` message handler (ios/Shared/NativeStore.swift);
+// on the web there is no handler and a test box stands in (nothing is charged).
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.vanvoyage.' + id;
+const iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
+function grant(it, loud = true) {
+  if (it.id === 'coins') S.coins += it.coins; else { S.owned[it.id] = true; if (it.id === 'starter') S.coins += 300; if (it.id === 'paint') S.paint = '#6ac0b0'; }
+  save(); if (loud) { SFX.fanfare(); JUICE.confetti(50); } renderHud();
+}
+const Store = {
+  prices: {},
+  price(it) { return this.prices[it.id] || it.price; },
+  async init() {
+    if (!IAP || this.ready) return; this.ready = true;
+    window.nativeStoreUpdate = pid => this.deliver(pid);
+    try { for (const p of await iap('products', { ids: D.store.map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {}
+    try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid); } catch (e) {}
+  },
+  deliver(pid) { const it = D.store.find(x => PID(x.id) === pid); if (it && !(it.once && S.owned[it.id])) grant(it); },
+  own(pids) { for (const pid of pids || []) { const it = D.store.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) grant(it, false); } },
+  async buy(it) {
+    track('iap_start', { id: it.id });
+    if (!IAP) { const ok = await confirmBox(t('testBuy') + `<br><b>${it.price}</b>`); if (ok) grant(it); return ok; }
+    try { const r = await iap('buy', { id: PID(it.id) }); if (r.ok) { track('iap_done', { id: it.id }); grant(it); return true; }
+      if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); }
+    return false;
+  },
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return false; } } toast(t('restored')); return true; }
+};
 function shopModal() {
-  openModal(`<h2>${t('shop')}</h2>${D.store.map(it => `<div class="it"><span>${t('s_' + it.id)}<small>${t('sd_' + it.id)}</small></span>${S.owned[it.id] ? '✔' : `<button class="b1" data-buy="${it.id}">${it.price}</button>`}</div>`).join('')}<button class="b2" data-close>${t('close')}</button>`);
-  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => { const it = D.store.find(x => x.id === b.dataset.buy); confirmBox(t('testBuy') + `<br><b>${it.price}</b>`).then(ok => { if (!ok) return; S.owned[it.id] = true; if (it.id === 'starter') S.coins += 300; if (it.id === 'paint') S.paint = '#6ac0b0'; save(); SFX.fanfare(); shopModal(); }); });
+  openModal(`<h2>${t('shop')}</h2>${D.store.map(it => `<div class="it"><span>${t('s_' + it.id, { n: it.coins })}<small>${t('sd_' + it.id, { n: it.coins })}</small></span>${it.once && S.owned[it.id] ? '✔' : `<button class="b1" data-buy="${it.id}">${Store.price(it)}</button>`}</div>`).join('')}<button class="b2" data-restore>${t('restore')}</button><button class="b2" data-close>${t('close')}</button>`);
+  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { if (await Store.buy(D.store.find(x => x.id === b.dataset.buy))) shopModal(); });
+  modal.querySelector('[data-restore]').onclick = async () => { if (await Store.restore()) shopModal(); };
   modal.querySelector('[data-close]').onclick = () => G.mode === 'map' ? mapScreen() : menuModal();
 }
 function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row2"><button class="b2" data-v="0">${t('cancel')}</button><button class="b1" data-v="1">${t('ok')}</button></div></div>`); el.onclick = e => { const v = e.target.dataset.v; if (v != null) { el.remove(); res(v === '1'); } }; document.body.appendChild(el); }); }
@@ -602,11 +631,11 @@ function titleScreen() {
   el.innerHTML = `<div class="logo">${SPR.logo ? `<img src="${SPR.logo}" alt="Van Voyage">` : '<h1>Van<br>Voyage</h1>'}<p>${t('subtitle')}</p></div><button class="b1 big" data-play>${S.stagesDriven ? t('cont') : t('play')}</button>`;
   el.classList.add('on'); el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.honk(); el.classList.remove('on'); S.consent == null ? consentModal() : begin(); };
 }
-function begin() { ensureLogin(); if (!S.stagesDriven) startStage(); else { mapScreen(); if (S.login.pending) setTimeout(giftModal, 500); } }
+function begin() { ensureLogin(); Store.init(); if (!S.stagesDriven) startStage(); else { mapScreen(); if (S.login.pending) setTimeout(giftModal, 500); } }
 let last = performance.now(), hudT = 0;
 function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; update(dt); musicTick(); draw(); if (G.mode === 'drive' && (hudT += dt) > 0.2) { hudT = 0; renderHud(); renderSeats(); } requestAnimationFrame(frame); }
 document.addEventListener('visibilitychange', () => { if (document.hidden) { save(); if (G.mode === 'drive') { G.paused = true; engineHum(false); menuModal(); } } });
-window.VV = { G, S: () => S, startStage, halt, update, steer, honk, D };
+window.VV = { G, S: () => S, startStage, halt, update, steer, honk, D, shopModal };
 resize(); titleScreen(); requestAnimationFrame(frame);
 })();
 </script>
