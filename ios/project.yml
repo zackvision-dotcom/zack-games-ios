@@ -280,3 +280,35 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.sceneexpress
         PRODUCT_NAME: SceneExpress
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  SilkHop:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: SilkHop/Assets.xcassets
+      - path: SilkHop/Web
+        type: folder
+    info:
+      path: SilkHop/Info.plist
+      properties:
+        CFBundleDisplayName: Silk Hop
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.action-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.silkhop
+        PRODUCT_NAME: SilkHop
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
