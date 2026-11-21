@@ -20,6 +20,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
 #hud{position:fixed;top:0;left:0;right:0;z-index:5;padding:calc(env(safe-area-inset-top) + 8px) 10px 0}
 #hud .row{display:flex;align-items:center;gap:8px}
 .pill{background:var(--paper);border:3px solid var(--deep);border-radius:999px;padding:3px 12px;font-weight:900;font-size:17px;box-shadow:0 3px 0 var(--deep)}
+.emo{height:1.05em;width:auto;vertical-align:-.18em;display:inline-block}.tyre{display:inline-block;width:.92em;height:.92em;margin:0 1px;border-radius:50%;vertical-align:-.12em;background:radial-gradient(circle,#d9d4c8 0 20%,#6b665e 21% 30%,#2d2a27 31% 66%,#141210 67%)}.hp span .tyre{opacity:.25}
 .lv{background:var(--deep);color:#fff;border-radius:10px;padding:2px 8px;font-weight:900;font-size:13px}
 .hp{flex:1;font-size:18px;text-align:right}.hp span{opacity:.25}
 .rb{width:40px;height:40px;border-radius:50%;background:var(--paper);border:3px solid var(--deep);box-shadow:0 3px 0 var(--deep);font-size:18px;font-weight:900}
@@ -73,6 +74,203 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
 <div id="game"><div id="hud"></div><div id="biscuit"><div class="bf">🐶</div><div class="bt"></div></div><div id="seats"></div><button id="honk">📯</button></div>
 <div id="mapv"></div><div id="modal"></div><div id="toasts"></div><div id="title"></div>
 <script>window.VV_VERSION="1.0";window.VV_SPR={"dog_0": "assets/dog_0.png", "dog_1": "assets/dog_1.png", "dog_2": "assets/dog_2.png", "dog_3": "assets/dog_3.png", "ev_bakery": "assets/ev_bakery.png", "ev_bike": "assets/ev_bike.png", "ev_cherry": "assets/ev_cherry.png", "ev_fair": "assets/ev_fair.png", "ev_flat": "assets/ev_flat.png", "ev_fog": "assets/ev_fog.png", "ev_garage": "assets/ev_garage.png", "ev_goat": "assets/ev_goat.png", "ev_hitch": "assets/ev_hitch.png", "ev_honey": "assets/ev_honey.png", "ev_kite": "assets/ev_kite.png", "ev_lake": "assets/ev_lake.png", "ev_lost": "assets/ev_lost.png", "ev_market": "assets/ev_market.png", "ev_picnic": "assets/ev_picnic.png", "ev_police": "assets/ev_police.png", "ev_radio": "assets/ev_radio.png", "ev_sheep": "assets/ev_sheep.png", "ev_short": "assets/ev_short.png", "ev_starry": "assets/ev_starry.png", "ev_storm": "assets/ev_storm.png", "ev_sunset": "assets/ev_sunset.png", "ev_tunnel": "assets/ev_tunnel.png", "ev_well": "assets/ev_well.png", "ev_yard": "assets/ev_yard.png", "it_card": "assets/it_card.png", "it_coin": "assets/it_coin.png", "it_cone": "assets/it_cone.png", "it_fuel": "assets/it_fuel.png", "it_hole": "assets/it_hole.png", "it_sheep": "assets/it_sheep.png", "logo": "assets/logo.png", "p_chef": "assets/p_chef.png", "p_grandma": "assets/p_grandma.png", "p_hiker": "assets/p_hiker.png", "p_kid": "assets/p_kid.png", "p_mechanic": "assets/p_mechanic.png", "p_musician": "assets/p_musician.png", "pc_0": "assets/pc_0.png", "pc_1": "assets/pc_1.png", "pc_2": "assets/pc_2.png", "pc_3": "assets/pc_3.png", "pc_4": "assets/pc_4.png", "pc_5": "assets/pc_5.png", "pc_6": "assets/pc_6.png", "pc_7": "assets/pc_7.png", "pc_8": "assets/pc_8.png", "pc_9": "assets/pc_9.png", "road_0": "assets/road_0.png", "title_bg": "assets/title_bg.png", "van_0": "assets/van_0.png", "van_1": "assets/van_1.png", "van_2": "assets/van_2.png", "van_3": "assets/van_3.png"};window.VV_PRIVACY="<h4>Politique de confidentialité — Van Voyage</h4>\n<p>Van Voyage fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Van Voyage convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Van Voyage</h4>\n<p>Van Voyage works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Van Voyage suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { B.sons.push({ t: +t0().toFixed(3), son: k }); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script>
 <script>// Van Voyage — the road, the passengers, the event cards, the garage. Texts [fr, en].
 (function (root) {
   const D = {
@@ -236,7 +434,9 @@ window.JUICE = (() => {
 const D = window.VDATA, I = window.I18N, t = I.t, P = a => I.pick(a), SPR = window.VV_SPR || {};
 const TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a);
 const $ = s => document.querySelector(s);
-function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
+function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = emo(html); return d; }
+// The coin and tyre emojis (Unicode 13-14) are missing on some systems (older Android, Windows 10): the painted coin and a drawn tyre instead
+function emo(h) { return typeof h !== 'string' ? h : h.split('🪙').join(SPR.it_coin ? `<img class="emo" src="${SPR.it_coin}" alt="">` : '●').split('🛞').join('<i class="tyre"></i>'); }
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
 
 // ---------- save ----------
@@ -528,9 +728,9 @@ function floatText(x, y, s, cls) { G.floats.push({ kind: 'text', x, y, s, cls, t
 // ---------- interface ----------
 function renderHud() {
   const prog = clamp(G.dist / D.stage.length, 0, 1), st = D.route.stages[Math.min(S.stage, D.route.stages.length - 1)];
-  $('#hud').innerHTML = `<div class="row"><div class="pill" id="hcoin">🪙 <b>${S.coins}</b></div><div class="lv">${t('level')} ${S.level}</div><div class="hp">${'🛞'.repeat(Math.ceil(S.hp))}<span>${'🛞'.repeat(Math.max(0, D.hp - Math.ceil(S.hp)))}</span></div><button class="rb" data-a="menu">☰</button></div>
+  $('#hud').innerHTML = emo(`<div class="row"><div class="pill" id="hcoin">🪙 <b>${S.coins}</b></div><div class="lv">${t('level')} ${S.level}</div><div class="hp">${'🛞'.repeat(Math.ceil(S.hp))}<span>${'🛞'.repeat(Math.max(0, D.hp - Math.ceil(S.hp)))}</span></div><button class="rb" data-a="menu">☰</button></div>
     <div class="fuel"><span>⛽</span><div class="bar"><i style="width:${S.fuel}%" class="${S.fuel < 25 ? 'low' : ''}"></i></div></div>
-    <div class="prog"><span>${P(st.name)}</span><div class="bar"><i style="width:${prog * 100}%"></i><em style="left:${prog * 100}%">🚐</em></div><span>🏡</span></div>`;
+    <div class="prog"><span>${P(st.name)}</span><div class="bar"><i style="width:${prog * 100}%"></i><em style="left:${prog * 100}%">🚐</em></div><span>🏡</span></div>`);
 }
 let seatsHTML = '';
 function renderSeats() {
@@ -546,7 +746,7 @@ $('#hud').addEventListener('click', e => { if (e.target.closest('[data-a=menu]')
 let bisT = 0;
 function biscuit(key) { const el = $('#biscuit'); el.querySelector('.bf').style.backgroundImage = SPR['dog_' + ({ b_ouch: 2, b_broken: 2, b_empty: 2, b_fuel: 3, b_sheep: 2, b_honk: 1, b_new: 0, b_sea: 0 }[key] ?? (key.includes('Ahead') ? 1 : 0))] ? `url(${SPR['dog_' + ({ b_ouch: 2, b_broken: 2, b_empty: 2, b_fuel: 3, b_sheep: 2, b_honk: 1, b_new: 0, b_sea: 0 }[key] ?? (key.includes('Ahead') ? 1 : 0))]})` : ''; el.querySelector('.bt').textContent = t(key); el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); clearTimeout(bisT); bisT = setTimeout(() => el.classList.remove('on'), 3600); }
 const modal = $('#modal');
-function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); }
+function openModal(html, cls = '') { modal.innerHTML = emo(`<div class="card ${cls}">${html}</div>`); modal.classList.add('on'); }
 function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
 const TQ = []; let tBusy = false;
 function toast(s) { TQ.push(s); if (!tBusy) nextToast(); }
@@ -619,9 +819,9 @@ function consentModal() {
 }
 function mapScreen() {
   G.mode = 'map'; $('#game').classList.remove('on'); engineHum(false); const m = $('#mapv');
-  m.innerHTML = `<div class="mapc"><h2>${P(D.route.name)}</h2><p class="sub">${t('trip')} ${S.trips + 1} · ${t('level')} ${S.level} · 🪙 ${S.coins}</p>
+  m.innerHTML = emo(`<div class="mapc"><h2>${P(D.route.name)}</h2><p class="sub">${t('trip')} ${S.trips + 1} · ${t('level')} ${S.level} · 🪙 ${S.coins}</p>
     <div class="stops">${D.route.stages.map((s, i) => `<div class="stop ${i < S.stage ? 'done' : i === S.stage ? 'now' : ''}"><b>${i < S.stage ? '✔' : i === S.stage ? '🚐' : i + 1}</b><span>${P(s.name)}</span></div>`).join('')}<div class="stop city"><b>🌊</b><span>${P(D.route.city)}</span></div></div>
-    <button class="b1 big" data-go>🚐 ${S.stage ? t('continueTrip') : t('startTrip')}</button><div class="row2"><button class="b2" data-album>📮 ${S.cards.length}/${D.postcards}</button><button class="b2" data-gift>🎁</button><button class="b2" data-shop>🛒</button><button class="b2" data-set>⚙️</button></div></div>`;
+    <button class="b1 big" data-go>🚐 ${S.stage ? t('continueTrip') : t('startTrip')}</button><div class="row2"><button class="b2" data-album>📮 ${S.cards.length}/${D.postcards}</button><button class="b2" data-gift>🎁</button><button class="b2" data-shop>🛒</button><button class="b2" data-set>⚙️</button></div></div>`);
   m.classList.add('on');
   m.querySelector('[data-go]').onclick = () => { audioInit(); m.classList.remove('on'); S.stage === 0 && !S.pass.length && !S.met.length ? startStage() : halt(); };
   m.querySelector('[data-album]').onclick = () => albumModal(true); m.querySelector('[data-gift]').onclick = giftModal; m.querySelector('[data-shop]').onclick = shopModal; m.querySelector('[data-set]').onclick = settingsModal;
@@ -635,8 +835,180 @@ function begin() { ensureLogin(); Store.init(); if (!S.stagesDriven) startStage(
 let last = performance.now(), hudT = 0;
 function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; update(dt); musicTick(); draw(); if (G.mode === 'drive' && (hudT += dt) > 0.2) { hudT = 0; renderHud(); renderSeats(); } requestAnimationFrame(frame); }
 document.addEventListener('visibilitychange', () => { if (document.hidden) { save(); if (G.mode === 'drive') { G.paused = true; engineHum(false); menuModal(); } } });
-window.VV = { G, S: () => S, startStage, halt, update, steer, honk, D, shopModal };
+window.VV = { G, S: () => S, startStage, halt, update, steer, honk, D, shopModal, SFX, laneX, VAN_Y, ROAD, mapScreen, save, seats };   // the BETA IA player reads the road (items, van, lanes) from here
 resize(); titleScreen(); requestAnimationFrame(frame);
+})();
+</script>
+<script>// Van Voyage scenes for the BETA IA simulated player (shared core: beta.js, spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// The player drives with a real finger: it slides left and right under the van (pointerdown on the road, pointermove,
+// pointerup, exactly like a thumb), taps the horn when sheep wander in, taps the passengers' bubbles, picks the event
+// cards and runs the village stops with the real buttons. It never touches the real-money shop, the ads or the settings.
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const V = window.VV, G = V.G, D = V.D, S = () => V.S();
+  const HAZ = { hole: 1, cone: 1, sheep: 1 };
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}#modal [data-double]{display:none!important}'; document.head.appendChild(st); }
+  const vis = sel => { const e = document.querySelector(sel); return e && e.getClientRects().length ? e : null; };
+  const modalOn = () => document.querySelector('#modal.on .card');
+  const fast = A => A.opts.style === 'rapide';
+  const pause = (A, a, b) => A.wait(fast(A) ? a * 0.6 : A.opts.style === 'debutant' ? b * 1.4 : A.jitter(a, b));
+
+  // ---------- the title screen and the consent window ----------
+  async function start(A) {
+    if (A.opts.ui === 'propre' && S().consent == null) S().consent = false;   // clean takes: no consent window on camera (refused = no personalised ads)
+    if (A.opts.ui === 'propre') S().owned.noads = true;      // clean takes: no interstitials
+    if (G.mode !== 'title') return;
+    await A.wait(900); await A.tapEl('#title [data-play]', 'jouer'); await A.wait(700);
+    if (vis('#modal [data-c="0"]') && !vis('#modal .eventm')) { await A.think(); await A.tapEl(A.opts.ui === 'propre' ? '#modal [data-c="0"]' : '#modal [data-c="1"]', 'consentement'); await A.wait(600); }
+  }
+
+  // ---------- driving: pick the best lane, slide the thumb there ----------
+  const thumbY = () => innerHeight * 0.81;   // under the van, clear of the horn (bottom right) and the seats (bottom)
+  function score(L) {
+    const spd = Math.max(160, G.speed), cur = G.targetX; let s = (Math.abs(L - cur) < 0.3 ? 0.25 : 0) - Math.abs(L) * 0.05;
+    for (const it of G.items) {
+      if (it.hit) continue; const ahead = it.y - G.dist; if (ahead < -30 || ahead > 520) continue;
+      const ix = it.vx ? it.x + it.vx * Math.max(0, ahead) / spd : it.x, near = Math.abs(ix - L);
+      if (HAZ[it.k]) { if (near < 0.55) s -= ahead < 300 ? 100 * (1 - ahead / 420) : 3; }
+      else if (near < 0.4) s += (it.k === 'card' ? 8 : it.k === 'fuel' ? (S().fuel < 45 ? 6 : 0.8) : 1) / (1 + Math.max(0, ahead) / 180);
+      // the van sweeps through the middle lane on a long move: a hazard right there blocks it
+      if (HAZ[it.k] && Math.abs(L - cur) > 1.5 && Math.abs(it.x) < 0.5 && ahead > -20 && ahead < 120) s -= 60;
+    }
+    return s;
+  }
+  function bestLane(A) {
+    const sc = [-1, 0, 1].map(L => [L, score(L)]).sort((a, b) => b[1] - a[1]);
+    if (A.opts.style === 'debutant' && A.rnd() < 0.12 && sc[1][1] > -50) return sc[1][0];   // a beginner sometimes picks the other lane
+    return sc[0][0];
+  }
+  const dangerAhead = (L, range) => G.items.some(it => !it.hit && HAZ[it.k] && Math.abs(it.x - L) < 0.55 && it.y - G.dist > -20 && it.y - G.dist < range);
+  async function steerTo(A, L) {
+    if (A.opts.style === 'debutant' && A.rnd() < 0.3) await A.wait(A.jitter(150, 400));   // late reaction
+    const y = thumbY() + A.jitter(-12, 12), x1 = V.laneX(G.targetX), x2 = V.laneX(L) + A.jitter(-6, 6);
+    await A.drag(x1, y, x2, y + A.jitter(-8, 8), L < 0 ? 'gauche' : L > 0 ? 'droite' : 'milieu', A.jitter(180, 300));
+  }
+  const honked = new WeakSet();
+  async function driveStep(A) {
+    const L = bestLane(A), cur = G.targetX;
+    if (Math.abs(L - cur) > 0.3) return steerTo(A, L);
+    // sheep wandering onto the road: honk (only when the lane is safe for a moment)
+    const sheep = G.items.find(it => it.k === 'sheep' && !it.hit && !honked.has(it) && it.y - G.dist > 0 && it.y - G.dist < innerHeight * 0.75 && Math.abs(it.vx) < 1);
+    if (sheep && !dangerAhead(cur, 160)) { G.items.forEach(it => it.k === 'sheep' && honked.add(it)); await A.tapEl('#honk', 'klaxon'); A.ev('klaxon'); return; }
+    // a passenger asks for something: tap the bubble when the road ahead is clear
+    const seat = vis('#seats .seat.need');
+    if (seat && !dangerAhead(cur, 380) && Math.abs(bestLaneQuiet() - cur) < 0.3) { await A.tapEl(seat, 'passager'); await A.wait(250); return; }
+    await A.wait(A.jitter(60, 140));
+  }
+  const bestLaneQuiet = () => [-1, 0, 1].map(L => [L, score(L)]).sort((a, b) => b[1] - a[1])[0][0];
+
+  // ---------- windows: event cards, end of stage, village, arrival ----------
+  function pickEvent() {
+    const st = S(), val = e => Object.entries(e || {}).reduce((a, [k, v]) => a + (k === 'coins' ? v / 10 : k === 'fuel' ? v / 10 * (st.fuel < 40 ? 2 : 1) : k === 'hp' ? v * (st.hp <= 1 ? 8 : 3) : k === 'mood' ? v * (st.pass.length ? 1.5 : 0.3) : k === 'card' ? 5 : 0), 0);
+    const title = (document.querySelector('#modal .evcard h2') || {}).textContent || '';
+    const ev = D.events.find(e => e.t.includes(title)); if (!ev) return 'a';
+    return val(ev.a[1]) >= val(ev.b[1]) ? 'a' : 'b';
+  }
+  async function handleWindow(A) {
+    const c = vis('.confirm'); if (c) { await A.think(); await A.tapEl('.confirm [data-v="0"]', 'annuler'); return true; }
+    if (document.querySelector('.adov')) { await A.wait(300); return true; }
+    if (!modalOn()) return false;
+    const q = s => vis('#modal ' + s);
+    if (q('.eventm') || q('.evcard')) { await pause(A, 900, 1600); const ch = A.opts.style === 'debutant' && A.rnd() < 0.3 ? (A.rnd() < 0.5 ? 'a' : 'b') : pickEvent();
+      A.ev('evenement', { choix: ch }); await A.tapEl(`#modal [data-c="${ch}"]`, 'choix ' + ch); await A.wait(80); return true; }
+    if (q('[data-c="0"]')) { await A.think(); await A.tapEl(A.opts.ui === 'propre' ? '#modal [data-c="0"]' : '#modal [data-c="1"]', 'consentement'); await A.wait(600); return true; }
+    if (q('[data-claim]')) { await A.think(); await A.tapEl(q('[data-claim]'), 'cadeau du jour'); await A.wait(1300); return true; }
+    if (q('.city')) { await A.wait(2600); await A.tapEl(q('[data-go]'), 'nouveau voyage'); await A.wait(700); return true; }
+    if (q('.haltm')) return village(A);
+    if (q('[data-restart]')) { await A.think(); await A.tapEl(q('[data-restart]'), 'recommencer l’étape'); await A.wait(500); return true; }   // never the rewarded jerrycan
+    if (q('[data-fix]')) { await A.think(); await A.tapEl(q('[data-fix]'), 'dépanneuse'); await A.wait(600); return true; }
+    if (q('[data-resume]')) { await A.tapEl(q('[data-resume]'), 'reprendre'); await A.wait(300); return true; }
+    if (q('[data-go]')) { await A.wait(fast(A) ? 900 : 1500); await A.tapEl(q('[data-go]'), 'vers le village'); await A.wait(700); return true; }   // end of stage: let the confetti fall
+    const back = q('[data-back], [data-close]'); if (back) { await A.tapEl(back, 'fermer'); await A.wait(400); return true; }
+    return false;
+  }
+  // the village stop: welcome a new passenger, repair, refuel, then back on the road
+  async function village(A, noShop) {
+    const q = s => vis('#modal ' + s), st = S();
+    const rec = !noShop && q('[data-rec]:not([disabled])'), fix = !noShop && st.hp < D.hp && q('[data-fix]:not([disabled])'), fuel = !noShop && st.fuel < 55 && q('[data-fuel]:not([disabled])');
+    const b = rec || fix || fuel;
+    if (b) { await pause(A, 700, 1300); await A.tapEl(b, rec ? 'recruter' : fix ? 'réparer' : 'plein'); await A.wait(rec ? 2000 : 600); return true; }
+    await pause(A, 600, 1200); await A.tapEl(q('[data-go]'), 'rouler'); await A.wait(500); return true;
+  }
+  // one tick of play, whatever the screen
+  async function tick(A) {
+    if (G.mode === 'title') return start(A);
+    if (await handleWindow(A)) return;
+    if (G.mode === 'drive' && !G.paused) return driveStep(A);
+    if (G.mode === 'map' && vis('#mapv [data-go]')) { await A.think(); await A.tapEl('#mapv [data-go]', 'continuer le voyage'); await A.wait(600); return; }
+    await A.wait(150);
+  }
+  async function play(A, ms) { const end = performance.now() + ms; while (A.running() && performance.now() < end) await tick(A); }
+  // menus only, no shopping (prepare: get onto the road off camera)
+  async function toDrive(A) {
+    for (let i = 0; i < 40 && G.mode !== 'drive'; i++) {
+      if (G.mode === 'title') await start(A);
+      else if (vis('#modal .haltm')) await village(A, true);
+      else if (!(await handleWindow(A)) && G.mode === 'map') await A.tapEl('#mapv [data-go]', 'continuer le voyage');
+      await A.wait(200);
+    }
+  }
+
+  // ---------- moments worth cutting on ----------
+  function watch(A) {
+    const st = S(); let cards = st.cards.length, lvl = st.level, pass = st.pass.length, trips = st.trips, stage = st.stage, tier = 0;
+    const iv = setInterval(() => { if (!A.running()) return clearInterval(iv); const s = S();
+      if (s.cards.length > cards) { cards = s.cards.length; A.mark('carte postale'); }
+      if (s.level !== lvl) { lvl = s.level; A.mark('niveau ' + lvl); }
+      if (s.pass.length > pass) A.mark('passager'); pass = s.pass.length;
+      if (s.trips > trips) { trips = s.trips; A.mark('arrivée à la mer'); } else if (s.stage > stage) A.mark('étape ' + s.stage); stage = s.stage;
+      const k = Math.floor(G.combo / 5); if (k > tier) A.mark('combo x' + k * 5); tier = k; }, 100);
+  }
+
+  // ---------- starting saves (written off camera) ----------
+  const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+  function setSave(save, A) {
+    const s = S(); if (save !== 'milieu' && save !== 'avance') return;
+    const pass = save === 'avance' ? ['mechanic', 'musician', 'grandma', 'hiker'] : ['mechanic', 'musician'];
+    Object.assign(s, save === 'avance'
+      ? { stage: 3, trips: 2, stagesDriven: 30, level: 9, coins: 1200, cards: [0, 1, 2, 3, 4, 5, 6, 7], garage: { tank: 1, tires: 1, engine: 1, roof: 1 }, met: [...pass, 'chef'] }
+      : { stage: 2, trips: 0, stagesDriven: 8, level: 4, coins: 240, cards: [0, 2, 5], garage: { tank: 1 }, met: pass.slice() });
+    s.pass = pass.map(id => ({ id, mood: 4 })); s.hp = D.hp; s.fuel = 90; s.xp = 0; s.tut = 2; s.consent = A.opts.ui !== 'propre';
+    s.login = { last: today(), streak: 3, pending: false }; V.save();
+  }
+
+  BETA.game({
+    sfx: V.SFX,
+    logo: () => (window.VV_SPR || {}).logo || '',
+    endText: () => document.documentElement.lang === 'en' ? 'Play free' : 'Joue gratuitement',
+    progress: () => [G.mode, S().stage, S().trips, Math.floor(G.dist / 200)],
+    async prepare(save, A) {
+      if (A.opts.ui === 'propre') S().owned.noads = true;
+      if (A.opts.scene === 'onboarding') return;            // onboarding always starts on the title screen of a new game
+      setSave(A.opts.scene === 'moment' && save === 'neuf' ? 'milieu' : save, A);
+      if (A.opts.scene === 'moment') { S().stage = D.route.stages.length - 1; V.save(); }   // the last stage: the sea is near
+      await toDrive(A);
+      if (A.opts.scene === 'moment') {
+        // the last stretch of the last stage: a long lane of coins (combo), a postcard, then Port-Soleil
+        G.dist = D.stage.length - 1500; G.eventDone = true; G.items = []; G.nextSpawn = G.dist + 1000; G.speed = D.stage.speed;
+        for (let i = 0; i < 12; i++) G.items.push({ k: 'coin', x: 0, y: G.dist + 170 + i * 40 });
+        G.items.push({ k: 'card', x: 0, y: G.dist + 670 });
+        for (let i = 0; i < 6; i++) G.items.push({ k: 'coin', x: 1, y: G.dist + 800 + i * 40 });
+      }
+      await A.wait(200);
+    },
+    scenes: {
+      // title -> consent -> the first drive with Biscuit's tips -> first event -> first village
+      async onboarding(A) { watch(A); await start(A); await play(A, 29000); },
+      // the satisfying core: weaving between potholes, coin combos, honking at sheep, happy passengers
+      async boucle(A) { watch(A); await play(A, 30000); },
+      // before/after, sped up: stages roll by, passengers join, the trip reaches the sea
+      async progression(A) { watch(A); const k = Math.max(2, A.opts.vitesse); A.speed(k); await play(A, 30000 * k); },
+      // the wow: a coin combo, a postcard flips in, then the arrival at the sea
+      async moment(A) { watch(A); const end = performance.now() + 9500; while (A.running() && performance.now() < end && !vis('#modal .city')) await tick(A); await A.wait(2600); },
+      // plays on until stopped (long tests, balance, memory)
+      async idle(A) { watch(A); while (A.running()) await tick(A); },
+    },
+  });
 })();
 </script>
 
