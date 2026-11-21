@@ -210,6 +210,8 @@ window.I18N = (() => {
     music: ['Musique', 'Music', 'Música', 'Musik', 'Música', 'Musica'],
     vibration: ['Vibrations', 'Vibration', 'Vibración', 'Vibration', 'Vibração', 'Vibrazione'],
     language: ['Langue', 'Language', 'Idioma', 'Sprache', 'Idioma', 'Lingua'],
+    buyFail: ['L’achat n’a pas abouti. Rien n’a été payé.', 'The purchase did not go through. Nothing was charged.', 'La compra no se completó. No se cobró nada.', 'Der Kauf ist fehlgeschlagen. Es wurde nichts berechnet.', 'A compra não foi concluída. Nada foi cobrado.', 'L’acquisto non è andato a buon fine. Nessun addebito.'],
+    buyPending: ['Achat en attente de validation', 'Purchase waiting for approval', 'Compra pendiente de aprobación', 'Kauf wartet auf Genehmigung', 'Compra aguardando aprovação', 'Acquisto in attesa di approvazione'],
     restore: ['Restaurer les achats', 'Restore purchases', 'Restaurar compras', 'Käufe wiederherstellen', 'Restaurar compras', 'Ripristina acquisti'],
     privacy: ['Confidentialité', 'Privacy', 'Privacidad', 'Datenschutz', 'Privacidade', 'Privacy'],
     adChoices: ['Choix publicitaires', 'Ad choices', 'Opciones de anuncios', 'Werbe-Einstellungen', 'Escolhas de anúncios', 'Scelte pubblicitarie'],
@@ -1028,18 +1030,32 @@ function testAdOverlay(rewarded) {
   });
 }
 
-// ---------- purchases (RevenueCat through Capacitor when present, otherwise test purchases) ----------
+// ---------- purchases ----------
+// Real purchases go through Apple (StoreKit 2) via the iOS shell's `store` message handler (ios/Shared/NativeStore.swift);
+// on the web there is no handler and a test box stands in (nothing is charged). The season pass (a subscription) is web-only for now.
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.gullstreet.' + id;
+const iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
+const shopItems = () => ECO.store.filter(it => !(IAP && it.pass));
 const Store = {
+  prices: {},
+  price(it) { return this.prices[it.id] || it.price; },
+  async init() {
+    if (!IAP || this.ready) return; this.ready = true;
+    window.nativeStoreUpdate = pid => this.deliver(pid);
+    try { for (const p of await iap('products', { ids: shopItems().map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {}
+    try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid); } catch (e) {}
+  },
+  deliver(pid) { const it = ECO.store.find(x => PID(x.id) === pid); if (it && !(it.once && S.owned[it.id])) grant(it); },
+  // restoring gives back what lasts (no ads, façades), not the starter coins and decorations a second time
+  own(pids) { for (const pid of pids || []) { const it = ECO.store.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) { S.owned[it.id] = true; if (it.noAds) S.owned.noads = true; if (it.skin) S.skin = it.skin; save(); } } },
   async buy(item) {
     track('iap_start', { id: item.id });
-    const P = window.Capacitor?.Plugins?.Purchases;
-    if (P) { try { await P.purchaseStoreProduct({ product: { identifier: 'gullstreet.' + item.id } }); grant(item); return true; } catch (e) { return false; } }
-    const ok = await confirmBox(t('testBuy') + `<br><b>${I.storeName(item)} — ${item.price}</b>`); if (ok) grant(item); return ok;
+    if (!IAP) { const ok = await confirmBox(t('testBuy') + `<br><b>${I.storeName(item)} — ${item.price}</b>`); if (ok) grant(item); return ok; }
+    try { const r = await iap('buy', { id: PID(item.id) }); if (r.ok) { grant(item); return true; }
+      if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); }
+    return false;
   },
-  async restore() {
-    const P = window.Capacitor?.Plugins?.Purchases; if (P) { try { await P.restorePurchases(); } catch (e) {} }
-    toast(t('restored'));
-  }
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return; } } toast(t('restored')); refreshHud(); }
 };
 function grant(item) {
   if (item.coins) S.coins += item.coins; if (item.shells) S.shells += item.shells;
@@ -1592,16 +1608,18 @@ function albumModal() {
   modal.querySelector('[data-close]').onclick = closeModal;
 }
 function storeModal() {
-  const items = ECO.store.map(it => {
+  const items = shopItems().map(it => {
     const own = it.once && S.owned[it.id] || (it.pass && S.owned.pass);
     const sub = it.id === 'starter' ? `${it.coins}🪙 · ${it.shells}🐚 · ${it.decos.map(decoImg).join('')}` : it.id === 'noads' ? t('sNoAdsSub') : it.id === 'pass' ? t('sPassSub') : it.id === 'facades' ? t('sFacades') : '🐚';
-    return `<div class="sitem"><span>${I.storeName(it)}<small>${sub}</small></span>${own ? `<b>${t('owned')}</b>` : `<button class="b1" data-buy="${it.id}">${it.price}</button>`}</div>`;
+    return `<div class="sitem"><span>${I.storeName(it)}<small>${sub}</small></span>${own ? `<b>${t('owned')}</b>` : `<button class="b1" data-buy="${it.id}">${Store.price(it)}</button>`}</div>`;
   }).join('');
   const X = ECO.shellExchange;
-  openModal(`<h2>${t('store')}</h2><div class="note">${t('webNote')} · ${t('testBuy').split(':')[0]}</div>${items}
+  openModal(`<h2>${t('store')}</h2>${IAP ? '' : `<div class="note">${t('webNote')} · ${t('testBuy').split(':')[0]}</div>`}${items}
+    <button class="b2" data-restore>${t('restore')}</button>
     <button class="b2" data-ex>${t('exchange', { s: X.shells, c: X.coins })}</button>
     <button class="b2 big" data-close>${t('close')}</button>`);
   modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { const it = ECO.store.find(x => x.id === b.dataset.buy); if (await Store.buy(it)) storeModal(); });
+  modal.querySelector('[data-restore]').onclick = async () => { await Store.restore(); storeModal(); };
   modal.querySelector('[data-ex]').onclick = () => { if (S.shells < X.shells) return toast(t('noShells')); S.shells -= X.shells; S.coins += X.coins; save(); SFX.coin(); refreshHud(); };
   modal.querySelector('[data-close]').onclick = closeModal;
 }
@@ -1646,7 +1664,7 @@ function titleScreen() {
   el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.bell(); el.classList.remove('on'); S.consent == null ? consentModal(false) : afterConsent(); };
 }
 function afterConsent() {
-  Ads.init(); ensureQuests(); G.phase = 'morning'; G.camY = MAP ? WORLD_H : -90; G.camX = MAP ? (W - viewW) / 2 : 0; resize(); refreshHud(); tutTargets(); track('session_start', { day: S.day });
+  Ads.init(); Store.init(); ensureQuests(); G.phase = 'morning'; G.camY = MAP ? WORLD_H : -90; G.camX = MAP ? (W - viewW) / 2 : 0; resize(); refreshHud(); tutTargets(); track('session_start', { day: S.day });
   if (S.login.pending && S.totals.days) setTimeout(questsModal, 500);
 }
 function tutTargets() {
@@ -1669,7 +1687,7 @@ function frame(now) {
 // ---------- boot ----------
 resize(); A.loadExt(window.GS_SPR, () => { WORLD = null; if (G.phase === 'title') titleScreen(); else refreshHud(); }); titleScreen(); requestAnimationFrame(frame);
 // test hooks (used by tools/play-test.mjs)
-window.GS = { S: () => S, G, startDay, nextDay, tapAt, endDay, save, setDay: d => { S.day = d; save(); refreshHud(); }, cam: y => { G.camY = clamp(y, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); }, LOTS, SLOTS,
+window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save, setDay: d => { S.day = d; save(); refreshHud(); }, cam: y => { G.camY = clamp(y, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); }, LOTS, SLOTS,
   play: () => { $('#title [data-play]')?.click(); } };
 })();
 </script>
