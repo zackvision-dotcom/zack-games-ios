@@ -1385,7 +1385,7 @@ function drawMina(cam) {
   const air = !s.ground && !s.float, spin = air && !s.rope && mult(s.n) >= 3 && s.vy > -300 && !G.over;
   const face = G.over && s.win ? 'mina_happy' : G.mood && G.moodT > 0 ? 'mina_' + G.mood : s.dead || (!s.rope && s.vy < -700) ? 'mina_scared' : spin ? 'mina_spin' : air ? 'mina_fly' : 'mina';
   if (spin) G.spin = (G.spin || 0) + 0.22 * Math.sign(s.vx || 1); else G.spin = 0;
-  const size = 68 * SC, im = img(face);
+  const size = 80 * SC, im = img(face);   // bigger Mina: easier to follow among the leaves
   cx.save(); cx.translate(x, y); cx.rotate(va); cx.scale(1 + st, 1 - st); cx.rotate(-va); cx.scale(1 + q * 0.6, 1 - q); cx.rotate(G.lean + (G.spin || 0));
   cx.drawImage(im, -size / 2, -size / 2, size, size * im.height / im.width);
   const hi = img('hat_' + (S.hat == null ? 0 : S.hat)); if (S.hat != null && hi && face !== 'mina_spin') { const hw = size * 0.6; cx.drawImage(hi, -hw / 2, -size * 0.5 - hw * 0.42, hw, hw * hi.height / hi.width); }
@@ -1531,7 +1531,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     const s = S(); s.tut = 1; s.consent = s.consent == null ? false : s.consent; s.login = { last: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(), streak: 2, pending: false };
     const upto = kind === 'avance' ? 12 : 6; for (let i = 1; i <= upto; i++) s.lvl[i] = { done: 1, stars: i % 3 === 0 ? 2 : 3, best: 20 + i * 2 };
     s.gnats = kind === 'avance' ? 1840 : 420; s.pearls = kind === 'avance' ? 60 : 0; s.plv = kind === 'avance' ? 9 : 4; s.xp = 60;
-    s.hats = { 0: 1, 1: 1, 2: 1, 3: 1 }; s.hat = 2; s.totals.combo5 = 1; s.elastic = true;
+    s.hats = { 0: 1, 1: 1, 2: 1, 3: 1 }; s.hat = 2; s.totals.combo5 = 1; s.elastic = true; s.said = Object.assign(s.said || {}, { web: 1 });   // hints already seen
     if (kind === 'avance') { Object.assign(s.hats, { 4: 1, 5: 1, 6: 1, 9: 1 }); s.hat = 6; s.decos = { lamp: 1, rug: 1, cup: 1, mobile: 1 }; s.cocoon = { id: 'hammock', end: Date.now() + 47 * 60000 }; }
     H.save();
   }
@@ -1546,18 +1546,21 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       if (save !== 'neuf') makeSave(save);
       await start(A); await A.wait(600); await clean(A);
       if (G.phase === 'play' && H.L() && H.L().tut) { G.over = true; H.showMap(); await A.wait(500); await clean(A); }
+      if (A.opts.scene === 'boucle') {   // the loop starts inside the level, not on the map
+        const id = Math.min(12, (Object.keys(S().lvl).filter(k => S().lvl[k].done).length || 0) + 1 - (A.rnd() < 0.5 ? 2 : 1)); await openLevel(A, Math.max(2, id));
+        document.getElementById('papi').classList.remove('on'); await A.wait(300); }
       // the wow moment starts off camera: level 5, high up, a 8-catch chain running (the next catches give ×5), the flower in sight
       if (A.opts.scene === 'moment') { await openLevel(A, 5); const s = H.s(), L = H.L();
         if (s) { const ai = L.anchors.reduce((b, a, i) => a[1] < L.flower[1] - 520 && a[1] > (b < 0 ? -1 : L.anchors[b][1]) ? i : b, -1); const a = L.anchors[Math.max(0, ai)];
           C.revive(L, s); s.x = a[0] + (a[0] < 200 ? 60 : -60); s.y = a[1] - 50; s.camB = s.y - K.camUp; s.n = 8; s.ev.length = 0;
-          for (let i = 0; i < L.gnats.length; i++) if (L.gnats[i][1] < a[1]) s.gn[i] = 1; G.trail.length = 0; G.parts.length = 0; }
+          for (let i = 0; i < L.gnats.length; i++) if (L.gnats[i][1] < a[1]) s.gn[i] = 1; s.dw.fill(1); G.trail.length = 0; G.parts.length = 0; }
         document.getElementById('papi').classList.remove('on'); await A.wait(300); }
     },
     scenes: {
       // title -> tutorial with Papi -> first flower (< 15 s) -> next level
       async onboarding(A) { watch(A); await start(A); for (let i = 0; i < 4 && A.running(); i++) { const r = await playLevel(A, 40); if (r === 'win') await afterWin(A); else if (r === 'dead') await afterDead(A); else break; } },
       // the satisfying core: a whole level of swings, combos, dew and the flower
-      async boucle(A) { watch(A); const id = Math.min(12, (Object.keys(S().lvl).filter(k => S().lvl[k].done).length || 0) + 1 - (A.rnd() < 0.5 ? 2 : 1)); await openLevel(A, Math.max(2, id));
+      async boucle(A) { watch(A); if (G.phase !== 'play') { const id = Math.min(12, (Object.keys(S().lvl).filter(k => S().lvl[k].done).length || 0) + 1); await openLevel(A, Math.max(2, id)); }
         for (let i = 0; i < 4 && A.running(); i++) { const r = await playLevel(A, 60); if (r === 'win') { await afterWin(A); } else if (r === 'dead') await afterDead(A); else break; } },
       // time-lapse: levels one after another at double speed, the garden map filling up between them (each jump marked)
       async progression(A) { watch(A); await start(A); A.speed(2);
