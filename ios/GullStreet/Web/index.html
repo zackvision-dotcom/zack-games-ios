@@ -1742,8 +1742,10 @@ function landModal() {
   modal.querySelector('[data-close]').onclick = closeModal;
 }
 
+// shop picker order: the shops unlocked today first (what the player wants to try), then the others available, then the locked ones
+const shopOrder = () => ECO.shops.map((s, k) => [s, k]).sort((a, b) => { const r = s => s.unlockDay === S.day ? 0 : s.unlockDay <= S.day ? 1 : 2; return r(a[0]) - r(b[0]) || a[1] - b[1]; }).map(x => x[0]);
 function buildSheet(i) {
-  const list = ECO.shops.map(s => {
+  const list = shopOrder().map(s => {
     const lockedDay = s.unlockDay > S.day, cant = S.coins < s.cost;
     return `<button class="item ${lockedDay ? 'off' : ''} ${G.tutPick === s.id ? 'pulse' : ''}" data-build="${s.id}" ${lockedDay ? 'disabled' : ''}>
       <span class="ic" style="background:${s.color}">${s.icon}</span><span class="nm">${I.shop(s.id)}<small>${lockedDay ? t('fromDay', { n: s.unlockDay }) : s.price + ' 🪙 / ' + t('shop').toLowerCase()}</small></span>
