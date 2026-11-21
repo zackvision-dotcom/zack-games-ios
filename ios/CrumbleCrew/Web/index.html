@@ -146,6 +146,7 @@ img.ui{width:100%;height:100%;object-fit:contain;display:block}
       { id: 'noads', price: '3,99 €', once: true },
       { id: 'starter', price: '1,99 €', once: true },
       { id: 'theme', price: '2,99 €', once: true },
+      { id: 'gold', price: '0,99 €', minutes: 180 },   // consumable: 3 hours of production at the current rate
     ],
     ads: { interFromSession: 3, gapSec: 180, boostMin: 5 },
   };
@@ -212,8 +213,10 @@ window.I18N = (() => {
     testAd: ['Pub de test', 'Test ad'], testBuy: ['Achat de test : rien n’est payé.', 'Test purchase: nothing is charged.'], owned: ['Acquis', 'Owned'],
     shop: ['Boutique', 'Shop'], sNoAds: ['Sans pub', 'No ads'], sNoAdsSub: ['Plus aucune pub imposée', 'No more forced ads'],
     sStarter: ['Pack de démarrage', 'Starter pack'], sStarterSub: ['Équipe dorée : mineurs ×1,5 et pièces ×1,25, pour toujours', 'Golden crew: miners ×1.5 and coins ×1.25, forever'],
+    sGold: ['Sac de pépites', 'Nugget bag'], sGoldSub: ['{n} h de production d’un coup', '{n} h of production at once'],
+    buyFail: ['L’achat n’a pas abouti. Rien n’a été payé.', 'The purchase did not go through. Nothing was charged.'], buyPending: ['Achat en attente de validation', 'Purchase waiting for approval'],
     sTheme: ['Thème « Mine de nuit »', '“Night mine” theme'], sThemeSub: ['Une caverne bleu nuit et lanternes', 'A midnight cave with lanterns'],
-    webNote: ['Aucun achat au hasard : tout s’obtient en jouant', 'No random purchases: everything is earned by playing'],
+    webNote: ['Aucun achat au hasard : tu sais toujours ce que tu achètes', 'No random purchases: you always know what you get'],
     goal: ['Objectif', 'Goal'], goalDone: ['Objectif atteint ! +{n}', 'Goal done! +{n}'], freeMode: ['Brise le rocher jusqu’au cœur !', 'Crush the boulder to its core!'],
     g_tap: ['Touche le rocher {n} fois', 'Tap the boulder {n} times'], g_layer: ['Brise la couche {n}', 'Break layer {n}'], g_buy: ['Achète : {s}', 'Buy: {s}'], g_have: ['Aie {n} × {s}', 'Have {n} × {s}'],
     levelUp: ['Niveau {n} !', 'Level {n}!'], nugget: ['Pépite !', 'Nugget!'],
@@ -372,13 +375,38 @@ const Ads = {
   async interstitial() { if (S.owned.noads || S.sessions < E.ads.interFromSession) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; track('ad_interstitial'); const A = AdMob(); if (A) { try { await A.prepareInterstitial({ adId: AD_IDS.inter, isTesting: true, npa: S.consent !== true }); await A.showInterstitial(); } catch (e) {} return; } await testAd(); }
 };
 function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart">⛏️🪨⛏️</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 700); }); }
+// Real purchases go through Apple (StoreKit 2) via the iOS shell's `store` message handler (ios/Shared/NativeStore.swift);
+// on the web there is no handler and a test box stands in (nothing is charged).
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.crumblecrew.' + id;
+const iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
 const Store = {
-  async buy(it) { track('iap_start', { id: it.id }); const ok = await confirmBox(t('testBuy') + `<br><b>${storeName(it)} — ${it.price}</b>`); if (ok) grant(it); return ok; },
-  async restore() { toast(t('restored')); }
+  prices: {},
+  price(it) { return this.prices[it.id] || it.price; },
+  async init() {
+    if (!IAP || this.ready) return; this.ready = true;
+    window.nativeStoreUpdate = pid => this.deliver(pid, true);
+    try { for (const p of await iap('products', { ids: E.store.map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {}
+    try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid, true); } catch (e) {}
+    if (G.phase === 'play') renderPanel();
+  },
+  deliver(pid, loud) { const it = E.store.find(x => PID(x.id) === pid); if (!it || (it.once && S.owned[it.id])) return; grant(it, loud); },
+  own(pids) { for (const pid of pids || []) { const it = E.store.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) grant(it, false); } },
+  async buy(it) {
+    track('iap_start', { id: it.id });
+    if (!IAP) { const ok = await confirmBox(t('testBuy') + `<br><b>${storeName(it)} — ${it.price}</b>`); if (ok) grant(it); return ok; }
+    try { const r = await iap('buy', { id: PID(it.id) }); if (r.ok) { track('iap_done', { id: it.id }); grant(it); return true; }
+      if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); }
+    return false;
+  },
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return; } } toast(t('restored')); renderPanel(); }
 };
-const storeName = it => ({ starter: t('sStarter'), theme: t('sTheme'), noads: t('sNoAds') }[it.id]);
-const storeSub = it => ({ starter: t('sStarterSub'), theme: t('sThemeSub'), noads: t('sNoAdsSub') }[it.id]);
-function grant(it) { S.owned[it.id] = true; if (it.id === 'starter') S.golden = true; if (it.id === 'theme') S.theme = 'night'; save(); SFX.fanfare(); JUICE.confetti(70); renderAll(); }
+const storeName = it => ({ starter: t('sStarter'), theme: t('sTheme'), noads: t('sNoAds'), gold: t('sGold') }[it.id]);
+const storeSub = it => ({ starter: t('sStarterSub'), theme: t('sThemeSub'), noads: t('sNoAdsSub'), gold: t('sGoldSub', { n: it.minutes / 60 }) }[it.id]);
+function grant(it, loud = true) {
+  if (it.id === 'gold') { const v = minutesOf(it.minutes); addCoins(v, null, null, false); if (loud) flyCoins(W / 2, H / 2, v, 18); }
+  else { S.owned[it.id] = true; if (it.id === 'starter') S.golden = true; if (it.id === 'theme') S.theme = 'night'; }
+  save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } if (G.phase === 'play') renderAll();
+}
 
 // ---------- the mine: layout in logical units (400 wide), scaled to the screen ----------
 const cv = $('#cv'), cx = cv.getContext('2d');
@@ -776,7 +804,7 @@ function renderPanel() {
     h += `<div class="it"><div class="ico">${{ picks: '⚒️', boots: '👢', lamp: '🔦', night: '🌙' }[r.id]}</div><div class="tx"><b>${t('r_' + r.id)} <em>${r.min >= 60 ? r.min / 60 + ' h' : r.min + ' min'}</em></b><small>${t('rd_' + r.id)}</small>${cur ? `<div class="pbar"><i style="width:${(1 - left / (r.min * 60000)) * 100}%"></i></div>` : ''}</div>
       ${done ? `<span class="lk">✅</span>` : cur ? `<button class="buy ad" data-finish><span>${fmtTime(left / 1000)}</span><b>▶ ${t('finishAd')}</b></button>` : `<button class="buy ${r.cost <= S.coins && !S.job ? '' : 'off'}" data-res="${r.id}"><span>${t('start')}</span><b><i class="cn"></i> ${fmt(r.cost)}</b></button>`}</div>`;
   }
-  if (tab === 'shop') { h += `<div class="note">${t('webNote')}</div>`; for (const it of E.store) h += `<div class="it"><div class="ico">${{ noads: '🚫', starter: '🌟', theme: '🌙' }[it.id]}</div><div class="tx"><b>${storeName(it)}</b><small>${storeSub(it)}</small></div>${S.owned[it.id] ? `<span class="lk">${t('owned')}</span>` : `<button class="buy" data-buy="${it.id}"><b>${it.price}</b></button>`}</div>`;
+  if (tab === 'shop') { h += `<div class="note">${t('webNote')}</div>`; for (const it of E.store) h += `<div class="it"><div class="ico">${{ noads: '🚫', starter: '🌟', theme: '🌙', gold: '💰' }[it.id]}</div><div class="tx"><b>${storeName(it)}</b><small>${storeSub(it)}</small></div>${it.once && S.owned[it.id] ? `<span class="lk">${t('owned')}</span>` : `<button class="buy" data-buy="${it.id}"><b>${Store.price(it)}</b></button>`}</div>`;
     h += `<div class="row2"><button class="b2" data-restore>${t('restore')}</button></div>`; }
   el.innerHTML = h;
 }
@@ -870,7 +898,7 @@ function titleScreen() {
   el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null ? consentModal(false) : startPlay(); };
 }
 function startPlay() {
-  G.crew = []; Ads.init(); ensureQuests(); S.sessions++; G.phase = 'play'; $('#game').classList.add('on'); buildUI(); resize(); rebuildCrew(); renderAll();
+  G.crew = []; Ads.init(); Store.init(); ensureQuests(); S.sessions++; G.phase = 'play'; $('#game').classList.add('on'); buildUI(); resize(); rebuildCrew(); renderAll();
   if (S.job && Date.now() >= S.job.end) finishResearch();
   const away = S.lastSeen ? (Date.now() - S.lastSeen) / 1000 : 0, cap = E.offline.capH * 3600, rate = S.res.night ? E.offline.rateResearch : E.offline.rate;
   const gain = Math.min(away, cap) * income() * rate;

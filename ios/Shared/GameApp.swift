@@ -21,8 +21,10 @@ struct GameWebView: UIViewRepresentable {
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
         config.websiteDataStore = .default()          // keeps the save (localStorage) between launches
+        config.userContentController.addScriptMessageHandler(context.coordinator.store, contentWorld: .page, name: "store")
 
         let view = WKWebView(frame: .zero, configuration: config)
+        context.coordinator.store.webView = view       // in-app purchases (NativeStore.swift)
         view.uiDelegate = context.coordinator          // shows the game's alert() / confirm() as native dialogs
         view.isOpaque = false
         view.backgroundColor = .black
@@ -46,6 +48,8 @@ struct GameWebView: UIViewRepresentable {
     /// Without a UI delegate, WKWebView silently drops alert() and makes confirm() return false
     /// (so "Recommencer" or "compte niveau max" did nothing when a save existed).
     final class Coordinator: NSObject, WKUIDelegate {
+        let store = NativeStore()
+
         private func present(_ alert: UIAlertController, from webView: WKWebView) {
             var top = webView.window?.rootViewController
             while let next = top?.presentedViewController { top = next }
