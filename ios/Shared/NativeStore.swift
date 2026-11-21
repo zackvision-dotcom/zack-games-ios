@@ -33,7 +33,7 @@ final class NativeStore: NSObject, WKScriptMessageHandlerWithReply {
         if tx.revocationDate != nil { return }
         if pageReady, let web = webView {
             let id = tx.productID.replacingOccurrences(of: "'", with: "")
-            web.evaluateJavaScript("window.nativeStoreUpdate && window.nativeStoreUpdate('\(id)')")
+            web.evaluateJavaScript("window.nativeStoreUpdate && window.nativeStoreUpdate('\(id)')", completionHandler: nil)
         } else {
             queued.append(tx.productID)
         }
