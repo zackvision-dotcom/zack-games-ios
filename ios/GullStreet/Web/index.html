@@ -1427,7 +1427,7 @@ function finishWalker(w) {
   if (m < M.sadBelow) SFX.sad();
 }
 function say(w, s, dur) { w.bubble = s; w.bubbleT = dur; }
-function floatText(x, y, s, col, ic = 'coin') { if (ic === 'coin') s = String(s).replace(/s*🪙/g, '');   // the painted coin icon is drawn next to the text (the emoji is missing on older systems)
+function floatText(x, y, s, col, ic = 'coin') { if (ic === 'coin') s = String(s).replace(/\s*🪙/g, '');   // the painted coin icon is drawn next to the text (the emoji is missing on older systems)
   G.floats.push({ x, y, s, col, t: 0, ic }); }
 
 // ---------- day flow ----------
