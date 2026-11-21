@@ -215,7 +215,7 @@ window.I18N = (() => {
     privacy: ['Confidentialité', 'Privacy'], adChoices: ['Choix publicitaires', 'Ad choices'], resetGame: ['Effacer la partie', 'Erase game'], resetSure: ['Tout effacer ? C’est définitif.', 'Erase everything? This cannot be undone.'],
     consentTitle: ['Tes données', 'Your data'], consentText: ['Le jeu est gratuit grâce à la pub. Acceptes-tu des pubs personnalisées ? Tu peux changer d’avis dans les réglages.', 'The game is free thanks to ads. Do you accept personalised ads? You can change your mind in settings.'],
     accept: ['Accepter', 'Accept'], refuse: ['Refuser', 'Refuse'], ok: ['OK', 'OK'], cancel: ['Annuler', 'Cancel'], testAd: ['Pub de test', 'Test ad'], testBuy: ['Achat de test : rien n’est payé.', 'Test purchase: nothing is charged.'],
-    shop: ['Boutique', 'Shop'], sNoAds: ['Sans pub', 'No ads'], sStarter: ['Pack de démarrage', 'Starter pack'], sStarterSub: ['Costume de Rico + 500 de butin', 'Rico outfit + 500 loot'], sCostume: ['Costume « Gentleman »', '“Gentleman” outfit'], restore: ['Restaurer les achats', 'Restore purchases'], restored: ['Achats restaurés', 'Purchases restored'],
+    shop: ['Boutique', 'Shop'], sNoAds: ['Sans pub', 'No ads'], sStarter: ['Pack de démarrage', 'Starter pack'], sStarterSub: ['Costume de Rico + 500 de butin', 'Rico outfit + 500 loot'], sCostume: ['Costume « Gentleman »', '“Gentleman” outfit'], sLoot: ['Sac de butin', 'Loot bag'], sLootSub: ['+{n} 💰 pour décorer la planque', '+{n} 💰 to decorate the hideout'], buyFail: ['L’achat n’a pas abouti. Rien n’a été payé.', 'The purchase did not go through. Nothing was charged.'], buyPending: ['Achat en attente de validation', 'Purchase waiting for approval'], restore: ['Restaurer les achats', 'Restore purchases'], restored: ['Achats restaurés', 'Purchases restored'],
     noAdsSub: ['Plus aucune pub imposée', 'No more forced ads'], costumeSub: ['Haut-de-forme et monocle pour Rico', 'Top hat and monocle for Rico'],
     locked: ['Termine le niveau précédent', 'Finish the previous level'], tutWire: ['Glisse du doigt d’un appareil à un autre pour les relier.', 'Drag from one device to another to connect them.'],
     dev_S: ['Interrupteur', 'Switch'], dev_B: ['Bouton', 'Button'], dev_C: ['Caméra', 'Camera'], dev_D: ['Porte', 'Door'], dev_L: ['Lampe', 'Lamp'], dev_T: ['Trappe', 'Trapdoor'], dev_E: ['Ascenseur', 'Elevator'], alarm: ['Alarme', 'Alarm'],
@@ -352,7 +352,35 @@ const Ads = {
   async interstitial() { if (S.owned.noads || S.levelsPlayed < 6) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); await testAd(); }
 };
 function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart">🦝💰🦝</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 700); }); }
-const STORE = [{ id: 'noads', price: '3,99 €' }, { id: 'starter', price: '1,99 €' }, { id: 'costume', price: '1,99 €' }];
+const STORE = [{ id: 'noads', price: '3,99 €', once: true }, { id: 'starter', price: '1,99 €', once: true }, { id: 'costume', price: '1,99 €', once: true }, { id: 'loot', price: '0,99 €', coins: 1000 }];
+// Real purchases go through Apple (StoreKit 2) via the iOS shell's `store` message handler (ios/Shared/NativeStore.swift);
+// on the web there is no handler and a test box stands in (nothing is charged).
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.circuitcaper.' + id;
+const iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
+function grant(it, loud = true) {
+  if (it.id === 'loot') S.coins += it.coins; else { S.owned[it.id] = true; if (it.id === 'starter') { S.coins += 500; S.outfit = 'costume'; } if (it.id === 'costume') S.outfit = 'costume'; }
+  save(); if (loud) { SFX.fanfare(); JUICE.confetti(50); } renderHud();
+}
+const Store = {
+  prices: {},
+  price(it) { return this.prices[it.id] || it.price; },
+  async init() {
+    if (!IAP || this.ready) return; this.ready = true;
+    window.nativeStoreUpdate = pid => this.deliver(pid);
+    try { for (const p of await iap('products', { ids: STORE.map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {}
+    try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid); } catch (e) {}
+  },
+  deliver(pid) { const it = STORE.find(x => PID(x.id) === pid); if (it && !(it.once && S.owned[it.id])) grant(it); },
+  own(pids) { for (const pid of pids || []) { const it = STORE.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) grant(it, false); } },
+  async buy(it) {
+    track('iap_start', { id: it.id });
+    if (!IAP) { const ok = await confirmBox(t('testBuy') + `<br><b>${it.price}</b>`); if (ok) grant(it); return ok; }
+    try { const r = await iap('buy', { id: PID(it.id) }); if (r.ok) { track('iap_done', { id: it.id }); grant(it); return true; }
+      if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); }
+    return false;
+  },
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return false; } } toast(t('restored')); return true; }
+};
 
 // ---------- painted sprites (ChatGPT sheets, cut by tools) ----------
 const IMG = {}; for (const k in SPR) { const im = new Image(); im.onload = () => { IMG[k] = im; }; im.src = SPR[k]; }
@@ -650,11 +678,11 @@ function mapScreen() {
 function hideout() {
   const items = DECO.map(([id, cost, ico]) => { const own = S.deco.includes(id); return `<div class="deco ${own ? 'own' : ''}"><span class="di">${DI(id, ico)}</span><b>${I.pick(DECO_NAMES[id])}</b>${own ? `<small>${t('owned')}</small>` : `<button class="b1" data-d="${id}" ${S.coins >= cost ? '' : 'disabled'}>💰 ${cost}</button>`}</div>`; }).join('');
   openModal(`<h2>🛋️ ${t('hideout')}</h2><div class="room">${S.deco.map(id => `<span>${DI(id, DECO.find(d => d[0] === id)[2])}</span>`).join('') || (SPR.rico_sneak ? `<span><img src="${SPR.rico_sneak}" alt=""></span>` : '🦝')}</div><p>${t('hideTxt')}</p><div class="decos">${items}</div>
-    <h3>${t('shop')}</h3>${STORE.map(it => `<div class="sitem"><span>${{ noads: t('sNoAds'), starter: t('sStarter'), costume: t('sCostume') }[it.id]}<small>${{ noads: t('noAdsSub'), starter: t('sStarterSub'), costume: t('costumeSub') }[it.id]}</small></span>${S.owned[it.id] ? '✔' : `<button class="b1" data-buy="${it.id}">${it.price}</button>`}</div>`).join('')}
+    <h3>${t('shop')}</h3>${STORE.map(it => `<div class="sitem"><span>${{ noads: t('sNoAds'), starter: t('sStarter'), costume: t('sCostume'), loot: t('sLoot') }[it.id]}<small>${{ noads: t('noAdsSub'), starter: t('sStarterSub'), costume: t('costumeSub'), loot: t('sLootSub', { n: it.coins }) }[it.id]}</small></span>${it.once && S.owned[it.id] ? '✔' : `<button class="b1" data-buy="${it.id}">${Store.price(it)}</button>`}</div>`).join('')}
     <button class="b2" data-restore>${t('restore')}</button><button class="b2 big" data-close>${t('close')}</button>`, 'wide');
   modal.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { const d = DECO.find(x => x[0] === b.dataset.d); if (S.coins < d[1]) return; S.coins -= d[1]; S.deco.push(d[0]); save(); SFX.fanfare(); JUICE.confetti(40); rico('r_deco'); renderHud(); hideout(); });
-  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { const it = STORE.find(x => x.id === b.dataset.buy); if (await confirmBox(t('testBuy') + `<br><b>${it.price}</b>`)) { S.owned[it.id] = true; if (it.id === 'starter') { S.coins += 500; S.outfit = 'costume'; } if (it.id === 'costume') S.outfit = 'costume'; save(); SFX.fanfare(); renderHud(); hideout(); } });
-  modal.querySelector('[data-restore]').onclick = () => toast(t('restored'));
+  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { if (await Store.buy(STORE.find(x => x.id === b.dataset.buy))) hideout(); });
+  modal.querySelector('[data-restore]').onclick = async () => { if (await Store.restore()) hideout(); };
   modal.querySelector('[data-close]').onclick = closeModal;
 }
 const LOGIN = [50, 80, 120, 160, 220, 300, 600];
@@ -687,6 +715,7 @@ function titleScreen() {
 }
 function begin() {
   ensureLogin(); $('#game').classList.add('on'); renderHud();
+  Store.init();
   const next = LV.find(L => !S.stars[L.id] && unlocked(L.id));
   if (!Object.keys(S.stars).length) { startLevel(LV[0]); setTimeout(() => rico('r_hello'), 100); setTimeout(() => rico('r_plan'), 4200); }
   else { mapScreen(); setTimeout(() => rico('r_back'), 300); if (S.login.pending) setTimeout(giftModal, 600); }
