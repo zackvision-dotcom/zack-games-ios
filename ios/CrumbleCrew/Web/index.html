@@ -21,7 +21,13 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
 #top{position:fixed;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top) + 8px) 10px 6px;z-index:5;background:linear-gradient(rgba(30,18,24,.85),rgba(30,18,24,0))}
 .bar1{display:flex;align-items:center;gap:8px}
 .coin{flex:1;display:flex;align-items:center;gap:6px;background:var(--paper);border:3px solid var(--deep);border-radius:999px;padding:3px 12px 3px 4px;box-shadow:0 3px 0 var(--deep);min-width:0}
-i.cn{display:inline-block;width:.95em;height:.95em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3a0,#ffcf33 45%,#c88a10);border:2px solid #8a5a0a;vertical-align:-.12em;margin-right:3px}
+i.cn{display:inline-block;width:1.05em;height:1.05em;background:url(assets/coin.png) center/contain no-repeat;vertical-align:-.12em;margin-right:3px}
+img.ui{width:100%;height:100%;object-fit:contain;display:block}
+.rb{padding:0;overflow:hidden}.rb img.ui{width:100%;height:100%}
+#tabs button img.ui{width:34px;height:34px}
+#fz img.ui{position:absolute;left:-2px;top:-9px;width:28px;height:28px;z-index:2}#fz{overflow:visible!important}
+.pill{display:flex;align-items:center;gap:4px}.pill img.ui{width:30px;height:30px;margin:-6px 0 -6px -6px}
+.lk img.ui{width:34px;height:34px;margin:auto}
 #coinIco{width:30px;height:30px;display:grid;place-items:center;font-size:24px}#coinIco img{width:30px;height:30px;object-fit:contain}
 #coins{font-size:22px;font-weight:900;white-space:nowrap}#rate{color:#8a5a2a;font-weight:800;white-space:nowrap}
 .pill{background:linear-gradient(#7ef0c0,#2fb08a);border:3px solid var(--deep);border-radius:999px;padding:6px 10px;font-weight:900;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.4);box-shadow:0 3px 0 var(--deep);white-space:nowrap}
@@ -38,7 +44,7 @@ i.cn{display:inline-block;width:.95em;height:.95em;border-radius:50%;background:
 #fz span{position:relative;z-index:1;display:block;text-align:center;font-size:10px;font-weight:900;color:#fff;line-height:12px;text-shadow:0 1px 0 #000}
 #fz.on{animation:fzp .3s infinite alternate}@keyframes fzp{to{box-shadow:0 0 14px #ff7a2a}}
 /* bottom panel */
-#panel{position:fixed;left:0;right:0;bottom:0;height:min(40vh,330px);z-index:5;background:var(--panel);border-top:4px solid var(--deep);border-radius:18px 18px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(0,0,0,.4)}
+#panel{position:fixed;left:0;right:0;bottom:0;height:min(35vh,300px);z-index:5;background:var(--panel);border-top:4px solid var(--deep);border-radius:18px 18px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -6px 20px rgba(0,0,0,.4)}
 #tabs{display:flex;gap:4px;padding:6px 6px 0}
 #tabs button{flex:1;background:#6b4a36;color:#ffe9c0;border-radius:12px 12px 0 0;padding:6px 2px 5px;font-weight:900;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:18px}
 #tabs button span{font-size:11px}#tabs button.on{background:var(--paper);color:var(--ink)}
@@ -57,7 +63,7 @@ i.cn{display:inline-block;width:.95em;height:.95em;border-radius:50%;background:
 /* chief */
 #chef{position:fixed;left:8px;right:8px;top:calc(env(safe-area-inset-top) + 178px);z-index:6;display:flex;align-items:flex-start;gap:6px;pointer-events:none;opacity:0;transform:translateY(20px) scale(.9);transition:.25s}
 #chef.on{opacity:1;transform:none}
-#chef .cf{width:52px;height:52px;flex:none;border-radius:50%;background:#ffe9c0 center/cover;border:3px solid var(--deep);display:grid;place-items:center;font-size:34px;box-shadow:0 3px 0 var(--deep)}
+#chef .cf{width:62px;height:62px;flex:none;border-radius:50%;background:radial-gradient(circle,#ffe9c0,#e8b77a) no-repeat;background-size:118%,cover;background-position:30% 18%,center;border:3px solid var(--deep);display:grid;place-items:center;font-size:34px;box-shadow:0 3px 0 var(--deep)}
 #chef .ct{background:var(--paper);border:3px solid var(--deep);border-radius:4px 16px 16px 16px;padding:7px 11px;font-weight:800;font-size:13.5px;box-shadow:0 3px 0 var(--deep);max-width:300px}
 /* overlays */
 #modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(20,10,10,.6);padding:18px}#modal.on{display:flex}
@@ -72,13 +78,13 @@ i.cn{display:inline-block;width:.95em;height:.95em;border-radius:50%;background:
 .sw{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:800;border-bottom:1px solid #e2c89a}.sw input{width:22px;height:22px}
 .ver{font-size:11px;color:#8a6a4a;margin-top:8px}.legal{font-size:13px}
 .confirm{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(20,10,10,.55);padding:20px}
-#toasts{position:fixed;top:calc(env(safe-area-inset-top) + 150px);left:0;right:0;z-index:20;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+#toasts{position:fixed;bottom:calc(min(35vh,300px) + 12px);left:0;right:0;z-index:20;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .toast{background:var(--paper);border:3px solid var(--deep);border-radius:14px;padding:7px 14px;font-weight:800;box-shadow:0 3px 0 var(--deep);animation:pop .3s;transition:opacity .4s}.toast.out{opacity:0}
 .banner{position:fixed;left:0;right:0;top:38%;z-index:25;text-align:center;font-size:38px;font-weight:900;color:#ffe27a;-webkit-text-stroke:2px var(--deep);text-shadow:0 4px 0 var(--deep);pointer-events:none;animation:ban 1.8s cubic-bezier(.2,1.4,.4,1) forwards}
 .banner.fz{color:#ff8a3a}.banner.lv{color:#7ef0c0}@keyframes ban{0%{transform:scale(2.5);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
 .adov{position:fixed;inset:0;z-index:50;background:#111;display:flex;align-items:center;justify-content:center}.adbox{color:#fff;text-align:center}.adtag{opacity:.7}.adart{font-size:60px;margin:20px}.adcount{font-size:40px;font-weight:900}
 /* title */
-#title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 40px) 24px calc(env(safe-area-inset-bottom) + 40px);background:radial-gradient(circle at 50% 40%,rgba(255,200,120,.25),rgba(0,0,0,0) 60%)}
+#title{position:fixed;inset:0;z-index:10;display:none;background:linear-gradient(rgba(20,26,51,.55),rgba(20,26,51,0) 35%,rgba(20,26,51,0) 70%,rgba(20,26,51,.7));flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 40px) 24px calc(env(safe-area-inset-bottom) + 40px);background:radial-gradient(circle at 50% 40%,rgba(255,200,120,.25),rgba(0,0,0,0) 60%)}
 #title.on{display:flex}#title .logo{text-align:center}#title .logo img{width:min(90vw,440px)}#title h1{font-size:56px;margin:0;color:#ffcf6a;-webkit-text-stroke:3px var(--deep);line-height:.95}
 #title p{color:#ffe9c0;font-weight:800;text-shadow:0 2px 3px #000;margin:6px 0}
 #title .hero{font-size:90px;animation:bob 2.4s ease-in-out infinite}#title .hero img{width:min(66vw,300px)}@keyframes bob{50%{transform:translateY(-10px)}}
@@ -89,7 +95,7 @@ i.cn{display:inline-block;width:.95em;height:.95em;border-radius:50%;background:
 <canvas id="cv"></canvas>
 <div id="game"><div id="top"></div><div id="chef"><div class="cf"></div><div class="ct"></div></div><div id="panel"><div id="tabs"></div><div id="modes"></div><div id="list"></div></div></div>
 <div id="modal"></div><div id="toasts"></div><div id="title"></div>
-<script>window.CC_VERSION="1.0";window.CC_SPR={};window.CC_PRIVACY="<h4>Politique de confidentialité — Crumble Crew</h4>\n<p>Crumble Crew fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Crumble Crew convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Crumble Crew</h4>\n<p>Crumble Crew works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Crumble Crew suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>window.CC_VERSION="1.0";window.CC_SPR={"bg_0": "assets/bg_0.png", "bg_1": "assets/bg_1.png", "bg_2": "assets/bg_2.png", "chef_0": "assets/chef_0.png", "chef_1": "assets/chef_1.png", "chef_2": "assets/chef_2.png", "chef_3": "assets/chef_3.png", "chest": "assets/chest.png", "chunk": "assets/chunk.png", "coin": "assets/coin.png", "logo": "assets/logo.png", "m_conveyor": "assets/m_conveyor.png", "m_crusher": "assets/m_crusher.png", "m_foundry": "assets/m_foundry.png", "m_polisher": "assets/m_polisher.png", "nugget": "assets/nugget.png", "rock_0": "assets/rock_0.png", "rock_1": "assets/rock_1.png", "rock_2": "assets/rock_2.png", "ui_crew": "assets/ui_crew.png", "ui_fire": "assets/ui_fire.png", "ui_gear": "assets/ui_gear.png", "ui_gift": "assets/ui_gift.png", "ui_lock": "assets/ui_lock.png", "ui_mach": "assets/ui_mach.png", "ui_res": "assets/ui_res.png", "ui_shop": "assets/ui_shop.png", "ui_star": "assets/ui_star.png", "ui_x2": "assets/ui_x2.png", "w_blaster_0": "assets/w_blaster_0.png", "w_blaster_1": "assets/w_blaster_1.png", "w_blaster_2": "assets/w_blaster_2.png", "w_cart_0": "assets/w_cart_0.png", "w_cart_1": "assets/w_cart_1.png", "w_cart_2": "assets/w_cart_2.png", "w_geo_0": "assets/w_geo_0.png", "w_geo_1": "assets/w_geo_1.png", "w_geo_2": "assets/w_geo_2.png", "w_miner_0": "assets/w_miner_0.png", "w_miner_1": "assets/w_miner_1.png", "w_miner_2": "assets/w_miner_2.png", "w_porter_0": "assets/w_porter_0.png", "w_porter_1": "assets/w_porter_1.png", "w_porter_2": "assets/w_porter_2.png"};window.CC_PRIVACY="<h4>Politique de confidentialité — Crumble Crew</h4>\n<p>Crumble Crew fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Crumble Crew convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Crumble Crew</h4>\n<p>Crumble Crew works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Crumble Crew suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
 <script>// Crumble Crew — the numbers of the game (shared by the game and tools/sim.mjs).
 (function (root) {
   const E = {
@@ -382,7 +388,7 @@ function resize() {
   DPR = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight;
   cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
   const panel = $('#panel'), top = $('#top'), area = H - (panel ? panel.offsetHeight : H * 0.38) - (top ? top.offsetHeight : 90);
-  SC = Math.min(W / 400, area / 470); OX = (W - 400 * SC) / 2; OY = (top ? top.offsetHeight : 90) + Math.max(0, area - 470 * SC) * 0.6;
+  SC = Math.min(W / 400, area / 440); OX = (W - 400 * SC) / 2; OY = (top ? top.offsetHeight : 90) - 20 * SC + Math.max(0, area - 440 * SC) * 0.6;
   WH = 470; L.rockY = 170; L.ground = 392;
 }
 const toWorld = (x, y) => [(x - OX) / SC, (y - OY) / SC];
@@ -394,14 +400,15 @@ for (const k in SPR) { const im = new Image(); im.onload = () => { IMG[k] = im; 
 
 // ---------- entities ----------
 const G = { phase: 'title', t: 0, crew: [], parts: [], floats: [], nuggets: [], chests: [], shake: 0, flash: 0, squash: 0, frenzy: 0, frenzyT: 0, taps: 0, nugT: 6, idleT: 0, lastHit: 0, resistSaid: 0, incomeEMA: 0, recordT: 0, coinCombo: 0, coinComboT: 0 };
-function slotOf(k, i) {
-  if (k === 'miner') { const side = i % 2 ? 1 : -1, ring = Math.floor(i / 2); return { x: L.rockX + side * (62 + (ring % 7) * 13), y: L.ground - 4 + Math.floor(ring / 7) * 9 - (ring % 7) * 1.5 }; }
-  if (k === 'blaster') return { x: L.rockX + (i % 2 ? 1 : -1) * (40 + (i * 7) % 50), y: L.ground + 14 + (i % 3) * 5 };
-  if (k === 'geo') return { x: 40 + (i * 37) % 320, y: L.ground + 30 + (i % 4) * 6 };
-  return { x: L.pileX, y: L.ground + 18 + (i % 6) * 5 };
+const CAP = { miner: 33, porter: 12, blaster: 8, cart: 6, geo: 6 };   // drawn workers per job; the rest are counted, not drawn
+function slotOf(k, i) {   // spread across the floor in rows (back rows a little higher), never in one heap
+  if (k === 'miner') { const r = Math.floor(i / 11), c = i % 11, order = [5, 4, 6, 3, 7, 2, 8, 1, 9, 0, 10][c]; return { x: 52 + order * 29.6 + (r % 2) * 14, y: L.ground - 8 + r * 11 }; }
+  if (k === 'blaster') return { x: 70 + ((i * 3) % 8) * 37, y: L.ground + 30 };
+  if (k === 'geo') return { x: 40 + (i * 61) % 320, y: L.ground + 44 };
+  return { x: L.pileX, y: L.ground + 22 + (i % 4) * 7 };
 }
 function spawnWorker(k, enter = true) {
-  const i = G.crew.filter(c => c.k === k).length, s = slotOf(k, i);
+  const i = G.crew.filter(c => c.k === k).length; if (i >= (CAP[k] || 99)) return null; const s = slotOf(k, i);
   const w = { k, i, x: enter ? (Math.random() < 0.5 ? -20 : 420) : s.x, y: s.y, hx: s.x, hy: s.y, t: rnd(0, 1.5), st: k === 'porter' || k === 'cart' ? 'toPile' : 'go', carry: 0, face: 1, ph: Math.random() * 6, act: 0, sp: 0 };
   if (!enter && (k === 'porter' || k === 'cart')) w.x = rnd(L.pileX, L.crushX);
   G.crew.push(w); return w;
@@ -469,7 +476,10 @@ function catchNugget(n) {
   addCoins(v, n.x, n.y); flyCoins(...toScreen(n.x, n.y), v, 8); floatText(n.x, n.y - 16, t('nugget') + ' +' + fmt(v), 'gold');
   SFX.chime(); buzz(20); JUICE.flash($('#coinIco'));
 }
-function dropChest(x) { G.chests.push({ x, y: L.rockY, vy: -200, ground: L.ground + 26, open: false, t: 0 }); }
+function dropChest(x) {
+  const open = G.chests.filter(c => !c.open && !c.opening); if (open.length >= 3) openChest(open[0]);   // never a heap of chests
+  const spots = [-110, 110, -55, 55, 0, -150, 150], taken = G.chests.filter(c => !c.dead).map(c => c.x - L.rockX); const dx = spots.find(d => taken.every(o => Math.abs(o - d) > 40)); x = L.rockX + (dx != null ? dx : rnd(-120, 120));
+  G.chests.push({ x, y: L.rockY, vy: -200, ground: L.ground + 26, open: false, t: 0 }); }
 function openChest(c) {
   if (c.opening) return; c.opening = true; SFX.click(); buzz(10);
   setTimeout(() => { c.open = true; S.totals.chests++; questProg('chest', 1); const v = Math.max(50, E.chest.secs * (income() + E.tapDmg(st()) * value()));
@@ -543,7 +553,7 @@ const minutesOf = m => Math.max(20 * m, (income() + E.tapDmg(st()) * value() * 1
 let chefTimer = 0;
 function chef(key, mood = 0, vars) {
   const el = $('#chef'); if (!el) return;
-  el.querySelector('.cf').style.backgroundImage = SPR['chef_' + mood] ? `url(${SPR['chef_' + mood]})` : '';
+  el.querySelector('.cf').style.backgroundImage = SPR['chef_' + mood] ? `url(${SPR['chef_' + mood]}), radial-gradient(circle, #ffe9c0, #e8b77a)` : ''; el.querySelector('.cf').classList.toggle('m3', mood === 3);
   el.querySelector('.cf').textContent = SPR['chef_' + mood] ? '' : ['😄', '☝️', '😮', '😤'][mood];
   el.querySelector('.ct').textContent = t(key, vars); el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
   clearTimeout(chefTimer); const sticky = S.tut < 4 && ['c_tap', 'c_hireMiner', 'c_hirePorter', 'c_frenzy', 'c_welcome'].includes(key);
@@ -614,7 +624,12 @@ function rockShape(seed) { const pts = []; let r = seed; const rand = () => (r =
 const SHAPE = [rockShape(7), rockShape(42), rockShape(99)];
 function drawBg() {
   const night = S.theme === 'night';
-  if (IMG.bg) { const im = IMG.bg, s = Math.max(W / im.width, H / im.height); cx.drawImage(im, (W - im.width * s) / 2, (H - im.height * s) / 2, im.width * s, im.height * s); if (night) { cx.fillStyle = 'rgba(20,30,90,.35)'; cx.fillRect(0, 0, W, H); } return; }
+  const bgIm = IMG['bg_' + (S.rock % 3)] || IMG.bg;
+  if (bgIm) {   // the painted cave: its floor (70 % of the picture's height) sits on the crew's ground line
+    const im = bgIm, gy = toScreen(0, L.ground + 6)[1], s = Math.max(W / im.width, gy / (im.height * 0.7)), dy = gy - im.height * 0.7 * s;
+    cx.fillStyle = '#141a33'; cx.fillRect(0, 0, W, H); cx.drawImage(im, (W - im.width * s) / 2, dy, im.width * s, im.height * s);
+    if (dy > 0) { const g = cx.createLinearGradient(0, dy, 0, dy + 40); g.addColorStop(0, '#141a33'); g.addColorStop(1, 'rgba(20,26,51,0)'); cx.fillStyle = g; cx.fillRect(0, dy, W, 40); }
+    if (night) { cx.fillStyle = 'rgba(20,30,90,.35)'; cx.fillRect(0, 0, W, H); } return; }
   const g = cx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, night ? '#0b1030' : '#1b1a33'); g.addColorStop(0.55, night ? '#18204a' : '#3b2c3a'); g.addColorStop(1, night ? '#241c2c' : '#5a3d2c'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
   // cave walls, beams, lamps (drawn fallback)
   cx.fillStyle = 'rgba(0,0,0,.25)'; for (let i = 0; i < 9; i++) { const x = (i / 8) * W; cx.beginPath(); cx.ellipse(x, OY + 30 * SC, 70 * SC, 120 * SC, 0, 0, TAU); cx.fill(); }
@@ -656,7 +671,7 @@ function drawWorker(w) {
   const frame = w.carry ? 2 : w.act > 0.2 ? 1 : 0, im = IMG[`w_${w.k}_${frame}`] || IMG[`w_${w.k}_0`];
   cx.save(); cx.translate(x, y - bob); cx.scale(w.face < 0 ? -1 : 1, 1);
   cx.fillStyle = 'rgba(0,0,0,.25)'; cx.beginPath(); cx.ellipse(0, bob, 13 * s, 4 * s, 0, 0, TAU); cx.fill();
-  if (im) { const h = 46 * s, k = h / im.height; cx.drawImage(im, -im.width * k / 2, -h, im.width * k, h); cx.restore(); return; }
+  if (im) { const k = 52 * s / 190, sq = w.act > 0.6 ? 1 + (w.act - 0.6) * 0.25 : 1; cx.scale(1 / sq, sq); cx.drawImage(im, -im.width * k / 2, -im.height * k + 2 * s, im.width * k, im.height * k); cx.restore(); return; }
   if (w.k === 'cart') { cx.fillStyle = '#6a6a72'; rr(-18 * s, -20 * s, 30 * s, 16 * s, 3 * s); cx.fill(); cx.fillStyle = '#333'; cx.beginPath(); cx.arc(-12 * s, -3 * s, 4 * s, 0, TAU); cx.arc(6 * s, -3 * s, 4 * s, 0, TAU); cx.fill(); if (w.carry) { cx.fillStyle = rockCol(0.3); cx.beginPath(); cx.arc(-3 * s, -22 * s, 9 * s, Math.PI, 0); cx.fill(); } cx.translate(16 * s, 0); }
   // body
   cx.fillStyle = MOLE[w.k]; cx.beginPath(); cx.ellipse(0, -14 * s, 11 * s, 13 * s, 0, 0, TAU); cx.fill();
@@ -674,13 +689,15 @@ function drawWorker(w) {
 }
 function drawMachines() {
   const pileH = Math.min(40, Math.log10(1 + S.pile) * 12), [px, py] = toScreen(L.pileX, L.ground + 8);
-  cx.fillStyle = rockCol(0.3); cx.beginPath(); cx.ellipse(px, py, (24 + pileH * 0.6) * SC, (6 + pileH) * SC, 0, Math.PI, 0); cx.fill();
+  if (IMG.chunk) { const n = Math.min(14, Math.ceil(Math.log2(2 + S.pile) * 1.6)), ch = IMG.chunk; for (let i = 0; i < n; i++) { const row = Math.floor((Math.sqrt(8 * i + 1) - 1) / 2), inRow = i - row * (row + 1) / 2, per = row + 1, sz = 16 * SC; const x = px + (inRow - (per - 1) / 2) * sz * 0.8 * (5 - row) / 4, y = py - (4 - row) * 0 - (n > 1 ? (Math.floor((Math.sqrt(8 * (n - 1) + 1) - 1) / 2) - row) * sz * 0.45 : 0); cx.save(); cx.translate(x, y); cx.rotate((i * 1.7) % 1 - 0.5); cx.drawImage(ch, -sz / 2, -sz * 0.8, sz, sz * ch.height / ch.width); cx.restore(); } }
+  else { cx.fillStyle = rockCol(0.3); cx.beginPath(); cx.ellipse(px, py, (24 + pileH * 0.6) * SC, (6 + pileH) * SC, 0, Math.PI, 0); cx.fill(); }
   if (S.pile >= 1) { cx.fillStyle = '#fff'; cx.font = `800 ${11 * SC}px system-ui`; cx.textAlign = 'center'; cx.fillText(fmt(S.pile), px, py - (12 + pileH) * SC); }
-  if (S.m.conveyor) { const [a, b] = toScreen(L.pileX + 20, L.ground + 2), [c2] = toScreen(L.crushX - 30, 0); cx.fillStyle = '#3a3a40'; cx.fillRect(a, b, c2 - a, 6 * SC); cx.fillStyle = '#6a6a74'; const off = (G.t * 40 * SC) % (14 * SC); for (let x = a + off; x < c2; x += 14 * SC) cx.fillRect(x, b + 1 * SC, 6 * SC, 4 * SC); }
+  if (S.m.conveyor && IMG.m_conveyor) { const im = IMG.m_conveyor, [a, b] = toScreen(L.pileX + 24, L.ground + 12), [c2] = toScreen(L.crushX - 34, 0), h = 24 * SC; cx.drawImage(im, a, b - h, c2 - a, h); cx.fillStyle = 'rgba(255,255,255,.12)'; const off = (G.t * 40 * SC) % (16 * SC); for (let x = a + 8 * SC + off; x < c2 - 8 * SC; x += 16 * SC) cx.fillRect(x, b - h + 2 * SC, 5 * SC, 3 * SC); }
+  else if (S.m.conveyor) { const [a, b] = toScreen(L.pileX + 20, L.ground + 2), [c2] = toScreen(L.crushX - 30, 0); cx.fillStyle = '#3a3a40'; cx.fillRect(a, b, c2 - a, 6 * SC); cx.fillStyle = '#6a6a74'; const off = (G.t * 40 * SC) % (14 * SC); for (let x = a + off; x < c2; x += 14 * SC) cx.fillRect(x, b + 1 * SC, 6 * SC, 4 * SC); }
   for (const k of ['polisher', 'foundry', 'crusher']) {
     if (k !== 'crusher' && !S.m[k]) continue; const [mx, my] = toScreen(...machinePos(k)), im = IMG['m_' + k], bump = k === 'crusher' && G.machBump > 0 ? G.machBump * 0.15 : 0;
     cx.save(); cx.translate(mx, my); cx.scale(1 + bump, 1 - bump);
-    if (im) { const h = (k === 'crusher' ? 74 : 62) * SC, s = h / im.height; cx.drawImage(im, -im.width * s / 2, -h, im.width * s, h); }
+    if (im) { const h = (k === 'crusher' ? 92 : 70) * SC, s = h / im.height; cx.drawImage(im, -im.width * s / 2, -h, im.width * s, h); }
     else if (k === 'crusher') { cx.fillStyle = '#8a8f99'; rr(-28 * SC, -54 * SC, 56 * SC, 54 * SC, 8 * SC); cx.fill(); cx.fillStyle = '#5a5f69'; rr(-20 * SC, -66 * SC, 40 * SC, 16 * SC, 4 * SC); cx.fill(); cx.fillStyle = '#ffd34d'; cx.font = `900 ${18 * SC}px system-ui`; cx.textAlign = 'center'; cx.fillText('⚙', 0, -22 * SC); }
     else if (k === 'foundry') { cx.fillStyle = '#9a4a2a'; rr(-24 * SC, -48 * SC, 48 * SC, 48 * SC, 6 * SC); cx.fill(); cx.fillStyle = '#ff9a3a'; cx.beginPath(); cx.arc(0, -20 * SC, 10 * SC, 0, TAU); cx.fill(); cx.fillStyle = '#5a3a2a'; cx.fillRect(8 * SC, -78 * SC, 10 * SC, 32 * SC); }
     else { cx.fillStyle = '#5a6aa0'; rr(-22 * SC, -40 * SC, 44 * SC, 40 * SC, 8 * SC); cx.fill(); cx.fillStyle = '#9ff0ff'; cx.beginPath(); cx.arc(0, -22 * SC, 9 * SC, 0, TAU); cx.fill(); }
@@ -692,13 +709,16 @@ function drawMachines() {
 function draw() {
   cx.setTransform(DPR, 0, 0, DPR, 0, 0);
   const sh = G.shake > 0 ? G.shake * 7 : 0; cx.save(); if (sh) cx.translate(rnd(-sh, sh), rnd(-sh, sh));
-  drawBg(); if (G.phase !== 'play') { cx.restore(); return; }
-  drawRock(); drawMachines();
+  drawBg(); if (G.phase !== 'play') { if (G.phase === 'title') { drawRock(); for (const w of G.crew) { w.ph += 0.13; w.act = w.k === 'miner' || w.k === 'blaster' ? Math.max(0, Math.sin(G.t * 4 + w.i * 2)) : 0; w.face = w.x < L.rockX ? 1 : -1; w.moving = w.k === 'porter' || w.k === 'cart'; if (w.moving) { w.x += (w.dir || 1) * 0.5; if (w.x > L.crushX - 30 || w.x < L.pileX) w.dir = -(w.dir || 1); w.face = w.dir || 1; } } G.crew.slice().sort((a, b) => a.y - b.y).forEach(drawWorker); } cx.restore(); return; }
+  drawRock();
   const list = G.crew.length > 120 ? G.crew.slice(0, 120) : G.crew; list.slice().sort((a, b) => a.y - b.y).forEach(drawWorker);
+  drawMachines();   // the pile and the machines stand in front of the crew so they always read
   for (const p of G.parts) {
     if (p.dyn) { const k = p.t / p.life, x = p.x + (p.tx - p.x) * k, y = p.y + (p.ty - p.y) * k - Math.sin(k * Math.PI) * 60; const [sx, sy] = toScreen(x, y); cx.fillStyle = '#d0302a'; cx.fillRect(sx - 3 * SC, sy - 6 * SC, 6 * SC, 12 * SC); cx.fillStyle = '#ffd34d'; cx.beginPath(); cx.arc(sx, sy - 8 * SC, 2.5 * SC + Math.random() * 2, 0, TAU); cx.fill(); continue; }
     if (p.ring) { const [sx, sy] = toScreen(p.x, p.y), k = p.t / p.life; cx.strokeStyle = `rgba(255,200,80,${1 - k})`; cx.lineWidth = 6 * SC * (1 - k); cx.beginPath(); cx.arc(sx, sy, (10 + k * 70) * SC, 0, TAU); cx.stroke(); cx.fillStyle = `rgba(255,240,180,${0.8 * (1 - k)})`; cx.beginPath(); cx.arc(sx, sy, (8 + k * 30) * SC, 0, TAU); cx.fill(); continue; }
-    const [sx, sy] = toScreen(p.x, p.y); cx.globalAlpha = clamp(1 - p.t / p.life, 0, 1) * 1.5; cx.fillStyle = p.col; cx.beginPath(); cx.moveTo(sx, sy - p.r * SC); cx.lineTo(sx + p.r * SC, sy); cx.lineTo(sx, sy + p.r * SC * 0.8); cx.lineTo(sx - p.r * SC, sy); cx.fill(); cx.globalAlpha = 1;
+    const [sx, sy] = toScreen(p.x, p.y); cx.globalAlpha = clamp(1 - p.t / p.life, 0, 1) * 1.5;
+    if (IMG.chunk && p.r > 2.5 && p.col !== '#ffd34d' && p.col !== '#ffe9a0') { const z = p.r * 3.2 * SC; cx.save(); cx.translate(sx, sy); cx.rotate(p.t * 8 + p.r); cx.drawImage(IMG.chunk, -z / 2, -z / 2, z, z); cx.restore(); cx.globalAlpha = 1; continue; }
+    cx.fillStyle = p.col; cx.beginPath(); cx.moveTo(sx, sy - p.r * SC); cx.lineTo(sx + p.r * SC, sy); cx.lineTo(sx, sy + p.r * SC * 0.8); cx.lineTo(sx - p.r * SC, sy); cx.fill(); cx.globalAlpha = 1;
   }
   for (const n of G.nuggets) { const [sx, sy] = toScreen(n.x, n.y), blink = n.t > E.nugget.life - 1 && (n.t * 8 | 0) % 2; if (blink) continue; const im = IMG.nugget, s = 30 * SC;
     const gl = cx.createRadialGradient(sx, sy, 2, sx, sy, s); gl.addColorStop(0, 'rgba(255,230,120,.8)'); gl.addColorStop(1, 'rgba(255,230,120,0)'); cx.fillStyle = gl; cx.fillRect(sx - s, sy - s, s * 2, s * 2);
@@ -706,7 +726,7 @@ function draw() {
   for (const c of G.chests) { const [sx, sy] = toScreen(c.x, c.y), wob = c.opening && !c.open ? Math.sin(G.t * 50) * 0.12 : Math.sin(G.t * 4) * 0.04, s = SC; const im = IMG.chest;
     cx.save(); cx.translate(sx, sy); cx.rotate(wob); if (!c.open) { const gl = cx.createRadialGradient(0, -14 * s, 3, 0, -14 * s, 50 * s); gl.addColorStop(0, 'rgba(255,220,120,.6)'); gl.addColorStop(1, 'rgba(255,220,120,0)'); cx.fillStyle = gl; cx.fillRect(-50 * s, -64 * s, 100 * s, 100 * s); }
     if (im) { const h = 42 * s, k = h / im.height; cx.drawImage(im, -im.width * k / 2, -h, im.width * k, h); } else { cx.fillStyle = '#8a5a2a'; rr(-20 * s, -28 * s, 40 * s, 28 * s, 4 * s); cx.fill(); cx.fillStyle = '#ffd34d'; cx.fillRect(-20 * s, -18 * s, 40 * s, 4 * s); cx.fillRect(-4 * s, -22 * s, 8 * s, 10 * s); }
-    if (!c.open && !c.opening) { cx.fillStyle = '#fff'; cx.font = `900 ${11 * s}px system-ui`; cx.textAlign = 'center'; cx.fillText(t('tapOpen'), 0, -48 * s - Math.abs(Math.sin(G.t * 4)) * 4 * s); }
+    if (!c.open && !c.opening && c === G.chests.find(o => !o.open && !o.opening)) { cx.fillStyle = '#fff'; cx.font = `900 ${11 * s}px system-ui`; cx.textAlign = 'center'; cx.fillText(t('tapOpen'), 0, -48 * s - Math.abs(Math.sin(G.t * 4)) * 4 * s); }
     cx.restore(); }
   cx.restore();
   if (G.flash > 0) { cx.fillStyle = `rgba(255,245,210,${G.flash * 0.6})`; cx.fillRect(0, 0, W, H); }
@@ -728,7 +748,7 @@ function renderTop() {
   el.querySelector('#goal').innerHTML = gi ? `⭐ ${gi.txt} <small>${fmt(Math.min(gi.v, gi.n))}/${fmt(gi.n)}</small>` : '⭐ ' + t('freeMode');
   el.querySelector('#fz i').style.width = (G.frenzyT > 0 ? G.frenzyT / E.frenzy.time : G.frenzy) * 100 + '%'; el.querySelector('#fz').classList.toggle('on', G.frenzyT > 0);
   el.querySelector('#layer').textContent = `${I.pick(E.rocks[S.rock % 3].name)} · ${t('layer')} ${Math.min(S.layer + 1, E.layers.length)}/${E.layers.length}${S.stars ? ' · ★' + S.stars : ''}`;
-  const bb = el.querySelector('#boost'); bb.textContent = boost ? `×2 ${Math.ceil((S.boostEnd - Date.now()) / 60000)}′` : '▶ ×2'; bb.classList.toggle('on', boost);
+  const bb = el.querySelector('#boost'); bb.innerHTML = (SPR.ui_x2 ? `<img class="ui" src="${SPR.ui_x2}" alt="">` : '') + (boost ? `${Math.ceil((S.boostEnd - Date.now()) / 60000)}′` : '▶'); bb.classList.toggle('on', boost);
   const gift = el.querySelector('#gift'); gift.classList.toggle('dot', !!(S.login.pending || (S.quests && S.quests.list.some(q => !q.claimed && q.p >= E.quests.find(x => x[0] === q.id)[1]))));
 }
 let tab = 'crew';
@@ -743,7 +763,7 @@ function renderPanel() {
     const hl = (S.tut === 1 && k === 'miner') || (S.tut === 2 && k === 'porter');
     h += `<div class="it ${lock ? 'lock' : ''} ${hl ? 'hl' : ''}"><div class="ico">${SPR['w_' + k + '_0'] ? `<img src="${SPR['w_' + k + '_0']}" alt="">` : { miner: '⛏️', porter: '🎒', blaster: '🧨', cart: '🛒', geo: '🔍' }[k]}</div>
       <div class="tx"><b>${t('w_' + k)} <em>×${have}</em></b><small>${lock ? t('locked', { n: W0.unlock + 1 }) : desc}</small></div>
-      ${lock ? '<span class="lk">🔒</span>' : `<button class="buy ${b.c <= S.coins && b.n ? '' : 'off'}" data-hire="${k}"><span>+${b.n}</span><b><i class="cn"></i> ${fmt(b.c)}</b></button>`}</div>`;
+      ${lock ? '<span class="lk">' + UI('lock', '🔒') + '</span>' : `<button class="buy ${b.c <= S.coins && b.n ? '' : 'off'}" data-hire="${k}"><span>+${b.n}</span><b><i class="cn"></i> ${fmt(b.c)}</b></button>`}</div>`;
   }
   if (tab === 'mach') {
     const pc = E.pickCost(S.pick), pmax = S.pick >= E.pick.max;
@@ -785,7 +805,9 @@ const modal = $('#modal');
 function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); }
 function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
 function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row2"><button class="b2" data-v="0">${t('cancel')}</button><button class="b1" data-v="1">${t('ok')}</button></div></div>`); el.onclick = e => { const v = e.target.dataset.v; if (v != null) { el.remove(); res(v === '1'); } }; document.body.appendChild(el); }); }
-function toast(s) { const box = $('#toasts'); while (box.children.length >= 3) box.firstChild.remove(); const el = div('toast', s); box.appendChild(el); setTimeout(() => el.classList.add('out'), 2300); setTimeout(() => el.remove(), 2800); }
+const TQ = []; let tBusy = false;   // one bubble at a time, in order
+function toast(s) { if (TQ.length > 4) TQ.shift(); TQ.push(s); if (!tBusy) nextToast(); }
+function nextToast() { const s = TQ.shift(); if (s == null) { tBusy = false; return; } tBusy = true; const box = $('#toasts'); box.innerHTML = ''; const el = div('toast', s); box.appendChild(el); setTimeout(() => el.classList.add('out'), 1500); setTimeout(() => { el.remove(); nextToast(); }, 1800); }
 function banner(s, cls = '') { const el = div('banner ' + cls, s); document.body.appendChild(el); setTimeout(() => el.remove(), 1800); }
 function questsModal() {
   ensureQuests(); const k = S.login.streak;
@@ -833,21 +855,22 @@ function consentModal(fromSettings) {
 }
 
 // ---------- title & loop ----------
+const UI = (k, alt) => SPR['ui_' + k] ? `<img class="ui" src="${SPR['ui_' + k]}" alt="">` : alt;
 function buildUI() {
   $('#top').innerHTML = `<div class="bar1"><div class="coin"><span id="coinIco">${SPR.coin ? `<img src="${SPR.coin}" alt="">` : '<i class="cn"></i>'}</span><b id="coins">0</b><small id="rate"></small></div>
-    <button id="boost" class="pill"></button><button id="gift" class="rb">🎁</button><button id="set" class="rb">⚙️</button></div>
-    <div class="bar2"><span id="lv"></span><div id="lvbar"><i></i></div></div><div id="layer"></div><div id="goal"></div><div id="fz"><span>${t('frenzy')}</span><i></i></div>`;
-  $('#tabs').innerHTML = ['crew', 'mach', 'res', 'shop'].map(k => `<button data-tab="${k}">${{ crew: '⛏️', mach: '⚙️', res: '🔬', shop: '🛒' }[k]}<span>${t({ crew: 'tabCrew', mach: 'tabMach', res: 'tabRes', shop: 'tabShop' }[k])}</span></button>`).join('');
+    <button id="boost" class="pill"></button><button id="gift" class="rb">${UI('gift', '🎁')}</button><button id="set" class="rb">${UI('gear', '⚙️')}</button></div>
+    <div class="bar2"><span id="lv"></span><div id="lvbar"><i></i></div></div><div id="layer"></div><div id="goal"></div><div id="fz">${UI('fire', '')}<span>${t('frenzy')}</span><i></i></div>`;
+  $('#tabs').innerHTML = ['crew', 'mach', 'res', 'shop'].map(k => `<button data-tab="${k}">${UI(k, { crew: '⛏️', mach: '⚙️', res: '🔬', shop: '🛒' }[k])}<span>${t({ crew: 'tabCrew', mach: 'tabMach', res: 'tabRes', shop: 'tabShop' }[k])}</span></button>`).join('');
   $('#modes').innerHTML = [1, 10, 0].map(m => `<button data-mode="${m}">${m ? '×' + m : 'MAX'}</button>`).join('');
 }
 function titleScreen() {
   G.phase = 'title'; const el = $('#title');
-  el.innerHTML = `<div class="logo">${SPR.logo ? `<img src="${SPR.logo}" alt="Crumble Crew">` : '<h1>Crumble<br>Crew</h1>'}<p>${t('subtitle')}</p></div><div class="hero">${SPR.chef_0 ? `<img src="${SPR.chef_0}" alt="">` : '⛏️🪨'}</div><button class="b1 big" data-play>${S.totals.taps ? t('cont') : t('play')}</button>`;
-  el.classList.add('on'); $('#game').classList.remove('on');
+  el.innerHTML = `<div class="logo">${SPR.logo ? `<img src="${SPR.logo}" alt="Crumble Crew">` : '<h1>Crumble<br>Crew</h1>'}<p>${t('subtitle')}</p></div><div class="hero"></div><button class="b1 big" data-play>${S.totals.taps ? t('cont') : t('play')}</button>`;
+  el.classList.add('on'); $('#game').classList.remove('on'); G.crew = []; ['miner', 'miner', 'porter', 'miner', 'blaster', 'miner', 'cart', 'geo'].forEach(k => { const w = spawnWorker(k, false); if (w) w.demo = 1; });
   el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null ? consentModal(false) : startPlay(); };
 }
 function startPlay() {
-  Ads.init(); ensureQuests(); S.sessions++; G.phase = 'play'; $('#game').classList.add('on'); buildUI(); resize(); rebuildCrew(); renderAll();
+  G.crew = []; Ads.init(); ensureQuests(); S.sessions++; G.phase = 'play'; $('#game').classList.add('on'); buildUI(); resize(); rebuildCrew(); renderAll();
   if (S.job && Date.now() >= S.job.end) finishResearch();
   const away = S.lastSeen ? (Date.now() - S.lastSeen) / 1000 : 0, cap = E.offline.capH * 3600, rate = S.res.night ? E.offline.rateResearch : E.offline.rate;
   const gain = Math.min(away, cap) * income() * rate;
