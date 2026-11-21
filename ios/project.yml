@@ -216,3 +216,35 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.circuitcaper
         PRODUCT_NAME: CircuitCaper
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  VanVoyage:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: VanVoyage/Assets.xcassets
+      - path: VanVoyage/Web
+        type: folder
+    info:
+      path: VanVoyage/Info.plist
+      properties:
+        CFBundleDisplayName: Van Voyage
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.casual-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.vanvoyage
+        PRODUCT_NAME: VanVoyage
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
