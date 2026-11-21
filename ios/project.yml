@@ -248,3 +248,35 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.vanvoyage
         PRODUCT_NAME: VanVoyage
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  SceneExpress:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: SceneExpress/Assets.xcassets
+      - path: SceneExpress/Web
+        type: folder
+    info:
+      path: SceneExpress/Info.plist
+      properties:
+        CFBundleDisplayName: Scène Express
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.lifestyle
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.sceneexpress
+        PRODUCT_NAME: SceneExpress
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
