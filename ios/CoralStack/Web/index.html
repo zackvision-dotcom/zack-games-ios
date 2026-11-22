@@ -181,6 +181,241 @@ img.op{width:26px;height:26px;object-fit:contain;flex:none;filter:drop-shadow(0 
 <canvas id="cv"></canvas>
 <div id="game"><div id="table"></div><div id="hand"></div></div><div id="hud"></div><div id="sheet"></div><div id="modal"></div><div id="toasts"></div><div id="title"></div>
 <script>window.CARDS={"version":1,"tide":{"seconds":150,"shellsPerTide":2,"interstitialFromTide":4,"interstitialGapSec":180},"start":{"shells":3,"cards":["diver","diver","rock","seabed","vent","wreck","seaweed","seaweed","oxygen","oxygen"],"maxCards":120},"cards":{"diver":{"fam":"creature","fr":"Plongeur","en":"Diver","worker":1,"sell":0,"art":[0,0]},"crab":{"fam":"creature","fr":"Crabe","en":"Crab","worker":1.2,"sell":3,"art":[0,1]},"octopus":{"fam":"creature","fr":"Poulpe","en":"Octopus","worker":1.3,"sell":4,"art":[0,2]},"seahorse":{"fam":"creature","fr":"Hippocampe","en":"Seahorse","worker":1.1,"sell":4,"art":[0,3]},"turtle":{"fam":"creature","fr":"Tortue","en":"Turtle","worker":0.8,"sell":5,"art":[0,4]},"puffer":{"fam":"creature","fr":"Poisson-globe","en":"Pufferfish","worker":1,"sell":4,"art":[0,5]},"rock":{"fam":"node","fr":"Rocher","en":"Rock","uses":4,"art":[0,6]},"seabed":{"fam":"node","fr":"Champ d'algues","en":"Seaweed bed","uses":6,"art":[0,7]},"coralpatch":{"fam":"node","fr":"Massif de corail","en":"Coral patch","uses":4,"art":[0,8]},"sandbank":{"fam":"node","fr":"Banc de sable","en":"Sandbank","uses":4,"art":[0,9]},"wreck":{"fam":"node","fr":"Épave","en":"Shipwreck","uses":4,"art":[0,10]},"musselbed":{"fam":"node","fr":"Banc de moules","en":"Mussel bed","uses":4,"art":[0,11]},"vent":{"fam":"node","fr":"Source de bulles","en":"Bubble vent","uses":6,"art":[0,12]},"seaweed":{"fam":"res","fr":"Algue","en":"Seaweed","food":1,"sell":1,"art":[0,13]},"coral":{"fam":"res","fr":"Corail","en":"Coral","sell":2,"art":[0,14]},"stone":{"fam":"res","fr":"Pierre","en":"Stone","sell":1,"art":[0,15]},"sand":{"fam":"res","fr":"Sable","en":"Sand","sell":1,"art":[0,16]},"pearl":{"fam":"res","fr":"Perle","en":"Pearl","sell":6,"art":[0,17]},"oxygen":{"fam":"res","fr":"Bulle d'oxygène","en":"Oxygen bubble","oxy":1,"sell":1,"art":[0,18]},"kelpcake":{"fam":"res","fr":"Galette d'algues","en":"Kelp cake","food":2,"sell":2,"art":[0,19]},"fish":{"fam":"res","fr":"Poisson","en":"Fish","food":2,"sell":2,"art":[0,20]},"sponge":{"fam":"res","fr":"Éponge","en":"Sponge","sell":2,"art":[0,21]},"driftwood":{"fam":"res","fr":"Bois flotté","en":"Driftwood","sell":1,"art":[0,22]},"rope":{"fam":"res","fr":"Corde","en":"Rope","sell":2,"art":[0,23]},"glass":{"fam":"res","fr":"Verre","en":"Glass","sell":3,"art":[1,0]},"scrap":{"fam":"res","fr":"Ferraille","en":"Scrap","sell":1,"art":[1,1]},"ink":{"fam":"res","fr":"Encre","en":"Ink","sell":3,"art":[1,2]},"urchin":{"fam":"res","fr":"Oursin","en":"Sea urchin","food":1,"sell":3,"art":[1,3]},"mussel":{"fam":"res","fr":"Moule","en":"Mussel","food":1,"sell":1,"art":[1,4]},"crystal":{"fam":"res","fr":"Cristal","en":"Crystal","sell":8,"art":[1,5]},"shell":{"fam":"res","fr":"Coquillage","en":"Shell","coin":1,"art":[1,6]},"hut":{"fam":"building","fr":"Cabane","en":"Hut","sell":4,"art":[1,7]},"airpump":{"fam":"building","fr":"Pompe à air","en":"Air pump","produce":["oxygen",35],"sell":6,"art":[1,8]},"kelpfarm":{"fam":"building","fr":"Serre à algues","en":"Kelp farm","produce":["seaweed",20],"sell":5,"art":[1,9]},"workshop":{"fam":"building","fr":"Atelier","en":"Workshop","sell":4,"art":[1,10]},"kitchen":{"fam":"building","fr":"Cuisine","en":"Kitchen","sell":4,"art":[1,11]},"glassworks":{"fam":"building","fr":"Verrerie","en":"Glassworks","sell":5,"art":[1,12]},"dock":{"fam":"building","fr":"Ponton du sous-marin","en":"Submarine dock","sell":8,"art":[1,13]},"pearlfarm":{"fam":"building","fr":"Ferme perlière","en":"Pearl farm","produce":["pearl",40],"sell":8,"art":[1,14]},"school":{"fam":"building","fr":"École des plongeurs","en":"Diving school","sell":6,"art":[1,15]},"market":{"fam":"building","fr":"Marché","en":"Market","sell":5,"art":[1,16]},"lanternhouse":{"fam":"building","fr":"Maison-lanterne","en":"Lantern house","sell":10,"art":[1,17],"unlock":"reef"},"airbell":{"fam":"building","fr":"Grande cloche à air","en":"Great air bell","produce":["oxygen",12],"sell":20,"art":[1,18],"unlock":"trench"},"net":{"fam":"item","fr":"Filet","en":"Net","sell":3,"art":[1,19]},"lantern":{"fam":"item","fr":"Lanterne","en":"Lantern","sell":5,"art":[1,20]},"jar":{"fam":"item","fr":"Bocal","en":"Jar","sell":3,"art":[1,21]},"helmet":{"fam":"item","fr":"Casque","en":"Helmet","sell":8,"art":[1,22]},"flippers":{"fam":"item","fr":"Palmes","en":"Flippers","sell":6,"art":[1,23]},"tank":{"fam":"item","fr":"Bouteille d'oxygène","en":"Oxygen tank","oxy":3,"sell":5,"art":[2,0]},"wrap":{"fam":"item","fr":"Wrap d'algues","en":"Seaweed wrap","food":3,"sell":4,"art":[2,1]},"soup":{"fam":"item","fr":"Soupe","en":"Soup","food":4,"sell":5,"art":[2,2]},"goldpearl":{"fam":"rare","fr":"Perle dorée","en":"Golden pearl","sell":25,"art":[2,3]},"chest":{"fam":"rare","fr":"Coffre au trésor","en":"Treasure chest","open":["pearl","crystal","goldpearl","oldcoin","glass","helmet"],"art":[2,4]},"oldcoin":{"fam":"rare","fr":"Pièce ancienne","en":"Old coin","coin":10,"art":[2,5]},"starcoral":{"fam":"rare","fr":"Corail étoilé","en":"Star coral","sell":30,"art":[2,6]},"submarine":{"fam":"rare","fr":"Sous-marin","en":"Submarine","art":[2,7]},"santahat":{"fam":"rare","fr":"Bonnet de Noël","en":"Christmas hat","sell":6,"art":[2,11],"event":"xmas"},"garland":{"fam":"rare","fr":"Guirlande de corail","en":"Coral garland","sell":6,"art":[2,12],"event":"xmas"}},"recipes":[{"id":"r_stone","in":["W","rock"],"keep":["W","rock"],"time":5,"out":["stone"]},{"id":"r_seaweed","in":["W","seabed"],"keep":["W","seabed"],"time":4,"out":["seaweed"]},{"id":"r_coral","in":["W","coralpatch"],"keep":["W","coralpatch"],"time":5,"out":[["coral",65],["sponge",20],["shell",15]]},{"id":"r_sand","in":["W","sandbank"],"keep":["W","sandbank"],"time":4,"out":[["sand",85],["shell",15]]},{"id":"r_wreck","in":["W","wreck"],"keep":["W","wreck"],"time":6,"out":[["driftwood",50],["scrap",40],["oldcoin",10]]},{"id":"r_mussel","in":["W","musselbed"],"keep":["W","musselbed"],"time":5,"out":[["mussel",80],["pearl",20]]},{"id":"r_oxygen","in":["W","vent"],"keep":["W","vent"],"time":6,"out":["oxygen"]},{"id":"r_fish","in":["W","net"],"keep":["W","net"],"time":6,"out":[["fish",85],["shell",15]]},{"id":"r_ink","in":["octopus","seaweed"],"keep":["octopus"],"time":5,"out":["ink"]},{"id":"r_cake","in":["W","seaweed","seaweed"],"keep":["W"],"time":4,"out":["kelpcake"]},{"id":"r_wrap","in":["kitchen","seaweed","mussel"],"keep":["kitchen"],"time":5,"out":["wrap"]},{"id":"r_soup","in":["kitchen","fish","seaweed"],"keep":["kitchen"],"time":6,"out":["soup"]},{"id":"r_urchin","in":["kitchen","urchin","urchin"],"keep":["kitchen"],"time":5,"out":["soup"]},{"id":"r_glass","in":["glassworks","sand"],"keep":["glassworks"],"time":6,"out":["glass"]},{"id":"r_rope","in":["workshop","seaweed","seaweed"],"keep":["workshop"],"time":5,"out":["rope"]},{"id":"r_net","in":["workshop","rope","rope"],"keep":["workshop"],"time":6,"out":["net"]},{"id":"r_jar","in":["workshop","glass"],"keep":["workshop"],"time":5,"out":["jar"]},{"id":"r_lantern","in":["workshop","jar","ink"],"keep":["workshop"],"time":6,"out":["lantern"]},{"id":"r_helmet","in":["workshop","glass","scrap"],"keep":["workshop"],"time":8,"out":["helmet"]},{"id":"r_flippers","in":["workshop","rope","sponge"],"keep":["workshop"],"time":6,"out":["flippers"]},{"id":"r_tank","in":["workshop","scrap","scrap","glass"],"keep":["workshop"],"time":8,"out":["tank"]},{"id":"r_gold","in":["pearlfarm","pearl","pearl","pearl"],"keep":["pearlfarm"],"time":10,"out":["goldpearl"]},{"id":"r_star","in":["glassworks","crystal","coral","coral"],"keep":["glassworks"],"time":12,"out":["starcoral"]},{"id":"r_hut","in":["W","stone","stone","driftwood"],"keep":["W"],"time":8,"out":["hut"]},{"id":"r_kelpfarm","in":["W","seaweed","seaweed","seaweed","sand"],"keep":["W"],"time":8,"out":["kelpfarm"]},{"id":"r_workshop","in":["W","driftwood","driftwood","stone"],"keep":["W"],"time":8,"out":["workshop"]},{"id":"r_glassworks","in":["W","stone","stone","scrap"],"keep":["W"],"time":8,"out":["glassworks"]},{"id":"r_kitchen","in":["W","stone","stone","coral"],"keep":["W"],"time":8,"out":["kitchen"]},{"id":"r_airpump","in":["W","scrap","scrap","glass"],"keep":["W"],"time":10,"out":["airpump"]},{"id":"r_pearlfarm","in":["W","mussel","mussel","coral","coral"],"keep":["W"],"time":10,"out":["pearlfarm"]},{"id":"r_market","in":["W","coral","coral","driftwood","driftwood"],"keep":["W"],"time":10,"out":["market"]},{"id":"r_school","in":["W","hut","coral","driftwood","driftwood"],"keep":["W"],"time":12,"out":["school"]},{"id":"r_baby","in":["school","diver","diver"],"keep":["school","diver","diver"],"time":20,"out":["diver"]},{"id":"r_dock","in":["W","driftwood","driftwood","driftwood","rope","rope"],"keep":["W"],"time":12,"out":["dock"]},{"id":"r_sub","in":["dock","diver","diver"],"keep":["dock","diver","diver"],"time":45,"out":[["pearl",20],["crystal",15],["chest",15],["goldpearl",8],["octopus",12],["turtle",10],["oldcoin",20]],"count":2,"expedition":1},{"id":"r_lanternhouse","in":["W","lantern","lantern","stone","stone"],"keep":["W"],"time":12,"out":["lanternhouse"]},{"id":"r_airbell","in":["W","glass","glass","glass","scrap","scrap","rope","rope"],"keep":["W"],"time":20,"out":["airbell"]}],"packs":[{"id":"lagoon","price":3,"count":3,"zone":"lagoon","fr":"Paquet du Lagon","en":"Lagoon pack","art":[2,8],"odds":[["rock",14],["seabed",12],["sandbank",14],["coralpatch",12],["wreck",12],["musselbed",8],["seaweed",10],["stone",6],["driftwood",6],["diver",4],["oxygen",2]]},{"id":"reef","price":8,"count":3,"zone":"reef","fr":"Paquet du Récif","en":"Reef pack","art":[2,9],"odds":[["coralpatch",14],["musselbed",12],["wreck",10],["crab",10],["octopus",8],["seahorse",8],["sponge",10],["pearl",8],["glass",8],["vent",6],["diver",6]]},{"id":"trench","price":15,"count":4,"zone":"trench","fr":"Paquet de la Fosse","en":"Trench pack","art":[2,10],"odds":[["crystal",14],["urchin",14],["turtle",8],["puffer",8],["vent",10],["scrap",14],["oldcoin",10],["chest",8],["pearl",8],["wreck",6]]}],"zones":{"lagoon":{"fr":"Le Lagon","en":"The Lagoon"},"reef":{"fr":"Le Récif","en":"The Reef"},"trench":{"fr":"La Fosse","en":"The Trench"}},"goals":[{"k":"make","c":"seaweed","n":2,"shells":2},{"k":"make","c":"kelpcake","n":1,"shells":2},{"k":"make","c":"stone","n":2,"shells":2},{"k":"make","c":"hut","n":1,"shells":3},{"k":"buy","n":1,"shells":2},{"k":"make","c":"workshop","n":1,"shells":3},{"k":"make","c":"rope","n":2,"shells":3},{"k":"make","c":"kitchen","n":1,"shells":3},{"k":"make","c":"net","n":1,"shells":3},{"k":"make","c":"glassworks","n":1,"shells":4},{"k":"make","c":"glass","n":3,"shells":4},{"k":"make","c":"airpump","n":1,"shells":5},{"k":"make","c":"market","n":1,"shells":5},{"k":"make","c":"school","n":1,"shells":5},{"k":"pop","n":4,"shells":6},{"k":"make","c":"lantern","n":2,"shells":6},{"k":"make","c":"lanternhouse","n":1,"shells":10},{"k":"make","c":"dock","n":1,"shells":8},{"k":"make","c":"pearlfarm","n":1,"shells":8},{"k":"recipes","n":25,"shells":10},{"k":"make","c":"airbell","n":1,"shells":20},{"k":"make","c":"starcoral","n":1,"shells":20},{"k":"pop","n":8,"shells":15}],"quests":[{"id":"make","target":15,"shells":3},{"id":"discover","target":1,"shells":3},{"id":"tides","target":3,"shells":4},{"id":"sell","target":10,"shells":3},{"id":"buy","target":2,"shells":3}],"login":[{"shells":3},{"card":"oxygen"},{"shells":5},{"card":"chest"},{"shells":8},{"card":"pearl"},{"shells":15}],"store":[{"id":"starter","price":"1,99 €","shells":50,"cards":["octopus","crab","chest"],"once":true},{"id":"theme","price":"2,99 €","theme":"night","once":true},{"id":"noads","price":"3,99 €","noAds":true,"once":true},{"id":"shells","price":"0,99 €","shells":100}]};window.CS_VERSION="1.0";window.CS_SPR={"anim_clown": "assets/anim_clown.png", "anim_jelly": "assets/anim_jelly.png", "anim_octopus": "assets/anim_octopus.png", "anim_turtle": "assets/anim_turtle.png", "anim_yellow": "assets/anim_yellow.png", "art_0_00": "assets/art_0_00.png", "art_0_01": "assets/art_0_01.png", "art_0_02": "assets/art_0_02.png", "art_0_03": "assets/art_0_03.png", "art_0_04": "assets/art_0_04.png", "art_0_05": "assets/art_0_05.png", "art_0_06": "assets/art_0_06.png", "art_0_07": "assets/art_0_07.png", "art_0_08": "assets/art_0_08.png", "art_0_09": "assets/art_0_09.png", "art_0_10": "assets/art_0_10.png", "art_0_11": "assets/art_0_11.png", "art_0_12": "assets/art_0_12.png", "art_0_13": "assets/art_0_13.png", "art_0_14": "assets/art_0_14.png", "art_0_15": "assets/art_0_15.png", "art_0_16": "assets/art_0_16.png", "art_0_17": "assets/art_0_17.png", "art_0_18": "assets/art_0_18.png", "art_0_19": "assets/art_0_19.png", "art_0_20": "assets/art_0_20.png", "art_0_21": "assets/art_0_21.png", "art_0_22": "assets/art_0_22.png", "art_0_23": "assets/art_0_23.png", "art_1_00": "assets/art_1_00.png", "art_1_01": "assets/art_1_01.png", "art_1_02": "assets/art_1_02.png", "art_1_03": "assets/art_1_03.png", "art_1_04": "assets/art_1_04.png", "art_1_05": "assets/art_1_05.png", "art_1_06": "assets/art_1_06.png", "art_1_07": "assets/art_1_07.png", "art_1_08": "assets/art_1_08.png", "art_1_09": "assets/art_1_09.png", "art_1_10": "assets/art_1_10.png", "art_1_11": "assets/art_1_11.png", "art_1_12": "assets/art_1_12.png", "art_1_13": "assets/art_1_13.png", "art_1_14": "assets/art_1_14.png", "art_1_15": "assets/art_1_15.png", "art_1_16": "assets/art_1_16.png", "art_1_17": "assets/art_1_17.png", "art_1_18": "assets/art_1_18.png", "art_1_19": "assets/art_1_19.png", "art_1_20": "assets/art_1_20.png", "art_1_21": "assets/art_1_21.png", "art_1_22": "assets/art_1_22.png", "art_1_23": "assets/art_1_23.png", "art_2_00": "assets/art_2_00.png", "art_2_01": "assets/art_2_01.png", "art_2_02": "assets/art_2_02.png", "art_2_03": "assets/art_2_03.png", "art_2_04": "assets/art_2_04.png", "art_2_05": "assets/art_2_05.png", "art_2_06": "assets/art_2_06.png", "art_2_07": "assets/art_2_07.png", "art_2_08": "assets/art_2_08.png", "art_2_09": "assets/art_2_09.png", "art_2_10": "assets/art_2_10.png", "art_2_11": "assets/art_2_11.png", "art_2_12": "assets/art_2_12.png", "art_2_13": "assets/art_2_13.png", "board": "assets/board.png", "frame_building": "assets/frame_building.png", "frame_creature": "assets/frame_creature.png", "frame_node": "assets/frame_node.png", "frame_rare": "assets/frame_rare.png", "frame_res": "assets/frame_res.png", "hero": "assets/hero.png", "logo": "assets/logo.png", "ui_arrows": "assets/ui_arrows.png", "ui_avatar": "assets/ui_avatar.png", "ui_bar": "assets/ui_bar.png", "ui_book": "assets/ui_book.png", "ui_deck": "assets/ui_deck.png", "ui_gear": "assets/ui_gear.png", "ui_pill": "assets/ui_pill.png", "ui_plus": "assets/ui_plus.png", "ui_refresh": "assets/ui_refresh.png", "ui_scroll": "assets/ui_scroll.png", "ui_slot": "assets/ui_slot.png", "ui_tide": "assets/ui_tide.png"};window.CS_PRIVACY="<h4>Politique de confidentialité — Coral Stack</h4>\n<p>Coral Stack fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Coral Stack convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Coral Stack</h4>\n<p>Coral Stack works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Coral Stack suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 32000;
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script>
 <script>// Coral Stack — UI texts in 6 languages; card names come from cards.json (FR/EN, others fall back to EN).
 window.I18N = (() => {
   const L = ['fr', 'en', 'es', 'de', 'pt', 'it'];
@@ -892,7 +1127,269 @@ function frame(now) {
 }
 resize(); titleScreen(); requestAnimationFrame(frame);
 if (A() && A().load) A().load(() => { ARTURL.clear(); if (G.phase === 'title') titleScreen(); else renderAll(); });
-window.CS = { S: () => S, G, D, storeModal, startPlay, endTide, nextTide, place, match, complete, save, rows: () => S.rows, hand: () => S.hand, rowsOpen, autoFill, tapCard, speed: v => { G.speed = v; } };
+window.CS = { S: () => S, G, D, storeModal, startPlay, endTide, nextTide, place, match, complete, save, rows: () => S.rows, hand: () => S.hand, rowsOpen, autoFill, tapCard, speed: v => { G.speed = v; },
+  // for the BETA IA simulated player (src/beta-game.js): sounds to log, and what it needs to read the board and build a starting save
+  SFX, step: update, mkCard, findCard, allCards, fitsPartial, renderAll };
+})();
+</script>
+<script>// Coral Stack scenes for the BETA IA simulated player (shared core: beta.js, spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Every action is a real gesture on screen: drag a card from the hand onto a row slot, tap a row card to take it back,
+// tap a pack / chest / coin in the hand, the deck button, the tide window buttons. The game's own rules then craft.
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const CS = window.CS, G = CS.G, D = CS.D, C = D.cards, S = () => CS.S();
+  const isC = id => C[id].fam === 'creature';
+  const nm = id => (window.I18N && I18N.name(C[id])) || id;
+  const vis = sel => { const e = document.querySelector(sel); return e && e.offsetParent !== null ? e : null; };
+  // ui=propre: no ad overlay, no real-money "+" next to the shells, no rewarded-ad buttons in the tide window
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}#hud .plus{display:none!important}#modal .ads{display:none!important}'; document.head.appendChild(st); }
+
+  // ---------- reading the board ----------
+  const ONE = { r_hut: 2, r_workshop: 1, r_kitchen: 1, r_glassworks: 1, r_airpump: 1, r_kelpfarm: 1, r_market: 1, r_school: 1, r_dock: 1, r_pearlfarm: 1, r_lanternhouse: 1, r_airbell: 1 };
+  const GEN = /^r_(stone|seaweed|coral|sand|wreck|mussel|oxygen|fish)$/;
+  const outOf = r => typeof r.out[0] === 'string' ? r.out[0] : r.out[0][0];
+  function needs() {
+    const all = CS.allCards(), pop = all.filter(c => isC(c.id)).length;
+    const food = all.reduce((a, c) => a + ((!isC(c.id) && C[c.id].food) || 0), 0), oxy = all.reduce((a, c) => a + (C[c.id].oxy || 0), 0);
+    return { all, pop, foodLow: food < pop + 1, oxyLow: oxy < pop + 1, cnt: id => all.filter(c => c.id === id).length };
+  }
+  // how much a player would like to start this recipe now (0 = never)
+  function score(r, n, running) {
+    if (r.id === 'r_baby' || r.id === 'r_sub' && n.pop < 4) return 0;
+    if (ONE[r.id] && n.cnt(outOf(r)) >= ONE[r.id]) return 0;
+    let s = GEN.test(r.id) ? 20 : ONE[r.id] ? 50 : 30;
+    if (S().tut === 0 && r.id === 'r_seaweed') s = 100;
+    if (S().tut === 1 && r.id === 'r_cake') s = 100;
+    if (n.foodLow && /^r_(cake|wrap|soup|urchin|fish)$/.test(r.id)) s = Math.max(s, 60);
+    if (n.foodLow && r.id === 'r_seaweed') s = Math.max(s, 45);
+    if (n.oxyLow && r.id === 'r_oxygen') s = Math.max(s, 55);
+    if (!S().discovered[r.id]) s += 40;                       // discoveries are the best thing to watch
+    if (GEN.test(r.id) && running.includes(r.id)) s -= 15;    // one of each harvester is enough
+    return s;
+  }
+  // the cards (from this pool) that make recipe r, the worker last so a half-built row never crafts something else
+  function picks(r, pool) {
+    const p = pool.slice(), got = [];
+    for (const tok of r.in) {
+      const k = tok === 'W' ? p.findIndex(c => isC(c.id) && !c.asleep && !r.in.includes(c.id)) : p.findIndex(c => c.id === tok && !(isC(c.id) && c.asleep));
+      if (k < 0) return null; got.push(p.splice(k, 1)[0]);
+    }
+    const m = CS.match(got); if (!m || m.blocked) return null;
+    return got.sort((a, b) => (isC(a.id) ? 1 : 0) - (isC(b.id) ? 1 : 0));
+  }
+  const rowCards = i => S().rows[i].a.concat(S().rows[i].b);
+  const rowRecipe = i => { const m = CS.match(rowCards(i)); return m && !m.blocked ? m : null; };
+  // the best (row, recipe) move: an empty row first, else replace a harvester for something much better
+  function plan() {
+    const n = needs(), open = [...Array(CS.rowsOpen()).keys()], running = open.map(i => rowRecipe(i)).filter(m => m && m.r).map(m => m.r.id);
+    let best = null;
+    for (const i of open) {
+      const cs = rowCards(i), m = rowRecipe(i);
+      if (cs.length && !m) continue;                                   // dead rows are cleared first
+      if (cs.length) { const cur = m.market ? 40 : score(m.r, n, []); if (cur >= 30 || (G.rowNeed[i] && G.rowT[i] / G.rowNeed[i] > 0.45)) continue; }
+      const pool = S().hand.concat(cs);
+      for (const r of D.recipes) {
+        const s = score(r, n, running); if (s <= 0 || (cs.length && s < 45)) continue;
+        const p = picks(r, pool); if (!p) continue;
+        const v = s - (cs.length ? 10 : 0) + BETA.rnd() * 6;
+        if (!best || v > best.v) best = { v, i, r, cards: p, clear: cs.length > 0 };
+      }
+    }
+    return best;
+  }
+
+  // ---------- gestures ----------
+  const center = (el, A, k = 0.12) => { const q = el.getBoundingClientRect(); return [q.left + q.width * A.jitter(0.5 - k, 0.5 + k), q.top + q.height * A.jitter(0.5 - k, 0.5 + k)]; };
+  const handEl = (id, asleep) => [...document.querySelectorAll('#hand .cc[data-hand]')].find(e => e.dataset.id === id && e.classList.contains('zz') === !!asleep);
+  // bring a card of the hand into view (the hand scrolls sideways when it is long)
+  async function showInHand(A, el) {
+    const hand = document.querySelector('#hand'); if (!hand || !el) return;
+    const r = el.getBoundingClientRect(), h = hand.getBoundingClientRect();
+    if (r.left >= h.left + 6 && r.right <= h.right - 6) return;
+    const from = hand.scrollLeft, to = Math.max(0, from + (r.left + r.width / 2) - (h.left + h.width / 2));
+    for (let k = 1; k <= 8; k++) { hand.scrollLeft = from + (to - from) * (1 - Math.pow(1 - k / 8, 3)); await A.wait(30); }
+  }
+  // drag one card of the hand onto a row slot
+  async function dragTo(A, id, row) {
+    let el = handEl(id); if (!el) return false;
+    await showInHand(A, el); el = handEl(id); if (!el) return false;
+    const slot = S().rows[row].a.length ? 'b' : 'a', sl = vis(`.slot[data-row="${row}"][data-slot="${slot}"]`); if (!sl) return false;
+    const before = rowCards(row).length, [x1, y1] = center(el, A), [x2, y2] = center(sl, A, 0.1);
+    await A.drag(x1, y1, x2, y2, `${nm(id)} → rangée ${row + 1}`, A.jitter(420, 620)); await A.wait(220);
+    return rowCards(row).length > before;
+  }
+  // tap the top card of a row pile: it goes back to the hand
+  async function takeBack(A, row) {
+    for (const s of ['b', 'a']) {
+      const pile = [...document.querySelectorAll(`.slot[data-row="${row}"][data-slot="${s}"] .pl .cc`)]; if (!pile.length) continue;
+      const [x, y] = center(pile[pile.length - 1], A, 0.08); await A.tap(x, y, `reprendre (rangée ${row + 1})`); await A.wait(260); return true;
+    }
+    return false;
+  }
+  async function clearRow(A, row) { for (let k = 0; k < 12 && rowCards(row).length && A.running(); k++) { if (!(await takeBack(A, row))) break; await A.realWait(A.jitter(120, 260)); } }
+
+  // ---------- popups (the tide window, consent, a stray sheet or confirm) ----------
+  async function popups(A) {
+    const conf = vis('.confirm [data-v="0"]'); if (conf) { await A.think(); await A.tapEl(conf, 'annuler'); return true; }
+    if (vis('.adov')) { await A.wait(800); return true; }
+    const c = vis('#modal [data-c]'); if (c) { await A.think(); await A.tapEl(A.opts.ui === 'propre' ? '#modal [data-c="0"]' : '#modal [data-c="1"]', 'consentement'); await A.wait(600); return true; }
+    const next = vis('#modal [data-next]');
+    if (next) {
+      await A.wait(A.jitter(1400, 2000));    // let the tide numbers be read
+      const packs = [...document.querySelectorAll('#modal [data-buy]')].map(b => [b, D.packs.find(p => p.id === b.dataset.buy)]).filter(([, p]) => p && p.price <= S().shells - 2);
+      if (packs.length && needs().all.length < 70) { await A.tapEl(packs[packs.length - 1][0], 'paquet (coquillages)'); await A.wait(700); }
+      await A.think(); await A.tapEl(vis('#modal [data-next]'), 'marée suivante'); await A.wait(900); return true;
+    }
+    const lg = vis('#modal [data-login]'); if (lg) { await A.think(); await A.tapEl(lg, 'cadeau du jour'); await A.wait(800); return true; }
+    const close = vis('#modal [data-close]'); if (close) { await A.think(); await A.tapEl(close, 'fermer'); await A.wait(400); return true; }
+    if (vis('#sheet.on')) {
+      const b = vis('#sheet [data-sell]') || vis('#sheet [data-put]') || [...document.querySelectorAll('#sheet [data-buy]:not([disabled])')][0];
+      if (b) { await A.think(); await A.tapEl(b, 'fiche'); await A.wait(400); return true; }
+    }
+    return false;
+  }
+  // never act during a reward animation: the new-recipe card, flying cards and shells
+  async function settle(A) { for (let k = 0; k < 60 && A.running() && document.querySelector('.reveal'); k++) await A.wait(150); }
+
+  // ---------- one decision, like a player looking at the board ----------
+  async function turn(A, opt = {}) {
+    if (await popups(A)) return true;
+    await settle(A);
+    // treasures in the hand: coins, chests, packs (one tap each)
+    const tre = [...document.querySelectorAll('#hand .cc[data-hand]')].find(e => C[e.dataset.id] && (C[e.dataset.id].pack || e.dataset.id === 'chest' || C[e.dataset.id].coin));
+    if (tre) { await showInHand(A, tre); await A.think(); const id = tre.dataset.id, el = handEl(id); if (el) { const [x, y] = center(el, A); await A.tap(x, y, nm(id)); if (C[id].pack || id === 'chest') A.mark(C[id].pack ? 'paquet ouvert' : 'coffre ouvert'); await A.wait(C[id].coin ? 800 : 1300); } return true; }
+    // a row that makes nothing any more (a worn-out node, a lone worker): take its cards back
+    for (let i = 0; i < CS.rowsOpen(); i++) if (rowCards(i).length && !rowRecipe(i)) { await A.think(); await clearRow(A, i); return true; }
+    // too many loose cards: sell one with a long press, so the board never fills up
+    if (needs().all.length > 80) {
+      const ids = S().hand.filter(c => !isC(c.id) && C[c.id].sell && C[c.id].fam === 'res').map(c => c.id), id = ids.sort((a, b) => ids.filter(x => x === b).length - ids.filter(x => x === a).length)[0], el = id && handEl(id);
+      if (el) { await showInHand(A, el); const [x, y] = center(handEl(id) || el, A); await A.think(); await A.drag(x, y, x, y, 'appui long ' + nm(id), 650); await A.wait(300); const sb = vis('#sheet [data-sell]'); if (sb) await A.tapEl(sb, 'vendre'); await A.wait(500); return true; }
+    }
+    // the next recipe
+    const p = plan();
+    if (p) {
+      await A.think(); if (p.clear) await clearRow(A, p.i);
+      A.ev('recette_lancee', { id: p.r.id, rangee: p.i + 1 });
+      for (const c of p.cards) { if (!A.running()) break; if (!(await dragTo(A, c.id, p.i))) { A.ev('echec', { id: p.r.id, carte: c.id }); break; } await A.realWait(A.jitter(150, 400)); }
+      return true;
+    }
+    // nothing to build: open a pack from the deck with shells (never real money)
+    const pk = D.packs.filter(x => S().zones[x.zone] && x.price <= S().shells).pop();
+    if (pk && opt.packs !== false && needs().all.length < 60) {
+      await A.think(); if (await A.tapEl('#hud [data-a="packs"]', 'paquets')) { await A.wait(500); const b = vis(`#sheet [data-buy="${pk.id}"]`); if (b) { await A.think(); await A.tapEl(b, 'acheter ' + pk.id); await A.wait(900); } }
+      return true;
+    }
+    return false;
+  }
+
+  // ---------- moments worth cutting on ----------
+  function watch(A) {
+    let disc = Object.keys(S().discovered).length, goal = S().goal, tide = S().tide, combo = G.combo, zones = Object.keys(S().zones).length, made = S().totals.made, phase = G.phase;
+    const iv = setInterval(() => {
+      if (!A.running()) return clearInterval(iv);
+      const d = Object.keys(S().discovered); if (d.length > disc) { const r = D.recipes.find(x => x.id === d[d.length - 1]); disc = d.length; A.mark('recette découverte : ' + (r ? nm(outOf(r)) : '?')); A.ev('decouverte', { id: r && r.id }); }
+      if (G.combo !== combo) { combo = G.combo; if (combo >= 2 && G.comboT > 3.5) A.mark('combo x' + combo); }
+      if (S().goal > goal) { goal = S().goal; A.mark('niveau ' + (goal + 1)); A.ev('niveau', { niveau: goal + 1 }); }
+      if (G.phase !== phase) { if (G.phase === 'tide') A.mark('fin de marée ' + S().tide); phase = G.phase; }
+      if (S().tide !== tide) { tide = S().tide; A.ev('maree', { maree: tide }); }
+      const z = Object.keys(S().zones).length; if (z > zones) { zones = z; A.mark('zone débloquée'); A.ev('deblocage', { zones: z }); }
+      if (S().totals.made > made) { A.ev('recolte', { n: S().totals.made - made }); made = S().totals.made; }
+    }, 100);
+  }
+
+  // ---------- title -> play ----------
+  async function start(A) {
+    if (A.opts.ui === 'propre' && S().consent == null) S().consent = false;   // clean takes: no consent window on camera (refused = no personalised ads)
+    if (A.opts.ui === 'propre') S().owned.noads = true;      // clean takes: no interstitials
+    if (G.phase !== 'title') return;
+    await A.wait(900); await A.tapEl('#title [data-play]', 'jouer'); await A.wait(700);
+    await popups(A); await A.wait(400);
+  }
+
+  // ---------- starting saves, built off camera by fast-forwarding the real rules (like tools/play-test.mjs) ----------
+  function botStep() {
+    const rows = S().rows, open = CS.rowsOpen();
+    rows.forEach((r, i) => { if ((r.a.length || r.b.length) && !CS.match(r.a.concat(r.b))) r.a.concat(r.b).forEach(c => CS.place(c.uid, 0, 'hand')); });
+    const n = needs();
+    for (let i = 0; i < open; i++) {
+      if (rows[i].a.length || rows[i].b.length) continue;
+      let best = null; for (const r of D.recipes) { const s = score(r, n, []); if (s <= 0) continue; const p = picks(r, S().hand); if (p && (!best || s > best.s)) best = { s, p }; }
+      if (best) best.p.forEach((c, k) => CS.place(c.uid, i, k === 0 ? 'a' : 'b'));
+    }
+    for (const c of S().hand.slice()) if (C[c.id].pack || c.id === 'chest' || C[c.id].coin) CS.tapCard(c, document.querySelector('#hand'));
+    if (n.all.length > 80) for (const c of S().hand.filter(c => C[c.id].fam === 'res' && C[c.id].sell).slice(0, n.all.length - 70)) { S().hand.splice(S().hand.indexOf(c), 1); S().shells += C[c.id].sell; }
+  }
+  async function fastForward(tides) {
+    const S0 = S(), noads = S0.owned.noads, end = S0.tide + tides; S0.owned.noads = true;
+    for (let k = 0; S0.tide < end && k < tides * 40; k++) {
+      await new Promise(r => setTimeout(r, 40));              // card rewards arrive on timers: let them land, and let the page breathe
+      if (G.phase === 'tide') {
+        const b = [...document.querySelectorAll('#modal [data-buy]')].reverse().find(b => (D.packs.find(p => p.id === b.dataset.buy) || {}).price <= S0.shells - 2); if (b) b.click();
+        const nx = document.querySelector('#modal [data-next]'); if (nx) nx.click(); continue;
+      }
+      botStep(); for (let i = 0; i < 20; i++) CS.step(0.5);
+    }
+    S0.owned.noads = noads; S0.tut = Math.max(S0.tut, 3); CS.save();
+  }
+  function tidy() {
+    document.querySelectorAll('.reveal, .toast, .jz, .fly, .float, .ghost').forEach(e => e.remove());
+    const cb = document.querySelector('#combo'); if (cb) cb.classList.remove('on');
+    const hand = document.querySelector('#hand'); if (hand) hand.scrollLeft = 0;
+  }
+  // the moment: a row one card short of a recipe never made before (props set off camera)
+  let staged = null;
+  function stageMoment() {
+    const S0 = S(); let r = D.recipes.filter(r => !S0.discovered[r.id] && r.in.length <= 3 && !/^r_(baby|sub)$/.test(r.id) && r.time <= 6).sort((a, b) => a.time - b.time)[0];
+    if (!r) { r = D.recipes.find(x => x.id === 'r_ink') || D.recipes[0]; delete S0.discovered[r.id]; }
+    const row = 0; rowCards(row).forEach(c => CS.place(c.uid, 0, 'hand'));
+    const want = r.in.map(t => t === 'W' ? 'diver' : t), have = S0.hand.slice();
+    for (const id of want) { const k = have.findIndex(c => c.id === id && !c.asleep); if (k >= 0) have.splice(k, 1); else S0.hand.push(CS.mkCard(id)); }
+    const p = picks(r, S0.hand); if (!p) return;
+    p.slice(0, -1).forEach((c, k) => CS.place(c.uid, row, k === 0 ? 'a' : 'b'));
+    staged = { r, row, last: p[p.length - 1].id }; CS.renderAll();
+  }
+
+  // progression runs the game faster: its frame step is capped at 50 ms, so the rule speed follows the clock speed
+  function syncSpeed(A) { let last = performance.now(); const f = now => { if (!A.running()) { G.speed = 1; return; } const d = now - last; last = now; G.speed = Math.max(1, d / 50); requestAnimationFrame(f); }; requestAnimationFrame(f); }
+
+  BETA.dbg = { plan, needs, picks, score };   // for tools/beta probes
+  BETA.game({
+    sfx: CS.SFX,
+    logo: () => (window.CSART && CSART.logoURL && CSART.logoURL()) || '',
+    endText: () => S().lang === 'fr' ? 'Joue gratuitement' : 'Play free',
+    progress: () => [S().tide, Object.keys(S().discovered).length, S().totals.made, S().goal, G.phase],
+    async prepare(save, A) {
+      if (A.opts.scene === 'onboarding') return;            // onboarding always starts from the title screen
+      await start(A);
+      if (save === 'milieu') await fastForward(6); else if (save === 'avance') await fastForward(16);
+      if (A.opts.ui === 'propre') S().owned.noads = true;
+      if (save !== 'neuf') S().hand.forEach(c => { c.asleep = 0; });   // a fresh tide: the divers worn out by the fast-forward are rested
+      if (save !== 'neuf') {   // the fast-forward wears out the resource spots: give back a fresh seabed so there is something to harvest on camera
+        for (const id of ['rock', 'seabed', 'vent', 'wreck', 'coralpatch', 'sandbank', 'octopus', 'seaweed', 'seaweed', 'seaweed', 'seaweed'])
+          if (C[id] && S().hand.filter(c => c.id === id).length < (id === 'seaweed' ? 4 : 1)) S().hand.push(CS.mkCard(id));
+      }
+      if (A.opts.scene === 'moment') stageMoment();
+      await A.wait(save === 'neuf' ? 600 : 2500); tidy(); CS.renderAll();   // let the fast-forward leftovers settle off camera
+    },
+    scenes: {
+      // title -> consent -> the tutorial rows -> first recipes discovered, first goals
+      async onboarding(A) { watch(A); await start(A); for (let i = 0; i < 40 && A.running(); i++) if (!(await turn(A))) await A.wait(500); },
+      // the satisfying core: drag cards into rows, harvests land in the hand, new recipes and combos
+      async boucle(A) { watch(A); let packs = 0; for (let i = 0; i < 30 && A.running(); i++) { const before = S().shells; const ok = await turn(A, { packs: packs < 1 }); if (S().shells < before) packs++; if (!ok) await A.wait(400); } },
+      // before/after: the colony grows, sped up
+      async progression(A) { watch(A); A.speed(Math.max(4, A.opts.vitesse)); syncSpeed(A); for (let i = 0; i < 200 && A.running(); i++) if (!(await turn(A))) await A.wait(400); },
+      // the wow: the last card goes on the row, the new recipe flips in the middle of the screen
+      async moment(A) {
+        watch(A); await A.wait(400);
+        if (staged) { await A.think(); await dragTo(A, staged.last, staged.row); }
+        for (let k = 0; k < 120 && A.running() && !document.querySelector('.reveal'); k++) await A.wait(100);
+        await settle(A); await A.wait(800);
+        for (let i = 0; i < 3 && A.running(); i++) if (!(await turn(A, { packs: false }))) await A.wait(400);
+      },
+      // plays on until stopped (long tests, balance, memory)
+      async idle(A) { watch(A); while (A.running()) if (!(await turn(A))) await A.wait(600); },
+    },
+  });
 })();
 </script>
 

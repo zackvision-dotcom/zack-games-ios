@@ -160,6 +160,41 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
   for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
   if (opts.seed) seedRandom(opts.seed);
   installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 32000;
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
   addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
   addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
   // FPS (real frames per real second)
@@ -230,7 +265,10 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
   const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
 
   // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
-  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { B.sons.push({ t: +t0().toFixed(3), son: k }); return f.apply(this, a); }; } }
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
 
   // ---- stuck detection: no progress for 60 s of game time ----
   function watchStuck(progress) {

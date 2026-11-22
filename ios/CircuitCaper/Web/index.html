@@ -68,6 +68,241 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
 <div id="game"><div id="hud"></div><div id="rico"><div class="rf"></div><div class="rt"></div></div><div id="bar"></div></div>
 <div id="mapv"></div><div id="modal"></div><div id="toasts"></div><div id="title"></div>
 <script>window.CC_VERSION="1.0";window.CC_SPR={"d_alarm": "assets/d_alarm.png", "d_button": "assets/d_button.png", "d_cam": "assets/d_cam.png", "d_door": "assets/d_door.png", "d_door_open": "assets/d_door_open.png", "d_elev": "assets/d_elev.png", "d_exit": "assets/d_exit.png", "d_lamp_off": "assets/d_lamp_off.png", "d_lamp_on": "assets/d_lamp_on.png", "d_painting": "assets/d_painting.png", "d_sack": "assets/d_sack.png", "d_safe": "assets/d_safe.png", "d_switch": "assets/d_switch.png", "d_trap": "assets/d_trap.png", "d_trap_open": "assets/d_trap_open.png", "deco_aquarium": "assets/deco_aquarium.png", "deco_armor": "assets/deco_armor.png", "deco_cat": "assets/deco_cat.png", "deco_chandelier": "assets/deco_chandelier.png", "deco_flamingo": "assets/deco_flamingo.png", "deco_globe": "assets/deco_globe.png", "deco_record": "assets/deco_record.png", "deco_rug": "assets/deco_rug.png", "deco_throne": "assets/deco_throne.png", "deco_vase": "assets/deco_vase.png", "guard_alert": "assets/guard_alert.png", "guard_ko": "assets/guard_ko.png", "guard_w0": "assets/guard_w0.png", "guard_w1": "assets/guard_w1.png", "logo": "assets/logo.png", "loot_0": "assets/loot_0.png", "loot_1": "assets/loot_1.png", "loot_2": "assets/loot_2.png", "loot_3": "assets/loot_3.png", "loot_4": "assets/loot_4.png", "loot_5": "assets/loot_5.png", "loot_6": "assets/loot_6.png", "loot_7": "assets/loot_7.png", "rico_fall": "assets/rico_fall.png", "rico_g0": "assets/rico_g0.png", "rico_g1": "assets/rico_g1.png", "rico_sneak": "assets/rico_sneak.png", "rico_w0": "assets/rico_w0.png", "rico_w1": "assets/rico_w1.png", "rico_w2": "assets/rico_w2.png", "rico_win": "assets/rico_win.png", "title_bg": "assets/title_bg.png", "ui_fast": "assets/ui_fast.png", "ui_gear": "assets/ui_gear.png", "ui_gift": "assets/ui_gift.png", "ui_hide": "assets/ui_hide.png", "ui_hint": "assets/ui_hint.png", "ui_lock": "assets/ui_lock.png", "ui_map": "assets/ui_map.png", "ui_retry": "assets/ui_retry.png", "ui_star": "assets/ui_star.png", "ui_star0": "assets/ui_star0.png", "wall_0": "assets/wall_0.png", "wall_1": "assets/wall_1.png", "wall_2": "assets/wall_2.png", "wall_3": "assets/wall_3.png", "wall_4": "assets/wall_4.png", "wall_5": "assets/wall_5.png"};window.CC_PRIVACY="<h4>Politique de confidentialité — Circuit Caper</h4>\n<p>Circuit Caper fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. RevenueCat vérifie les reçus d’achat avec un identifiant anonyme.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) sont envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Circuit Caper convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Circuit Caper</h4>\n<p>Circuit Caper works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. RevenueCat checks receipts with an anonymous identifier.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) are sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Circuit Caper suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 32000;
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script>
 <script>// Circuit Caper — the heist simulation (shared by the game and tools/solve.mjs). Pure logic, no drawing.
 // A level is a building seen in cross-section: floors (0 = ground) of `w` tiles. Rico follows his route on his own;
 // the player only rewires the devices (source -> target) before the heist and may press remote buttons during it.
@@ -396,7 +631,8 @@ const G = { mode: 'title', lvl: null, wires: {}, s: null, acc: 0, speed: 1, slow
 function layout() {
   DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
   const L = G.lvl; if (!L) return; const top = ($('#hud')?.offsetHeight || 70) + 40, bottom = ($('#bar')?.offsetHeight || 120) + 70;
-  TS = Math.min(48, (W - 20) / L.w); FH = Math.min(TS * 3.4, (H - top - bottom) / L.floors); OX = (W - TS * L.w) / 2;
+  const tall = window.BETA && BETA.on ? 5 : 3.4;   // BETA IA video takes: taller rooms fill the 9:16 frame
+  TS = Math.min(48, (W - 20) / L.w); FH = Math.min(TS * tall, (H - top - bottom) / L.floors); OX = (W - TS * L.w) / 2;
   BASE = top + FH * L.floors + Math.max(0, (H - top - bottom - FH * L.floors) / 2); TOPY = BASE - FH * L.floors;
 }
 const X = x => OX + (x + 0.5) * TS, FY = f => BASE - f * FH;
@@ -619,6 +855,7 @@ function win() {
 function safeGame(done) {
   const el = div('safe', `<h2>${t('safe')}</h2><p>${t('safeTxt')}</p><canvas width="240" height="240"></canvas><div class="dots"><i></i><i></i><i></i></div>`); document.body.appendChild(el); rico('r_safe');
   const c2 = el.querySelector('canvas').getContext('2d'); let a = 0, hits = 0, tries = 0, target = rnd(1, 5), sp = 3.2, alive = true, lastTick = 0;
+  G.dial = () => ({ a, target, alive, el });   // read by the BETA IA player (beta-game.js)
   const loop = () => { if (!alive) return; a = (a + sp / 60) % TAU; if (Math.floor(a * 6) !== lastTick) { lastTick = Math.floor(a * 6); SFX.tick(); }
     c2.clearRect(0, 0, 240, 240); c2.fillStyle = '#4a4a5a'; c2.beginPath(); c2.arc(120, 120, 110, 0, TAU); c2.fill(); c2.fillStyle = '#c0c4d0'; c2.beginPath(); c2.arc(120, 120, 96, 0, TAU); c2.fill();
     c2.strokeStyle = '#3aff7a'; c2.lineWidth = 16; c2.beginPath(); c2.arc(120, 120, 84, target - 0.28, target + 0.28); c2.stroke();
@@ -723,8 +960,115 @@ function begin() {
 addEventListener('resize', layout);
 let last = performance.now();
 function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; G.t += dt; if (G.mode === 'heist') heistTick(dt); musicTick(); draw(); requestAnimationFrame(frame); }
-window.CAPER = { G, S: () => S, startLevel, LV, startHeist, pressBtn, toPlan, C };
+window.CAPER = { G, S: () => S, startLevel, LV, startHeist, pressBtn, toPlan, C, sock, sockets, SFX, mapScreen, save };
 titleScreen(); requestAnimationFrame(frame);
+})();
+</script>
+<script>// Circuit Caper scenes for the BETA IA simulated player (shared core: beta.js, spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// The player drags real wires between the sockets on screen (the winning wiring of tools/solve.mjs), starts the heist,
+// presses the buttons on time, then cracks the safe by tapping when the needle crosses the green notch.
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const K = window.CAPER, G = K.G, S = () => K.S();
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}#modal [data-double]{display:none!important}#bar [data-a="hintad"]{visibility:hidden!important}'; document.head.appendChild(st); }
+  const visible = sel => { const e = document.querySelector(sel); return e && e.offsetParent ? e : null; };
+  async function start(A) {
+    if (A.opts.ui === 'propre' && S().consent == null) S().consent = false;   // clean takes: no consent window on camera (refused = no personalised ads)
+    if (A.opts.ui === 'propre') S().owned.noads = true;
+    if (G.mode !== 'title') return;
+    await A.wait(900); await A.tapEl('#title [data-play]', 'jouer'); await A.wait(700);
+    if (visible('#modal [data-c]')) { await A.think(); await A.tapEl(A.opts.ui === 'propre' ? '#modal [data-c="0"]' : '#modal [data-c="1"]', 'consentement'); await A.wait(700); }
+    const gift = visible('#modal [data-claim], #modal [data-close]'); if (gift) { await A.wait(500); await A.tapEl(gift, 'fermer'); await A.wait(400); }
+  }
+  // plan: drag each wire of the winning wiring, like a player who knows the answer
+  async function wire(A, L) {
+    const sol = (window.CSOL || {})[L.id]; if (!sol) return false;
+    for (const [a, b] of Object.entries(sol.w)) {
+      if (!A.running()) return false; if (G.wires[a] === b) continue;
+      const sa = K.sock(a), sb = K.sock(b); if (!sa || !sb) continue;
+      await A.think(); await A.drag(sa.x, sa.y, sb.x, sb.y, `câble ${a}→${b}`, A.jitter(450, 700)); await A.wait(250);
+    }
+    return true;
+  }
+  async function heist(A, L) {
+    const sol = (window.CSOL || {})[L.id] || { pr: [] };
+    await A.think(); if (!(await A.tapEl('#bar [data-a="go"]', 'lancer le casse'))) return false;
+    const presses = [...(sol.pr || [])].sort((x, y) => x.t - y.t);
+    for (let i = 0; i < 1200 && A.running() && G.mode === 'heist'; i++) {
+      if (presses.length && G.s && G.s.t >= presses[0].t - 0.02) { presses.shift(); await A.tapEl('#bar [data-a="press"]', 'bouton'); }
+      await A.wait(50);
+    }
+    return G.mode === 'win';
+  }
+  // the safe: tap when the needle is inside the notch (a "debutant" player misses on purpose now and then)
+  async function safe(A) {
+    for (let i = 0; i < 400 && A.running() && !(G.dial && G.dial().alive); i++) await A.wait(50);
+    let taps = 0; const d0 = G.dial(), r = d0.el.querySelector('canvas').getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const ang = v => ((v % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2), gap = (x, y) => Math.abs(((x - y + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+    let pa = d0.a, pt = performance.now(), w = 3.2;   // needle speed, measured live (rad per second of game time)
+    while (A.running() && G.dial && G.dial().alive && taps < 6) {
+      const d = G.dial(), now = performance.now(); if (now > pt) { const dv = ang(d.a - pa); if (dv > 0 && dv < 1) w = w * 0.7 + (dv / ((now - pt) / 1000)) * 0.3; pa = d.a; pt = now; }
+      const lead = 0.24 * A.opts.vitesse, ahead = d.a + w * lead;   // a tap lands about 0.24 s after it starts
+      const miss = A.opts.style === 'debutant' && A.rnd() < 0.35;
+      if (gap(ahead, d.target) < 0.1 && !miss) { await A.tap(cx, cy, 'coffre-fort'); taps++; await A.wait(300); pa = G.dial().a; pt = performance.now(); }
+      else await A.wait(16);
+    }
+    A.mark('coffre ouvert');
+  }
+  async function afterWin(A) {
+    await A.wait(1800);   // let the stars land
+    const n = visible('#modal [data-next]'); if (n) { await A.think(); await A.tapEl(n, 'suivant'); await A.wait(900); }
+  }
+  // a popup over the screen (daily gift, consent…): close it the way a player would
+  async function clearPopups(A) {
+    for (let i = 0; i < 4; i++) {
+      const b = visible('#modal [data-claim]') || visible('#modal [data-close]'); if (!b) return;
+      await A.wait(A.jitter(400, 800)); await A.tapEl(b, b.dataset.claim != null ? 'cadeau' : 'fermer'); await A.wait(500);
+    }
+  }
+  async function playLevel(A, L) {
+    for (let k = 0; k < 3 && (!G.lvl || G.lvl.id !== L.id || G.mode !== 'plan'); k++) {
+      await clearPopups(A);
+      if (G.mode !== 'map') { K.mapScreen(); await A.wait(600); }
+      await A.think(); await A.tapEl(`#mapv [data-l="${L.id}"]`, 'niveau ' + L.id); await A.wait(900);
+    }
+    if (!G.lvl || G.mode !== 'plan') { A.ev('erreur', { msg: 'niveau ' + L.id + ' pas ouvert' }); return false; }
+    A.ev('niveau', { id: L.id }); await A.wait(600);
+    await wire(A, L); const won = await heist(A, L);
+    if (won) { A.mark('braquage réussi'); await safe(A); await afterWin(A); }
+    else { A.ev('echec', { id: L.id }); const r = visible('#modal [data-retry], #bar [data-a="abort"]'); if (r) await A.tapEl(r, 'réessayer'); }
+    return won;
+  }
+  const nextLevel = () => K.LV.find(L => !(S().stars[L.id] > 0)) || K.LV[K.LV.length - 1];
+  function setSave(save) {
+    const n = save === 'avance' ? 14 : save === 'milieu' ? 6 : 0; if (!n) return;
+    for (const L of K.LV) if (L.id <= n) S().stars[L.id] = Math.max(S().stars[L.id] || 0, 3);
+    S().coins = Math.max(S().coins, n * 120); S().tipWire = 1; K.save();
+  }
+
+  BETA.game({
+    sfx: K.SFX,
+    logo: () => (window.CP_SPR || window.CC_SPR || {}).logo || (document.querySelector('#title .logo img') || {}).src || '',
+    endText: () => document.documentElement.lang === 'en' ? 'Play free' : 'Joue gratuitement',
+    progress: () => [G.mode, G.lvl && G.lvl.id, G.s && Math.round(G.s.t)],
+    async prepare(save, A) {
+      setSave(save); if (A.opts.scene === 'onboarding') return;
+      await start(A); await A.wait(800);
+      if (G.mode !== 'map' && !(G.lvl && G.mode === 'plan')) { K.mapScreen(); await A.wait(500); }
+      await A.wait(900); await clearPopups(A);
+    },
+    scenes: {
+      async onboarding(A) { await start(A); await A.wait(1200); for (let i = 0; i < 2 && A.running(); i++) await playLevel(A, G.lvl && G.mode === 'plan' ? G.lvl : nextLevel()); },
+      async boucle(A) { await playLevel(A, nextLevel()); },
+      async progression(A) { A.speed(Math.max(2, A.opts.vitesse)); for (let i = 0; i < 4 && A.running(); i++) await playLevel(A, nextLevel()); },
+      async moment(A) {   // straight into the heist of a wired level: the run, the loot, the safe
+        const L = nextLevel(); K.startLevel(L); await A.wait(400);
+        const sol = (window.CSOL || {})[L.id]; if (sol) Object.assign(G.wires, sol.w);
+        if (await heist(A, L)) { A.mark('braquage réussi'); await safe(A); await A.wait(1500); }
+      },
+      async idle(A) { while (A.running()) await playLevel(A, nextLevel()); },
+    },
+  });
 })();
 </script>
 

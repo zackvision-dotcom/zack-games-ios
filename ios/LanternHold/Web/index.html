@@ -216,21 +216,30 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
   // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
   const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
-  let offCtx = null;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
     const RATE = 32000;
-    offCtx = new OfflineAudioContext(1, Math.ceil(AUDIO_LEN * RATE), RATE);   // mono keeps memory low on an 8 GB PC
-    Object.defineProperty(offCtx, 'currentTime', { get: () => videoNow() / 1000 });
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
-  // renders the whole soundtrack and returns the part from `from` (s) lasting `dur` (s), as a 16-bit stereo WAV in base64
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
   B.renderAudio = async (from, dur) => {
     if (!offCtx) return '';
-    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.max(0, Math.floor(from * r)), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
     const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
     const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
     w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
@@ -507,8 +516,9 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   // ---- the night ----
   function plan(R) {
     const n = R.night, out = [];
-    // the tutorial night: 5 shadows one by one, then a small "big wave" of 10 frail ones in a tight pack (one bolt pops half of it)
-    if (R.tut && n === 1) { for (let i = 0; i < 5; i++) out.push({ t: 2 + i * 2.6, k: 'shade', lane: 'N', w: 0 }); for (let i = 0; i < 10; i++) out.push({ t: 17 + i * 0.22, k: 'shade', lane: 'N', w: 50, big: 1, m: 0.45 }); return out; }
+    // the tutorial night: 3 shadows one by one, then a small "big wave" of 10 frail ones in a tight pack (one bolt pops half of it),
+    // early enough to land in the first 30 seconds of play
+    if (R.tut && n === 1) { for (let i = 0; i < 3; i++) out.push({ t: 1.5 + i * 2.4, k: 'shade', lane: 'N', w: 0 }); for (let i = 0; i < 10; i++) out.push({ t: 9.5 + i * 0.22, k: 'shade', lane: 'N', w: 50, big: 1, m: 0.45 }); return out; }
     const lanes = R.lanes, waves = 3 + Math.floor(n / 2);
     for (let w = 0; w < waves; w++) {
       const t0 = 3 + w * (TUNE.gap[n] || 34), cnt = Math.round(5 + n * 2.8 + w * 2.2), l1 = lanes[(w + n) % lanes.length], l2 = lanes[(w * 3 + n + 1) % lanes.length];
@@ -1890,6 +1900,10 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       H.startRun(false); await A.wait(300); await clean(A);
       const sc = A.opts.scene;
       if (sc === 'boucle' || sc === 'idle') { simTo(r => r.night >= 3 && r.phase === 'day'); R().berries += 60; R().dayT = C.DAY; }
+      if (sc === 'vague') {   // night 5, 3 s before its closing "Grande vague !" (10-15 shadows in a tight pack)
+        simTo(r => r.phase === 'won' || r.phase === 'lost' || (r.night === 5 && r.phase === 'night' && r.spawn[r.si] && r.spawn[r.si].big && r.spawn[r.si].t - r.t < 3));
+        if (R().phase === 'lost') { R().phase = 'night'; } R().lan.hp = R().lan.max;
+      }
       if (sc === 'moment') {   // the last shadows of the 7th night (the Great Fog weakened, or gone): a few taps, then the victorious sunrise
         // the boss is gone and a last pack of 3 to 8 weakened shadows is coming: defences and a few taps clear it on camera, every take
         simTo(r => r.phase === 'won' || r.phase === 'lost' || (r.night === 7 && r.phase === 'night' && r.si >= r.spawn.length && !r.e.some(e => e.boss) && r.e.length <= 8));
@@ -1912,6 +1926,8 @@ resize(); titleScreen(); requestAnimationFrame(frame);
         for (let n = 0; n < 7 && A.running(); n++) { await day(A, 10); const res = await night(A, 400); if (res === 'dawn') await dawnPick(A); else break; } },
       // the wow moment: the last shadows of the 7th night (the Great Fog), then the sun rising with its fanfare
       async moment(A) { watch(A); const res = await night(A, 30); if (res === 'won') await A.wait(3500); },
+      // the closing big wave of a night: the banner, 10-15 shadows rushing in, a storm of taps, then the dawn
+      async vague(A) { watch(A); const res = await night(A, 60); if (res === 'dawn') { await A.wait(1200); await dawnPick(A); } },
       // plays on until stopped (long tests): whole runs one after the other
       async idle(A) { watch(A);
         while (A.running()) { const r = R(); if (!r) { H.startRun(false); await A.wait(500); continue; }

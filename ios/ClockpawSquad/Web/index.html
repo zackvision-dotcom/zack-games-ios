@@ -227,21 +227,30 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
   // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
   const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
-  let offCtx = null;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
     const RATE = 32000;
-    offCtx = new OfflineAudioContext(1, Math.ceil(AUDIO_LEN * RATE), RATE);   // mono keeps memory low on an 8 GB PC
-    Object.defineProperty(offCtx, 'currentTime', { get: () => videoNow() / 1000 });
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
-  // renders the whole soundtrack and returns the part from `from` (s) lasting `dur` (s), as a 16-bit stereo WAV in base64
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
   B.renderAudio = async (from, dur) => {
     if (!offCtx) return '';
-    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.max(0, Math.floor(from * r)), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
     const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
     const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
     w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
