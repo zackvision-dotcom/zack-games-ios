@@ -1,16 +1,2 @@
-BUILD silkhop v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:20
-BUILD silkhop v42 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:54
-BUILD lanternhold v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:19
-BUILD lanternhold v43 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:55
-BUILD clockpawsquad v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:21
-BUILD clockpawsquad v44 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:55
-BUILD pulsepost v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:21
-BUILD pulsepost v45 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:56
-BUILD dungeondash v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:20
-BUILD dungeondash v46 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:57
-BUILD crumblecrew v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:22
-BUILD crumblecrew v51 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T01:01
-BUILD circuitcaper v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:22
-BUILD circuitcaper v52 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T01:00
-BUILD coralstack v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:23
-BUILD coralstack v50 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:59
+CHECK circuitcaper en-US desc=669 kw=81 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
+CHECK circuitcaper fr-FR desc=696 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
