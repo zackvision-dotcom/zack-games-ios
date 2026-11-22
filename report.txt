@@ -1,11 +1,48 @@
-REVIEW silkhop ok
-REVIEW lanternhold ok
-REVIEW clockpawsquad ok
-REVIEW pulsepost ok
-REVIEW dungeondash ok
-REVIEW gullstreet ok
-REVIEW coralstack ok
-REVIEW crumblecrew ok
-REVIEW circuitcaper ok
-REVIEW vanvoyage ok
-REVIEW braise ok
+IAPSTATE silkhop pearls READY_TO_SUBMIT
+IAPSTATE silkhop glow READY_TO_SUBMIT
+IAPSTATE silkhop starter READY_TO_SUBMIT
+IAPSTATE silkhop pass_hiver_2026 READY_TO_SUBMIT
+IAPSTATE silkhop noads READY_TO_SUBMIT
+IAPSTATE lanternhold acorns READY_TO_SUBMIT
+IAPSTATE lanternhold festival READY_TO_SUBMIT
+IAPSTATE lanternhold starter READY_TO_SUBMIT
+IAPSTATE lanternhold pass_hiver_2026 READY_TO_SUBMIT
+IAPSTATE lanternhold noads READY_TO_SUBMIT
+IAPSTATE clockpawsquad keys READY_TO_SUBMIT
+IAPSTATE clockpawsquad hints READY_TO_SUBMIT
+IAPSTATE clockpawsquad starter READY_TO_SUBMIT
+IAPSTATE clockpawsquad pass_hiver_2026 READY_TO_SUBMIT
+IAPSTATE clockpawsquad noads READY_TO_SUBMIT
+IAPSTATE pulsepost plumes READY_TO_SUBMIT
+IAPSTATE pulsepost album_nuit_electro READY_TO_SUBMIT
+IAPSTATE pulsepost starter READY_TO_SUBMIT
+IAPSTATE pulsepost pass_hiver_2026 READY_TO_SUBMIT
+IAPSTATE pulsepost noads READY_TO_SUBMIT
+IAPSTATE dungeondash gems READY_TO_SUBMIT
+IAPSTATE dungeondash cite_engloutie READY_TO_SUBMIT
+IAPSTATE dungeondash starter READY_TO_SUBMIT
+IAPSTATE dungeondash pass_hiver_2026 READY_TO_SUBMIT
+IAPSTATE dungeondash noads READY_TO_SUBMIT
+IAPSTATE gullstreet shells120 READY_TO_SUBMIT
+IAPSTATE gullstreet shells20 READY_TO_SUBMIT
+IAPSTATE gullstreet shells260 READY_TO_SUBMIT
+IAPSTATE gullstreet shells600 READY_TO_SUBMIT
+IAPSTATE gullstreet facades READY_TO_SUBMIT
+IAPSTATE gullstreet starter READY_TO_SUBMIT
+IAPSTATE gullstreet noads READY_TO_SUBMIT
+IAPSTATE coralstack shells READY_TO_SUBMIT
+IAPSTATE coralstack starter READY_TO_SUBMIT
+IAPSTATE coralstack noads READY_TO_SUBMIT
+IAPSTATE coralstack theme READY_TO_SUBMIT
+IAPSTATE crumblecrew starter READY_TO_SUBMIT
+IAPSTATE crumblecrew gold READY_TO_SUBMIT
+IAPSTATE crumblecrew noads READY_TO_SUBMIT
+IAPSTATE crumblecrew theme READY_TO_SUBMIT
+IAPSTATE circuitcaper costume READY_TO_SUBMIT
+IAPSTATE circuitcaper starter READY_TO_SUBMIT
+IAPSTATE circuitcaper loot READY_TO_SUBMIT
+IAPSTATE circuitcaper noads READY_TO_SUBMIT
+IAPSTATE vanvoyage starter READY_TO_SUBMIT
+IAPSTATE vanvoyage paint READY_TO_SUBMIT
+IAPSTATE vanvoyage noads READY_TO_SUBMIT
+IAPSTATE vanvoyage coins READY_TO_SUBMIT
