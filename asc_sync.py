@@ -219,6 +219,12 @@ def previews_v2(suffix):
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('COPYRIGHT'):
+        for g in sys.argv[1:]:
+            ver = edit_version(find_app(g)['id'])
+            call('PATCH', f"/appStoreVersions/{ver['id']}", {'data': {'type': 'appStoreVersions', 'id': ver['id'], 'attributes': {'copyright': os.environ['COPYRIGHT']}}})
+            print('COPYRIGHT', g, 'ok')
+        sys.exit(0)
     if os.environ.get('ADDKW'):
         # Zack's explicit choice (22/11, warned about guideline 2.3.7): add one keyword to every store language of an app
         word = os.environ['ADDKW']
