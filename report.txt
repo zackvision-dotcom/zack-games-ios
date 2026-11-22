@@ -1,2 +1,20 @@
-SUBMIT gullstreet ITEM ERR STATE_ERROR.ENTITY_STATE_INVALID | appStoreVersions with id '1c96498b-aa40-463c-a698-36ce17d205fb' is not in valid state. | This resource cannot be reviewed, please check associated errors to see why. | ENTITY_ERROR.ATTRIBUTE.REQUIRED | The provided entity is missing a required attribute | You must provide a value for the attribute 'contentRightsDeclaration' with this request
-SUBMIT silkhop ITEM ERR STATE_ERROR.ENTITY_STATE_INVALID | appStoreVersions with id '923f6a82-ab68-44cd-a92d-f036f0178b51' is not in valid state. | This resource cannot be reviewed, please check associated errors to see why. | ENTITY_ERROR.ATTRIBUTE.REQUIRED | The provided entity is missing a required attribute | You must provide a value for the attribute 'contentRightsDeclaration' with this request
+SUBMIT gullstreet content rights: no third-party content
+SUBMIT gullstreet version item added
+SUBMIT gullstreet iap shells120 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT gullstreet iap shells20 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT gullstreet iap shells260 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT gullstreet iap shells600 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT gullstreet iap facades ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT gullstreet iap starter ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT gullstreet iap noads ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT gullstreet submission WAITING_FOR_REVIEW
+SUBMIT gullstreet version 1.0 WAITING_FOR_REVIEW
+SUBMIT silkhop content rights: no third-party content
+SUBMIT silkhop version item added
+SUBMIT silkhop iap pearls ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT silkhop iap glow ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT silkhop iap starter ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT silkhop iap pass_hiver_2026 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT silkhop iap noads ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
+SUBMIT silkhop submission WAITING_FOR_REVIEW
+SUBMIT silkhop version 1.0 WAITING_FOR_REVIEW
