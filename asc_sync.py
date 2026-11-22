@@ -287,6 +287,30 @@ if __name__ == '__main__':
                 call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'keywords': ','.join(kws)}}})
                 print('ADDKW', g, l['attributes']['locale'], ','.join(kws))
         sys.exit(0)
+    if os.environ.get('SETBUILD'):
+        # attach build SETBUILD (e.g. 1009, release ADS_TEST=0) to the version being edited, then print the S1 checklist; never submits
+        want = os.environ['SETBUILD']
+        for g in sys.argv[1:]:
+            app = find_app(g); ver = edit_version(app['id'])
+            bs = call('GET', f"/builds?filter[app]={app['id']}&filter[version]={want}&limit=5")['data']
+            if not bs:
+                print('SETBUILD', g, 'build', want, 'not found'); continue
+            b = bs[0]
+            call('PATCH', f"/appStoreVersions/{ver['id']}/relationships/build", {'data': {'type': 'builds', 'id': b['id']}})
+            cur = call('GET', f"/appStoreVersions/{ver['id']}/build")['data']
+            print('SETBUILD', g, 'version', ver['attributes'].get('versionString'), ver['attributes'].get('appStoreState'), '-> build', cur['attributes']['version'], cur['attributes'].get('processingState'))
+            rd = call('GET', f"/appStoreVersions/{ver['id']}/appStoreReviewDetail", ok=(200, 404)).get('data')
+            if rd:
+                n = rd['attributes'].get('notes') or ''
+                att = call('GET', f"/appStoreReviewDetails/{rd['id']}/appStoreReviewAttachments?limit=50")['data']
+                print('  notes', len(n), 'chars, UMP/ATT sentence:', 'App Tracking Transparency prompt' in n, '| attachments', [x['attributes'].get('fileName') for x in att])
+            info = call('GET', f"/apps/{app['id']}/appInfos")['data']
+            for i in info:
+                ar = call('GET', f"/appInfos/{i['id']}/ageRatingDeclaration", ok=(200, 404)).get('data')
+                if ar: print('  appInfo', i['attributes'].get('appStoreState') or i['attributes'].get('state'), 'lootBox', ar['attributes'].get('lootBox'), 'advertising', ar['attributes'].get('advertising'))
+                for l in call('GET', f"/appInfos/{i['id']}/appInfoLocalizations?limit=50")['data']:
+                    print('  privacy', l['attributes']['locale'], l['attributes'].get('privacyPolicyUrl'))
+        sys.exit(0)
     if os.environ.get('ATTACH'):
         # App Review attachment: media/review/<suffix>.mp4 (Zack's iPhone screen recording) on the review details; never submits
         for g in sys.argv[1:]:
