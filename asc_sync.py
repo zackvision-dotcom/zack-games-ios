@@ -120,7 +120,7 @@ def put_file(kind, set_id, path):
         typ, rel, attrs = 'appScreenshots', 'appScreenshotSet', {'fileName': name, 'fileSize': len(data)}
         set_type = 'appScreenshotSets'
     else:
-        typ, rel, attrs = 'appPreviews', 'appPreviewSet', {'fileName': name, 'fileSize': len(data), 'mimeType': 'video/mp4', 'previewFrameTimeCode': '00:00:05:00'}
+        typ, rel, attrs = 'appPreviews', 'appPreviewSet', {'fileName': name, 'fileSize': len(data), 'mimeType': 'video/quicktime' if name.endswith('.mov') else 'video/mp4'}
         set_type = 'appPreviewSets'
     r = call('POST', f'/{typ}', {'data': {'type': typ, 'attributes': attrs, 'relationships': {rel: {'data': {'type': set_type, 'id': set_id}}}}})['data']
     ops = r['attributes']['uploadOperations']

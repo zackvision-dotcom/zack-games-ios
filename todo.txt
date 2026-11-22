@@ -1,4 +1,2 @@
-# one bundle suffix per line: the games synced by the next push (a line "check" = only report)
-check
-lanternhold
+# one bundle suffix per line (a line "check" = only report)
 crumblecrew
