@@ -1,10 +1,4 @@
-SETBUILD gullstreet version 1.0 PREPARE_FOR_SUBMISSION -> build 1009 VALID
-  notes 1082 chars, UMP/ATT sentence: True | attachments ['gameplay-gullstreet.mp4']
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-SETBUILD silkhop version 1.0 PREPARE_FOR_SUBMISSION -> build 1009 VALID
-  notes 1082 chars, UMP/ATT sentence: True | attachments ['gameplay-silkhop.mp4']
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+BUILD braise v1010 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T12:11
+BUILD braise v1005 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T06:16
+BUILD kunaigaiden v1010 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T12:07
+BUILD kunaigaiden v1006 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T06:20
