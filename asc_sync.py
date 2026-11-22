@@ -265,6 +265,8 @@ if __name__ == '__main__':
     for g in games:
         try:
             sync(g, fiches)
+            if not os.environ.get('ONLY_TEXT'):
+                previews_v2(g)
         except Exception as e:
             print('  FAILED', g, e); failed.append(g)
     for g in games:
