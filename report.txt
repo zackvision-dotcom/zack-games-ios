@@ -1,47 +1,11 @@
-IAPSHOT com.zvisionclub.silkhop.pearls uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.silkhop.glow uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.silkhop.starter uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.silkhop.pass_hiver_2026 uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.silkhop.noads uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.lanternhold.acorns uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.lanternhold.festival uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.lanternhold.starter uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.lanternhold.pass_hiver_2026 uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.lanternhold.noads uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.clockpawsquad.keys uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.clockpawsquad.hints uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.clockpawsquad.starter uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.clockpawsquad.pass_hiver_2026 uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.clockpawsquad.noads uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.pulsepost.plumes uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.pulsepost.album_nuit_electro uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.pulsepost.starter uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.pulsepost.pass_hiver_2026 uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.pulsepost.noads uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.dungeondash.gems uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.dungeondash.cite_engloutie uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.dungeondash.starter uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.dungeondash.pass_hiver_2026 uploaded MISSING_METADATA
-IAPSHOT com.zvisionclub.dungeondash.noads uploaded MISSING_METADATA
-Traceback (most recent call last):
-  File "/home/runner/work/zack-games-ios/zack-games-ios/asc_sync.py", line 262, in <module>
-    r = call('POST', '/inAppPurchaseAppStoreReviewScreenshots', {'data': {'type': 'inAppPurchaseAppStoreReviewScreenshots',
-        ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        'attributes': {'fileName': 'iap-review.jpg', 'fileSize': len(data)},
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        'relationships': {'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}})['data']
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/zack-games-ios/zack-games-ios/asc_sync.py", line 40, in call
-    raise RuntimeError(f'{method} {path} -> {r.status_code} {r.text[:600]}')
-RuntimeError: POST /inAppPurchaseAppStoreReviewScreenshots -> 409 {
-  "errors" : [ {
-    "id" : "cd55d4b9-714a-4932-83a0-7185a3537335",
-    "status" : "409",
-    "code" : "ENTITY_ERROR.MEDIA_ASSET_CREATION_NOT_ALLOWED",
-    "title" : "You are not allowed to create asset.",
-    "detail" : "Screenshot already exists",
-    "source" : {
-      "pointer" : "/data/id"
-    }
-  } ]
-}
+REVIEW silkhop ok
+REVIEW lanternhold ok
+REVIEW clockpawsquad ok
+REVIEW pulsepost ok
+REVIEW dungeondash ok
+REVIEW gullstreet ok
+REVIEW coralstack ok
+REVIEW crumblecrew ok
+REVIEW circuitcaper ok
+REVIEW vanvoyage ok
+REVIEW braise ok
