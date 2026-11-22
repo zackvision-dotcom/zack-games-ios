@@ -56,5 +56,5 @@ window.FX = (() => {
     g.strokeStyle = `rgba(${col},.6)`; g.lineWidth = 2.5; g.beginPath(); g.ellipse(0, 0, 34, 9, 0, 0, TAU); g.stroke(); }
   const KINDS = { kunai, shuriken, fireball, chakraSphere, lightning, windSlash, waterBullet, smoke, leafSwirl, hit, aura };
   function draw(g, kind, t, o) { o = o || {}; g.save(); const s = o.size || 1; g.scale(s, s); try { KINDS[kind](g, ((t % 1) + 1) % 1, o); } finally { g.restore(); } }
-  return { draw, kinds: Object.keys(KINDS), LABELS: { kunai: 'Kunai', shuriken: 'Shuriken', fireball: 'Boule de feu', chakraSphere: 'Sphère de chakra', lightning: 'Éclair', windSlash: 'Lame de vent', waterBullet: 'Balle d’eau', smoke: 'Fumée (substitution)', leafSwirl: 'Tourbillon de feuilles', hit: 'Impact', aura: 'Aura de chakra' } };
+  return { draw, kinds: Object.keys(KINDS), LABELS: { kunai: 'Kunai', shuriken: 'Shuriken', fireball: 'Boule de feu', chakraSphere: 'Sphère de souffle', lightning: 'Éclair', windSlash: 'Lame de vent', waterBullet: 'Balle d’eau', smoke: 'Fumée (substitution)', leafSwirl: 'Tourbillon de feuilles', hit: 'Impact', aura: 'Aura de souffle' } };
 })();

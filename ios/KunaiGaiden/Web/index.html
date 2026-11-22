@@ -19,7 +19,241 @@ body.minioff .zoom{bottom:16px}@media (max-width:700px){#mt{right:102px;bottom:1
 .zoom button{background:#f7f1de!important;color:#2a2230!important;border:2.5px solid #2a2230!important;font-family:serif!important}
 .zone{background:#f7f1de!important;color:#2a2230!important;border:2.5px solid #2a2230;font-family:"Potta One",sans-serif!important;font-weight:400!important;top:auto!important;bottom:96px}
 #load{position:fixed;inset:0;display:grid;place-items:center;background:#1b2117;font:700 18px system-ui;z-index:9}
-</style><style id="k-max-hide">#k-max{display:none!important}</style><style>#k-title h1 .k-logo{display:block;width:min(460px,72vw);height:auto;margin:0 auto -4px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}</style></head><body><script>/* hidden "max level" account: tap the title logo 5 times quickly to reveal the button (demos, App Review) */(function(){var n=0,t=0;document.addEventListener("pointerdown",function(e){var h=e.target&&e.target.closest&&e.target.closest("#k-title h1");if(!h)return;var now=Date.now();n=now-t<1500?n+1:1;t=now;if(n>=5){var st=document.getElementById("k-max-hide");if(st)st.textContent="#k-title #k-max{pointer-events:auto!important}";n=0;}},true);})();</script>
+</style><style id="k-max-hide">#k-max{display:none!important}</style><style>#k-title h1 .k-logo{display:block;width:min(460px,72vw);height:auto;margin:0 auto -4px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}</style></head><body><script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 32000;
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script><script>/* hidden "max level" account: tap the title logo 5 times quickly to reveal the button (demos, App Review) */(function(){var n=0,t=0;document.addEventListener("pointerdown",function(e){var h=e.target&&e.target.closest&&e.target.closest("#k-title h1");if(!h)return;var now=Date.now();n=now-t<1500?n+1:1;t=now;if(n>=5){var st=document.getElementById("k-max-hide");if(st)st.textContent="#k-title #k-max{pointer-events:auto!important}";n=0;}},true);})();</script>
 <canvas id="c"></canvas>
 <div class="zone" id="zone"></div>
 <div class="zoom"><button id="zo">−</button><button id="zi">+</button></div><button id="jb" class="jump" hidden>跳<small>Saut</small></button>
@@ -2228,7 +2462,7 @@ window.FX = (() => {
     g.strokeStyle = `rgba(${col},.6)`; g.lineWidth = 2.5; g.beginPath(); g.ellipse(0, 0, 34, 9, 0, 0, TAU); g.stroke(); }
   const KINDS = { kunai, shuriken, fireball, chakraSphere, lightning, windSlash, waterBullet, smoke, leafSwirl, hit, aura };
   function draw(g, kind, t, o) { o = o || {}; g.save(); const s = o.size || 1; g.scale(s, s); try { KINDS[kind](g, ((t % 1) + 1) % 1, o); } finally { g.restore(); } }
-  return { draw, kinds: Object.keys(KINDS), LABELS: { kunai: 'Kunai', shuriken: 'Shuriken', fireball: 'Boule de feu', chakraSphere: 'Sphère de chakra', lightning: 'Éclair', windSlash: 'Lame de vent', waterBullet: 'Balle d’eau', smoke: 'Fumée (substitution)', leafSwirl: 'Tourbillon de feuilles', hit: 'Impact', aura: 'Aura de chakra' } };
+  return { draw, kinds: Object.keys(KINDS), LABELS: { kunai: 'Kunai', shuriken: 'Shuriken', fireball: 'Boule de feu', chakraSphere: 'Sphère de souffle', lightning: 'Éclair', windSlash: 'Lame de vent', waterBullet: 'Balle d’eau', smoke: 'Fumée (substitution)', leafSwirl: 'Tourbillon de feuilles', hit: 'Impact', aura: 'Aura de souffle' } };
 })();
 </script><script>/* Kunai Online — creatures on the same kind of 3D rig as the ninjas (8 directions, ink + cel shading).
    CREATURE.wolf(g, {anim:'idle'|'run'|'attack'|'hurt', phase, yaw, fur}) — feet on (0,0). */
@@ -2371,8 +2605,8 @@ window.ICONS = (() => {
     sDash(g) { g.strokeStyle = '#fff4dc'; g.lineCap = 'round'; for (let i = 0; i < 4; i++) { g.lineWidth = 3; g.beginPath(); g.moveTo(10 + i * 3, 20 + i * 8); g.lineTo(30 + i * 3, 20 + i * 8); g.stroke(); } g.beginPath(); g.moveTo(36, 16); g.lineTo(54, 32); g.lineTo(36, 48); g.closePath(); fill(g, '#ff8a3a'); ink(g); },
   };
   const ITEMS = ['kunai', 'katana', 'hache', 'marteau', 'fouet', 'shuriken', 'tag', 'scroll', 'ramen', 'onigiri', 'pillHp', 'pillCk', 'pouch', 'headband', 'smokeBomb', 'wire'], SKILLS = ['sFist', 'sFire', 'sSphere', 'sSubst', 'sClone', 'sBolt', 'sWater', 'sWind', 'sDash'];
-  const LABELS = { kunai: 'Kunai', katana: 'Katana', hache: 'Hache', marteau: 'Marteau', fouet: 'Fouet', shuriken: 'Shuriken', tag: 'Parchemin explosif', scroll: 'Rouleau', ramen: 'Bol de ramen', onigiri: 'Onigiri', pillHp: 'Pilule de soin', pillCk: 'Pilule de chakra', pouch: 'Bourse de ryō', headband: 'Bandeau', smokeBomb: 'Bombe fumigène', wire: 'Fil ninja',
-    sFist: 'Frappe', sFire: 'Boule de feu', sSphere: 'Sphère de chakra', sSubst: 'Substitution', sClone: 'Clonage', sBolt: 'Éclair', sWater: 'Balle d’eau', sWind: 'Lame de vent', sDash: 'Pas éclair' };
+  const LABELS = { kunai: 'Kunai', katana: 'Katana', hache: 'Hache', marteau: 'Marteau', fouet: 'Fouet', shuriken: 'Shuriken', tag: 'Parchemin explosif', scroll: 'Rouleau', ramen: 'Bol de ramen', onigiri: 'Onigiri', pillHp: 'Pilule de soin', pillCk: 'Pilule de souffle', pouch: 'Bourse de ryō', headband: 'Bandeau', smokeBomb: 'Bombe fumigène', wire: 'Fil ninja',
+    sFist: 'Frappe', sFire: 'Boule de feu', sSphere: 'Sphère de souffle', sSubst: 'Substitution', sClone: 'Clonage', sBolt: 'Éclair', sWater: 'Balle d’eau', sWind: 'Lame de vent', sDash: 'Pas éclair' };
   function draw(g, id, size) { g.save(); const k = (size || 64) / 64; g.scale(k, k); frame(g, id[0] === 's' && id !== 'shuriken' && id !== 'scroll' && id !== 'smokeBomb' ? 'skill' : 'item'); I[id](g); g.restore(); }
   return { draw, ITEMS, SKILLS, LABELS };
 })();
@@ -2983,14 +3217,14 @@ window.KGAME = (() => {
   /* ================= state ================= */
   const NEW = () => ({ v: 1, name: 'Kaze', look: { hair: '#2b2a3b', hairStyle: 'short', eyes: '#1c6fe0', skin: '#fde2cb', coat: '#2f90aa', coatLen: 1, headband: true, scarf: false, vest: false },
     lvl: 1, xp: 0, hp: 100, ck: 80, ryo: 50, inv: { kunai: 12, pillHp: 2, pillCk: 1, ramen: 0, ramenBowl: 0 }, skills: { fire: false, sphere: false, chidori: false, water: false, wind: false, clone: false, dash: false },
-    q: { q1: 'active' }, qp: {}, kills: { wolf: 0, bandit: 0, boss: 0 }, pos: null, sound: true, rank: 'Genin', done: false,
+    q: { q1: 'active' }, qp: {}, kills: { wolf: 0, bandit: 0, boss: 0 }, pos: null, sound: true, rank: 'Novice', done: false,
     eq: { weapon: { id: 'katana0', slot: 'weapon', w: 'katana', r: 0, lvl: 1, st: { atk: 3 }, name: 'Katana de genin' } }, gotKatana: true, bag: [], sp: 0, rk: { fist: 1, kunai: 1, fire: 1, sphere: 1, subst: 1, chidori: 1, water: 1, wind: 1, clone: 1, dash: 1 }, herbs: 0, scrolls: [], perm: { atk: 0, hp: 0 }, ach: {}, st: { maxCombo: 0, roofs: 0, water: 0, elites: 0, legend: 0, contracts: 0, herbs: 0 }, contracts: [], daily: { last: '', streak: 0 } });
   let S = NEW();
   const MAXL = 30;
   // the "max level" account: level 30, every technique learned and at rank 5, legendary gear, Aozora's missions done (the saga stays to be played)
   function MAXSAVE() { const m = NEW(), L = MAXL, base = { atk: 3, def: 4, hp: 14, ck: 10, crit: 1.5, spd: 2 }, MN = { head: 'ck', body: 'def', hands: 'atk', feet: 'spd', weapon: 'atk' };
     const leg = (slot, w, name) => { const st = {}; for (const k of [MN[slot], 'hp', 'def', 'crit']) if (!st[k]) st[k] = Math.round(base[k] * (1 + L * (k === MN[slot] ? .35 : .2)) * (k === MN[slot] ? (k === 'spd' ? 1.1 : 2.8) : .8)); return { id: Math.random().toString(36).slice(2, 9), slot, r: 3, lvl: L, st, w, name }; };
-    Object.assign(m, { lvl: L, xp: 0, sp: 0, ryo: 99999, rank: 'Jōnin', done: true, inv: { kunai: 99, pillHp: 30, pillCk: 30, ramen: 10, ramenBowl: 0 },
+    Object.assign(m, { lvl: L, xp: 0, sp: 0, ryo: 99999, rank: 'Maître du Ciel', done: true, inv: { kunai: 99, pillHp: 30, pillCk: 30, ramen: 10, ramenBowl: 0 },
       skills: { fire: true, sphere: true, chidori: true, water: true, wind: true, clone: true, dash: true }, rk: { fist: 5, kunai: 5, fire: 5, sphere: 5, subst: 5, chidori: 5, water: 5, wind: 5, clone: 5, dash: 5 },
       q: { q1: 'done', q2: 'done', q3: 'done', q4: 'done', q5: 'done' }, qp: { q1met: true, wolves: 6, roof: true, ramenGiven: true, bandits: 5, boss: true, q5back: true },
       kills: { wolf: 6, bandit: 5, boss: 1 }, scrolls: Array.from({ length: 12 }, (_, i) => 's' + i), perm: { atk: 24, hp: 120 },
@@ -3256,7 +3490,7 @@ window.KGAME = (() => {
     for (const href of ['https://fonts.googleapis.com/css2?family=Potta+One&family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap']) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l); }
     const st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
     const d = document.createElement('div'); d.id = 'kg'; d.innerHTML = `
-      <div id="k-hud" class="paper maki" hidden>${ROD()}<canvas id="k-por" width="132" height="132"></canvas><span class="lvseal" id="k-lvs">1</span><div><div class="nm"><span id="k-name">Kaze</span><small id="k-lvl">Genin</small></div>
+      <div id="k-hud" class="paper maki" hidden>${ROD()}<canvas id="k-por" width="132" height="132"></canvas><span class="lvseal" id="k-lvs">1</span><div><div class="nm"><span id="k-name">Kaze</span><small id="k-lvl">Novice</small></div>
         <div class="brow"><span class="kj" style="background:#c8281e">体</span><div class="kbar" id="k-hp"><i></i><b></b></div></div><div class="brow"><span class="kj" style="background:#1f6fd0">気</span><div class="kbar" id="k-ck"><i></i><b></b></div></div><div class="brow"><span class="kj" style="background:#c99a3a;width:20px;height:14px;font-size:9px">経</span><div class="kbar" id="k-xp"><i></i></div></div></div></div>
       <div id="k-weather" class="paper maki" hidden>${ROD('b')}<span id="k-wl">Ciel dégagé</span></div>
       <div id="k-top" hidden><div class="ryo paper maki">${ROD("r")}両 <span id="k-ryo">0</span></div>
@@ -3289,19 +3523,19 @@ window.KGAME = (() => {
 
   /* ================= skills, items ================= */
   const SK = {
-    fist: { key: 'j', icon: 'sFist', name: 'Taijutsu', ck: 0, cd: .45, act: 'attack' },
+    fist: { key: 'j', icon: 'sFist', name: 'Corps à corps', ck: 0, cd: .45, act: 'attack' },
     kunai: { key: 'k', icon: 'kunai', name: 'Lancer de kunai', ck: 0, cd: .5, act: 'throw', item: 'kunai' },
     fire: { key: 'l', icon: 'sFire', name: 'Boule de feu', ck: 22, cd: 2.6, act: 'seal', lock: () => !S.skills.fire, hint: 'Mission « Le toit du Gardien »' },
-    sphere: { key: 'u', icon: 'sSphere', name: 'Sphère de chakra', ck: 32, cd: 4.5, act: 'seal', lock: () => !S.skills.sphere, hint: 'Niveau 4' },
+    sphere: { key: 'u', icon: 'sSphere', name: 'Sphère de souffle', ck: 32, cd: 4.5, act: 'seal', lock: () => !S.skills.sphere, hint: 'Niveau 4' },
     subst: { key: 'i', icon: 'sSubst', name: 'Substitution', ck: 12, cd: 3.5, act: 'subst' },
     // learned by level (Kunai Gaiden)
     dash: { key: 'g', icon: 'sDash', name: 'Pas éclair', ck: 8, cd: 1.4, act: 'dash0', lock: () => !S.skills.dash, hint: 'Niveau 5' },
     water: { key: 'p', icon: 'sWater', name: 'Dragon d’eau', ck: 24, cd: 3, act: 'seal', lock: () => !S.skills.water, hint: 'Niveau 7' },
-    clone: { key: 'h', icon: 'sClone', name: 'Multiclonage', ck: 28, cd: 7, act: 'seal', lock: () => !S.skills.clone, hint: 'Niveau 9' },
+    clone: { key: 'h', icon: 'sClone', name: 'Clones de brume', ck: 28, cd: 7, act: 'seal', lock: () => !S.skills.clone, hint: 'Niveau 9' },
     chidori: { key: 'o', icon: 'sBolt', name: 'Lame-tonnerre', ck: 30, cd: 5, act: 'seal', lock: () => !S.skills.chidori, hint: 'Niveau 11' },
     wind: { key: 'y', icon: 'sWind', name: 'Lame de vent', ck: 18, cd: 2.4, act: 'seal', lock: () => !S.skills.wind, hint: 'Niveau 13' } };
-  const ITEMUSE = { pillHp: { key: '1', name: 'Pilule de soin', use: () => heal(60, 0) }, pillCk: { key: '2', name: 'Pilule de chakra', use: () => heal(0, 60) }, ramen: { key: '3', name: 'Bol de ramen', use: () => { S.regen = 8; toastMini('Ramen : régénération'); } } };
-  const PRICES = { kunai: [6, 'Kunai ×1'], pillHp: [30, 'Pilule de soin'], pillCk: [30, 'Pilule de chakra'], ramen: [18, 'Bol de ramen'] };
+  const ITEMUSE = { pillHp: { key: '1', name: 'Pilule de soin', use: () => heal(60, 0) }, pillCk: { key: '2', name: 'Pilule de souffle', use: () => heal(0, 60) }, ramen: { key: '3', name: 'Bol de ramen', use: () => { S.regen = 8; toastMini('Ramen : régénération'); } } };
+  const PRICES = { kunai: [6, 'Kunai ×1'], pillHp: [30, 'Pilule de soin'], pillCk: [30, 'Pilule de souffle'], ramen: [18, 'Bol de ramen'] };
   const cds = {};
   function heal(h, c) { S.hp = Math.min(maxHp(), S.hp + h); S.ck = Math.min(maxCk(), S.ck + c); if (h) addText(A.hero.x, A.hero.y, '+' + h, '#7dff8a'); if (c) addText(A.hero.x, A.hero.y, '+' + c, '#7ac8ff'); fx('aura', A.hero.x, A.hero.y, .6, .9); }
 
@@ -3317,8 +3551,8 @@ window.KGAME = (() => {
   const WSHOP = [['katana', 150], ['fouet', 170], ['hache', 190], ['marteau', 230]];
   const iconOf = it => it.slot === 'weapon' ? WT[it.w || 'kunai'].ic : SLOTS[it.slot][1];
   const SLOTN = { head: 'Tête', body: 'Corps', hands: 'Mains', feet: 'Pieds', weapon: 'Arme' };
-  const SUFFIX = ['du Loup', 'de l’Aube', 'du Tonnerre', 'de la Feuille', 'du Renard', 'de l’Ombre', 'du Vent', 'de la Brume', 'du Dragon', 'de la Lune'];
-  const MAIN = { head: 'ck', body: 'def', hands: 'atk', feet: 'spd', weapon: 'atk' }, STN = { atk: 'Attaque', def: 'Défense', hp: 'Vie', ck: 'Chakra', crit: 'Critique %', spd: 'Vitesse %' };
+  const SUFFIX = ['du Loup', 'de l’Aube', 'du Tonnerre', 'de l’Érable', 'du Renard', 'de l’Ombre', 'du Vent', 'de la Brume', 'du Dragon', 'de la Lune'];
+  const MAIN = { head: 'ck', body: 'def', hands: 'atk', feet: 'spd', weapon: 'atk' }, STN = { atk: 'Attaque', def: 'Défense', hp: 'Vie', ck: 'Souffle', crit: 'Critique %', spd: 'Vitesse %' };
   function genItem(lvl, minR) { let r = 0; const x = rnd(); r = x < .03 ? 3 : x < .14 ? 2 : x < .42 ? 1 : 0; r = Math.max(r, minR || 0); const slot = Object.keys(SLOTS)[(rnd() * 5) | 0], m = 1 + r * .6, st = {};
     const base = { atk: 3, def: 4, hp: 14, ck: 10, crit: 1.5, spd: 2 }; st[MAIN[slot]] = Math.round(base[MAIN[slot]] * (1 + lvl * .35) * m);
     const extra = Object.keys(base).filter(k => k !== MAIN[slot]); for (let i = 0; i < r; i++) { const k = extra[(rnd() * extra.length) | 0]; st[k] = (st[k] || 0) + Math.round(base[k] * (1 + lvl * .25) * (.6 + rnd() * .5)); }
@@ -3335,7 +3569,7 @@ window.KGAME = (() => {
   function newContract() { const L = S.lvl, kinds = ['hunt', 'hunt', 'herb', 'combo', 'roof', S.lvl >= 3 ? 'elite' : 'hunt', S.lvl >= 3 ? 'bandit' : 'herb'], k = kinds[(rnd() * kinds.length) | 0];
     const c = { k, p: 0, rw: { ryo: 35 + L * 14, xp: 50 + L * 28, gear: rnd() < .4 ? (k === 'elite' ? 2 : 1) : (k === 'elite' ? 1 : -1) } };
     if (k === 'hunt') { c.n = 5 + ((rnd() * 5) | 0); c.t = 'Chasse : ' + c.n + ' loups'; }
-    if (k === 'bandit') { c.n = 4 + ((rnd() * 4) | 0); c.t = 'Rang C : ' + c.n + ' bandits'; c.rw.ryo += 40; }
+    if (k === 'bandit') { c.n = 4 + ((rnd() * 4) | 0); c.t = 'Contrat : ' + c.n + ' bandits'; c.rw.ryo += 40; }
     if (k === 'herb') { c.n = 4 + ((rnd() * 5) | 0); c.t = 'Cueillette : ' + c.n + ' herbes médicinales'; }
     if (k === 'combo') { c.n = 8 + ((rnd() * 4) | 0) * 3; c.t = 'Entraînement : un combo de ' + c.n; }
     if (k === 'roof') { c.n = 3 + ((rnd() * 3) | 0); c.t = 'Course sur les toits : ' + c.n + ' toits différents'; }
@@ -3352,7 +3586,7 @@ window.KGAME = (() => {
     ['c40', 'Tempête de coups', 'Combo de 40', () => S.st.maxCombo >= 40, 300], ['roof', 'Chat des toits', 'Atterrir sur 25 toits', () => S.st.roofs >= 25, 120], ['water', 'Marche sur l’eau', 'Parcourir 200 m sur l’eau', () => S.st.water >= 200, 150],
     ['elite', 'Chasseur d’élites', 'Vaincre 10 Élites', () => S.st.elites >= 10, 300], ['legend', 'Légende vivante', 'Trouver un objet légendaire', () => S.st.legend >= 1, 400], ['herb', 'Herboriste', 'Cueillir 40 herbes', () => S.st.herbs >= 40, 120],
     ['scroll6', 'Archiviste', 'Trouver 6 rouleaux secrets', () => S.scrolls.length >= 6, 200], ['scroll', 'Gardien des secrets', 'Trouver les 12 rouleaux secrets', () => S.scrolls.length >= 12, 800], ['lvl10', 'Ninja aguerri', 'Atteindre le niveau 10', () => S.lvl >= 10, 400],
-    ['contr', 'Mercenaire de la Feuille', 'Remplir 20 contrats', () => S.st.contracts >= 20, 300], ['chunin', 'Chûnin', 'Terminer l’histoire', () => S.done, 500]];
+    ['contr', 'Mercenaire du Ciel', 'Remplir 20 contrats', () => S.st.contracts >= 20, 300], ['chunin', 'Éclaireur', 'Terminer l’histoire', () => S.done, 500]];
   function checkAch() { for (const [id, n, d, test, r] of ACH) { if (S.ach[id] || !test()) continue; S.ach[id] = 1; S.ryo += r; setTimeout(() => { toast('Succès : ' + n, d + ' — ' + r + ' ryō'); sfx('lvl'); }, 900); } }
 
   /* ================= world entities ================= */
@@ -3371,10 +3605,10 @@ window.KGAME = (() => {
   /* ================= missions ================= */
   const Q = {
     q1: { title: 'Bienvenue à Aozora', giver: 'guard', steps: [{ txt: 'Présente-toi à la secrétaire, devant la résidence du Gardien', done: () => S.qp.q1met }], reward: { xp: 60, ryo: 30 } },
-    q2: { title: 'Rang D : les loups de la forêt', giver: 'mei', steps: [{ txt: 'Repousse les loups au sud du village', n: 6, cnt: () => S.qp.wolves || 0 }], reward: { xp: 180, ryo: 120, items: { kunai: 10, pillHp: 1 } } },
+    q2: { title: 'Les loups de la forêt', giver: 'mei', steps: [{ txt: 'Repousse les loups au sud du village', n: 6, cnt: () => S.qp.wolves || 0 }], reward: { xp: 180, ryo: 120, items: { kunai: 10, pillHp: 1 } } },
     q3: { title: 'Le toit du Gardien', giver: 'hayato', steps: [{ txt: 'Grimpe sur le toit de la résidence du Gardien (double saut !)', done: () => S.qp.roof }, { txt: 'Reviens voir Sensei Hayato', done: () => S.qp.q3back }], reward: { xp: 150, skill: 'fire' } },
     q4: { title: 'Livraison de ramen', giver: 'genzo', steps: [{ txt: 'Apporte le bol de ramen au médecin Ren, près du temple', done: () => S.qp.ramenGiven }], reward: { xp: 120, ryo: 60, items: { pillHp: 2, pillCk: 2 } } },
-    q5: { title: 'Rang C : le camp des bandits', giver: 'mei', need: () => S.q.q2 === 'done' && S.lvl >= 3, steps: [{ txt: 'Mets en fuite les bandits du nord-ouest', n: 5, cnt: () => S.qp.bandits || 0 }, { txt: 'Bats leur chef, Kurogane le déserteur', done: () => S.qp.boss }, { txt: 'Fais ton rapport à la secrétaire Mei', done: () => S.qp.q5back }], reward: { xp: 600, ryo: 400, rank: 'Chûnin' } } };
+    q5: { title: 'Le camp des bandits', giver: 'mei', need: () => S.q.q2 === 'done' && S.lvl >= 3, steps: [{ txt: 'Mets en fuite les bandits du nord-ouest', n: 5, cnt: () => S.qp.bandits || 0 }, { txt: 'Bats leur chef, Kurogane le déserteur', done: () => S.qp.boss }, { txt: 'Fais ton rapport à la secrétaire Mei', done: () => S.qp.q5back }], reward: { xp: 600, ryo: 400, rank: 'Éclaireur' } } };
   const qStep = id => { const q = Q[id]; for (let i = 0; i < q.steps.length; i++) { const s = q.steps[i]; const ok = s.n ? s.cnt() >= s.n : s.done(); if (!ok) return i; } return q.steps.length; };
   function startQuest(id) { if (S.q[id]) return; S.q[id] = 'active'; sfx('quest'); toast('Nouvelle mission', Q[id].title); if (id === 'q4') S.inv.ramenBowl = 1; refresh(); }
   function finishQuest(id) { const q = Q[id], r = q.reward; S.q[id] = 'done'; sfx('quest'); let msg = [];
@@ -3385,7 +3619,7 @@ window.KGAME = (() => {
     toast('Mission accomplie', q.title + ' — ' + msg.join(' · ')); if (r.xp) gainXp(r.xp); refresh(); save(); }
   function gainXp(n) { S.xp += n; addText(A.hero.x, A.hero.y, '+' + n + ' XP', '#ffe08a', 1.3);
     while (S.lvl < MAXL && S.xp >= xpNeed()) { S.xp -= xpNeed(); S.lvl++; S.sp++; S.hp = maxHp(); S.ck = maxCk(); checkAch(); sfx('lvl'); fx('leafSwirl', A.hero.x, A.hero.y, 1, 1.6);
-      let extra = ''; if (S.lvl >= 4 && !S.skills.sphere) { S.skills.sphere = true; extra = ' · Technique : Sphère de chakra (U)'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } toast('Niveau ' + S.lvl + ' !', 'Vie et chakra augmentés · +1 point de technique (T)' + extra); } refresh(); }
+      let extra = ''; if (S.lvl >= 4 && !S.skills.sphere) { S.skills.sphere = true; extra = ' · Technique : Sphère de souffle (U)'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } toast('Niveau ' + S.lvl + ' !', 'Vie et souffle augmentés · +1 point de technique (T)' + extra); } refresh(); }
 
   /* ================= dialogues ================= */
   const DLG = {
@@ -3397,7 +3631,7 @@ window.KGAME = (() => {
         : ['Les loups sont au sud, de l’autre côté de la grande porte. Tu en as repoussé ' + (S.qp.wolves || 0) + ' sur 6.'];
       if (S.q.q2 === 'done' && !S.q.q5) return S.lvl >= 3 ? ['Tu progresses vite. Une mission de rang C, maintenant.', 'Des bandits ont installé un camp au nord-ouest, près des falaises. Leur chef est un ninja déserteur : Kurogane. Sois prudent.', { act: () => startQuest('q5') }]
         : ['Entraîne-toi encore un peu. Reviens quand tu auras atteint le niveau 3 (tu es niveau ' + S.lvl + ').'];
-      if (S.q.q5 === 'active') { const st = qStep('q5'); if (st >= 2) return ['Kurogane vaincu ?! Le conseil va en parler pendant des semaines.', { act: () => { S.qp.q5back = true; finishQuest('q5'); } }, 'Par décision du Gardien, tu es promu Chûnin. Félicitations !', { act: () => showEnd() }];
+      if (S.q.q5 === 'active') { const st = qStep('q5'); if (st >= 2) return ['Kurogane vaincu ?! Le conseil va en parler pendant des semaines.', { act: () => { S.qp.q5back = true; finishQuest('q5'); } }, 'Par décision du Gardien, tu es promu Éclaireur. Félicitations !', { act: () => showEnd() }];
         return ['Le camp des bandits est au nord-ouest. ' + (st === 0 ? 'Bandits repoussés : ' + (S.qp.bandits || 0) + '/5.' : 'Il reste leur chef, Kurogane.')]; }
       return ['Merci pour tout ce que tu fais pour le village, ' + S.rank + ' ' + S.name + '.'];
     },
@@ -3405,7 +3639,7 @@ window.KGAME = (() => {
       if (!S.q.q3 && S.q.q2 === 'done') return ['Alors c’est toi qui as chassé les loups ? Pas mal.', 'Un ninja doit savoir se déplacer partout, même sur les toits.', 'Grimpe tout en haut de la résidence du Gardien. Double saut, et accroche-toi aux rebords !', { act: () => startQuest('q3') }];
       if (!S.q.q3) return ['Je suis Hayato, instructeur à l’académie.', 'Termine d’abord ta première mission auprès de la secrétaire Mei.'];
       if (S.q.q3 === 'active') return S.qp.roof ? ['Je t’ai vu là-haut ! Tu as de bonnes jambes.', 'Je vais t’apprendre une technique de feu : la boule de feu. Touche L.', { act: () => { S.qp.q3back = true; finishQuest('q3'); } }] : ['Le toit de la résidence du Gardien, c’est tout en haut. Saute de toit en toit si c’est trop haut.'];
-      return ['Continue à t’entraîner. La boule de feu coûte du chakra : surveille ta jauge bleue.'];
+      return ['Continue à t’entraîner. La boule de feu coûte du souffle : surveille ta jauge bleue.'];
     },
     genzo: () => {
       if (!S.q.q4) return ['Bienvenue ! Le meilleur ramen du village.', 'Dis, tu pourrais me rendre un service ? Le médecin Ren, près du temple à l’est, n’a pas mangé depuis ce matin.', { act: () => startQuest('q4') }, 'Voilà le bol. Ne le renverse pas !'];
@@ -3413,7 +3647,7 @@ window.KGAME = (() => {
       return ['Reviens quand tu veux ! (Les bols de ramen se vendent chez la marchande Aiko.)'];
     },
     ren: () => {
-      if (S.q.q4 === 'active' && !S.qp.ramenGiven) return ['Un ramen de chez Genzo ? Tu me sauves la vie !', { act: () => { S.qp.ramenGiven = true; S.inv.ramenBowl = 0; finishQuest('q4'); } }, 'Prends ces pilules, elles soignent les blessures et rendent du chakra.'];
+      if (S.q.q4 === 'active' && !S.qp.ramenGiven) return ['Un ramen de chez Genzo ? Tu me sauves la vie !', { act: () => { S.qp.ramenGiven = true; S.inv.ramenBowl = 0; finishQuest('q4'); } }, 'Prends ces pilules, elles soignent les blessures et rendent du souffle.'];
       return ['Si tu es blessé, viens me voir.', { act: () => { S.hp = maxHp(); S.ck = maxCk(); fx('aura', A.hero.x, A.hero.y, .8, 1); }, txt: '*Ren te soigne entièrement.*' }];
     },
     aiko: () => ['Kunai, pilules, ramen… J’ai tout ce qu’il faut à un ninja !', { shop: true }],
@@ -3434,9 +3668,9 @@ window.KGAME = (() => {
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const RCOL = ['#A8A29A', '#4DA8FF', '#B26BFF', '#F0A020'];
   const WDESC = { kunai: 'se lance à distance', katana: 'rapide et précis', hache: 'coups lents, gros recul', marteau: 'très lent, frappe fort', fouet: 'longue portée, balaie large' };
-  const IDESC = { pillHp: 'Rend 60 points de vie.', pillCk: 'Rend 60 points de chakra.', ramen: 'Régénère ta vie pendant quelques secondes.', kunai: 'Munitions du lancer de kunai.', ramenBowl: 'Le bol à livrer au médecin Ren, près du temple.' };
+  const IDESC = { pillHp: 'Rend 60 points de vie.', pillCk: 'Rend 60 points de souffle.', ramen: 'Régénère ta vie pendant quelques secondes.', kunai: 'Munitions du lancer de kunai.', ramenBowl: 'Le bol à livrer au médecin Ren, près du temple.' };
   const JDESC = { fist: 'Coups de poing et de pied au corps à corps. Enchaîne-les pour faire monter le combo.', kunai: 'Lance un kunai sur ta cible. Chaque lancer consomme un kunai du sac.',
-    fire: 'Une boule de feu part droit devant toi et brûle le premier ennemi touché.', sphere: 'Une sphère de chakra explose devant toi et repousse violemment les ennemis proches.',
+    fire: 'Une boule de feu part droit devant toi et brûle le premier ennemi touché.', sphere: 'Une sphère de souffle explose devant toi et repousse violemment les ennemis proches.',
     subst: 'Tu disparais dans un nuage de fumée et laisses une bûche à ta place.', dash: 'Un pas éclair dans la direction de ton trait.',
     water: 'Un dragon d’eau fonce devant toi et traverse tous les ennemis sur sa route.', clone: 'Trois clones apparaissent et attaquent chacun l’ennemi le plus proche.',
     chidori: 'Tu fonces en ligne droite, la main chargée d’éclairs, et traverses les ennemis sur ta route.', wind: 'Une lame de vent tranche tous les ennemis devant toi.' };
@@ -3458,7 +3692,7 @@ window.KGAME = (() => {
     const SLP = { head: 'l t', body: 'l m', weapon: 'r t', hands: 'r m', feet: 'c b' };
     box.innerHTML = v2head('Sac', '忍具袋', `<span class="pill gold">${fmt(S.ryo)} 両</span>`) + `<div class="v2b bagb">
       <section class="card eqc"><div class="fig"><canvas id="k-fig" width="200" height="340"></canvas>${Object.keys(SLOTS).map(sl => { const it = S.eq[sl]; return `<button class="eqslot ${SLP[sl]}${bagSel === 'e:' + sl ? ' sel' : ''}${it ? '' : ' empty'}" data-sl="${sl}" style="--r:${it ? RCOL[it.r] : 'rgba(246,235,211,.16)'}" aria-label="${SLOTN[sl]}${it ? ' : ' + esc(it.name) : ', vide'}"><small>${SLOTN[sl]}</small></button>`; }).join('')}</div>
-        <div class="sts"><span>Vie <b>${fmt(maxHp())}</b></span><span>Chakra <b>${fmt(maxCk())}</b></span><span>Attaque <b>+${g.atk} %</b></span><span>Défense <b>${g.def}</b></span><span>Critique <b>${g.crit} %</b></span><span>Vitesse <b>${g.spd} %</b></span></div></section>
+        <div class="sts"><span>Vie <b>${fmt(maxHp())}</b></span><span>Souffle <b>${fmt(maxCk())}</b></span><span>Attaque <b>+${g.atk} %</b></span><span>Défense <b>${g.def}</b></span><span>Critique <b>${g.crit} %</b></span><span>Vitesse <b>${g.spd} %</b></span></div></section>
       <section class="inv"><div class="chips">${[['all', 'Tout'], ['gear', 'Équipement'], ['cons', 'Consommables']].map(([k, n]) => `<button data-f="${k}" class="${bagF === k ? 'on' : ''}">${n}</button>`).join('')}<span class="cnt">${S.bag.length} / 30</span></div>
         <div class="igrid">${vis.map(e => `<button class="bi${e.key === bagSel ? ' sel' : ''}" data-k="${e.key}" style="--r:${e.it ? RCOL[e.it.r] : 'rgba(246,235,211,.16)'}" aria-label="${esc(e.it ? e.it.name : labOf(e.k) + ', ' + S.inv[e.k])}">${e.it ? '' : `<span>${S.inv[e.k]}</span>`}</button>`).join('')}</div>${vis.length ? '' : '<p class="help">Rien ici pour l’instant.</p>'}
         <p class="help">${S.rank} · niveau ${S.lvl} · rouleaux secrets ${S.scrolls.length} / ${secrets.length} · herbes ${S.herbs}</p></section>
@@ -3492,12 +3726,12 @@ window.KGAME = (() => {
     if (!SK[jutSel]) jutSel = ids.find(id => KS && KS.GLYPH[id] && !(SK[id].lock && SK[id].lock())) || ids[0];
     const id = jutSel, k = SK[id], lk = !!(k.lock && k.lock()), r = S.rk[id] || 1, gl = KS && KS.GLYPH[id], seq = (KS && KS.SEQ[id]) || [];
     const glyph = i => KS && KS.GLYPH[i] ? `<span class="g">${KS.GLYPH[i]}</span>` : `<span class="g ic" data-ic="${SK[i].icon}"></span>`;
-    box.innerHTML = v2head('Rouleau des jutsus', '巻物', `<span class="pill gold">${S.sp} point${S.sp > 1 ? 's' : ''} de technique</span>`) + `<div class="v2b jutb">
+    box.innerHTML = v2head('Rouleau des techniques', '巻物', `<span class="pill gold">${S.sp} point${S.sp > 1 ? 's' : ''} de technique</span>`) + `<div class="v2b jutb">
       <div class="list">${ids.map(i => { const L = !!(SK[i].lock && SK[i].lock()), R = S.rk[i] || 1; return `<button class="j${i === id ? ' on' : ''}${L ? ' lk' : ''}" data-j="${i}">${L ? '<span class="g">🔒</span>' : glyph(i)}<span class="nm"><b>${esc(SK[i].name)}</b>${L ? `<small>${esc(SK[i].hint)}</small>` : `<span class="pips">${[1, 2, 3, 4, 5].map(n => `<i class="${n <= R ? 'on' : ''}"></i>`).join('')}</span>`}</span>${!L && SK[i].ck ? `<small class="ck">${SK[i].ck}</small>` : ''}</button>`; }).join('')}</div>
       <section class="card jdet"><div class="col">
         <div class="t"><h3>${esc(k.name)}</h3><span>${lk ? 'verrouillée' : 'rang ' + r + ' / 5'}</span></div>
         <p class="dsc">${JDESC[id] || ''}</p>
-        <div class="nums">${['fist', 'kunai', 'fire', 'sphere', 'chidori', 'water', 'wind', 'clone'].includes(id) ? `<span>Dégâts <b>${fmt(dmgOf(id))}</b></span>` : ''}${k.ck ? `<span>Chakra <b class="ck">${k.ck}</b></span>` : ''}<span>Recharge <b>${(k.cd * (1 - (r - 1) * .08)).toFixed(1).replace('.', ',')} s</b></span>${isTouch() ? '' : `<span>Touche <b>${k.key.toUpperCase()}</b></span>`}</div>
+        <div class="nums">${['fist', 'kunai', 'fire', 'sphere', 'chidori', 'water', 'wind', 'clone'].includes(id) ? `<span>Dégâts <b>${fmt(dmgOf(id))}</b></span>` : ''}${k.ck ? `<span>Souffle <b class="ck">${k.ck}</b></span>` : ''}<span>Recharge <b>${(k.cd * (1 - (r - 1) * .08)).toFixed(1).replace('.', ',')} s</b></span>${isTouch() ? '' : `<span>Touche <b>${k.key.toUpperCase()}</b></span>`}</div>
         ${lk ? `<div class="lock">🔒 S’apprend : ${esc(k.hint)}</div>` : ''}
         ${seq.length ? `<div class="lab">Signes</div><div class="seals">${seq.map(s => `<div class="sg"><canvas width="128" height="128" data-s="${s}"></canvas><b>${KS.SEALS[s].k}</b><span>${KS.SEALS[s].n}</span></div>`).join('')}</div>` : ''}
         <div class="acts">${!lk && r < 5 ? `<button class="b1" data-up ${S.sp ? '' : 'disabled'}>Améliorer · +20 % dégâts</button>` : !lk ? '<span class="sub">Rang maximal atteint</span>' : ''}</div></div>
@@ -3580,8 +3814,8 @@ window.KGAME = (() => {
     if (kind === 'map') { h += '<h2><span class="seal">地</span>Carte ' + (A.region ? '· ' + A.region.name : 'd’Aozora') + (window.KREG ? '<button class="kbtn" id="k-towrld" style="margin-left:auto;min-height:0;padding:5px 12px;font-size:13px">🗺 Carte du monde · voyager</button>' : '') + '</h2><div id="k-mapview"><canvas id="k-bigmap"></canvas><div class="mz"><button data-z="in" aria-label="Zoomer">+</button><button data-z="out" aria-label="Dézoomer">−</button><button data-z="fit" aria-label="Voir toute la carte">⤢</button><button data-z="me" aria-label="Centrer sur moi">◎</button><button data-z="clr" aria-label="Retirer la destination" class="clr">✕</button></div><div class="mtip">Touche la carte pour poser ta destination</div></div><p class="help">Le point rouge, c’est toi. Touche un endroit pour y poser ta destination : le chemin s’affiche en violet, sur la carte et au sol. Touche le repère pour le retirer. Glisse pour te déplacer, pince ou molette pour zoomer.</p>'; }
     if (kind === 'opts') { h += `<h2><span class="seal">巻</span>Menu</h2><div style="display:grid;gap:10px;max-width:340px"><button class="kbtn" data-o="resume">Reprendre</button><button class="kbtn alt" data-o="save">Sauvegarder</button>
         <button class="kbtn alt" data-o="sound">Son : ${S.sound ? 'activé' : 'coupé'}</button><button class="kbtn alt" data-o="quality">Qualité : ${({ high: 'haute', auto: 'auto', perf: 'performance' })[window.KMAP && KMAP.quality ? KMAP.quality() : 'high']}</button><button class="kbtn alt" data-o="look">Changer d’apparence</button><button class="kbtn alt" data-o="tuto">☝️ ${tt('replay')}</button><button class="kbtn alt" data-o="reset">Recommencer une partie</button></div>
-        <h2 style="margin-top:18px;font-size:18px">Commandes</h2><div class="help">Déplacement : ZQSD / WASD / flèches, ou maintenir le doigt · Tab ou clic : cibler un ennemi · T : techniques · Maj : course ninja · Espace : saut, double saut · E : parler · Dès le niveau 3, tu peux marcher sur l’eau (coûte un peu de chakra)<br>J : taijutsu · K : kunai · L : boule de feu · U : sphère de chakra · I : substitution · G : shunshin · P : dragon d’eau · H : multiclonage · O : Lame-tonnerre · Y : lame de vent · 1 2 3 : objets<br>B : sac · M : missions · N : carte · Échap : menu · Molette : zoom<br>Sur téléphone : joystick avec le pouce gauche, pincer à deux doigts pour zoomer, bouton 地 pour cacher la carte. Avec un katana, une hache, un marteau ou un fouet (boutique d’Aiko), glisse le doigt sur les ennemis pour trancher, plusieurs d’un seul geste pour un bonus.</div>`; }
-    const TABS = [['bag', '袋', 'Sac'], ['jutsu', '術', 'Jutsus'], ['quests', '任', 'Missions'], ['map', '地', 'Carte'], ['opts', '巻', 'Menu']];
+        <h2 style="margin-top:18px;font-size:18px">Commandes</h2><div class="help">Déplacement : ZQSD / WASD / flèches, ou maintenir le doigt · Tab ou clic : cibler un ennemi · T : techniques · Maj : course ninja · Espace : saut, double saut · E : parler · Dès le niveau 3, tu peux marcher sur l’eau (coûte un peu de souffle)<br>J : frappe · K : kunai · L : boule de feu · U : sphère de souffle · I : substitution · G : pas éclair · P : dragon d’eau · H : clones de brume · O : Lame-tonnerre · Y : lame de vent · 1 2 3 : objets<br>B : sac · M : missions · N : carte · Échap : menu · Molette : zoom<br>Sur téléphone : joystick avec le pouce gauche, pincer à deux doigts pour zoomer, bouton 地 pour cacher la carte. Avec un katana, une hache, un marteau ou un fouet (boutique d’Aiko), glisse le doigt sur les ennemis pour trancher, plusieurs d’un seul geste pour un bonus.</div>`; }
+    const TABS = [['bag', '袋', 'Sac'], ['jutsu', '術', 'Techniques'], ['quests', '任', 'Missions'], ['map', '地', 'Carte'], ['opts', '巻', 'Menu']];
     if (kind !== 'shop') h = h.replace('<div class="scr">', '<div class="ptabs">' + TABS.map(([k, kj, n]) => `<button data-t="${k}" class="${k === kind ? 'on' : ''}"><b>${kj}</b>${n}</button>`).join('') + '</div><div class="scr">');
     P.innerHTML = h + '</div>'; P.querySelector('.x').onclick = closePanel; P.querySelectorAll('.ptabs button').forEach(b => b.onclick = () => { if (b.dataset.t !== kind) openPanel(b.dataset.t); });
     if (V2[kind]) V2[kind](P);
@@ -3703,7 +3937,7 @@ window.KGAME = (() => {
     // mission tracker
     const act = Object.keys(Q).filter(id => S.q[id] === 'active').sort((a, b) => (b === S.trackQ) - (a === S.trackQ)), tr = $('#k-track'), box = tr.querySelector('.in'); let html;
     if (objective) html = '<h4>' + objective[0] + '</h4><p>' + objective[1] + '</p>';
-    else if (!act.length) { html = S.done ? '<h4>Chûnin d’Aozora</h4><p>Toutes les missions sont accomplies. Explore et entraîne-toi librement !</p>' : '<h4>Missions</h4><p>Cherche les <b style="color:#b8322a">!</b> dorés au-dessus des villageois.</p>'; }
+    else if (!act.length) { html = S.done ? '<h4>Éclaireur d’Aozora</h4><p>Toutes les missions sont accomplies. Explore et entraîne-toi librement !</p>' : '<h4>Missions</h4><p>Cherche les <b style="color:#b8322a">!</b> dorés au-dessus des villageois.</p>'; }
     else html = act.slice(0, 1).map(id => { const q = Q[id], st = qStep(id), s = q.steps[Math.min(st, q.steps.length - 1)]; return `<h4>${q.title}</h4><p>${st >= q.steps.length ? 'Retourne voir ' + (NPCS.find(n => n.id === q.giver) || {}).name : s.txt + (s.n ? ' — ' + Math.min(s.n, s.cnt()) + '/' + s.n : '')}</p>`; }).join('');
       if (!objective && S.contracts.length) html += S.contracts.slice(0, 2).map(c => `<p style="margin-top:6px"><b style="color:#2a6ac0">◆</b> ${c.t} — ${c.p}/${c.n}</p>`).join('');
     if (box.dataset.h !== html) { box.dataset.h = html; box.innerHTML = html; }
@@ -3715,7 +3949,7 @@ window.KGAME = (() => {
   const H = () => A.hero;
   const ACT = { attack: { d: .42, hit: .2 }, kick: { d: .5, hit: .28 }, throw: { d: .4, hit: .22 }, seal: { d: .5 }, dash: { d: .4 }, cast: { d: .45, hit: .15 }, hurt: { d: .35 }, subst: { d: .01 } };
   function useSkill(id, yawTo) { if (tu && tu.step === 'fist' && id === 'fist' && !tu.hit) tu.hit = 1; const k = SK[id], h = H(); if (!started || dlg || panel || h.dead) return; if (k.lock && k.lock()) { toastMini('🔒 ' + k.hint); return; } if ((cds[id] || 0) > 0) return; if (h.act && h.act !== 'hurt') return;
-    if (S.ck < k.ck) { toastMini('Pas assez de chakra'); return; } if (k.item && !(S.inv[k.item] > 0)) { toastMini('Plus de kunai'); return; }
+    if (S.ck < k.ck) { toastMini('Pas assez de souffle'); return; } if (k.item && !(S.inv[k.item] > 0)) { toastMini('Plus de kunai'); return; }
     S.ck -= k.ck; if (k.item) S.inv[k.item]--; cds[id] = k.cd * (1 - (S.rk[id] - 1) * .08); if (yawTo != null) h.yaw = yawTo; else faceTarget(); if (window.KSEAL && KSEAL.SEQ[id]) KSEAL.play(id, k.name);
     if (id === 'dash') { const r = h.yaw * Math.PI / 180; fx('leafSwirl', h.x, h.y, .5, .9); sfx('throw'); h.inv = .3; for (let d = 7; d > 0; d -= .5) { const nx = h.x + Math.sin(r) * d, ny = h.y + Math.cos(r) * d; if (!A.blocked(nx, ny)) { h.x = nx; h.y = ny; break; } } fx('leafSwirl', h.x, h.y, .5, .9); refresh(); return true; }
     if (id === 'subst') { const r = h.yaw * Math.PI / 180; fx('smoke', h.x, h.y, .6, 1.1); sfx('smoke'); h.inv = .7; for (let d = 5; d > 0; d -= .5) { const nx = h.x - Math.sin(r) * d, ny = h.y - Math.cos(r) * d; if (!A.blocked(nx, ny)) { h.x = nx; h.y = ny; break; } } fxs.push({ k: 'log', x: h.x + Math.sin(r) * 3, y: h.y + Math.cos(r) * 3, t: 0, d: 1.2 }); refresh(); return true; }
@@ -3993,7 +4227,7 @@ window.KGAME = (() => {
     else { const today = new Date().toDateString(); if (S.daily.last !== today) { const y = new Date(Date.now() - 864e5).toDateString(); S.daily.streak = S.daily.last === y ? S.daily.streak + 1 : 1; S.daily.last = today;
       const ry = 40 * Math.min(7, S.daily.streak) + S.lvl * 10; S.ryo += ry; setTimeout(() => { toast('Récompense du jour · série ' + S.daily.streak, ry + ' ryō' + (S.daily.streak % 3 === 0 ? ' + un équipement rare' : '')); if (S.daily.streak % 3 === 0) giveItem(genItem(S.lvl, 1)); refresh(); }, 900); } }
     fillContracts(); save(); tuArm(); }
-  function showEnd() { setTimeout(() => { openPanel('quests'); const P = $('#k-panel'); P.querySelector('.scr').insertAdjacentHTML('afterbegin', '<div style="text-align:center;margin-bottom:12px"><div style="font:900 54px serif;color:#b8322a">青空</div><h2 style="justify-content:center">Félicitations, Chûnin ' + S.name + ' !</h2><p>Tu as terminé l’histoire de Kunai Online. Le village est à toi : continue à explorer, à chasser et à t’entraîner.</p></div>'); }, 400); }
+  function showEnd() { setTimeout(() => { openPanel('quests'); const P = $('#k-panel'); P.querySelector('.scr').insertAdjacentHTML('afterbegin', '<div style="text-align:center;margin-bottom:12px"><div style="font:900 54px serif;color:#b8322a">青空</div><h2 style="justify-content:center">Félicitations, Éclaireur ' + S.name + ' !</h2><p>Tu as terminé l’histoire de Kunai Gaiden. Le village est à toi : continue à explorer, à chasser et à t’entraîner.</p></div>'); }, 400); }
 
   let traveling = false;
   function travel(id) { if (!started) return; save(); S.region = id; S.pos = null; store.set('kunai-save', S); traveling = true; setTimeout(() => location.reload(), 120); }
@@ -4044,7 +4278,8 @@ window.KGAME = (() => {
   function init(api) { A = api; buildDom(); buildBar(); setTimeout(sealPad, 0);
     const sv = store.get('kunai-save'); if (sv && sv.v === 1) { S = Object.assign(NEW(), sv); S.inv = Object.assign(NEW().inv, sv.inv); S.skills = Object.assign(NEW().skills, sv.skills); S.rk = Object.assign(NEW().rk, sv.rk);
       // older saves: every ninja now starts with a katana (any other weapon goes to the bag)
-      if (sv.tutoDone == null) S.tutoDone = true;   // saves from before the first-run tutorial count it as seen
+      if (sv.tutoDone == null) S.tutoDone = true;   // saves from before the first-run tutorial
+      S.rank = ({ Genin: 'Novice', 'Chûnin': 'Éclaireur', Chunin: 'Éclaireur', 'Jōnin': 'Maître du Ciel', Jonin: 'Maître du Ciel' })[S.rank] || S.rank;   // saves from before the original rank names count it as seen
       if (!sv.gotKatana) { S.eq = Object.assign({}, sv.eq); if (S.eq.weapon && S.eq.weapon.w !== 'katana') S.bag.push(S.eq.weapon); if (!S.eq.weapon || S.eq.weapon.w !== 'katana') S.eq.weapon = { id: 'katana0', slot: 'weapon', w: 'katana', r: 0, lvl: 1, st: { atk: 3 }, name: 'Katana de genin' }; S.gotKatana = true; } }
     LOOKS.player = lookOf(S.look);
     document.querySelectorAll('#k-top [data-p]').forEach(b => tap(b, () => openPanel(b.dataset.p)));
@@ -4060,7 +4295,7 @@ window.KGAME = (() => {
   function onReady() { place(); $('#k-new').disabled = false; $('#k-max').disabled = false; $('#k-cont').disabled = false; $('#k-tload').textContent = (A.region ? A.region.name : 'Aozora') + ' est prêt.'; try { if (sessionStorage.getItem('nsr-new')) { sessionStorage.removeItem('nsr-new'); setTimeout(() => $('#k-new').click(), 300); } } catch (e) {} portrait($('#k-por'), LOOKS.player, null); }
   const blockInput = () => !started || !!dlg || !!panel || creatorOpen || (A && A.hero.dead > 0) || (A && A.hero.act && A.hero.act !== 'hurt' && A.hero.act !== 'throw');
   const canWaterWalk = () => started && S.lvl >= 3 && S.ck > 1, drainCk = n => { S.ck = Math.max(0, S.ck - n); }, inCombat = () => enemies.some(e => !e.dead && e.state === 'chase');
-  let waterHint = 0; const sinkHint = () => { if (performance.now() - waterHint > 6000) { waterHint = performance.now(); toastMini(S.lvl < 3 ? 'Marcher sur l’eau : niveau 3' : 'Plus assez de chakra'); } };
+  let waterHint = 0; const sinkHint = () => { if (performance.now() - waterHint > 6000) { waterHint = performance.now(); toastMini(S.lvl < 3 ? 'Marcher sur l’eau : niveau 3' : 'Plus assez de souffle'); } };
   const timeScale = dt => { if (hitstop > 0) { hitstop -= dt; return .06; } return 1; }, speedMul = () => 1 + gear().spd / 100;
   let prompt = null; const setPrompt = p => { prompt = p; };
   const say = (name, look, lines, onClose) => { openDlg({ name, look, id: '_' }, lines); if (dlg) dlg.onClose = onClose; };
@@ -4131,14 +4366,14 @@ window.KGAME = (() => {
 })();
 </script><script>window.LOOKS = {
   hero:     { label: 'Héros (Kaze)', coat: '#2f90aa', hair: '#2b2a3b', eyes: '#1c6fe0', headband: true },
-  kunoichi: { label: 'Kunoichi (Hana)', coat: '#c24d6e', hair: '#e48fb0', eyes: '#3fae5a', hairStyle: 'long', coatLen: .5, pants: '#2b2235', headband: '#3a2c46', skin: '#fde6d4' },
-  jonin:    { label: 'Jōnin instructeur', coat: '#2b3a52', vest: '#5f7d45', hair: '#c9ccd6', eyes: '#4a4f5c', coatLen: 0, headband: true, hairStyle: 'spiky', pants: '#2b3a52' },
+  kunoichi: { label: 'Ninja (Hana)', coat: '#c24d6e', hair: '#6b3a2a', eyes: '#3fae5a', hairStyle: 'long', coatLen: .5, pants: '#2b2235', headband: '#3a2c46', skin: '#fde6d4' },
+  jonin:    { label: 'Maître instructeur', coat: '#2b3a52', vest: '#7a5a3a', hair: '#2e2a36', eyes: '#4a4f5c', coatLen: 0, headband: true, hairStyle: 'spiky', pants: '#2b3a52' },
   rogue:    { label: 'Ninja déserteur', coat: '#3a3442', hair: '#a8242c', eyes: '#c8322f', scarf: '#5a1f2a', coatLen: 1, pants: '#221f29', hairStyle: 'spiky' },
   villager: { label: 'Villageois', coat: '#b98a4e', hair: '#5a3a26', eyes: '#6b4a2a', coatLen: .5, pants: '#4a4a3a', belt: '#7a3b2a', skin: '#f3c9a5' },
   merchant: { label: 'Marchande', coat: '#7a8f3a', hair: '#2e2018', eyes: '#7a4b1f', hairStyle: 'long', coatLen: 1, belt: '#e7c35a', skin: '#f6d1b0' },
-  medic:    { label: 'Ninja médical', coat: '#e8e6dd', hair: '#4f7a9a', eyes: '#2f8f8a', coatLen: .5, headband: '#2c5a7a', pants: '#3a4a5a', belt: '#c8323a' },
+  medic:    { label: 'Médecin', coat: '#e8e6dd', hair: '#4f7a9a', eyes: '#2f8f8a', coatLen: .5, headband: '#2c5a7a', pants: '#3a4a5a', belt: '#c8323a' },
   bandit:   { label: 'Bandit', coat: '#6b5a44', hair: '#3a2a20', eyes: '#8a3a2a', mask: '#2a2a30', coatLen: .5, pants: '#3a3430', belt: '#8a2a20', hairStyle: 'spiky' },
-  student:  { label: 'Élève de l’académie', coat: '#e08a3a', hair: '#e6c24a', eyes: '#2a7fd4', coatLen: 0, scarf: '#2d4fa0', pants: '#33364a', hairStyle: 'spiky' },
+  student:  { label: 'Élève de l’académie', coat: '#4f8a6a', hair: '#5a3a26', eyes: '#6b4a2a', coatLen: 0, scarf: '#c8a040', pants: '#33364a', hairStyle: 'spiky' },
 };
 </script><script>/* Kunai Gaiden — techniques by drawing (touch screens).
    The player draws a sign with the finger in the pad at the bottom right; a recogniser (a $1-style
@@ -4218,7 +4453,7 @@ window.KSEAL = (() => {
   // which seals each technique weaves (traditional-style sequences)
   const SEQ = { fire: ['mi', 'hitsuji', 'saru', 'i', 'uma', 'tora'], chidori: ['ushi', 'u', 'saru'], water: ['ushi', 'saru', 'u', 'ne', 'i', 'tori'], clone: ['clone'],
     subst: ['hitsuji', 'tora'], dash: ['tora'], sphere: ['palm'], wind: ['tori', 'inu', 'tora'] };
-  const TECH = { fire: 'Boule de feu', chidori: 'Lame-tonnerre', water: 'Dragon d’eau', clone: 'Multiclonage', subst: 'Substitution', dash: 'Pas éclair', sphere: 'Sphère de chakra', wind: 'Lame de vent' };
+  const TECH = { fire: 'Boule de feu', chidori: 'Lame-tonnerre', water: 'Dragon d’eau', clone: 'Clones de brume', subst: 'Substitution', dash: 'Pas éclair', sphere: 'Sphère de souffle', wind: 'Lame de vent' };
   function drawSeal(g, id, t) { const s = SEALS[id]; g.save(); g.scale(1.55, 1.55);
     const ord = s.L ? (s.front === 'R' ? [['L', true], ['R', false]] : [['R', false], ['L', true]]) : [['R', false]];
     for (const [k, left] of ord) hand(g, s[k], left);
@@ -4575,7 +4810,7 @@ window.KSEAL = (() => {
     const open = () => { const d = KGAME.dbg(); d.openPanel('bag'); };
     mb.addEventListener('click', e => { e.stopPropagation(); open(); });
     // the pouch: one button for the three consumables
-    const bar = $('#k-bar'), pb = document.createElement('button'); pb.id = 'k-pouch'; pb.setAttribute('aria-label', 'Sacoche : soins, chakra, ramen'); pb.innerHTML = svg('<path d="M4 7 h12 l-1 10 H5 Z"/><path d="M7 7 V5 a3 3 0 0 1 6 0 V7"/>') + '<i>0</i>'; bar.appendChild(pb);
+    const bar = $('#k-bar'), pb = document.createElement('button'); pb.id = 'k-pouch'; pb.setAttribute('aria-label', 'Sacoche : soins, souffle, ramen'); pb.innerHTML = svg('<path d="M4 7 h12 l-1 10 H5 Z"/><path d="M7 7 V5 a3 3 0 0 1 6 0 V7"/>') + '<i>0</i>'; bar.appendChild(pb);
     pb.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); document.body.classList.toggle('pouch'); });
     for (const id of ['pillHp', 'pillCk', 'ramen']) { const s = bar.querySelector(`.slot[title=${id}]`); if (s) s.addEventListener('pointerdown', () => setTimeout(() => document.body.classList.remove('pouch'), 120)); }
     // low-life vignette
@@ -5056,7 +5291,7 @@ window.KINTRO = (() => {
     // the duel: real combat, but it cannot be won
     chaseArrow = null; M.lock = true; letterbox(true); await sub('Kurogane', 'Un genin du jour ? Ils envoient vraiment n’importe qui.', 2600); letterbox(false);
     M.actors.splice(M.actors.indexOf(kuro), 1); const boss = GI.spawnBoss(kuro.x, kuro.y); GI.setNoDeath(true); GI.showHud(true); GI.heal(); M.lock = false; GI.toast('Le duel', 'Frappe Kurogane !');
-    GI.setObjective('Le duel', (window.KTOUCH && KTOUCH.enabled) ? 'Combats ! Boutons de taijutsu et de kunai' : 'Combats ! J : taijutsu · K : kunai'); const d0 = performance.now(); await until(() => performance.now() - d0 > 24000 || GI.hp() < .22);
+    GI.setObjective('Le duel', (window.KTOUCH && KTOUCH.enabled) ? 'Combats ! Boutons de frappe et de kunai' : 'Combats ! J : frappe · K : kunai'); const d0 = performance.now(); await until(() => performance.now() - d0 > 24000 || GI.hp() < .22);
     return { boss, masks }; }
 
   async function awakeningSequence(ctx) { log('awakeningSequence'); const M = KMAP, GI = KGAME.intro, boss = ctx.boss, cvMain = document.getElementById('c');
@@ -5481,5 +5716,144 @@ KGAME.init({region:RG,toClient:(x,y)=>{const s=screenOf(x,y);return[s[0],s[1],Z]
 Object.assign(KMAP,{setQuality,quality:()=>QUALITY,PROF,toScreen:(x,y,z)=>{const s=screenOf(x,y);return [s[0],s[1]-(z||0)*CP*PM*Z];},hero,B,toS,PM,SP,CP,support,cls,frames,blocked,enterHouse,exitHouse,getInt:()=>INT,setLevel,snap:()=>{const p=toS(hero.x,hero.y);cam.x=p[0];cam.y=p[1]-40;},clearBank:()=>{for(const k in bank)delete bank[k];bankN=0;},level:()=>level,G,L,GW,GH,R0,isReady:()=>ready});
 window.__k={hero,B,setLevel,blocked,support,G,L,jump:()=>{jumpReq=true;},get level(){return level;},snap:()=>{const p=toS(hero.x,hero.y);cam.x=p[0];cam.y=p[1]-40;Z=LEVELS[level];},draw:()=>drawWorld(performance.now()/1000),enter:b=>enterHouse(b),go:l=>goRoom(l),exit:()=>INT&&exitHouse(),get inside(){return INT;}};
 schedule();
+})();
+</script><script>// Kunai Gaiden scenes for the BETA IA simulated player (shared core: beta.js, copied by games-kit/sync.py; spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Every action is a real touch gesture: the katana slashes are finger swipes across the enemies, the techniques are signs
+// drawn in the pad at the bottom right (V = fireball, Z = thunder blade, O = breath sphere, W = wind blade), the run is the
+// floating joystick on the left. Loaded last (after the map script), inactive unless the address has ?beta=ia.
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const K = window.KGAME, E = K.ext, D = () => K.dbg(), $ = s => document.querySelector(s);
+  // clean takes: no chat handle or "Système" lines, no mission tracker banner, no tutorial, no route GPS, no hidden max-account button
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style');
+    st.textContent = ['#k-chath', '#k-chat', '#k-track', '#k-tu', '#k-gps', '#k-max'].map(q => 'html body.beta-propre ' + q).join(',') + '{display:none!important}'; document.head.appendChild(st); }
+  const H = () => E.hero();
+  const live = () => E.enemies.filter(e => !e.dead && !e.pvp);
+  const pack = () => live().filter(e => e.beta);   // the enemies of the take (the village's own stay in their woods)
+  const scr = (x, y, z) => KMAP.toScreen(x, y, z == null ? 1.4 : z);   // the body of an actor on screen (1.4 m above its feet)
+  const onScreen = p => p[0] > 30 && p[0] < innerWidth - 30 && p[1] > 70 && p[1] < innerHeight - 90;
+
+  // ---- a stroke with several segments (a sign in the pad): the same touch events as beta.js's drag, through each point ----
+  const fingerEl = () => document.getElementById('beta-finger');
+  function put(x, y) { const f = fingerEl(); if (f && BETA.opts.doigt) { f.classList.add('on'); f.style.left = x + 'px'; f.style.top = y + 'px'; } }
+  function fire(type, x, y, el) { el.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, button: 0, buttons: type === 'pointerup' ? 0 : 1, pointerId: 7, pointerType: 'touch', isPrimary: true, view: window })); }
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  async function trace(A, pts, ms, label) {
+    if (!A.running()) return; const [x0, y0] = pts[0];
+    // reach the start like a finger would (a short move of the dot), then press, draw through every point, lift
+    const f = fingerEl(); const fx = f ? parseFloat(f.style.left) || innerWidth / 2 : innerWidth / 2, fy = f ? parseFloat(f.style.top) || innerHeight * .7 : innerHeight * .7;
+    for (let k = 1; k <= 6; k++) { put(fx + (x0 - fx) * k / 6, fy + (y0 - fy) * k / 6); await frame(); }
+    const el = document.elementFromPoint(x0, y0) || document.body; if (f) f.classList.add('down'); fire('pointerdown', x0, y0, el);
+    let L = 0; const seg = []; for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); L += d; }
+    const t0 = performance.now(), dur = ms; let k = 0;
+    while (k < 1) { k = Math.min(1, (performance.now() - t0) / dur); let want = k * L, i = 0; while (i < seg.length - 1 && want > seg[i]) { want -= seg[i]; i++; }
+      const u = seg[i] ? Math.min(1, want / seg[i]) : 1, x = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * u, y = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * u;
+      put(x, y); fire('pointermove', x, y, el); await frame(); }
+    const [x1, y1] = pts[pts.length - 1]; fire('pointerup', x1, y1, el); if (f) f.classList.remove('down');
+    A.ev('action', { action: 'tracer', x: Math.round(x0), y: Math.round(y0), cible: label });
+  }
+  // the signs, drawn inside the pad (orientation matters: the recogniser tells Z from N and M from W)
+  const SIGN = { fire: [[0, 0], [.5, 1], [1, 0]], chidori: [[0, 0], [1, 0], [0, 1], [1, 1]], wind: [[0, 0], [.25, 1], [.5, .25], [.75, 1], [1, 0]],
+    sphere: Array.from({ length: 25 }, (_, i) => { const a = -Math.PI / 2 - i / 24 * Math.PI * 2; return [.5 + .5 * Math.cos(a), .5 + .5 * Math.sin(a)]; }) };
+  const NAME = { fire: 'signe V : boule de feu', chidori: 'signe Z : lame-tonnerre', wind: 'signe W : lame de vent', sphere: 'signe O : sphère de souffle' };
+  async function sign(A, id) {
+    const pad = $('#k-sealpad'); if (!pad || pad.style.display === 'none') return false;
+    const r = pad.getBoundingClientRect(), s = Math.min(r.width, r.height) * .62, ox = r.left + (r.width - s) / 2 + A.jitter(-4, 4), oy = r.top + (r.height - s) / 2 - 4 + A.jitter(-4, 4);
+    const pts = SIGN[id].map(([x, y]) => [ox + x * s + A.jitter(-2, 2), oy + y * s + A.jitter(-2, 2)]);
+    await trace(A, pts, id === 'sphere' ? 560 : id === 'wind' ? 520 : 420, NAME[id]); return true;
+  }
+  // a katana swipe through the enemies in reach (the finger crosses their bodies fast: one swipe can cut several)
+  async function slash(A) {
+    const h = H(), near = pack().filter(e => Math.hypot(e.x - h.x, e.y - h.y) < 4.4).map(e => ({ e, p: scr(e.x, e.y) })).filter(o => onScreen(o.p));
+    if (!near.length) return false;
+    near.sort((a, b) => a.p[0] - b.p[0]); const a = near[0].p, b = near[near.length - 1].p;
+    const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy);
+    let x1, y1, x2, y2; if (l < 40) { const ang = A.jitter(-.5, .5); x1 = a[0] - 90 * Math.cos(ang); y1 = a[1] - 60 * Math.sin(ang) - 20; x2 = a[0] + 90 * Math.cos(ang); y2 = a[1] + 60 * Math.sin(ang) + 20; }
+    else { x1 = a[0] - dx / l * 50; y1 = a[1] - dy / l * 50; x2 = b[0] + dx / l * 50; y2 = b[1] + dy / l * 50; }
+    if (A.rnd() < .5) [x1, y1, x2, y2] = [x2, y2, x1, y1];
+    await A.drag(x1, y1, x2, y2, 'coup de katana' + (near.length > 1 ? ' ×' + near.length : ''), A.jitter(170, 240)); return true;
+  }
+  // a few steps with the floating joystick toward a point of the world (the thumb lands on the left half, pushes, lets go)
+  async function run(A, tx, ty, ms) {
+    const h = H(), p = scr(h.x, h.y, 0), q = scr(tx, ty, 0), dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1;
+    const sx = innerWidth * A.jitter(.14, .2), sy = innerHeight * A.jitter(.62, .7); await A.drag(sx, sy, sx + dx / l * 60, sy + dy / l * 60, 'courir', ms || 700);
+  }
+  const nearest = () => { const h = H(); let b = null, bd = 1e9; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d < bd) { bd = d; b = e; } } return [b, bd]; };
+
+  // ---- the pack at the gate of Aozora: wolves from the southern woods and bandits, all around the hero ----
+  function wave(n, r0, r1, kinds, weak) {
+    const h = H(), out = [];
+    for (let i = 0, tries = 0; out.length < n && tries < 200; tries++) { const a = (i / n) * Math.PI * 1.6 - Math.PI * .8 + (Math.random() - .5) * .4, r = r0 + Math.random() * (r1 - r0);
+      // in front of the camera side (south of the hero, +y), spread on an arc
+      const x = h.x + Math.sin(a) * r, y = h.y + Math.cos(a) * r * .75 + .6; if (!E.free(x, y, .8)) continue; i++;
+      const e = E.spawn(kinds[out.length % kinds.length], x, y); e.beta = true; e.home = [x, y]; e.wander = [x, y]; e.state = 'chase'; e.show = 3; e.elite = false;
+      if (weak) e.hp = Math.round(e.max * weak); out.push(e); }
+    return out;
+  }
+  function midSave() {   // a hero in the middle of the story: level 14, the techniques of the first levels, the bandit mission running
+    const today = new Date().toDateString();
+    return { lvl: 14, xp: 900, sp: 1, ryo: 1840, rank: D().S.rank, tutoDone: true, introDone: true, done: false,
+      inv: { kunai: 24, pillHp: 4, pillCk: 3, ramen: 2, ramenBowl: 0 }, skills: { fire: true, sphere: true, chidori: true, water: true, wind: true, clone: true, dash: true },
+      rk: { fist: 3, kunai: 2, fire: 3, sphere: 2, subst: 1, chidori: 2, water: 1, wind: 3, clone: 1, dash: 2 },
+      q: { q1: 'done', q2: 'done', q3: 'done', q4: 'done', q5: 'active' }, qp: { q1met: true, wolves: 6, roof: true, q3back: true, ramenGiven: true, bandits: 2 },
+      kills: { wolf: 31, bandit: 9, boss: 0 }, daily: { last: today, streak: 4 }, region: 'konoha', ach: { c40: 1, roof: 1, water: 1, herb: 1, scroll6: 1, lvl10: 1 },
+      eq: { weapon: { id: 'betakat', slot: 'weapon', w: 'katana', r: 2, lvl: 12, st: { atk: 34, crit: 6 }, name: 'Katana du Vent' } } };
+  }
+  function watch(A) {
+    let kills = 0, lv = D().S.lvl; const h0 = { n: 0 };
+    E.hooks.kill.push(e => { if (!A.running()) return; kills++; h0.n++; if (kills === 1) A.mark('premier ennemi vaincu'); if (kills % 4 === 0) A.mark(kills + ' ennemis vaincus'); });
+    const iv = setInterval(() => { if (!A.running()) return clearInterval(iv); const S = D().S; if (S.lvl > lv) { lv = S.lvl; A.mark('niveau ' + lv); } }, 200);
+    return h0;
+  }
+  const hideToast = () => { const t = $('#k-toast'); if (t) t.classList.remove('on'); };
+
+  BETA.game({
+    progress: () => { const h = H(); return h ? [Math.round(h.x), Math.round(h.y), live().length, D().S.xp, D().S.lvl] : [0]; },
+    async prepare(save, A) {
+      // the world is baked behind the title scroll; "Continuer" needs a save read at load, so the mid-game hero is put in place directly
+      for (let i = 0; i < 1200 && !($('#k-new') && !$('#k-new').disabled); i++) await A.wait(100);
+      const S = D().S; Object.assign(S, midSave()); K.intro.heal(); K.intro.setNoDeath(true);   // a take never ends on a knock-out
+      K.intro.begin(); hideToast();
+      // the road just outside the great gate, the gate behind the hero
+      const h = H(); h.x = 0.5; h.y = 160; h.z = 0; h.yaw = 0; __k.snap();
+      // the village's own wolves and bandits stay where they are; the pack for the take comes out of the woods around the gate
+      for (const e of live()) if (Math.hypot(e.x - h.x, e.y - h.y) < 30) e.dead = 1e9;
+      const sc = A.opts.scene;
+      if (sc === 'moment') { h.y = 158; __k.snap(); await A.wait(400); wave(6, 2.6, 4.2, ['bandit', 'wolf'], .3); }
+      else wave(5, 6, 9, ['wolf', 'bandit', 'wolf']);
+      // let the frames of every actor be painted before filming, then hide the hint that pops up after the start
+      for (let i = 0; i < 30; i++) { await A.wait(100); }
+      await A.wait(4600); hideToast();
+      for (const e of live()) if (Math.hypot(e.x - h.x, e.y - h.y) < 14) { e.state = 'chase'; }
+      K.intro.heal(); E.refresh();
+      // the joystick and the sign pad are touch controls: make sure they exist (they do whenever the page runs as a phone)
+      if (!$('#k-sealpad')) A.ev('erreur', { msg: 'pas de pavé des signes (écran non tactile)' });
+    },
+    scenes: {
+      // the core: the pack rushes in, katana swipes through it, techniques drawn in the pad (V, Z, O), the pack thins out
+      async boucle(A) { watch(A); const plan = ['fire', null, null, 'chidori', null, 'sphere', null, null, 'fire', null, 'wind', null];
+        await A.wait(600); let i = 0;
+        while (A.running()) {
+          const [e, d] = nearest();
+          if (!e) { if (E.enemies.filter(q => q.beta).length < 12) wave(4, 6, 9, ['wolf', 'bandit', 'wolf']); await A.wait(900); continue; }
+          if (d > 6) { await run(A, e.x, e.y, Math.min(900, 250 + d * 60)); await A.wait(A.jitter(80, 180)); continue; }
+          const id = plan[i++ % plan.length];
+          if (id && d < 5.5) { const ok = await sign(A, id); if (ok) { A.mark(NAME[id]); await A.wait(A.jitter(500, 800)); continue; } }
+          if (!(await slash(A))) await A.wait(200); await A.wait(A.jitter(160, 320));
+          if (D().S.hp < 60) K.intro.heal();
+          for (const e of pack()) { e.home = [H().x + (e.home[0] - H().x) * .5, H().y + (e.home[1] - H().y) * .5]; if (e.state === 'home') e.state = 'chase'; }
+        } },
+      // the wow moment: six weakened enemies pressed around the hero, the wind blade (W) mows them down, the sphere (O) finishes
+      async moment(A) { watch(A); await A.wait(500);
+        if (await sign(A, 'wind')) A.mark('lame de vent sur la meute'); await A.wait(900);
+        for (let k = 0; k < 4 && A.running() && live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 6); k++) { await slash(A); await A.wait(A.jitter(200, 320)); }
+        if (live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 5)) { await sign(A, 'sphere'); A.mark('sphère de souffle'); }
+        await A.wait(1200);
+        while (A.running()) { if (!(await slash(A))) await A.wait(400); await A.wait(300); } },
+      // plays on until stopped (long tests): the same fight, the pack coming back
+      async idle(A) { watch(A); while (A.running()) { const [e, d] = nearest(); if (!e) { wave(4, 6, 9, ['wolf', 'bandit']); await A.wait(1000); continue; }
+        if (d > 6) await run(A, e.x, e.y, 700); else if (A.rnd() < .25) await sign(A, ['fire', 'chidori', 'sphere', 'wind'][(A.rnd() * 4) | 0]); else await slash(A); await A.think(); } },
+    },
+  });
 })();
 </script></body></html>

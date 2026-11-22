@@ -50,8 +50,8 @@ window.ICONS = (() => {
     sDash(g) { g.strokeStyle = '#fff4dc'; g.lineCap = 'round'; for (let i = 0; i < 4; i++) { g.lineWidth = 3; g.beginPath(); g.moveTo(10 + i * 3, 20 + i * 8); g.lineTo(30 + i * 3, 20 + i * 8); g.stroke(); } g.beginPath(); g.moveTo(36, 16); g.lineTo(54, 32); g.lineTo(36, 48); g.closePath(); fill(g, '#ff8a3a'); ink(g); },
   };
   const ITEMS = ['kunai', 'katana', 'hache', 'marteau', 'fouet', 'shuriken', 'tag', 'scroll', 'ramen', 'onigiri', 'pillHp', 'pillCk', 'pouch', 'headband', 'smokeBomb', 'wire'], SKILLS = ['sFist', 'sFire', 'sSphere', 'sSubst', 'sClone', 'sBolt', 'sWater', 'sWind', 'sDash'];
-  const LABELS = { kunai: 'Kunai', katana: 'Katana', hache: 'Hache', marteau: 'Marteau', fouet: 'Fouet', shuriken: 'Shuriken', tag: 'Parchemin explosif', scroll: 'Rouleau', ramen: 'Bol de ramen', onigiri: 'Onigiri', pillHp: 'Pilule de soin', pillCk: 'Pilule de chakra', pouch: 'Bourse de ryō', headband: 'Bandeau', smokeBomb: 'Bombe fumigène', wire: 'Fil ninja',
-    sFist: 'Frappe', sFire: 'Boule de feu', sSphere: 'Sphère de chakra', sSubst: 'Substitution', sClone: 'Clonage', sBolt: 'Éclair', sWater: 'Balle d’eau', sWind: 'Lame de vent', sDash: 'Pas éclair' };
+  const LABELS = { kunai: 'Kunai', katana: 'Katana', hache: 'Hache', marteau: 'Marteau', fouet: 'Fouet', shuriken: 'Shuriken', tag: 'Parchemin explosif', scroll: 'Rouleau', ramen: 'Bol de ramen', onigiri: 'Onigiri', pillHp: 'Pilule de soin', pillCk: 'Pilule de souffle', pouch: 'Bourse de ryō', headband: 'Bandeau', smokeBomb: 'Bombe fumigène', wire: 'Fil ninja',
+    sFist: 'Frappe', sFire: 'Boule de feu', sSphere: 'Sphère de souffle', sSubst: 'Substitution', sClone: 'Clonage', sBolt: 'Éclair', sWater: 'Balle d’eau', sWind: 'Lame de vent', sDash: 'Pas éclair' };
   function draw(g, id, size) { g.save(); const k = (size || 64) / 64; g.scale(k, k); frame(g, id[0] === 's' && id !== 'shuriken' && id !== 'scroll' && id !== 'smokeBomb' ? 'skill' : 'item'); I[id](g); g.restore(); }
   return { draw, ITEMS, SKILLS, LABELS };
 })();

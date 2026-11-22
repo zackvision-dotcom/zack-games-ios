@@ -19,7 +19,7 @@ body.minioff .zoom{bottom:16px}@media (max-width:700px){#mt{right:102px;bottom:1
 .zoom button{background:#f7f1de!important;color:#2a2230!important;border:2.5px solid #2a2230!important;font-family:serif!important}
 .zone{background:#f7f1de!important;color:#2a2230!important;border:2.5px solid #2a2230;font-family:"Potta One",sans-serif!important;font-weight:400!important;top:auto!important;bottom:96px}
 #load{position:fixed;inset:0;display:grid;place-items:center;background:#1b2117;font:700 18px system-ui;z-index:9}
-</style><style id="k-max-hide">#k-max{display:none!important}</style></head><body><script>/* hidden "max level" account: tap the title logo 5 times quickly to reveal the button (demos, App Review) */(function(){var n=0,t=0;document.addEventListener("pointerdown",function(e){var h=e.target&&e.target.closest&&e.target.closest("#k-title h1");if(!h)return;var now=Date.now();n=now-t<1500?n+1:1;t=now;if(n>=5){var st=document.getElementById("k-max-hide");if(st)st.textContent="#k-title #k-max{pointer-events:auto!important}";n=0;}},true);})();</script>
+</style><style id="k-max-hide">#k-max{display:none!important}</style></head><body><script src="beta.js"></script><script>/* hidden "max level" account: tap the title logo 5 times quickly to reveal the button (demos, App Review) */(function(){var n=0,t=0;document.addEventListener("pointerdown",function(e){var h=e.target&&e.target.closest&&e.target.closest("#k-title h1");if(!h)return;var now=Date.now();n=now-t<1500?n+1:1;t=now;if(n>=5){var st=document.getElementById("k-max-hide");if(st)st.textContent="#k-title #k-max{pointer-events:auto!important}";n=0;}},true);})();</script>
 <canvas id="c"></canvas>
 <div class="zone" id="zone"></div>
 <div class="zoom"><button id="zo">−</button><button id="zi">+</button></div><button id="jb" class="jump" hidden>跳<small>Saut</small></button>
@@ -399,4 +399,4 @@ Object.assign(KMAP,{setQuality,quality:()=>QUALITY,PROF,toScreen:(x,y,z)=>{const
 window.__k={hero,B,setLevel,blocked,support,G,L,jump:()=>{jumpReq=true;},get level(){return level;},snap:()=>{const p=toS(hero.x,hero.y);cam.x=p[0];cam.y=p[1]-40;Z=LEVELS[level];},draw:()=>drawWorld(performance.now()/1000),enter:b=>enterHouse(b),go:l=>goRoom(l),exit:()=>INT&&exitHouse(),get inside(){return INT;}};
 schedule();
 })();
-</script></body></html>
+</script><script src="beta-game.js"></script></body></html>

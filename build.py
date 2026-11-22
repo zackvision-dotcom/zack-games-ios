@@ -45,12 +45,18 @@ def braise():
     s = s.replace(boot, "window.BRAISE_TOUCH={autoAct,attackNearest,dropSlot,toggleCraft:()=>{openTab=openTab?null:'tools';renderRecipes();},"
                   "cancel:()=>{placing=null;P.target=null;},state:()=>({mode,paused,dead:P.dead,placing:!!placing,items:P.items.filter(Boolean).map(s=>s.id+':'+s.n).join(' ')}),"
                   "zoom:f=>{userZoom=clamp(userZoom*f,.7,1.45);}};\n"
-                  # staging for App Store screenshots and trailers only (tools/shots.mjs opens the page with ?shots=1; the app never does)
-                  "if(/[?&]shots=1/.test(location.search))window.BRAISE_DEV={P:()=>P,time:f=>{gameTime=DAY_LEN*(dayNum()-1+f);lastDay=dayNum();dayBanner=null;},"
+                  # staging for App Store screenshots and trailers only (tools/shots.mjs opens the page with ?shots=1, the BETA IA
+                  # player with ?beta=ia; the app never does either)
+                  "if(/[?&](shots=1|beta=ia)/.test(location.search))window.BRAISE_DEV={P:()=>P,mobs:()=>mobs,statics:()=>statics,fires:()=>fires,W2S,sfx,"
+                  "mode:()=>mode,paused:()=>paused,day:()=>dayNum(),frac:()=>dayFrac(),placing:()=>placing,time:f=>{gameTime=DAY_LEN*(dayNum()-1+f);lastDay=dayNum();dayBanner=null;},"
                   "give:(id,n)=>{addItem(id,n||1,P.x,P.y);invDirty=true;},fire:(dx,dy)=>mk('campfire',P.x+(dx||70),P.y+(dy||10),{fuel:85,max:90}),"
                   "hyenas:(n,r)=>{r=r||260;for(let i=0;i<n;i++){const a=i/n*6.28+.4,h={x:P.x+Math.cos(a)*r,y:P.y+Math.sin(a)*r*.65};const m=newHyena(h);if(m){m.x=h.x;m.y=h.y;mobs.push(m);}}},"
                   "craft:t=>{openTab=t;renderRecipes();},zoom:z=>{userZoom=z;}};\n" + boot + '\n</script>\n<script src="touch.js"></script>\n<script>', 1)
     shutil.copy(os.path.join(src, 'touch.js'), web)
+    # BETA IA (simulated player for in-game captures, ?beta=ia only, never in the app): the shared core first, the scenes last
+    head = '<head><meta charset="utf-8">'; assert s.count(head) == 1 and s.count('</body>') == 1
+    s = s.replace(head, head + '<script src="beta.js"></script>', 1).replace('</body>', '<script src="beta-game.js"></script></body>', 1)
+    for f in ('beta.js', 'beta-game.js'): shutil.copy(os.path.join(src, f), web)
     io.open(os.path.join(web, 'index.html'), 'w', encoding='utf-8', newline='\n').write(s)
     shutil.copy(os.path.join(src, 'ere1', 'art.js'), web); shutil.copy(os.path.join(src, 'i18n.css'), web)
     # the eras' own art (heirs, fauna, flora, places, ground) and the canonical landmarks of the lineage (ref/landmarks.js),

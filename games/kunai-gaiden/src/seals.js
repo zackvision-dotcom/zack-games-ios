@@ -76,7 +76,7 @@ window.KSEAL = (() => {
   // which seals each technique weaves (traditional-style sequences)
   const SEQ = { fire: ['mi', 'hitsuji', 'saru', 'i', 'uma', 'tora'], chidori: ['ushi', 'u', 'saru'], water: ['ushi', 'saru', 'u', 'ne', 'i', 'tori'], clone: ['clone'],
     subst: ['hitsuji', 'tora'], dash: ['tora'], sphere: ['palm'], wind: ['tori', 'inu', 'tora'] };
-  const TECH = { fire: 'Boule de feu', chidori: 'Lame-tonnerre', water: 'Dragon d’eau', clone: 'Multiclonage', subst: 'Substitution', dash: 'Pas éclair', sphere: 'Sphère de chakra', wind: 'Lame de vent' };
+  const TECH = { fire: 'Boule de feu', chidori: 'Lame-tonnerre', water: 'Dragon d’eau', clone: 'Clones de brume', subst: 'Substitution', dash: 'Pas éclair', sphere: 'Sphère de souffle', wind: 'Lame de vent' };
   function drawSeal(g, id, t) { const s = SEALS[id]; g.save(); g.scale(1.55, 1.55);
     const ord = s.L ? (s.front === 'R' ? [['L', true], ['R', false]] : [['R', false], ['L', true]]) : [['R', false]];
     for (const [k, left] of ord) hand(g, s[k], left);
