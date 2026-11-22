@@ -1,2 +1,2 @@
-lootboxoff
+textonly
 coralstack
