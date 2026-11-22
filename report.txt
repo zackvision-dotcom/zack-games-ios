@@ -1,4 +1,38 @@
-CHECK lanternhold fr-FR desc=604 kw=91 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 15128405, 'fileName': '1.mp4', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}, {'fileSize': 18831076, 'fileName': '2.mp4', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}]
-CHECK lanternhold en-US desc=560 kw=99 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 15128405, 'fileName': '1.mp4', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'AWAITING_UPLOAD'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'AWAITING_UPLOAD'}}]
-CHECK crumblecrew fr-FR desc=877 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 10745362, 'fileName': '1.mp4', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}]
-CHECK crumblecrew en-US desc=789 kw=80 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 10745362, 'fileName': '1.mp4', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}]
+== crumblecrew
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 689890)]
+    shot 01.jpg 673 KB
+    ops 1 [(0, 701895)]
+    shot 02.jpg 685 KB
+    ops 1 [(0, 679414)]
+    shot 03.jpg 663 KB
+    ops 1 [(0, 682701)]
+    shot 04.jpg 666 KB
+    ops 1 [(0, 686791)]
+    shot 05.jpg 670 KB
+    ops 3 [(0, 5242880), (5242880, 5242880), (10485760, 259602)]
+    preview 1.mp4 10493 KB
+    ops 5 [(0, 5242880), (5242880, 5242880), (10485760, 5242880)]
+    preview 2.mov 20528 KB
+  media fr-FR 5 screens, 2 previews
+    ops 1 [(0, 689890)]
+    shot 01.jpg 673 KB
+    ops 1 [(0, 701895)]
+    shot 02.jpg 685 KB
+    ops 1 [(0, 679414)]
+    shot 03.jpg 663 KB
+    ops 1 [(0, 682701)]
+    shot 04.jpg 666 KB
+    ops 1 [(0, 686791)]
+    shot 05.jpg 670 KB
+    ops 3 [(0, 5242880), (5242880, 5242880), (10485760, 259602)]
+    preview 1.mp4 10493 KB
+    ops 5 [(0, 5242880), (5242880, 5242880), (10485760, 5242880)]
+    preview 2.mov 20528 KB
+  media en-US 5 screens, 2 previews
+CHECK crumblecrew fr-FR desc=877 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 10745362, 'fileName': '1.mp4', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}, {'fileSize': 21021572, 'fileName': '2.mov', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/quicktime', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}]
+CHECK crumblecrew en-US desc=789 kw=80 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 10745362, 'fileName': '1.mp4', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}, {'fileSize': 21021572, 'fileName': '2.mov', 'sourceFileChecksum': None, 'previewFrameTimeCode': '', 'mimeType': 'video/quicktime', 'videoUrl': '', 'previewFrameImage': None, 'previewImage': None, 'assetDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}, 'videoDeliveryState': {'errors': [{'code': 'ASSET_FAILED', 'description': 'ASSET_FAILED'}], 'warnings': None, 'state': 'FAILED'}}]
+done; failed: []
