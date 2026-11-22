@@ -33,16 +33,17 @@
     const i = item('axe'); if (i >= 0 && !(P().hand && P().hand.id === 'axe')) { await A.tapEl(`#inv .slot[data-i="${i}"]`, 'prendre la hache'); await A.wait(400); }
     const e = near(D().statics(), e => ['pine', 'oak', 'dead'].includes(e.type) && !e.sourceFire, 600)[0]; if (!e) return;   // not the lightning-struck acacia (that one is captured, not felled)
     const logs = P().stats.logs; await A.think(); await tapWorld(A, e.x, e.y - 30, 'abattre ' + e.type);
-    for (let k = 0; k < 6 && A.running() && P().stats.logs === logs; k++) { await until(A, () => !P().target || P().stats.logs > logs, 2600); if (P().stats.logs > logs || e.dead) break; await A.wait(A.jitter(500, 800)); await tapWorld(A, e.x, e.y - 30, 'abattre ' + e.type); }
-    if (P().stats.logs > logs) A.mark('arbre abattu');
+    for (let k = 0; k < 6 && A.running() && P().stats.logs === logs; k++) { await until(A, () => !P().target || P().stats.logs > logs, 2600); if (P().stats.logs > logs || e.dead || e.hp <= 0) break; await A.wait(A.jitter(500, 800)); await tapWorld(A, e.x, e.y - 30, 'abattre ' + e.type); }
+    if (P().stats.logs > logs || e.dead || e.hp <= 0) A.mark('arbre abattu');
   }
   async function fire(A) { const ok = await fire1(A); if (!ok) { try { D().closeCraft && D().closeCraft(); } catch (e) {} if (D().placing() && window.BRAISE_TOUCH) BRAISE_TOUCH.cancel(); } return ok; }
   async function fire1(A) {   // the workshop: Atelier, the "light" tab, Campfire, then a tap on the ground where it goes
+    if (D().capture) D().capture();   // a loaded save can bring back an era where the fire is not captured yet
     await A.think(); if (!(await A.tapEl('#tCraft', 'atelier'))) return false; await A.wait(A.jitter(350, 550));
     await A.tapEl('#craft .tab[data-tab="light"]', 'onglet lumière'); await A.wait(A.jitter(400, 600));
     const R = D().RECIPES || [], rec = [...document.querySelectorAll('#rec .rec, .rec')].find(el => R[+el.dataset.r] && R[+el.dataset.r].id === 'campfire');
     if (!rec) return false; await A.tapEl(rec, 'fabriquer un feu de camp'); await A.wait(A.jitter(500, 700));
-    if (!D().placing()) return false;
+    if (!D().placing()) { A.ev('info', { label: 'pas de placement ' + rec.className + ' cap=' + JSON.stringify(D().era && D().era()) + ' cc=' + (D().canCraft && D().canCraft('campfire')) + ' | ' + P().items.map(s => s ? s.id + ':' + s.n : '-').join(' ') }); return false; }
     const n0 = D().fires().length; let ok = false;
     for (const [dx, dy] of [[95, 25], [-95, 30], [60, 80], [-70, -70], [120, -40]]) { await tapWorld(A, P().x + dx, P().y + dy, 'poser le feu'); await A.wait(300); if (P().target && P().target.place) { ok = true; break; } }
     if (!ok) return false; await until(A, () => D().fires().length > n0, 4000); if (D().fires().length > n0) { A.mark('feu allumé'); return true; } return false;

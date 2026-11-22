@@ -53,7 +53,7 @@ def braise():
                   "mode:()=>mode,paused:()=>paused,day:()=>dayNum(),frac:()=>dayFrac(),placing:()=>placing,time:f=>{gameTime=DAY_LEN*(dayNum()-1+f);lastDay=dayNum();dayBanner=null;},"
                   "give:(id,n)=>{addItem(id,n||1,P.x,P.y);invDirty=true;},fire:(dx,dy)=>mk('campfire',P.x+(dx||70),P.y+(dy||10),{fuel:85,max:90}),"
                   "hyenas:(n,r)=>{r=r||260;for(let i=0;i<n;i++){const a=i/n*6.28+.4,h={x:P.x+Math.cos(a)*r,y:P.y+Math.sin(a)*r*.65};const m=newHyena(h);if(m){m.x=h.x;m.y=h.y;mobs.push(m);}}},"
-                  "craft:t=>{openTab=t;renderRecipes();},zoom:z=>{userZoom=z;},RECIPES,capture:()=>{eraState.captured=true;P.stats.captured=true;},closeCraft:()=>{openTab=null;renderRecipes();}};\n" + boot + '\n</script>\n<script src="touch.js"></script>\n<script>', 1)
+                  "craft:t=>{openTab=t;renderRecipes();},zoom:z=>{userZoom=z;},RECIPES,capture:()=>{eraState.captured=true;eraState.ember=180;P.stats.captured=true;},closeCraft:()=>{openTab=null;renderRecipes();},era:()=>eraState,canCraft:id=>canCraft(RECIPES.find(r=>r.id===id))};\n" + boot + '\n</script>\n<script src="touch.js"></script>\n<script>', 1)
     shutil.copy(os.path.join(src, 'touch.js'), web)
     # BETA IA (simulated player for in-game captures, ?beta=ia only, never in the app): the shared core first, the scenes last
     head = '<head><meta charset="utf-8">'; assert s.count(head) == 1 and s.count('</body>') == 1
