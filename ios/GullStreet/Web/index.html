@@ -49,6 +49,12 @@ button:disabled{opacity:.45;filter:grayscale(.5)}
 .tabs button{flex:1;border-radius:14px;padding:5px 0 4px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:10.5px;font-weight:900;position:relative}
 .tabs button .pi{width:30px;height:30px}
 .tabs button:active{transform:translateY(2px)}
+.tuto{position:fixed;inset:0;z-index:7;pointer-events:none;display:none}.tuto.on{display:block}.tuveil{position:absolute;inset:0}
+.tuhand{position:absolute;width:48px;height:56px;pointer-events:none}.tuhand i{display:block;font-style:normal;font-size:46px;line-height:1;filter:drop-shadow(0 4px 3px rgba(60,30,10,.55));animation:tuTap .9s ease-in-out infinite}
+@keyframes tuTap{0%,100%{transform:translateY(-4px)}45%{transform:translateY(8px) scale(.88)}}
+.tuhand::before{content:'';position:absolute;left:2px;top:-20px;width:44px;height:44px;border-radius:50%;border:4px solid #fff;animation:tuRing .9s ease-out infinite}@keyframes tuRing{0%,40%{transform:scale(.3);opacity:0}50%{opacity:1}100%{transform:scale(1.6);opacity:0}}
+.tubub{position:absolute;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);background:var(--paper);border:3px solid var(--accent);box-shadow:inset 0 0 0 2px #fff8ea,0 3px 0 var(--woodDk);border-radius:14px;padding:9px 14px;font-weight:900;font-size:17px;text-align:center;animation:tuPop .35s cubic-bezier(.3,1.6,.5,1)}@keyframes tuPop{from{transform:translateX(-50%) scale(.6);opacity:0}}
+.tuskip{position:absolute;right:10px;top:calc(env(safe-area-inset-top) + 64px);min-width:96px;min-height:46px;padding:0 14px;pointer-events:auto;background:var(--paper);border:3px solid var(--wood);box-shadow:inset 0 0 0 2px #fff8ea,0 3px 0 var(--woodDk);border-radius:999px;font:inherit;font-weight:900;font-size:16px;color:var(--ink)}
 .tut{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 146px);border-color:var(--accent);border-radius:14px;padding:9px 12px;font-weight:800;font-size:14px;animation:bob 1.6s ease-in-out infinite;pointer-events:none}
 @keyframes bob{50%{transform:translateY(-4px)}}
 #sheet{position:fixed;left:0;right:0;bottom:0;max-height:62%;overflow:auto;border-radius:20px 20px 0 0;border-bottom:0;padding:6px 14px calc(env(safe-area-inset-bottom) + 14px);transform:translateY(105%);transition:transform .22s ease;z-index:5}
@@ -457,11 +463,14 @@ window.I18N = (() => {
     consentText: ['Gull Street est gratuit grâce à quelques pubs, toujours au choix sauf entre deux journées. Acceptes-tu des pubs personnalisées ? Tu peux changer d’avis dans les réglages.', 'Gull Street is free thanks to a few ads, always optional except between two days. Do you accept personalised ads? You can change this in settings.', 'Gull Street es gratis gracias a algunos anuncios, siempre opcionales salvo entre dos días. ¿Aceptas anuncios personalizados? Puedes cambiarlo en ajustes.', 'Gull Street ist dank weniger Werbung kostenlos, immer freiwillig außer zwischen zwei Tagen. Personalisierte Werbung erlauben? Änderbar in den Einstellungen.', 'Gull Street é grátis graças a alguns anúncios, sempre opcionais exceto entre dois dias. Aceita anúncios personalizados? Pode mudar nos ajustes.', 'Gull Street è gratis grazie a poche pubblicità, sempre facoltative tranne tra due giornate. Accetti pubblicità personalizzate? Puoi cambiare nelle impostazioni.'],
     accept: ['Accepter', 'Accept', 'Aceptar', 'Akzeptieren', 'Aceitar', 'Accetta'],
     refuse: ['Refuser', 'Decline', 'Rechazar', 'Ablehnen', 'Recusar', 'Rifiuta'],
-    tut1: ['Touche un emplacement libre pour poser ta première boutique.', 'Tap an empty spot to place your first shop.', 'Toca un sitio libre para poner tu primera tienda.', 'Tippe auf einen freien Platz für deinen ersten Laden.', 'Toque um lugar livre para pôr sua primeira loja.', 'Tocca un posto libero per il tuo primo negozio.'],
-    tut2: ['Choisis la boulangerie.', 'Pick the bakery.', 'Elige la panadería.', 'Wähle die Bäckerei.', 'Escolha a padaria.', 'Scegli il forno.'],
-    tut3: ['Pose aussi un glacier, puis ouvre la rue !', 'Add an ice-cream parlour, then open the street!', 'Añade una heladería y abre la calle.', 'Stell noch eine Eisdiele hin und öffne die Straße!', 'Ponha uma sorveteria e abra a rua!', 'Aggiungi una gelateria e apri la via!'],
-    tut4: ['Les bulles montrent les envies des passants. Touche-les pour en savoir plus.', 'Bubbles show what visitors want. Tap them to learn more.', 'Las burbujas muestran lo que quieren. Tócalas.', 'Die Blasen zeigen Wünsche. Tippe die Gäste an.', 'Os balões mostram os desejos. Toque nos visitantes.', 'Le nuvolette mostrano i desideri. Toccali.'],
-    tut5: ['Le soir, tu fais le bilan. Vise les 3 étoiles !', 'In the evening, review your day. Aim for 3 stars!', 'Por la noche, haz balance. ¡Apunta a 3 estrellas!', 'Abends ziehst du Bilanz. Hol dir 3 Sterne!', 'À noite, faça o balanço. Busque 3 estrelas!', 'La sera fai il bilancio. Punta a 3 stelle!'],
+    // first-run tutorial: 3 real taps, 8 words at most per bubble
+    tut1: ['Touche ici pour poser une boutique', 'Tap here to place a shop', 'Toca aquí para poner una tienda', 'Tippe hier für einen Laden', 'Toque aqui para pôr uma loja', 'Tocca qui per un negozio'],
+    tut2: ['Choisis la boulangerie', 'Pick the bakery', 'Elige la panadería', 'Wähle die Bäckerei', 'Escolha a padaria', 'Scegli il forno'],
+    tut2b: ['Choisis une boutique', 'Pick a shop', 'Elige una tienda', 'Wähle einen Laden', 'Escolha uma loja', 'Scegli un negozio'],
+    tut3: ['Ouvre la rue aux passants !', 'Open the street to visitors!', '¡Abre la calle a la gente!', 'Öffne die Straße für Gäste!', 'Abra a rua para o público!', 'Apri la via ai passanti!'],
+    tutSkip: ['Passer', 'Skip', 'Saltar', 'Überspringen', 'Pular', 'Salta'],
+    tutReplay: ['Revoir le tutoriel', 'Replay the tutorial', 'Ver el tutorial', 'Tutorial wiederholen', 'Rever o tutorial', 'Rivedi il tutorial'],
+    tutNext: ['Il revient demain matin', 'It plays next morning', 'Vuelve mañana por la mañana', 'Morgen früh geht es los', 'Volta amanhã de manhã', 'Torna domattina'],
     objEarn: ['Gagner {n} 🪙', 'Earn {n} 🪙', 'Ganar {n} 🪙', '{n} 🪙 verdienen', 'Ganhar {n} 🪙', 'Guadagna {n} 🪙'],
     objHappy: ['Bonheur ≥ {n} %', 'Happiness ≥ {n}%', 'Felicidad ≥ {n} %', 'Glück ≥ {n} %', 'Felicidade ≥ {n}%', 'Felicità ≥ {n}%'],
     objServe: ['Servir {n} clients', 'Serve {n} customers', 'Atender {n} clientes', '{n} Kunden bedienen', 'Atender {n} clientes', 'Servi {n} clienti'],
@@ -1183,7 +1192,8 @@ function fresh() {
     quests: null, login: { last: '', streak: 0, pending: false }, owned: {}, skin: '', vipNext: false, lastAdAt: 0, totals: { served: 0, earned: 0, days: 0 } };
 }
 let S;
-function load() { try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); } }
+function load() { let had = false; try { had = !!localStorage.getItem(KEY); S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+  if (!S.tutoV) { if (had) S.tut = 6; S.tutoV = 2; } }   // saves from before the 3-tap tutorial count it as seen
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 load(); I.set(S.lang);
 
@@ -1471,7 +1481,7 @@ function floatText(x, y, s, col, ic = 'coin') { if (ic === 'coin') s = String(s)
 // ---------- day flow ----------
 function startDay() {
   if (G.phase !== 'morning') return;
-  if (!S.lots.some(Boolean)) { toast(t('tut1')); return; }
+  if (!S.lots.some(Boolean)) { toast(t('tut2b')); return; }
   G.phase = 'day'; G.dayT = 0; G.walkers = []; G.queues = {}; G.speed = 1; G.bonuses = []; G.daySales = 0; G.bonusGap = 0; G.combo = 0; G.openBonus = false;
   G.stats = { income: 0, tips: 0, served: 0, happy: 0, moods: [], vip: 0, moodAvg: 0 };
   S.lots.forEach(l => { if (l) l.sales = 0; });
@@ -1485,7 +1495,7 @@ function startDay() {
   let person = due.length ? due[0].id : (metList.length && Math.random() < 0.5 ? pickR(metList) : null);
   if (person) G.spawnAt[Math.floor(G.spawnAt.length * rnd(0.2, 0.6))].person = person;
   if (S.vipNext) { G.spawnAt[Math.floor(G.spawnAt.length / 2)].vip = true; S.vipNext = false; }
-  if (S.tut === 3) S.tut = 4;
+  if (S.tut < 6) { S.tut = 6; G.tutReplay = false; save(); track('tuto_done'); }
   closeSheet(); refreshHud(); track('day_start', { day: S.day, visitors: n });
 }
 function updateDay(dt) {
@@ -1751,11 +1761,41 @@ function refreshHud() {
     ${tutHtml()}`);
 }
 function questBadge() { const n = (S.quests?.list || []).filter(q => !q.claimed && q.p >= ECO.quests.find(x => x.id === q.id).target).length + (S.login.pending ? 1 : 0); return n ? `<span class="badge">${n}</span>` : ''; }
-function tutHtml() {
-  if (S.tut >= 6 || G.phase === 'title') return '';
-  const msg = { 0: 'tut1', 1: 'tut2', 2: 'tut3', 3: 'tut3', 4: 'tut4', 5: 'tut5' }[S.tut];
-  if ((S.tut <= 3 && G.phase !== 'morning') || (S.tut === 4 && G.phase !== 'day') || (S.tut === 5 && G.phase !== 'evening')) return '';
-  return `<div class="tut">👉 ${t(msg)}</div>`;
+function tutHtml() { return ''; }   // the tutorial draws its own hand and bubble (tutFrame)
+// ---------- first-run tutorial: tap a free spot, pick the bakery, open the street (3 real taps, nothing to lose) ----------
+// S.tut: 0-2 = build the first shop, 3 = open the street, 6 = done (also after "Skip"). A hand shows each tap; "Skip" stays top right.
+const tutEl = div('tuto', `<div class="tuveil"></div><div class="tuhand"><i>☝️</i></div><div class="tubub"></div><button class="tuskip"></button>`);
+document.body.appendChild(tutEl);
+tutEl.querySelector('.tuskip').addEventListener('click', e => { e.stopPropagation(); audioInit(); SFX.tap(); tutSkip(); });
+function tutSkip() { S.tut = 6; G.tutReplay = false; G.tutLot = null; G.tutPick = null; save(); track('tuto_skip'); refreshHud(); if (sheet.classList.contains('on')) buildSheetRefresh(); }
+function buildSheetRefresh() { sheet.querySelectorAll('.item.pulse').forEach(b => b.classList.remove('pulse')); }
+let tutKey = '';
+function tutFrame() {
+  let step = '', tx = 0, ty = 0, r = 0, msg = '';
+  const busy = modal.classList.contains('on') || document.querySelector('.confirm, .adov') || $('#title').classList.contains('on');
+  if (S.tut < 6 && G.phase === 'morning' && !busy) {
+    if (sheet.classList.contains('on')) {
+      const b = G.tutPick && sheet.querySelector(`[data-build="${G.tutPick}"]`);
+      if (b) { const rc = b.getBoundingClientRect(); if (rc.bottom > innerHeight - 8 || rc.top < 0) b.scrollIntoView({ block: 'center' }); step = 'pick'; tx = rc.left + rc.width * 0.72; ty = rc.top + rc.height / 2; r = Math.max(rc.width, rc.height) * 0.62; msg = G.tutPick === 'bakery' && !G.tutReplay ? 'tut2' : 'tut2b'; }
+    } else if (S.tut <= 2 && G.tutLot != null) {
+      const L = LOTS[G.tutLot]; step = 'lot'; tx = (L.x - (G.camX || 0)) * scale; ty = (L.y - 2 - G.camY) * scale; r = 62 * scale; msg = 'tut1';
+    } else if (S.tut >= 3) {
+      const b = hud.querySelector('[data-a="open"]'); if (b) { const rc = b.getBoundingClientRect(); step = 'open'; tx = rc.left + rc.width / 2; ty = rc.top + rc.height / 2; r = rc.width * 0.3; msg = 'tut3'; }
+    }
+  }
+  tutEl.classList.toggle('on', !!step);
+  if (!step) { tutKey = ''; return; }
+  const key = step + msg + I.lang;
+  if (key !== tutKey) { tutKey = key; const bb = tutEl.querySelector('.tubub'); bb.textContent = t(msg); bb.style.animation = 'none'; void bb.offsetWidth; bb.style.animation = ''; tutEl.querySelector('.tuskip').textContent = t('tutSkip') + ' ⏭'; }
+  const hand = tutEl.querySelector('.tuhand'); hand.style.left = (tx - 22) + 'px'; hand.style.top = (ty - 4) + 'px';
+  const bb = tutEl.querySelector('.tubub'), bh = bb.offsetHeight || 40;
+  bb.style.top = clamp(step === 'lot' ? ty - r - bh - 14 : ty - r - bh - 22, innerHeight * 0.2, innerHeight - bh - 10) + 'px';
+  if (step === 'lot' && ty - r - bh - 14 < innerHeight * 0.2) bb.style.top = (ty + r + 50) + 'px';
+  tutEl.querySelector('.tuveil').style.background = `radial-gradient(circle at ${tx}px ${ty}px, transparent ${r * 0.92}px, rgba(60,30,20,.5) ${r * 1.3}px)`;
+}
+function tutReplay() {
+  S.tut = 0; G.tutReplay = true; save(); closeModal(); track('tuto_replay');
+  if (G.phase === 'morning') { tutTargets(); refreshHud(); } else toast(t('tutNext'));
 }
 let lastTimerUpdate = 0;
 hud.addEventListener('click', e => {
@@ -1794,7 +1834,7 @@ function buildSheet(i) {
     const s = SHOP[b.dataset.build]; if (S.coins < s.cost) return toast(t('noMoney'));
     S.coins -= s.cost; S.lots[i] = { type: s.id, lvl: 1, price: 'normal', sales: 0 }; G.builtAt[i] = G.t; save(); SFX.build(); buzz(15);
     track('shop_built', { type: s.id, lot: i, day: S.day });
-    if (S.tut === 0 || S.tut === 1) S.tut = 2; else if (S.tut === 2 && S.lots.filter(Boolean).length >= 2) S.tut = 3;
+    if (S.tut <= 2) { S.tut = 3; save(); }
     closeSheet(); refreshHud(); tutTargets();
   });
 }
@@ -1935,6 +1975,7 @@ function settingsModal() {
     <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
     <button class="b2" data-restore>${t('restore')}</button>
     <button class="b2" data-consent>${t('adChoices')}</button>
+    <button class="b2" data-tuto>☝️ ${t('tutReplay')}</button>
     <button class="b2" data-privacy>${t('privacy')}</button>
     <button class="b3" data-reset>${t('reset')}</button>
     <button class="b2 big" data-close>${t('close')}</button>
@@ -1942,6 +1983,7 @@ function settingsModal() {
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); refreshHud(); settingsModal(); };
   modal.querySelector('[data-restore]').onclick = () => Store.restore();
+  modal.querySelector('[data-tuto]').onclick = tutReplay;
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = privacyModal;
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
@@ -1973,8 +2015,12 @@ function afterConsent() {
   if (S.login.pending && S.totals.days) setTimeout(questsModal, 500);
 }
 function tutTargets() {
-  G.tutLot = S.tut <= 2 ? S.lots.findIndex(l => !l) : null; if (G.tutLot === -1) G.tutLot = null;
-  G.tutPick = S.tut <= 1 ? 'bakery' : S.tut === 2 ? 'icecream' : null; if (S.tut === 0 && S.lots.some(Boolean)) S.tut = 2;
+  G.tutLot = S.tut <= 2 ? LOTS.findIndex(L => !S.lots[L.i] && districtOpen(L.district)) : null; if (G.tutLot === -1) G.tutLot = null;
+  // the bakery for a first shop; on a replay, the cheapest shop the player can afford today
+  const afford = ECO.shops.filter(s => s.unlockDay <= S.day && s.cost <= S.coins).sort((a, b) => a.cost - b.cost);
+  G.tutPick = S.tut <= 2 ? (afford.some(s => s.id === 'bakery') ? 'bakery' : (afford[0] || {}).id || null) : null;
+  if (S.tut <= 2 && (G.tutLot == null || !G.tutPick)) { S.tut = 3; G.tutLot = null; G.tutPick = null; }   // no free spot or no coins: straight to "open"
+  if (S.tut <= 2 && G.tutLot != null && G.phase === 'morning') { const L = LOTS[G.tutLot]; G.camY = clamp(L.y - viewH * 0.4, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); G.camX = clamp(L.x - viewW / 2, 0, Math.max(0, W - viewW)); }
 }
 
 // ---------- main loop ----------
@@ -1992,7 +2038,7 @@ function frame(now) {
   musicTick();
   cx.setTransform(dpr * scale, 0, 0, dpr * scale, -(G.camX || 0) * dpr * scale, -G.camY * dpr * scale); cx.imageSmoothingEnabled = !!MAP;
   cx.fillStyle = PC.paper; cx.fillRect(0, G.camY, W, viewH);
-  drawWorld(); drawWalkers(); drawBirds(); drawFloats(rdt); drawLight(); drawBonuses(rdt);
+  drawWorld(); drawWalkers(); drawBirds(); drawFloats(rdt); drawLight(); drawBonuses(rdt); tutFrame();
   requestAnimationFrame(frame);
 }
 // ---------- boot ----------
@@ -2281,7 +2327,8 @@ window.GS = { S: () => S, G, storeModal, startDay, nextDay, tapAt, endDay, save,
     async prepare(save, A) {
       if (A.opts.ui === 'propre') S().owned.noads = true;
       const sc = A.opts.scene;
-      if (sc === 'onboarding') return;                 // onboarding always starts on the title screen of a new game
+      if (sc === 'onboarding') return;                 // onboarding always starts on the title screen of a new game (and plays the 3-tap tutorial)
+      if (S().tut < 6) { S().tut = 6; GS.save(); }     // the other scenes skip the first-run tutorial
       await start(A);
       // boucle builds two shops on camera and moment builds the shop unlocked by the next day: their saves keep lots free
       const leave = sc === 'boucle' ? 2 : sc === 'moment' ? 1 : 0;

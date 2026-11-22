@@ -3811,7 +3811,7 @@ window.KGAME = (() => {
         g.globalAlpha = 1; g.globalCompositeOperation = 'source-over'; }
       if (SL.on || P.length) slRaf = requestAnimationFrame(step); }; slRaf = requestAnimationFrame(step); }
   let hintShown = false;
-  function weaponHint(force) { const w = meleeW(); if (!w || !(window.KTOUCH && KTOUCH.enabled)) return; if (hintShown && !force) return; hintShown = true; toast(w.n + ' en main', 'Glisse le doigt sur l’ennemi pour trancher. Plusieurs ennemis d’un seul geste = bonus.'); }
+  function weaponHint(force) { if (tu) { setTimeout(() => weaponHint(force), 2000); return; } const w = meleeW(); if (!w || !(window.KTOUCH && KTOUCH.enabled)) return; if (hintShown && !force) return; hintShown = true; toast(w.n + ' en main', 'Glisse le doigt sur l’ennemi pour trancher. Plusieurs ennemis d’un seul geste = bonus.'); }
 
   /* ================= update ================= */
   let noDeath = false, objective = null, hudOn = true;
@@ -4085,7 +4085,7 @@ window.KGAME = (() => {
     const el = document.createElement('div'); el.id = 'k-tu';
     el.innerHTML = `<style>#k-tu{position:fixed;inset:0;z-index:14;pointer-events:none}#k-tu .tv{position:absolute;inset:0}
       #k-tu .th{position:absolute;width:48px;height:56px}#k-tu .th i{display:block;font-style:normal;font-size:46px;line-height:1;filter:drop-shadow(0 4px 3px rgba(0,0,0,.6))}
-      #k-tu .th.drag i{animation:ktuDrag 1.3s ease-in-out infinite}@keyframes ktuDrag{0%{transform:translate(0,0);opacity:0}15%{opacity:1}70%{transform:translate(70px,-34px);opacity:1}100%{transform:translate(70px,-34px);opacity:0}}
+      #k-tu .th.drag i{animation:ktuDrag 1.3s ease-in-out infinite}@keyframes ktuDrag{0%{transform:translate(0,0);opacity:1}70%{transform:translate(70px,-34px);opacity:1}100%{transform:translate(70px,-34px);opacity:.15}}
       #k-tu .th.tap i{animation:ktuTap .9s ease-in-out infinite}@keyframes ktuTap{0%,100%{transform:translateY(-4px)}45%{transform:translateY(8px) scale(.88)}}
       #k-tu .th.tap::before{content:'';position:absolute;left:2px;top:-20px;width:44px;height:44px;border-radius:50%;border:4px solid #f7f1de;animation:ktuRing .9s ease-out infinite}@keyframes ktuRing{0%,40%{transform:scale(.3);opacity:0}50%{opacity:1}100%{transform:scale(1.6);opacity:0}}
       #k-tu .tb{position:absolute;transform:translate(-50%,-100%);width:max-content;max-width:min(320px,80vw);padding:9px 16px;border-radius:12px;font:800 17px 'M PLUS Rounded 1c',system-ui,sans-serif;text-align:center;animation:ktuPop .35s cubic-bezier(.3,1.6,.5,1)}@keyframes ktuPop{from{opacity:0;transform:translate(-50%,-100%) scale(.6)}}

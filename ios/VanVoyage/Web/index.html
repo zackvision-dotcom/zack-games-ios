@@ -67,6 +67,14 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
 #title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 40px) 24px calc(env(safe-area-inset-bottom) + 40px)}
 #title.on{display:flex}#title .logo{text-align:center}#title .logo img{width:min(90vw,440px);filter:drop-shadow(0 4px 8px rgba(0,0,0,.35))}
 #title h1{font-size:60px;margin:0;line-height:.9;color:#fff;-webkit-text-stroke:3px var(--deep);text-shadow:0 6px 0 var(--deep)}#title p{color:#fff;font-weight:900;text-shadow:0 2px 4px rgba(0,0,0,.6)}#title .b1{max-width:320px}
+.tuto{position:fixed;inset:0;z-index:7;pointer-events:none}.tuveil{position:absolute;inset:0}
+.tuhand{position:absolute;width:48px;height:56px;pointer-events:none}.tuhand i{display:block;font-style:normal;font-size:46px;line-height:1;filter:drop-shadow(0 4px 3px rgba(0,0,0,.5))}
+.tuhand.swipe i{animation:tuSwipe 1.4s ease-in-out infinite alternate}@keyframes tuSwipe{from{transform:translateX(-80px)}to{transform:translateX(80px)}}
+.tuhand.slide i{animation:tuSlide 1.3s ease-in-out infinite}@keyframes tuSlide{0%{transform:translateX(0);opacity:0}15%{opacity:1}75%{transform:translateX(var(--dx));opacity:1}100%{transform:translateX(var(--dx));opacity:0}}
+.tuhand.tap i{animation:tuTap .9s ease-in-out infinite}@keyframes tuTap{0%,100%{transform:translateY(-4px)}45%{transform:translateY(8px) scale(.88)}}
+.tuhand.tap::before{content:'';position:absolute;left:2px;top:-18px;width:44px;height:44px;border-radius:50%;border:4px solid #fff;animation:tuRing .9s ease-out infinite}@keyframes tuRing{0%,40%{transform:scale(.3);opacity:0}50%{opacity:1}100%{transform:scale(1.6);opacity:0}}
+.tubub{position:absolute;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);white-space:nowrap;background:var(--paper);border:3px solid var(--deep);border-radius:16px;padding:8px 14px;font-weight:900;font-size:18px;text-align:center;box-shadow:0 3px 0 var(--deep);animation:tuPop .35s cubic-bezier(.3,1.6,.5,1)}@keyframes tuPop{from{transform:translateX(-50%) scale(.6);opacity:0}}
+.tuskip{position:absolute;right:10px;top:calc(env(safe-area-inset-top) + 108px);min-width:92px;min-height:46px;padding:0 14px;pointer-events:auto;background:var(--paper);border:3px solid var(--deep);border-radius:999px;box-shadow:0 3px 0 var(--deep);font-weight:900;font-size:16px}
 </style>
 </head>
 <body>
@@ -401,8 +409,10 @@ window.I18N = (() => {
     consentTitle: ['Tes données', 'Your data'], consentText: ['Le jeu est gratuit grâce à la pub. Acceptes-tu des pubs personnalisées ? Tu peux changer d’avis dans les réglages.', 'The game is free thanks to ads. Do you accept personalised ads? You can change your mind in settings.'], accept: ['Accepter', 'Accept'], refuse: ['Refuser', 'Refuse'],
     map: ['Carte', 'Map'], trip: ['Voyage', 'Trip'], startTrip: ['Partir', 'Set off'], continueTrip: ['Continuer le voyage', 'Continue the trip'], levelUp: ['Niveau {n} !', 'Level {n}!'],
     // Biscuit
-    b_tut1: ['Wouf ! Glisse ton doigt à gauche et à droite pour conduire. Ramasse les pièces !', 'Woof! Slide your finger left and right to steer. Grab the coins!'],
-    b_tut2: ['Bravo ! Surveille l’essence ⛽ en haut, et évite les trous.', 'Nice! Watch the fuel ⛽ up top, and dodge the potholes.'],
+    b_tut2: ['Bravo ! Surveille l’essence ⛽ et évite les trous.', 'Nice! Watch the fuel ⛽ and dodge potholes.'],
+    // first-run tutorial (8 words at most)
+    tu_steer: ['Glisse ton doigt pour conduire', 'Slide your finger to steer'], tu_coins: ['Attrape les pièces !', 'Grab the coins!'], tu_honk: ['Klaxonne pour chasser les moutons !', 'Honk to scare the sheep!'],
+    tuSkip: ['Passer', 'Skip'], tuReplay: ['Revoir le tutoriel', 'Replay the tutorial'], tuNext: ['Il revient au prochain départ', 'It plays on your next drive'],
     b_go1: ['On repart ! J’ai la carte, tu as le volant.', 'Off we go! I’ve got the map, you’ve got the wheel.'], b_go2: ['Wouf ! Ça sent le pique-nique par ici.', 'Woof! Smells like a picnic around here.'], b_go3: ['La mer n’est plus très loin…', 'The sea isn’t far now…'],
     b_fuel: ['Grrr… l’essence baisse ! Attrape un bidon !', 'Grrr… fuel is low! Grab a can!'], b_holeAhead: ['Wouf ! Un trou devant !', 'Woof! Pothole ahead!'], b_sheepAhead: ['Des moutons ! Klaxonne !', 'Sheep! Honk!'],
     b_ouch: ['Aïe ! Mes oreilles…', 'Ouch! My ears…'], b_sheep: ['Bêêê… pardon, madame la brebis !', 'Baaa… sorry, Mrs Sheep!'], b_honk: ['Pouet pouet ! Ils s’écartent.', 'Honk honk! They move aside.'],
@@ -481,7 +491,8 @@ const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.ge
 const KEY = 'vanvoyage.save.v1';
 const fresh = () => ({ v: 1, coins: 40, xp: 0, level: 1, stage: 0, trips: 0, hp: D.hp, fuel: D.fuel.max, pass: [], met: [], cards: [], garage: {}, job: null, best: 0,
   lang: I.detect(), sound: true, music: true, vib: true, consent: null, owned: {}, paint: '', lastAdAt: 0, stagesDriven: 0, tut: 0, login: { last: '', streak: 0, pending: false } });
-let S; try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+let S, hadSave = false; try { hadSave = !!localStorage.getItem(KEY); S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+if (S.tutoDone == null) S.tutoDone = hadSave;   // saves from before the tutorial count it as seen
 I.set(S.lang);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 const track = (ev, d) => { try { console.debug('[ga]', ev, d || ''); } catch (e) {} };
@@ -552,10 +563,10 @@ function startStage() {
   if (S.fuel < 25) S.fuel = 25;   // never strand the player at the very start
   for (const p of S.pass) { p.need = null; }
   $('#game').classList.add('on'); $('#mapv').classList.remove('on'); closeModal(); renderHud(); renderSeats(); audioInit(); engineHum(true);
-  biscuit(S.tut === 0 ? 'b_tut1' : ['b_go1', 'b_go2', 'b_go3'][S.stage % 3]); track('stage_start', { stage: S.stage });
+  if (S.tutoDone) biscuit(['b_go1', 'b_go2', 'b_go3'][S.stage % 3]); else tuStart(); track('stage_start', { stage: S.stage });
 }
 function spawnRow(y) {
-  const sp = D.spawn, lanes = [-1, 0, 1].sort(() => Math.random() - 0.5), easy = S.tut === 0 && G.dist < 600;
+  const sp = D.spawn, lanes = [-1, 0, 1].sort(() => Math.random() - 0.5), easy = TU.on || S.tut === 0 && G.dist < 600;
   // a lane of coins is the backbone: there is always something to catch
   if (Math.random() < sp.coin) { const lx = lanes[0], n = 3 + (Math.random() * 3 | 0); for (let i = 0; i < n; i++) G.items.push({ k: 'coin', x: lx, y: y + i * 40 }); }
   if (Math.random() < sp.fuel || S.fuel < 30 && Math.random() < 0.3) G.items.push({ k: 'fuel', x: lanes[1], y: y + 20 });
@@ -566,6 +577,8 @@ function spawnRow(y) {
 }
 function hitItem(it) {
   it.hit = true; const [sx, sy] = [laneX(it.x), VAN_Y() - 30];
+  if (it.tu && TU.on && TU.step === 'coins' && it.k === 'coin') TU.got++;
+  if (TU.on && (it.k === 'hole' || it.k === 'cone' || it.k === 'sheep')) { SFX.baa(); return; }   // no damage during the tutorial
   if (it.k === 'coin') { G.combo = G.comboT > 0 ? G.combo + 1 : 1; G.comboT = D.combo.window; const v = Math.round((1 + Math.floor(G.combo / 5)) * coinMult()); S.coins += v; G.stageCoins += v; SFX.coin(G.combo); buzz(4); flyCoin(sx, sy); if (G.combo >= 5 && G.combo % 5 === 0) { floatText(W / 2, H * 0.4, t('combo', { n: G.combo }), 'combo'); SFX.happy(); } }
   else if (it.k === 'fuel') { S.fuel = Math.min(D.fuel.max, S.fuel + D.fuel.can); SFX.fuel(); buzz(10); floatText(sx, sy, '+⛽', 'fuel'); }
   else if (it.k === 'card') { cardFound(); floatText(sx, sy, '+📮', 'card'); }
@@ -594,12 +607,12 @@ function update(dt) {
   for (const p of G.parts) { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 300 * dt; } G.parts = G.parts.filter(p => p.t < p.life);
   if (G.mode !== 'drive' || G.paused) return;
   const max = D.stage.speedMax * (S.garage.engine ? 1.15 : 1), base = D.stage.speed * (S.garage.engine ? 1.15 : 1);
-  G.speed = Math.min(max, G.speed + (base * 1.2) * dt); if (G.hit > 0) G.speed = Math.min(G.speed, base * 0.5);
+  G.speed = Math.min(TU.on ? base * 0.8 : max, G.speed + (base * 1.2) * dt); if (G.hit > 0) G.speed = Math.min(G.speed, base * 0.5);
   G.dist += G.speed * dt;
   // steering eases toward the finger
   G.vanX += (G.targetX - G.vanX) * Math.min(1, dt * 10);
   // fuel
-  S.fuel = Math.max(0, S.fuel - D.fuel.burn * (S.garage.tank ? 0.75 : 1) * dt * (G.speed / base));
+  S.fuel = Math.max(0, S.fuel - D.fuel.burn * (S.garage.tank ? 0.75 : 1) * dt * (G.speed / base) * (TU.on ? 0 : 1));
   if (S.fuel <= 0) return outOfFuel();
   if (S.fuel < 20 && G.t - G.barkT > 8) { G.barkT = G.t; biscuit('b_fuel'); SFX.bark(); }
   // spawning ahead of the van
@@ -616,11 +629,12 @@ function update(dt) {
   G.needT -= dt; if (G.needT <= 0 && S.pass.length) { G.needT = rnd(5, 9) / (has('musician') ? 1.3 : 1); const free = S.pass.filter(p => !p.need); if (free.length) { const p = free[Math.random() * free.length | 0]; p.need = D.needs[Math.random() * 3 | 0]; p.needT = 7; renderSeats(); } }
   for (const p of S.pass) if (p.need) { p.needT -= dt; if (p.needT <= 0) { p.need = null; p.mood = Math.max(0, (p.mood || 3) - 1); SFX.sad(); renderSeats(); } }
   // the event card halfway, the village at the end
+  if (TU.on) return tuTick();
   if (!G.eventDone && G.dist > G.eventAt) { G.eventDone = true; eventCard(); }
   if (G.dist >= D.stage.length) endStage();
-  if (S.tut === 0 && G.dist > 300) { S.tut = 1; biscuit('b_tut2'); }
+  if (S.tut === 0 && G.dist > 600) S.tut = 1;
 }
-function honk() { if (G.mode !== 'drive') return; SFX.honk(); buzz(10); G.honkT = 0.4; let n = 0; for (const it of G.items) if (it.k === 'sheep' && !it.hit && it.y - G.dist < H * 0.8) { it.vx = (it.x < 0 ? -1 : 1) * 2.2; n++; } if (n) { biscuit('b_honk'); SFX.baa(); } }
+function honk() { if (G.mode !== 'drive') return; if (TU.on && TU.step === 'honk' && !TU.wait) { TU.wait = 1; setTimeout(tuNext, 700); } SFX.honk(); buzz(10); G.honkT = 0.4; let n = 0; for (const it of G.items) if (it.k === 'sheep' && !it.hit && it.y - G.dist < H * 0.8) { it.vx = (it.x < 0 ? -1 : 1) * 2.2; n++; } if (n) { biscuit('b_honk'); SFX.baa(); } }
 function outOfFuel() {
   G.mode = 'pause'; engineHum(false); SFX.sad(); biscuit('b_empty');
   openModal(`<div class="big">⛽</div><h2>${t('noFuel')}</h2><p>${t('noFuelTxt')}</p><button class="b1 big" data-ad>▶ ${t('jerrycan')}</button><button class="b2" data-restart>${t('restartStage')}</button>`);
@@ -712,7 +726,52 @@ function albumModal(fromMap) {
 cv.addEventListener('pointerdown', e => { if (G.mode !== 'drive') return; audioInit(); G.dragging = true; steer(e.clientX); });
 addEventListener('pointermove', e => { if (G.dragging) steer(e.clientX); });
 addEventListener('pointerup', () => { G.dragging = false; }); addEventListener('pointercancel', () => { G.dragging = false; });
-function steer(x) { const r = ROAD(); G.targetX = clamp((x - r.cx) / (r.w * 0.38), -1.15, 1.15); }
+function steer(x) { const r = ROAD(), nx = clamp((x - r.cx) / (r.w * 0.38), -1.15, 1.15); if (TU.on) TU.moved += Math.abs(nx - G.targetX); G.targetX = nx; }
+
+// ---------- first-run tutorial: three real gestures (slide, catch coins, horn); nothing can hurt the van meanwhile ----------
+const TU = { on: false, step: '', moved: 0, got: 0, lane: 1, el: null, wait: 0 };
+const TU_STEPS = ['steer', 'coins', 'honk'];
+function tuStart() {
+  if (TU.on) return; TU.on = true;
+  const el = TU.el = div('tuto', `<div class="tuveil"></div><div class="tuhand"><i>☝️</i></div><div class="tubub"></div><button class="tuskip">${t('tuSkip')} ⏭</button>`);
+  $('#game').appendChild(el); $('#biscuit').classList.remove('on');
+  el.querySelector('.tuskip').addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); SFX.click(); tuEnd(true); });
+  tuGo('steer'); track('tuto_start');
+}
+function tuGo(step) {
+  TU.step = step; TU.moved = 0; TU.got = 0; TU.wait = 0; const el = TU.el; el.dataset.step = step;
+  const b = el.querySelector('.tubub'); b.textContent = t('tu_' + step); b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
+  el.querySelector('.tuhand').className = 'tuhand ' + (step === 'honk' ? 'tap' : step === 'coins' ? 'slide' : 'swipe');
+  if (step === 'coins') tuCoins(); if (step === 'honk') tuSheep();
+}
+function tuNext() { if (!TU.on) return; SFX.happy(); buzz(10); const i = TU_STEPS.indexOf(TU.step); i < TU_STEPS.length - 1 ? tuGo(TU_STEPS[i + 1]) : tuEnd(false); }
+function tuEnd(skipped) {
+  if (!TU.on) return; TU.on = false; TU.step = ''; if (TU.el) TU.el.remove(); TU.el = null;
+  G.items = G.items.filter(it => !(it.tu && it.k === 'sheep'));
+  if (G.dist > 300) { const d = G.dist - 200; G.dist -= d; G.nextSpawn -= d; for (const it of G.items) it.y -= d; }   // the stage starts for real now
+  S.tutoDone = true; save(); track(skipped ? 'tuto_skip' : 'tuto_done');
+  if (!skipped) { biscuit('b_tut2'); JUICE.confetti(30); SFX.fanfare(); }
+}
+function tuCoins() { TU.lane = G.targetX <= 0 ? 1 : -1; for (let i = 0; i < 5; i++) G.items.push({ k: 'coin', x: TU.lane, y: G.dist + H * 0.5 + i * 40, tu: 1 }); }
+function tuSheep() { const l = Math.random() < 0.5 ? -1 : 1; G.items.push({ k: 'sheep', x: l * 1.4, y: G.dist + H * 0.55, vx: -l * 0.3, tu: 1 }); }
+function tuTick() {
+  // the stage does not move on while learning: the world slides back (the road keeps scrolling)
+  if (G.dist > 900) { const d = G.dist - 200; G.dist -= d; G.nextSpawn -= d; for (const it of G.items) it.y -= d; }
+  const tuLeft = k => G.items.some(it => it.tu && it.k === k && !it.hit && it.y - G.dist > -30);
+  if (TU.step === 'steer' && TU.moved >= 1.5 && !TU.wait) { TU.wait = 1; setTimeout(tuNext, 300); }
+  if (TU.step === 'coins') { if (TU.got >= 3 && !TU.wait) { TU.wait = 1; setTimeout(tuNext, 300); } else if (!TU.wait && !tuLeft('coin')) tuCoins(); }
+  if (TU.step === 'honk' && !tuLeft('sheep')) tuSheep();
+  // place the hand, the bubble and the light on the spot to touch
+  const el = TU.el, hand = el.querySelector('.tuhand'), vy = VAN_Y(); let x, y, r, by, cy;
+  if (TU.step === 'steer') { x = ROAD().cx; y = H * 0.81; cy = y; r = Math.min(W * 0.48, 210); by = H * 0.5; }
+  else if (TU.step === 'coins') { const vx = laneX(G.vanX), lx = laneX(TU.lane); y = H * 0.81; x = (vx + lx) / 2; cy = (vy + y) / 2 - 40; r = Math.min(W * 0.4, 160); by = H * 0.3;
+    hand.style.setProperty('--dx', (lx - vx) + 'px'); hand.style.left = (vx - 22) + 'px'; }
+  else { const hb = $('#honk').getBoundingClientRect(); x = hb.left + hb.width / 2; y = hb.top + hb.height / 2 + 6; cy = y - 6; r = 58; by = H * 0.42; }
+  if (TU.step !== 'coins') hand.style.left = (x - 22) + 'px';
+  hand.style.top = (y - 6) + 'px';
+  el.querySelector('.tubub').style.top = by + 'px';
+  el.querySelector('.tuveil').style.background = `radial-gradient(circle at ${x}px ${cy}px, transparent ${r}px, rgba(40,25,10,.5) ${r + 50}px)`;
+}
 $('#honk').addEventListener('pointerdown', e => { e.stopPropagation(); honk(); });
 
 // ---------- drawing ----------
@@ -782,7 +841,7 @@ $('#seats').addEventListener('pointerdown', e => {
 });
 $('#hud').addEventListener('click', e => { if (e.target.closest('[data-a=menu]')) { audioInit(); SFX.click(); G.paused = true; engineHum(false); menuModal(); } });
 let bisT = 0;
-function biscuit(key) { const el = $('#biscuit'); el.querySelector('.bf').style.backgroundImage = SPR['dog_' + ({ b_ouch: 2, b_broken: 2, b_empty: 2, b_fuel: 3, b_sheep: 2, b_honk: 1, b_new: 0, b_sea: 0 }[key] ?? (key.includes('Ahead') ? 1 : 0))] ? `url(${SPR['dog_' + ({ b_ouch: 2, b_broken: 2, b_empty: 2, b_fuel: 3, b_sheep: 2, b_honk: 1, b_new: 0, b_sea: 0 }[key] ?? (key.includes('Ahead') ? 1 : 0))]})` : ''; el.querySelector('.bt').textContent = t(key); el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); clearTimeout(bisT); bisT = setTimeout(() => el.classList.remove('on'), 3600); }
+function biscuit(key) { if (TU.on) return; const el = $('#biscuit'); el.querySelector('.bf').style.backgroundImage = SPR['dog_' + ({ b_ouch: 2, b_broken: 2, b_empty: 2, b_fuel: 3, b_sheep: 2, b_honk: 1, b_new: 0, b_sea: 0 }[key] ?? (key.includes('Ahead') ? 1 : 0))] ? `url(${SPR['dog_' + ({ b_ouch: 2, b_broken: 2, b_empty: 2, b_fuel: 3, b_sheep: 2, b_honk: 1, b_new: 0, b_sea: 0 }[key] ?? (key.includes('Ahead') ? 1 : 0))]})` : ''; el.querySelector('.bt').textContent = t(key); el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); clearTimeout(bisT); bisT = setTimeout(() => el.classList.remove('on'), 3600); }
 const modal = $('#modal');
 function openModal(html, cls = '') { modal.innerHTML = emo(`<div class="card ${cls}">${html}</div>`); modal.classList.add('on'); }
 function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
@@ -844,10 +903,11 @@ function confirmBox(html) { return new Promise(res => { const el = div('confirm'
 function settingsModal() {
   const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}<label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
-    <button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Van Voyage ${window.VV_VERSION || ''}</div>`);
+    <button class="b2" data-tuto>☝️ ${t('tuReplay')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Van Voyage ${window.VV_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); settingsModal(); };
   modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.VV_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = settingsModal; };
+  modal.querySelector('[data-tuto]').onclick = () => { S.tutoDone = false; save(); closeModal(); if (G.mode === 'drive') { G.paused = false; engineHum(true); tuStart(); } else { if (G.mode === 'map') mapScreen(); toast(t('tuNext')); } };
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
   modal.querySelector('[data-close]').onclick = () => G.mode === 'map' ? mapScreen() : menuModal();
 }
@@ -873,7 +933,7 @@ function begin() { ensureLogin(); Store.init(); if (!S.stagesDriven) startStage(
 let last = performance.now(), hudT = 0;
 function frame(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; update(dt); musicTick(); draw(); if (G.mode === 'drive' && (hudT += dt) > 0.2) { hudT = 0; renderHud(); renderSeats(); } requestAnimationFrame(frame); }
 document.addEventListener('visibilitychange', () => { if (document.hidden) { save(); if (G.mode === 'drive') { G.paused = true; engineHum(false); menuModal(); } } });
-window.VV = { G, S: () => S, startStage, halt, update, steer, honk, D, shopModal, SFX, laneX, VAN_Y, ROAD, mapScreen, save, seats };   // the BETA IA player reads the road (items, van, lanes) from here
+window.VV = { G, S: () => S, tu: () => TU.on ? TU.step : '', tuEnd, startStage, halt, update, steer, honk, D, shopModal, SFX, laneX, VAN_Y, ROAD, mapScreen, save, seats };   // the BETA IA player reads the road (items, van, lanes) from here
 resize(); titleScreen(); requestAnimationFrame(frame);
 })();
 </script>
@@ -927,6 +987,10 @@ resize(); titleScreen(); requestAnimationFrame(frame);
   }
   const honked = new WeakSet();
   async function driveStep(A) {
+    // the first-run tutorial: do the gesture the hand shows (coins: the lane picker already goes for them)
+    const tu = V.tu ? V.tu() : '';
+    if (tu === 'steer') { const y = thumbY(); await A.wait(A.jitter(500, 900)); await A.drag(V.laneX(0), y, V.laneX(-1), y, 'gauche', A.jitter(260, 360)); await A.wait(A.jitter(150, 300)); await A.drag(V.laneX(-1), y, V.laneX(1), y, 'droite', A.jitter(320, 420)); await A.wait(400); return; }
+    if (tu === 'honk') { await A.wait(A.jitter(600, 1000)); await A.tapEl('#honk', 'klaxon'); A.ev('klaxon'); await A.wait(900); return; }
     const L = bestLane(A), cur = G.targetX;
     if (Math.abs(L - cur) > 0.3) return steerTo(A, L);
     // sheep wandering onto the road: honk (only when the lane is safe for a moment)
@@ -1010,7 +1074,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     Object.assign(s, save === 'avance'
       ? { stage: 3, trips: 2, stagesDriven: 30, level: 9, coins: 1200, cards: [0, 1, 2, 3, 4, 5, 6, 7], garage: { tank: 1, tires: 1, engine: 1, roof: 1 }, met: [...pass, 'chef'] }
       : { stage: 2, trips: 0, stagesDriven: 8, level: 4, coins: 240, cards: [0, 2, 5], garage: { tank: 1 }, met: pass.slice() });
-    s.pass = pass.map(id => ({ id, mood: 4 })); s.hp = D.hp; s.fuel = 90; s.xp = 0; s.tut = 2; s.consent = A.opts.ui !== 'propre';
+    s.pass = pass.map(id => ({ id, mood: 4 })); s.hp = D.hp; s.fuel = 90; s.xp = 0; s.tut = 2; s.tutoDone = true; s.consent = A.opts.ui !== 'propre';
     s.login = { last: today(), streak: 3, pending: false }; V.save();
   }
 
@@ -1021,7 +1085,8 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     progress: () => [G.mode, S().stage, S().trips, Math.floor(G.dist / 200)],
     async prepare(save, A) {
       if (A.opts.ui === 'propre') S().owned.noads = true;
-      if (A.opts.scene === 'onboarding') return;            // onboarding always starts on the title screen of a new game
+      if (A.opts.scene === 'onboarding') return;            // onboarding always starts on the title screen of a new game (and plays the tutorial)
+      S().tutoDone = true;                                    // the other scenes skip the first-run tutorial
       setSave(A.opts.scene === 'moment' && save === 'neuf' ? 'milieu' : save, A);
       if (A.opts.scene === 'moment') { S().stage = D.route.stages.length - 1; V.save(); }   // the last stage: the sea is near
       await toDrive(A);
