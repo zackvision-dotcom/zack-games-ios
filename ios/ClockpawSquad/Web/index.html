@@ -28,7 +28,7 @@ i.bo,i.ky{display:inline-block;width:1.15em;height:1.15em;background:center/cont
 .rb.dot::after{content:'';position:absolute;right:-3px;top:-3px;width:13px;height:13px;border-radius:50%;background:var(--brick);border:2px solid var(--ink)}
 .rb small.n{position:absolute;right:-6px;bottom:-5px;background:var(--brick);color:var(--cream);border:2px solid var(--ink);border-radius:9px;font-size:11px;padding:0 4px;line-height:15px}
 .chip{display:flex;align-items:center;gap:4px;background:var(--cream);border:3px solid var(--ink);border-radius:999px;padding:3px 9px;box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:16px;white-space:nowrap}
-#rinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+#rinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;background:rgba(35,32,43,.78);border-radius:12px;padding:5px 10px;box-shadow:0 2px 0 rgba(0,0,0,.25)}
 #rinfo b{color:var(--cream);font-size:14px;text-shadow:0 2px 0 var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #rinfo small{color:var(--cream);font-weight:900;font-size:12px;text-shadow:0 1px 0 var(--ink);display:flex;align-items:center;gap:3px}
 #rinfo small img{width:15px;height:15px}
@@ -1347,7 +1347,7 @@ function banter() {
   const n = 1 + (Math.floor(G.L.id * 3 + banterN++) % 8), a = hs[(G.L.id + banterN) % hs.length], b = hs[(G.L.id + banterN + 1) % hs.length];
   const bub = (u, key, delay) => setTimeout(() => { if (G.mode !== 'room') return; const [x, y] = cellCenter(u.c, u.r), el = div('bub', t(key)); document.body.appendChild(el);
     el.style.left = clamp(x - 90, 6, W - 200) + 'px'; el.style.top = Math.max(70, y - SC * 1.2 - 40) + 'px'; SFX.tic(); setTimeout(() => el.classList.add('out'), 2300); setTimeout(() => el.remove(), 2700); }, delay);
-  bub(a, 'k' + n + 'a', 0); bub(b, 'k' + n + 'b', 1500);
+  bub(a, 'k' + n + 'a', 0); bub(b, 'k' + n + 'b', 2800);   // the reply waits for the first bubble to go (they overlapped)
 }
 const modal = $('#modal');
 function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); }
