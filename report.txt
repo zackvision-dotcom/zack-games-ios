@@ -1,1 +1,2 @@
-SUBMIT gullstreet draft only, items: [dict_keys([])]
+SUBMIT gullstreet version item added
+SUBMIT gullstreet draft only, items: [dict_keys([]), dict_keys([])]
