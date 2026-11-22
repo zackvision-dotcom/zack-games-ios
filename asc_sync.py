@@ -123,7 +123,9 @@ def put_file(kind, set_id, path):
         typ, rel, attrs = 'appPreviews', 'appPreviewSet', {'fileName': name, 'fileSize': len(data), 'mimeType': 'video/mp4', 'previewFrameTimeCode': '00:00:05:00'}
         set_type = 'appPreviewSets'
     r = call('POST', f'/{typ}', {'data': {'type': typ, 'attributes': attrs, 'relationships': {rel: {'data': {'type': set_type, 'id': set_id}}}}})['data']
-    upload(r['attributes']['uploadOperations'], data)
+    ops = r['attributes']['uploadOperations']
+    print('    ops', len(ops), [(o['offset'], o['length']) for o in ops][:3])
+    upload(ops, data)
     call('PATCH', f"/{typ}/{r['id']}", {'data': {'type': typ, 'id': r['id'], 'attributes': {'uploaded': True, 'sourceFileChecksum': hashlib.md5(data).hexdigest()}}})
     print('   ', kind, name, len(data) // 1024, 'KB')
 
@@ -158,14 +160,17 @@ def check(suffix):
         sets = call('GET', f"/appStoreVersionLocalizations/{l['id']}/appScreenshotSets?include=appScreenshots&limit=50")
         prev = call('GET', f"/appStoreVersionLocalizations/{l['id']}/appPreviewSets?include=appPreviews&limit=50")
         st = [s['attributes'].get('assetDeliveryState', {}).get('state') for s in sets.get('included', [])]
-        pv = [(s['attributes'].get('assetDeliveryState') or {}) for s in prev.get('included', [])]
-        pv = [d.get('state') + (' ' + json.dumps(d.get('errors')) if d.get('errors') else '') for d in pv]
+        pv = [{k: v for k, v in s['attributes'].items() if k not in ('uploadOperations',)} for s in prev.get('included', [])]
         a = l['attributes']
         print(f"CHECK {suffix} {a['locale']} desc={len(a.get('description') or '')} kw={len(a.get('keywords') or '')} screens={st} previews={pv}")
 
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('CHECK_ONLY'):
+        for g in sys.argv[1:]:
+            check(g)
+        sys.exit(0)
     games = sys.argv[1:] or sorted(d for d in os.listdir(os.path.join(HERE, 'media')) if os.path.isdir(os.path.join(HERE, 'media', d)))
     failed = []
     for g in games:
