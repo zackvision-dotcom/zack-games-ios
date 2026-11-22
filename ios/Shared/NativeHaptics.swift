@@ -23,11 +23,22 @@ final class NativeHaptics: NSObject, WKScriptMessageHandler {
     private var last = Date.distantPast
 
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+        // two message shapes: [ms, ...] from the navigator.vibrate shim, or {style: 'light'|'medium'|'heavy'|'success'} sent directly
+        let now = Date()
+        if now.timeIntervalSince(last) < 0.04 { return }             // no more than ~25 taps a second
+        if let d = message.body as? [String: Any], let style = d["style"] as? String {
+            last = now
+            switch style {
+            case "heavy": heavy.impactOccurred()
+            case "medium": medium.impactOccurred()
+            case "success": notify.notificationOccurred(.success)
+            default: light.impactOccurred()
+            }
+            return
+        }
         guard let p = message.body as? [Any] else { return }
         let ms = p.compactMap { ($0 as? NSNumber)?.doubleValue }
         guard let first = ms.first, first > 0 else { return }       // vibrate(0) cancels: nothing to do
-        let now = Date()
-        if now.timeIntervalSince(last) < 0.04 { return }             // no more than ~25 taps a second
         last = now
         if ms.count > 1 { notify.notificationOccurred(.success); return }
         if first <= 15 { light.impactOccurred() } else if first <= 35 { medium.impactOccurred() } else { heavy.impactOccurred() }
