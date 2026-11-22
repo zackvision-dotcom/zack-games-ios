@@ -376,3 +376,35 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.clockpawsquad
         PRODUCT_NAME: ClockpawSquad
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  PulsePost:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: PulsePost/Assets.xcassets
+      - path: PulsePost/Web
+        type: folder
+    info:
+      path: PulsePost/Info.plist
+      properties:
+        CFBundleDisplayName: Pulse Post
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.music-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.pulsepost
+        PRODUCT_NAME: PulsePost
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later

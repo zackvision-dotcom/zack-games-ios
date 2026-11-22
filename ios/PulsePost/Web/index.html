@@ -1,0 +1,1750 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#2F5DA8">
+<title>Pulse Post</title>
+<style>
+:root{--blue:#2F5DA8;--yellow:#FFC93C;--red:#E0453A;--cream:#FBF3E0;--green:#7CC36A;--ink:#22223B}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--blue);font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#cv{position:fixed;inset:0;display:block;touch-action:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none;padding:0}
+img.ui{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+.b1,.b2,.b3{border-radius:16px;padding:11px 16px;font-weight:900;border:3px solid var(--ink);transition:transform .08s;display:block;width:100%;margin-top:9px;font-size:17px}
+.b1{background:var(--yellow);color:var(--ink);box-shadow:0 4px 0 var(--ink)}
+.b2{background:var(--cream);box-shadow:0 4px 0 var(--ink)}.b3{background:#fff;color:var(--red);box-shadow:0 4px 0 var(--ink)}
+.bad{background:var(--green);color:var(--ink)}.bred{background:var(--red);color:var(--cream)}
+.b1:active,.b2:active,.b3:active,.rb:active,.sc:active{transform:translateY(3px)}.b1:disabled,.b2:disabled{opacity:.45}
+.big{font-size:21px;padding:14px}
+.row2{display:flex;gap:9px}.row2>*{flex:1}
+i.ti,i.pl{display:inline-block;width:1.15em;height:1.15em;background:center/contain no-repeat;vertical-align:-.2em}
+/* HUD (in a song) */
+#hud{position:fixed;left:0;right:0;top:0;z-index:5;display:none;padding:calc(env(safe-area-inset-top) + 8px) 8px 6px;pointer-events:none;align-items:center;gap:6px}
+#hud.on{display:flex}#hud button{pointer-events:auto}
+.rb{width:42px;height:42px;flex:none;border-radius:50%;background:var(--cream);border:3px solid var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.35);font-size:16px;font-weight:900;position:relative;display:grid;place-items:center}
+.rb img.ui{width:32px;height:32px}
+.rb.dot::after{content:'';position:absolute;right:-3px;top:-3px;width:13px;height:13px;border-radius:50%;background:var(--red);border:2px solid var(--ink)}
+.chip{display:flex;align-items:center;gap:4px;background:var(--cream);border:3px solid var(--ink);border-radius:999px;padding:3px 9px;box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:15px;white-space:nowrap}
+#sinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+#sinfo b{color:var(--cream);font-size:14px;text-shadow:0 2px 0 var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bag{height:12px;background:var(--ink);border:2px solid var(--cream);border-radius:7px;overflow:hidden;max-width:180px}#bag i{display:block;height:100%;background:var(--yellow);transition:width .15s}#bag.low i{background:var(--red)}
+#hcombo.hot{background:var(--yellow)}
+/* Madame Tampon */
+#mt{position:fixed;left:8px;right:8px;z-index:8;display:flex;align-items:flex-end;gap:6px;pointer-events:none;opacity:0;transform:translateY(24px) scale(.92);transition:.25s;bottom:calc(env(safe-area-inset-bottom) + 12px)}
+#mt.on{opacity:1;transform:none}
+#mt .pf{width:78px;height:84px;flex:none;object-fit:contain;animation:pbob 1.6s ease-in-out infinite}@keyframes pbob{50%{transform:translateY(-4px) rotate(-2deg)}}
+#mt .pt{background:var(--cream);border:3px solid var(--ink);border-radius:16px 16px 16px 4px;padding:9px 12px;font-weight:800;font-size:15px;line-height:1.3;box-shadow:4px 4px 0 rgba(0,0,0,.35);max-width:300px;margin-bottom:22px}
+#mt .pt b.cnt{font-size:22px;color:var(--red)}
+#mt.top{bottom:auto;top:calc(env(safe-area-inset-top) + 58px);align-items:flex-start}#mt.top .pf{width:58px;height:62px}#mt.top .pt{margin:8px 0 0;border-radius:4px 16px 16px 16px;font-size:14px;padding:7px 10px}
+/* home: the district */
+#home{position:fixed;inset:0;z-index:4;display:none;flex-direction:column;background:var(--blue) center/cover no-repeat}
+#home.on{display:flex}
+#hhead{padding:calc(env(safe-area-inset-top) + 8px) 10px 8px;display:flex;flex-direction:column;gap:6px;background:rgba(34,34,59,.88);border-bottom:3px solid var(--yellow)}
+.mrow{display:flex;align-items:center;gap:8px}
+#plv{background:var(--yellow);font-weight:900;border-radius:10px;padding:3px 9px;font-size:13px;white-space:nowrap;border:3px solid var(--ink)}
+#xpbar{flex:1;height:14px;background:var(--ink);border:3px solid var(--cream);border-radius:8px;overflow:hidden}#xpbar i{display:block;height:100%;background:var(--green);transition:width .4s}
+#hmid{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:8px 12px;gap:8px}
+#hmid .logo{width:min(56vw,250px);margin-top:2px}
+.hood{width:100%;max-width:400px;background:rgba(251,243,224,.96);border:3px solid var(--ink);border-radius:16px;padding:7px 8px;box-shadow:0 4px 0 rgba(0,0,0,.4)}
+.hood h4{margin:0 0 6px;font-size:15px;display:flex;justify-content:space-between;align-items:center}.hood h4 small{font-size:12px;display:flex;align-items:center;gap:3px}.hood h4 img{width:16px;height:16px}
+.hood.night{background:rgba(34,34,59,.95);color:var(--cream)}
+.sc{display:flex;align-items:center;gap:8px;width:100%;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:5px 8px;margin-bottom:6px;text-align:left;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.sc img.r{width:44px;height:44px;object-fit:contain;flex:none;pointer-events:none}
+.sc .tx{flex:1;min-width:0;pointer-events:none}.sc .tx b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sc .tx small{display:block;font-size:11.5px;font-weight:800;opacity:.75}
+.sc .st{display:flex;gap:1px;pointer-events:none}.sc .st img{width:17px;height:17px}.sc .st img.off{opacity:.2;filter:grayscale(1)}
+.sc .gr{width:30px;height:30px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-weight:900;font-size:15px;flex:none;background:var(--cream);pointer-events:none}.sc .gr.S{background:var(--yellow)}
+.sc.lock{opacity:.45;filter:grayscale(.6)}.sc.cur{background:var(--yellow);animation:hint .8s infinite alternate}.sc.boss{background:var(--red);color:var(--cream)}.sc.boss.cur{background:var(--yellow);color:var(--ink)}
+.night .sc{background:#2c3a6b;color:var(--cream)}
+@keyframes hint{to{transform:translateY(-3px);box-shadow:0 0 0 4px var(--yellow)}}
+.trainrow{width:100%;max-width:400px;display:flex;align-items:center;gap:8px;background:rgba(251,243,224,.96);border:3px solid var(--ink);border-radius:14px;padding:5px 10px;font-weight:900;font-size:14px}
+.trainrow img{width:30px;height:30px}.trainrow small{display:block;font-size:11px;opacity:.7}.trainrow input{margin-left:auto;width:26px;height:26px;accent-color:var(--green)}
+.hcard{display:flex;gap:10px;align-items:center;background:var(--cream);border:3px solid var(--ink);border-radius:16px;padding:7px 9px;width:100%;max-width:400px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.hcard img{width:44px;height:44px;object-fit:contain}.hcard .tx{flex:1;min-width:0;font-weight:800;font-size:13px;line-height:1.25}.hcard .tx b{font-size:15px;display:block}
+#hfoot{display:flex;justify-content:space-around;padding:8px 6px calc(env(safe-area-inset-bottom) + 10px);background:rgba(34,34,59,.92);border-top:3px solid var(--yellow)}
+#hfoot .rb{width:50px;height:50px;border-radius:16px}#hfoot .rb img.ui{width:38px;height:38px}
+#hfoot small{display:block;text-align:center;font-weight:900;font-size:10.5px;margin-top:4px;color:var(--cream)}
+/* overlays */
+#modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(20,20,40,.62);padding:14px}#modal.on{display:flex}
+.card{background:var(--cream);border:4px solid var(--ink);border-radius:22px;padding:14px;max-width:390px;width:100%;max-height:90vh;overflow:auto;box-shadow:7px 7px 0 rgba(0,0,0,.45);animation:pop .35s cubic-bezier(.3,1.6,.5,1);text-align:center}
+.card.wide{max-width:520px;text-align:left}@keyframes pop{from{transform:scale(.6);opacity:0}}
+.card h2{margin:2px 0 8px;font-size:23px;text-align:center}.card p{margin:6px 0 10px;line-height:1.35}
+.big-ico img{width:100px;height:100px;object-fit:contain}.big-ico.s img{width:76px;height:76px}
+.gain{font-size:24px;font-weight:900;color:var(--blue);margin:4px 0}.sub{font-size:13px;color:var(--blue);font-weight:800}
+.stat{display:flex;justify-content:space-between;font-weight:800;padding:3px 4px;border-bottom:2px dashed rgba(34,34,59,.15)}
+.stars{display:flex;justify-content:center;gap:8px;margin:6px 0}
+.stars img{width:64px;height:64px;opacity:.2;filter:grayscale(1)}.stars img.on{opacity:1;filter:none;animation:clack .45s cubic-bezier(.3,1.8,.5,1) both}
+@keyframes clack{0%{transform:scale(2.4) rotate(-40deg);opacity:0}100%{transform:none;opacity:1}}
+.grade{font-size:64px;font-weight:900;line-height:1;color:var(--blue);-webkit-text-stroke:2px var(--ink);margin:2px 0;display:inline-block;animation:clack .6s cubic-bezier(.3,1.8,.5,1) both}
+.grade.S{color:var(--yellow);animation:gold 1.6s cubic-bezier(.2,1,.3,1) both;text-shadow:0 0 0 var(--yellow)}
+@keyframes gold{0%{transform:scale(3);opacity:0}40%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+.goldwash{position:fixed;inset:0;z-index:29;pointer-events:none;background:rgba(255,201,60,.45);animation:gw 1.6s ease-out forwards}@keyframes gw{to{opacity:0}}
+.login{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}.lg{background:#fff;border:3px solid var(--ink);border-radius:10px;padding:4px 1px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.lg small{font-size:9px;font-weight:800}.lg b{font-size:11px}.lg i{width:20px;height:20px}.lg.got{opacity:.4}.lg.now{background:var(--yellow)}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:800;border-bottom:2px solid rgba(34,34,59,.15);gap:8px}.sw input{width:24px;height:24px;accent-color:var(--yellow)}.sw select{font:inherit;font-weight:800;border:3px solid var(--ink);border-radius:10px;background:#fff;padding:3px 6px}
+.sw .mini{font:inherit;font-weight:900;border:3px solid var(--ink);border-radius:10px;background:var(--yellow);padding:4px 10px;font-size:14px}
+.ver{font-size:11px;opacity:.6;margin-top:8px;text-align:center}.legal{font-size:13px}
+.it{display:flex;align-items:center;gap:9px;background:#fff;border:3px solid var(--ink);border-radius:16px;padding:7px 9px;margin-bottom:8px;text-align:left}
+.it .ico{width:50px;height:50px;flex:none;display:grid;place-items:center}.it .ico img{width:50px;height:50px;object-fit:contain}
+.it .tx{flex:1;min-width:0}.it .tx b{display:block;font-size:15px}.it .tx small{display:block;font-size:12px;line-height:1.25;opacity:.85}
+.buy{min-width:80px;background:var(--green);color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:6px 8px;box-shadow:0 3px 0 var(--ink);font-weight:900;font-size:15px;white-space:nowrap}
+.buy.ad{background:var(--blue);color:var(--cream)}.buy.pl{background:var(--yellow)}.buy.off{opacity:.45}.buy:active{transform:translateY(3px)}
+.own{font-weight:900;color:var(--green);min-width:70px;text-align:center;-webkit-text-stroke:.5px var(--ink)}
+.note{font-size:12px;text-align:center;margin:2px 0 10px;font-weight:700;opacity:.8}
+.pbar{height:12px;background:#fff;border:2px solid var(--ink);border-radius:7px;overflow:hidden;margin:5px 0}.pbar i{display:block;height:100%;background:var(--yellow)}
+.cos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.co{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px;display:flex;flex-direction:column;align-items:center;font-size:11px;font-weight:900;min-height:110px;text-align:center;line-height:1.1}
+.co .wear{position:relative;width:64px;height:68px}.co .wear img{position:absolute;object-fit:contain}.co .wear .pb{inset:0;width:100%;height:100%}
+.co.lock .wear{opacity:.4;filter:grayscale(1)}.co.on{background:var(--yellow)}.co small{font-size:10px;font-weight:800;margin-top:2px}
+/* album */
+.alb{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;background:var(--blue);border:3px solid var(--ink);border-radius:14px;padding:9px}
+.stp{aspect-ratio:4/5;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:8.5px;font-weight:900;line-height:1.05;text-align:center;padding:14% 12%;background:center/100% 100% no-repeat}
+.stp i.bgc{position:absolute;inset:13% 12%;border-radius:3px;opacity:.55}.stp>*{position:relative}.stp i.bgc{position:absolute}
+.stp img{width:84%;height:60%;object-fit:contain}.stp.c0 i.bgc{background:var(--yellow)}.stp.c1 i.bgc{background:var(--red)}.stp.c2 i.bgc{background:var(--green)}.stp.c3 i.bgc{background:var(--cream)}
+.stp.off{opacity:.35;filter:grayscale(1)}.stp.off span{visibility:hidden}.stp.off img{opacity:.25}
+.stp.new{animation:glue .7s cubic-bezier(.3,1.7,.5,1) both}@keyframes glue{0%{transform:scale(2.2) rotate(-25deg);opacity:0}70%{transform:scale(.92) rotate(3deg);opacity:1}100%{transform:none}}
+h3{margin:10px 0 6px;font-size:16px;text-align:left}
+.confirm{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(20,20,40,.6);padding:20px}
+#toasts{position:fixed;top:calc(env(safe-area-inset-top) + 64px);left:0;right:0;z-index:35;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.toast{background:var(--cream);border:3px solid var(--ink);border-radius:14px;padding:7px 14px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.35);animation:pop .3s;transition:opacity .4s;max-width:90vw;text-align:center}.toast.out{opacity:0}
+.banner{position:fixed;left:0;right:0;top:30%;z-index:25;text-align:center;font-size:38px;font-weight:900;color:var(--yellow);-webkit-text-stroke:2.5px var(--ink);text-shadow:4px 4px 0 var(--ink);pointer-events:none;animation:ban 1.8s cubic-bezier(.2,1.4,.4,1) forwards;padding:0 10px}
+.banner.r{color:var(--red)}.banner.c{color:var(--cream)}.banner small{display:block;font-size:20px;-webkit-text-stroke:1.5px var(--ink)}@keyframes ban{0%{transform:scale(2.4);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+.adov{position:fixed;inset:0;z-index:50;background:var(--ink);display:flex;align-items:center;justify-content:center}.adbox{color:var(--cream);text-align:center}.adtag{opacity:.7;font-weight:800}.adart img{width:120px;margin:20px}.adcount{font-size:44px;font-weight:900}
+/* calibration */
+#calib{position:fixed;inset:0;z-index:32;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--blue);color:var(--cream);text-align:center;padding:20px;touch-action:none}
+#calib.on{display:flex}#calib .ring{width:180px;height:180px;border-radius:50%;border:8px solid var(--ink);background:var(--cream);display:grid;place-items:center;font-size:56px;font-weight:900;color:var(--ink);transition:transform .06s}
+#calib .ring.flash{background:var(--yellow);transform:scale(1.12)}#calib .dots{display:flex;gap:6px}#calib .dots i{width:16px;height:16px;border-radius:50%;border:3px solid var(--ink);background:var(--cream)}#calib .dots i.on{background:var(--green)}
+#calib p{font-weight:900;font-size:18px;margin:0;max-width:340px}#calib .b1,#calib .b2{max-width:300px;color:var(--ink)}
+/* title */
+#title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 30px) 24px calc(env(safe-area-inset-bottom) + 40px);background:var(--blue) center/cover no-repeat}
+#title.on{display:flex}#title .logo img{width:min(84vw,400px)}#title .tbg{width:min(78vw,44vh);animation:pbob 2.4s ease-in-out infinite}
+#title p{font-weight:900;margin:4px 0;font-size:16px;color:var(--cream);text-align:center;text-shadow:0 2px 0 var(--ink)}#title .b1{max-width:320px}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="hud"></div>
+<div id="mt"><img class="pf" alt=""><div class="pt"></div></div>
+<div id="home"><div id="hhead"></div><div id="hmid"></div><div id="hfoot"></div></div>
+<div id="calib"></div>
+<div id="modal"></div><div id="toasts"></div><div id="title"></div>
+<script>window.PP_VERSION="1.0";window.PP_SPR={"bg_street": "assets/bg_street.png", "costume_0": "assets/costume_0.png", "costume_1": "assets/costume_1.png", "costume_2": "assets/costume_2.png", "costume_3": "assets/costume_3.png", "costume_4": "assets/costume_4.png", "costume_5": "assets/costume_5.png", "facade": "assets/facade.png", "firework": "assets/firework.png", "letter": "assets/letter.png", "letter_wings": "assets/letter_wings.png", "logo": "assets/logo.png", "mailbox": "assets/mailbox.png", "note": "assets/note.png", "parcel": "assets/parcel.png", "pip_0": "assets/pip_0.png", "pip_1": "assets/pip_1.png", "pip_2": "assets/pip_2.png", "pip_3": "assets/pip_3.png", "res_0": "assets/res_0.png", "res_1": "assets/res_1.png", "res_2": "assets/res_2.png", "res_3": "assets/res_3.png", "res_4": "assets/res_4.png", "res_5": "assets/res_5.png", "stamp_blank": "assets/stamp_blank.png", "stamp_oops": "assets/stamp_oops.png", "stamp_perfect": "assets/stamp_perfect.png", "stamp_star": "assets/stamp_star.png", "tampon_0": "assets/tampon_0.png", "tampon_1": "assets/tampon_1.png", "tampon_2": "assets/tampon_2.png", "tampon_3": "assets/tampon_3.png", "title_bg": "assets/title_bg.png", "ui_album": "assets/ui_album.png", "ui_gift": "assets/ui_gift.png", "ui_settings": "assets/ui_settings.png", "ui_shop": "assets/ui_shop.png", "window_dark": "assets/window_dark.png", "window_lit": "assets/window_lit.png"};window.PP_PRIVACY="<h4>Politique de confidentialité — Pulse Post</h4>\n<p>Pulse Post fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. Aucun achat ne donne d’objet tiré au hasard, et il n’y a aucun abonnement.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) peuvent être envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Pulse Post convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Pulse Post</h4>\n<p>Pulse Post works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. No purchase gives a random item, and there is no subscription.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) may be sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Pulse Post suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script>
+<script>// Pulse Post — the rhythm core: the habitants' rules (patterns), the songs (tempo map + chart), the beat tables and the judge.
+// Pure data and maths, no DOM: shared by the game (game.js), the BETA robot (beta-game.js) and the bot (tools/bot.mjs).
+//
+// A song is a list of sections; a section repeats a phrase; a phrase places patterns on the windows of the façade.
+// A pattern is one habitant's musical habit: the light walks over the cells of the window sill on the beats (`cells`),
+// then the letter must be caught on the `hits` (in beats from the pattern start). The beat table of a song is the list of
+// every hit with its exact time in seconds from beat 0, computed from the tempo map (constant BPM, or steps for the DJ).
+(function (root) {
+  'use strict';
+  const WIN = { perfect: 0.045, good: 0.09, reach: 0.18 };   // seconds: PARFAIT ±45 ms, BIEN ±90 ms, a tap further than 180 ms belongs to no letter
+  const MIN_GAP = 0.12;                                       // one finger: two letters are never closer than 120 ms
+
+  // ---- the habitants of the market quarter (window 0..5: 2 columns × 3 floors) ----
+  const HAB = [
+    { id: 0, key: 'lola', inst: 'pan' },          // Lola, the rabbit: saucepans. Counts "1, 2, 3!" (and later "1, 2!")
+    { id: 1, key: 'mimi', inst: 'accordion' },    // Mimi, the cat: an accordion. Always on the 7th beat
+    { id: 2, key: 'bruno', inst: 'drill' },       // Bruno, the bear: a drill. Syncopated: on the "and" after the 4th beat
+    { id: 3, key: 'glouglou', inst: 'glass' },    // Glouglou, the frog: a xylophone of glasses. Always two strokes (eighth notes)
+    { id: 4, key: 'hector', inst: 'tuba' },       // Hector, the owl: a tuba. On the 7th beat, and the tempo keeps rising
+    { id: 5, key: 'souricette', inst: 'castanets' }, // Souricette, the mouse: castanets. Three quick strokes (sixteenth notes)
+  ];
+  // ---- the patterns: lights on `cells` (beats), letters on `hits` (beats), the window is busy for `dur` beats ----
+  const PAT = {
+    p3: { cells: [0, 1], hits: [2], dur: 4 },             // "1, 2, 3!"
+    p2: { cells: [0], hits: [1], dur: 2 },                // "1, 2!"
+    p7: { cells: [0, 1, 2, 3, 4, 5], hits: [6], dur: 8 }, // the 7th beat
+    sy: { cells: [0, 1, 2, 3], hits: [3.5], dur: 4 },     // syncope: just after the 4th beat
+    db: { cells: [0, 1, 2], hits: [3, 3.5], dur: 4 },     // double: two eighth notes
+    tr: { cells: [0, 1, 2], hits: [3, 3.25, 3.5], dur: 4 }, // triple: three sixteenth notes
+  };
+  // ---- phrases: [beat, pattern, window] ----
+  const PH = {
+    count: { len: 4, ev: [] }, rest: { len: 4, ev: [] },
+    R1: { len: 4, ev: [[0, 'p3', 0]] },
+    R2: { len: 4, ev: [[0, 'p2', 0], [2, 'p2', 0]] },
+    B1: { len: 8, ev: [[0, 'p7', 1], [0, 'p2', 0], [4, 'p2', 0]] },
+    B2: { len: 8, ev: [[0, 'p7', 1], [0, 'p2', 0], [2, 'p2', 0], [4, 'p2', 0]] },
+    M1: { len: 4, ev: [[0, 'sy', 2], [0, 'p2', 0]] },
+    M2: { len: 8, ev: [[0, 'sy', 2], [4, 'p3', 0], [4, 'sy', 2]] },
+    M3: { len: 8, ev: [[0, 'p7', 1], [0, 'sy', 2], [4, 'p2', 0]] },
+    G1: { len: 4, ev: [[0, 'db', 3]] },
+    G2: { len: 8, ev: [[0, 'db', 3], [0, 'p2', 0], [4, 'sy', 2], [4, 'p2', 0]] },
+    G3: { len: 8, ev: [[0, 'p7', 1], [0, 'db', 3], [4, 'db', 3]] },
+    L1: { len: 8, ev: [[0, 'p7', 4], [0, 'p3', 0], [4, 'p2', 0]] },
+    L2: { len: 8, ev: [[0, 'p7', 4], [0, 'db', 3], [4, 'p2', 0]] },
+    L3: { len: 8, ev: [[0, 'p7', 4], [0, 'sy', 2], [4, 'db', 3]] },
+    E1: { len: 4, ev: [[0, 'tr', 5]] },
+    E2: { len: 8, ev: [[0, 'tr', 5], [0, 'p7', 1], [4, 'sy', 2]] },
+    E3: { len: 8, ev: [[0, 'p2', 0], [0, 'tr', 5], [4, 'db', 3]] },
+    X1: { len: 8, ev: [[0, 'p3', 0], [0, 'p7', 1], [4, 'sy', 2]] },
+    X2: { len: 8, ev: [[0, 'db', 3], [0, 'p7', 4], [4, 'p2', 0]] },
+    X3: { len: 8, ev: [[0, 'tr', 5], [4, 'p3', 0], [4, 'sy', 2]] },
+    X4: { len: 8, ev: [[0, 'p2', 0], [2, 'p2', 0], [0, 'p7', 1], [4, 'tr', 5]] },
+    X5: { len: 8, ev: [[0, 'sy', 2], [0, 'p7', 4], [4, 'tr', 5]] },
+  };
+  // ---- the songs. mus = what the synthesiser plays (all original, composed by the generator in audio.js from these settings) ----
+  // tempo: [[from beat, bpm], ...]; sections: [[phrase, repeats], ...]; feat: the habitant introduced; rule: the i18n key of the rule
+  const SONGS = [
+    { id: 'm1', hood: 'market', feat: 0, rule: 'r_p3', tempo: [[0, 92]], tut: 1,
+      sections: [['count', 2], ['R1', 8], ['R2', 8], ['rest', 1], ['R1', 4], ['R2', 6], ['rest', 2]],
+      mus: { root: 60, scale: 'maj', prog: [0, 3, 4, 0], drums: 'pop', bass: 'root', lead: 'triangle', seed: 11, pad: 'organ' } },
+    { id: 'm2', hood: 'market', feat: 1, rule: 'r_p7', tempo: [[0, 100]],
+      sections: [['count', 2], ['R1', 4], ['B1', 3], ['B2', 6], ['rest', 1], ['B2', 4], ['rest', 2]],
+      mus: { root: 57, scale: 'min', prog: [0, 5, 3, 4], drums: 'waltz', bass: 'oompah', lead: 'reed', seed: 23, pad: 'reed' } },
+    { id: 'm3', hood: 'market', feat: 2, rule: 'r_sy', tempo: [[0, 108]],
+      sections: [['count', 2], ['M1', 6], ['M2', 4], ['rest', 1], ['M3', 4], ['M2', 4], ['rest', 2]],
+      mus: { root: 62, scale: 'dor', prog: [0, 3, 0, 4], drums: 'swing', bass: 'walk', lead: 'square', seed: 37, pad: 'piano' } },
+    { id: 'm4', hood: 'market', feat: 3, rule: 'r_db', tempo: [[0, 112]],
+      sections: [['count', 2], ['G1', 6], ['G2', 4], ['rest', 1], ['G3', 4], ['G2', 5], ['rest', 2]],
+      mus: { root: 55, scale: 'mix', prog: [0, 6, 3, 0], drums: 'funk', bass: 'octave', lead: 'saw', seed: 41, pad: 'organ' } },
+    { id: 'm5', hood: 'market', feat: 4, rule: 'r_acc', tempo: [[0, 108], [40, 114], [72, 120], [104, 126], [136, 132]],
+      sections: [['count', 2], ['L1', 4], ['L2', 4], ['rest', 1], ['L3', 4], ['L2', 4], ['L3', 3], ['rest', 2]],
+      mus: { root: 58, scale: 'min', prog: [0, 3, 5, 4], drums: 'disco', bass: 'octave', lead: 'square', seed: 53, pad: 'synth' } },
+    { id: 'm6', hood: 'market', feat: 5, rule: 'r_tr', tempo: [[0, 120]],
+      sections: [['count', 2], ['E1', 6], ['E2', 5], ['rest', 1], ['E3', 5], ['E2', 4], ['rest', 2]],
+      mus: { root: 64, scale: 'min', prog: [0, 5, 6, 4], drums: 'march', bass: 'root', lead: 'triangle', seed: 67, pad: 'brass' } },
+    { id: 'boss', hood: 'market', feat: -1, rule: 'r_boss', tempo: [[0, 120]], boss: 1,
+      sections: [['count', 2], ['X1', 3], ['X2', 3], ['X3', 3], ['rest', 1], ['X4', 3], ['X5', 3], ['X2', 2], ['X4', 2], ['rest', 2]],
+      mus: { root: 60, scale: 'maj', prog: [0, 4, 5, 3], drums: 'disco', bass: 'walk', lead: 'square', seed: 79, pad: 'brass' } },
+    // « Album Nuit Électro » (content pack): the same habitants at night, remixed on a drum machine
+    { id: 'n1', hood: 'night', feat: 0, rule: 'r_p3', tempo: [[0, 104]], pack: 1,
+      sections: [['count', 2], ['R2', 6], ['B2', 4], ['rest', 1], ['M3', 4], ['B2', 4], ['rest', 2]],
+      mus: { root: 57, scale: 'min', prog: [0, 5, 3, 6], drums: 'electro', bass: 'pulse', lead: 'saw', seed: 101, pad: 'synth' } },
+    { id: 'n2', hood: 'night', feat: 2, rule: 'r_sy', tempo: [[0, 112]], pack: 1,
+      sections: [['count', 2], ['M2', 5], ['G2', 4], ['rest', 1], ['M3', 4], ['G2', 5], ['rest', 2]],
+      mus: { root: 62, scale: 'dor', prog: [0, 3, 4, 3], drums: 'electro', bass: 'pulse', lead: 'square', seed: 113, pad: 'synth' } },
+    { id: 'n3', hood: 'night', feat: 3, rule: 'r_db', tempo: [[0, 118]], pack: 1,
+      sections: [['count', 2], ['G3', 4], ['L2', 4], ['rest', 1], ['G2', 5], ['L3', 4], ['rest', 2]],
+      mus: { root: 53, scale: 'min', prog: [0, 6, 5, 4], drums: 'house', bass: 'offbeat', lead: 'saw', seed: 127, pad: 'synth' } },
+    { id: 'n4', hood: 'night', feat: 4, rule: 'r_acc', tempo: [[0, 112], [48, 118], [96, 124], [144, 130]], pack: 1,
+      sections: [['count', 2], ['L1', 4], ['L3', 4], ['rest', 1], ['X2', 4], ['L2', 5], ['rest', 2]],
+      mus: { root: 59, scale: 'min', prog: [0, 3, 6, 5], drums: 'house', bass: 'offbeat', lead: 'square', seed: 131, pad: 'synth' } },
+    { id: 'n5', hood: 'night', feat: 5, rule: 'r_tr', tempo: [[0, 120]], pack: 1,
+      sections: [['count', 2], ['E3', 4], ['X3', 4], ['rest', 1], ['X5', 4], ['E2', 4], ['X4', 2], ['rest', 2]],
+      mus: { root: 61, scale: 'min', prog: [0, 5, 3, 4], drums: 'electro', bass: 'pulse', lead: 'saw', seed: 149, pad: 'synth' } },
+  ];
+
+  // ---- the tempo map: seconds of a beat and beat of a second (piecewise constant BPM) ----
+  function tempoOf(song) {
+    const seg = []; let t = 0;
+    song.tempo.forEach(([b, bpm], i) => { if (i) { const p = seg[i - 1]; t = p.t + (b - p.b) * 60 / p.bpm; } seg.push({ b, bpm, t }); });
+    return seg;
+  }
+  function timeOf(song, beat) {
+    const seg = song._seg || (song._seg = tempoOf(song)); let s = seg[0];
+    for (const x of seg) if (beat >= x.b) s = x;
+    return s.t + (beat - s.b) * 60 / s.bpm;
+  }
+  function beatOf(song, t) {
+    const seg = song._seg || (song._seg = tempoOf(song)); let s = seg[0];
+    for (const x of seg) if (t >= x.t) s = x;
+    return s.b + (t - s.t) * s.bpm / 60;
+  }
+  const bpmAt = (song, beat) => { const seg = song._seg || (song._seg = tempoOf(song)); let s = seg[0]; for (const x of seg) if (beat >= x.b) s = x; return s.bpm; };
+
+  // ---- the beat table: every pattern instance (lights) and every letter (hits), with exact times ----
+  function table(song) {
+    if (song._tab) return song._tab;
+    const pats = [], notes = []; let beat = 0, bars = 0;
+    for (const [name, reps] of song.sections) {
+      const ph = PH[name];
+      for (let r = 0; r < reps; r++) {
+        for (const [b, p, w] of ph.ev) {
+          const P = PAT[p], b0 = beat + b, inst = { i: pats.length, w, p, b0, dur: P.dur, cells: P.cells.map(c => b0 + c), hits: [] };
+          for (const h of P.hits) { const n = { i: 0, w, p, beat: b0 + h, t: timeOf(song, b0 + h), pat: inst.i, k: inst.hits.length, of: P.hits.length }; inst.hits.push(n); notes.push(n); }
+          pats.push(inst);
+        }
+        beat += ph.len;
+      }
+    }
+    notes.sort((a, b) => a.t - b.t); notes.forEach((n, i) => n.i = i);
+    bars = beat / 4;
+    const end = timeOf(song, beat);
+    return (song._tab = { id: song.id, meter: 4, bpm: song.tempo[0][1], tempo: song.tempo, beats: beat, bars, dur: end, pats, notes,
+      checkpoints: checkpoints(song, beat) });
+  }
+  // a checkpoint at the start of every section after the count-in (the rewarded "resume" goes back to the last one passed)
+  function checkpoints(song, total) {
+    const out = []; let beat = 0;
+    for (const [name, reps] of song.sections) { if (name !== 'count' && name !== 'rest') out.push(beat); beat += PH[name].len * reps; }
+    return out.length ? out : [0];
+  }
+
+  // ---- the judge: a tap time (seconds, song clock, latency already removed) against the table ----
+  const grade = err => { const a = Math.abs(err); return a <= WIN.perfect ? 'P' : a <= WIN.good ? 'B' : 'M'; };
+  // the letter a tap belongs to: the nearest letter not yet judged within reach (null = a tap in the void)
+  function pick(notes, done, t, from = 0) {
+    let best = null, bd = 1e9;
+    for (let i = from; i < notes.length; i++) { const n = notes[i]; if (n.t - t > WIN.reach) break; if (done[i]) continue; const d = Math.abs(n.t - t); if (d <= WIN.reach && d < bd) { bd = d; best = n; } }
+    return best;
+  }
+  // accuracy, stamps (1..3 star stamps), letter grade C..S from the results ['P'|'B'|'M', ...]
+  function score(res) {
+    const n = res.length || 1, P = res.filter(r => r === 'P').length, B = res.filter(r => r === 'B').length, M = res.filter(r => r === 'M').length;
+    const acc = (P + 0.5 * B) / n;
+    const stars = acc >= 0.93 ? 3 : acc >= 0.8 ? 2 : acc >= 0.55 ? 1 : 0;
+    const letter = acc >= 0.95 && M === 0 ? 'S' : acc >= 0.88 ? 'A' : acc >= 0.75 ? 'B' : 'C';
+    let combo = 0, best = 0; for (const r of res) { combo = r === 'M' ? 0 : combo + 1; best = Math.max(best, combo); }
+    return { n: res.length, P, B, M, acc, stars, letter, best };
+  }
+  const mult = combo => Math.min(4, 1 + Math.floor(combo / 10));
+  const points = (r, combo) => (r === 'P' ? 300 : r === 'B' ? 100 : 0) * mult(combo);
+
+  const R = { WIN, MIN_GAP, HAB, PAT, PH, SONGS, tempoOf, timeOf, beatOf, bpmAt, table, grade, pick, score, mult, points, song: id => SONGS.find(s => s.id === id) };
+  root.PPR = R; if (typeof module !== 'undefined') module.exports = R;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Pulse Post — the numbers around the songs: stamps (earned) and XP per song, the sorting office (real-time timers),
+// the daily gift, Pip's costumes, the album, the shop and the ads.
+// No energy, no subscription, nothing random for real money: golden feathers (sold) only buy fixed-price costumes or finish a sorting.
+(function (root) {
+  const E = {
+    // stamps (the currency earned by playing) per song: first clear vs replay, each star stamp adds some
+    timbres: (stars, first) => first ? 30 + 15 * stars : 8 + 4 * stars,
+    xp: stars => 15 + 10 * stars,
+    xpLevel: n => 100 + 60 * (n - 1),
+    levelGift: n => 40 + 10 * n,
+    // the mail bag (normal mode): a miss empties it, good taps fill it back; empty = the round is lost (never in training or the tutorial)
+    bag: { miss: 0.14, good: 0.02, perfect: 0.04 },
+    // the sorting office: one sorting at a time, real time, free to start; gives stamps (and its album stamp the first time)
+    tri: [{ min: 30, timbres: 60 }, { min: 60, timbres: 110 }, { min: 120, timbres: 200 }, { min: 240, timbres: 360 }],
+    finishPlumes: min => Math.max(5, Math.ceil(min / 10)),   // golden feathers to finish now: 1 per 10 min left, at least 5
+    login: [40, 50, 60, 80, 100, 120, 200], loginPlumes: 10, // stamps days 1..7 (day 7 also gives golden feathers)
+    // Pip's 6 costumes (Pip in his plain uniform, -1, is free): from a pack, the winter pass, or a FIXED price (golden feathers or stamps)
+    costumes: [{ id: 0, how: 'starter' }, { id: 1, plumes: 40 }, { id: 2, how: 'pass' }, { id: 3, plumes: 60 }, { id: 4, timbres: 400 }, { id: 5, plumes: 80 }],
+    // the album: 15 collector stamps, all earned by playing
+    album: ['st_m1', 'st_m2', 'st_m3', 'st_m4', 'st_m5', 'st_m6', 'st_boss', 'ms_combo50', 'ms_s', 'ms_calib', 'ms_300', 'tr_0', 'tr_1', 'tr_2', 'tr_3'],
+    store: [
+      { id: 'noads', price: '3,99 €', once: true },
+      { id: 'starter', price: '1,99 €', once: true },
+      { id: 'album_nuit_electro', price: '2,99 €', once: true },
+      { id: 'plumes', price: '1,99 €', once: false, n: 100 },
+      { id: 'pass_hiver_2026', price: '2,99 €', once: true },
+    ],
+    starterTimbres: 300,
+    ads: { interFromPlay: 3, gapSec: 180 },
+  };
+  root.PPE = E; if (typeof module !== 'undefined') module.exports = E;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Pulse Post — UI texts. [fr, en]; other languages fall back to English for now.
+window.I18N = (() => {
+  const L = ['fr', 'en'];
+  const T = {
+    subtitle: ['Le courrier arrive en musique. Touche pile sur le temps !', 'The mail arrives in music. Tap right on the beat!'],
+    play: ['Jouer', 'Play'], cont: ['Continuer', 'Continue'], level: ['Niv.', 'Lv.'],
+    hood_market: ['Le marché', 'The market'], hood_night: ['Nuit Électro', 'Electro Night'], quarter: ['Quartier', 'District'],
+    timbres: ['timbres', 'stamps'], plumes: ['plumes d’or', 'golden feathers'],
+    // habitants and their rules
+    h_lola: ['Lola la lapine', 'Lola the rabbit'], h_mimi: ['Mimi la chatte', 'Mimi the cat'], h_bruno: ['Bruno l’ours', 'Bruno the bear'],
+    h_glouglou: ['Glouglou la grenouille', 'Glouglou the frog'], h_hector: ['Hector le hibou', 'Hector the owl'], h_souricette: ['Souricette la souris', 'Souricette the mouse'],
+    r_p3: ['Sur le 3e temps', 'On the 3rd beat'], r_p7: ['Sur le 7e temps', 'On the 7th beat'], r_sy: ['À contretemps', 'Off the beat'],
+    r_db: ['Toujours deux coups', 'Always two strokes'], r_acc: ['Le tempo accélère', 'The tempo speeds up'], r_tr: ['Trois coups rapides', 'Three quick strokes'], r_boss: ['Tout le quartier à la fois', 'The whole district at once'],
+    // songs
+    s_m1: ['Le marché se réveille', 'The market wakes up'], s_m2: ['L’accordéon de Mimi', 'Mimi’s accordion'], s_m3: ['Bruno perce le rythme', 'Bruno drills the beat'],
+    s_m4: ['Verres en fête', 'Glasses at the party'], s_m5: ['Hector monte le tempo', 'Hector speeds it up'], s_m6: ['La souris pressée', 'The hurried mouse'], s_boss: ['La grande tournée', 'The grand round'],
+    s_n1: ['Néon de minuit', 'Midnight neon'], s_n2: ['Perceuse de nuit', 'Night drill'], s_n3: ['Verres de minuit', 'Midnight glasses'], s_n4: ['Tuba after-hours', 'Tuba after hours'], s_n5: ['Pigeon express', 'Pigeon express'],
+    boss: ['Boss', 'Boss'], locked: ['Finis le morceau d’avant', 'Clear the song before'], packLock: ['Album Nuit Électro', 'Electro Night album'],
+    training: ['Entraînement', 'Training'], trainingSub: ['Sans échec possible', 'You cannot fail'], trainOn: ['Entraînement : rien ne se perd', 'Training: nothing is lost'],
+    // in a song
+    perfect: ['PARFAIT !', 'PERFECT!'], good: ['BIEN', 'GOOD'], miss: ['RATÉ', 'MISS'], oops: ['OUPS', 'OOPS'], combo: ['Combo', 'Combo'],
+    ready: ['Prêt ?', 'Ready?'], tapAnywhere: ['Touche n’importe où', 'Tap anywhere'],
+    pause: ['Pause', 'Pause'], resume: ['Reprendre', 'Resume'], restart: ['Recommencer', 'Restart'], quit: ['Retour au quartier', 'Back to the district'],
+    lost: ['Le sac est vide !', 'The bag is empty!'], retry: ['Réessayer', 'Try again'], resumeAd: ['Reprendre au point de contrôle', 'Resume at the checkpoint'],
+    // results
+    done: ['Tournée finie !', 'Round complete!'], grade: ['Note', 'Grade'], accuracy: ['Précision', 'Accuracy'], bestCombo: ['Meilleur combo', 'Best combo'],
+    next: ['Morceau suivant', 'Next song'], again: ['Rejouer', 'Play again'], home: ['Le quartier', 'The district'], x2: ['×2 timbres', '×2 stamps'],
+    newStamp: ['Nouveau timbre dans l’album !', 'New stamp in the album!'], score: ['Score', 'Score'], unlocked: ['Débloqué : {s}', 'Unlocked: {s}'],
+    bossDone: ['Le marché est en fête !', 'The market is celebrating!'],
+    // meta
+    album: ['Album', 'Album'], albumSub: ['{n}/{m} timbres collés', '{n}/{m} stamps glued'], tri: ['Tri', 'Sorting'], triTitle: ['Bureau de tri', 'Sorting office'],
+    triIdle: ['Le bureau de tri attend du courrier', 'The sorting office awaits mail'], triRun: ['Tri en cours : {s}', 'Sorting: {s}'], triReady: ['Tri terminé !', 'Sorting done!'],
+    triStart: ['Trier', 'Sort'], triDur: ['{s} · +{n}', '{s} · +{n}'], collect: ['Récupérer', 'Collect'], finish: ['Finir', 'Finish'], finishP: ['Finir · {n}', 'Finish · {n}'], busy: ['Un tri est déjà en cours', 'A sorting is already running'],
+    login: ['Cadeau du jour', 'Daily gift'], dayK: ['J', 'D'], claim: ['Récupérer', 'Claim'], comeBack: ['Reviens demain !', 'Come back tomorrow!'],
+    levelUp: ['Niveau {n} !', 'Level {n}!'], shop: ['Boutique', 'Shop'], settings: ['Réglages', 'Settings'], gift: ['Cadeau', 'Gift'], notEnough: ['Pas assez', 'Not enough'],
+    costumes: ['Costumes', 'Costumes'], use: ['Porter', 'Wear'], used: ['Porté', 'Worn'],
+    co_n: ['Uniforme de facteur', 'Postman’s uniform'], co_0: ['Facteur de nuit', 'Night postman'], co_1: ['Facteur à vélo', 'Postman on a bike'], co_2: ['Sous la neige', 'In the snow'], co_3: ['Pirate', 'Pirate'], co_4: ['Rockeur', 'Rocker'], co_5: ['Jour de fête', 'Party day'],
+    ch_starter: ['Pack de démarrage', 'Starter pack'], ch_pass: ['Passe Hiver', 'Winter pass'],
+    // album stamps
+    st_m1: ['Lola', 'Lola'], st_m2: ['Mimi', 'Mimi'], st_m3: ['Bruno', 'Bruno'], st_m4: ['Glouglou', 'Glouglou'], st_m5: ['Hector', 'Hector'], st_m6: ['Souricette', 'Souricette'], st_boss: ['Le marché', 'The market'],
+    ms_combo50: ['Combo ×50', 'Combo ×50'], ms_s: ['Première note S', 'First S grade'], ms_calib: ['Horloge réglée', 'Clock tuned'], ms_300: ['300 lettres', '300 letters'],
+    tr_0: ['Tri éclair', 'Quick sort'], tr_1: ['Tri d’une heure', 'One-hour sort'], tr_2: ['Grand tri', 'Big sort'], tr_3: ['Tri de nuit', 'Night sort'],
+    how_song: ['Finis ce morceau', 'Clear this song'], how_ms: ['Un exploit en jouant', 'A feat while playing'], how_tri: ['Au bureau de tri', 'At the sorting office'],
+    // shop
+    s_noads: ['Sans pub', 'No ads'], s_noadsSub: ['Plus aucune publicité entre les morceaux', 'No more ads between songs'],
+    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['Pip facteur de nuit (costume) et 300 timbres', 'Night postman Pip (costume) and 300 stamps'],
+    s_album: ['Album Nuit Électro', 'Electro Night album'], s_albumSub: ['5 morceaux en plus, la nuit, à vie', '5 more songs, at night, for life'],
+    s_plumes: ['100 plumes d’or', '100 golden feathers'], s_plumesSub: ['Pour des costumes à prix fixe ou finir un tri', 'For fixed-price costumes or finishing a sorting'],
+    s_pass: ['Passe Hiver', 'Winter pass'], s_passSub: ['Pip sous la neige (costume), neige sur le quartier, cadeaux du jour ×2. Achat unique, sans abonnement', 'Pip in the snow (costume), snow on the district, daily gifts ×2. One-time purchase, no subscription'],
+    owned: ['Possédé', 'Owned'], restore: ['Restaurer les achats', 'Restore purchases'], restored: ['Achats restaurés', 'Purchases restored'],
+    webNote: ['Achats réels via l’App Store', 'Real purchases through the App Store'], testBuy: ['Achat de test (aucun paiement) :', 'Test purchase (nothing charged):'],
+    buyFail: ['L’achat n’a pas abouti', 'The purchase did not go through'], buyPending: ['Achat en attente de validation', 'Purchase pending approval'],
+    // settings
+    sound: ['Sons', 'Sounds'], music: ['Musique', 'Music'], vibration: ['Vibrations', 'Vibrations'], language: ['Langue', 'Language'],
+    latency: ['Latence', 'Latency'], latencyBtn: ['Régler la latence', 'Set the latency'], latVal: ['{n} ms', '{n} ms'], latAuto: ['auto', 'auto'],
+    calTitle: ['Réglage de la latence', 'Latency setting'], calText: ['Touche l’écran sur chaque bip, 8 fois.', 'Tap the screen on each beep, 8 times.'], calStart: ['Commencer', 'Start'],
+    calDone: ['Décalage mesuré : {n} ms', 'Measured offset: {n} ms'], calAgain: ['Recommencer', 'Again'], calKeep: ['Garder', 'Keep'], calFew: ['Pas assez de touches, recommence.', 'Not enough taps, try again.'],
+    adChoices: ['Choix publicitaires', 'Ad choices'], privacy: ['Confidentialité', 'Privacy'], reset: ['Effacer la partie', 'Erase progress'], resetSure: ['Tout effacer ? C’est définitif.', 'Erase everything? This cannot be undone.'],
+    close: ['Fermer', 'Close'], cancel: ['Annuler', 'Cancel'], ok: ['OK', 'OK'],
+    consentTitle: ['Les publicités', 'Ads'], consentText: ['Pulse Post est gratuit grâce à la publicité (jamais pendant un morceau). Acceptes-tu des pubs adaptées à tes goûts ? Tu peux changer d’avis dans les réglages.', 'Pulse Post is free thanks to ads (never during a song). Do you accept ads tailored to you? You can change your mind in the settings.'],
+    accept: ['J’accepte', 'I accept'], refuse: ['Non merci', 'No thanks'], testAd: ['Publicité de test', 'Test ad'],
+    // Madame Tampon (20 lines)
+    mt_hello: ['Bonjour, Pip ! Je suis Madame Tampon, cheffe du bureau de poste. Ici, le courrier arrive en musique.', 'Hello, Pip! I am Madame Tampon, head of the post office. Here, the mail arrives in music.'],
+    mt_count: ['Regarde la fenêtre de Lola : la lumière avance… 1, 2… et sur 3, touche l’écran !', 'Watch Lola’s window: the light moves… 1, 2… and on 3, tap the screen!'],
+    mt_first: ['Attrapée ! Et pile sur le temps : PARFAIT !', 'Caught! Right on the beat: PERFECT!'],
+    mt_timing: ['Presque ! Touche quand la lumière arrive sur la lettre.', 'Almost! Tap when the light reaches the letter.'],
+    mt_two: ['Lola presse le pas : maintenant 1, 2 ! La lumière te montre toujours le moment.', 'Lola speeds up: now 1, 2! The light always shows you when.'],
+    mt_mimi: ['Mimi la chatte n’envoie que sur le 7e temps : six lumières, puis la lettre.', 'Mimi the cat only sends on the 7th beat: six lights, then the letter.'],
+    mt_bruno: ['Bruno et sa perceuse font une syncope : la lettre tombe juste APRÈS le 4e temps. Laisse passer, puis hop !', 'Bruno and his drill are syncopated: the letter falls just AFTER the 4th beat. Let it pass, then hop!'],
+    mt_glouglou: ['Glouglou et ses verres : toujours deux coups. Ding-ding !', 'Glouglou and her glasses: always two strokes. Ding-ding!'],
+    mt_hector: ['Hector le hibou accélère au tuba toutes les quelques mesures. Reste sur la lumière !', 'Hector the owl speeds up on his tuba every few bars. Stay on the light!'],
+    mt_souricette: ['Souricette et ses castagnettes : trois coups très rapides, ta-ta-ta !', 'Souricette and her castanets: three very quick strokes, ta-ta-ta!'],
+    mt_boss: ['La grande tournée ! Tout le quartier envoie du courrier en même temps.', 'The grand round! The whole district sends mail at once.'],
+    mt_combo: ['Le quartier s’allume ! Continue comme ça !', 'The district lights up! Keep it going!'],
+    mt_oops: ['OUPS ! Ce n’est rien, la prochaine arrive.', 'OOPS! No harm done, the next one is coming.'],
+    mt_fail: ['Le sac est vide… On reprend, tu vas l’avoir !', 'The bag is empty… Let’s go again, you’ll get it!'],
+    mt_s: ['Note S ! Je tamponne ça en or.', 'Grade S! I’ll stamp that in gold.'],
+    mt_calib: ['Touche l’écran sur chaque bip : je règle l’horloge de ton téléphone.', 'Tap the screen on each beep: I’m tuning your phone’s clock.'],
+    mt_tri: ['Le bureau de tri attend : lance un tri, il travaille même quand tu dors.', 'The sorting office is waiting: start a sorting, it works even while you sleep.'],
+    mt_gift: ['Un colis pour toi ! Reviens demain, il y en a un chaque jour.', 'A parcel for you! Come back tomorrow, there is one every day.'],
+    mt_train: ['En entraînement, rien ne se perd : répète autant que tu veux.', 'In training, nothing is lost: practise as much as you like.'],
+    mt_bosswin: ['Bravo ! Tout le marché danse. Le prochain quartier arrive bientôt !', 'Well done! The whole market is dancing. The next district is coming soon!'],
+  };
+  let lang = 'fr'; const idx = () => Math.max(0, L.indexOf(lang));
+  const t = (k, v) => { const e = T[k]; let s = e ? (e[idx()] || e[1] || e[0]) : k; if (v) for (const n in v) s = s.split('{' + n + '}').join(v[n]); return s; };
+  const detect = () => { const l = (navigator.language || 'fr').slice(0, 2); return L.includes(l) ? l : 'en'; };
+  return { t, set: l => { lang = L.includes(l) ? l : 'en'; document.documentElement.lang = lang; }, get lang() { return lang; }, langs: L, names: { fr: 'Français', en: 'English' }, detect, has: k => !!T[k], count: p => Object.keys(T).filter(k => k.startsWith(p)).length };
+})();
+</script>
+<script>// Shared "juice": flying coins, confetti, pops, dust and hearts (DOM + CSS only, cheap on phones). From Crumble Crew, in the Pulse Post palette (post blue, mail yellow, stamp red, paper cream, lime green, ink).
+window.JUICE = (() => {
+  const css = `
+.jz{position:fixed;z-index:60;pointer-events:none;left:0;top:0;will-change:transform,opacity}
+.jz-coin{width:26px;height:26px;object-fit:contain;transition:transform .7s cubic-bezier(.55,-0.25,.4,1),opacity .7s}
+.jz-conf{width:8px;height:12px;border-radius:2px;animation:jzfall var(--d) cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes jzfall{0%{transform:translate(var(--x0),var(--y0)) rotate(0)}100%{transform:translate(var(--x1),var(--y1)) rotate(var(--r));opacity:0}}
+.jz-dust{width:10px;height:10px;border-radius:50%;background:rgba(251,243,224,.95);animation:jzdust .6s ease-out forwards}
+@keyframes jzdust{0%{transform:translate(var(--x0),var(--y0)) scale(.6);opacity:1}100%{transform:translate(var(--x1),var(--y1)) scale(1.8);opacity:0}}
+.jz-heart{font-size:20px;animation:jzheart 1.1s ease-out forwards}
+@keyframes jzheart{0%{transform:translate(var(--x0),var(--y0)) scale(.4);opacity:0}25%{opacity:1;transform:translate(var(--x0),calc(var(--y0) - 14px)) scale(1.2)}100%{transform:translate(var(--x0),calc(var(--y0) - 54px)) scale(1);opacity:0}}
+.jz-pop{animation:jzpop .45s cubic-bezier(.3,1.6,.5,1)}@keyframes jzpop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+.jz-bump{animation:jzbump .35s ease-out}@keyframes jzbump{40%{transform:scale(1.25)}}
+.jz-flash{position:fixed;inset:0;z-index:58;pointer-events:none;background:radial-gradient(circle at var(--fx) var(--fy),rgba(251,243,224,.8),rgba(251,243,224,0) 45%);animation:jzflash .7s ease-out forwards}@keyframes jzflash{to{opacity:0}}
+`;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+  const center = el => { if (!el) return [innerWidth / 2, innerHeight / 2]; const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  const mk = (cls, html = '') => { const d = document.createElement(html === 'img' ? 'img' : 'div'); d.className = 'jz ' + cls; if (html && html !== 'img') d.innerHTML = html; document.body.appendChild(d); return d; };
+  // coins (or any icon) flying from an element to a counter, which bumps on arrival
+  function fly(fromEl, toEl, src, n = 6, done) {
+    const [x0, y0] = center(fromEl), [x1, y1] = center(toEl);
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-coin', 'img'); c.src = src; const ox = (Math.random() - 0.5) * 50, oy = (Math.random() - 0.5) * 40;
+      c.style.transform = `translate(${x0 - 13 + ox}px,${y0 - 13 + oy}px) scale(.6)`;
+      setTimeout(() => { c.style.transform = `translate(${x1 - 13}px,${y1 - 13}px) scale(.9)`; c.style.opacity = '.4'; }, 30 + i * 55);
+      setTimeout(() => { c.remove(); if (i === n - 1) { bump(toEl); done && done(); } }, 780 + i * 55);
+    }
+  }
+  function bump(el) { if (!el) return; el.classList.remove('jz-bump'); void el.offsetWidth; el.classList.add('jz-bump'); }
+  function confetti(n = 70) {
+    const cols = ['#FFC93C', '#2F5DA8', '#E0453A', '#FBF3E0', '#7CC36A', '#FFC93C'];   // confetti in the post palette
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-conf'); const x0 = innerWidth / 2 + (Math.random() - 0.5) * 80, y0 = innerHeight * 0.35;
+      c.style.background = cols[i % cols.length];
+      c.style.setProperty('--x0', x0 + 'px'); c.style.setProperty('--y0', y0 + 'px');
+      c.style.setProperty('--x1', x0 + (Math.random() - 0.5) * innerWidth * 1.1 + 'px'); c.style.setProperty('--y1', y0 + innerHeight * (0.4 + Math.random() * 0.5) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg'); c.style.setProperty('--d', (1.2 + Math.random() * 1.1) + 's');
+      setTimeout(() => c.remove(), 2600);
+    }
+  }
+  function dust(el, n = 10) {
+    const [x, y] = center(el);
+    for (let i = 0; i < n; i++) { const d = mk('jz-dust'), a = Math.random() * Math.PI * 2, r = 26 + Math.random() * 30;
+      d.style.setProperty('--x0', x - 5 + 'px'); d.style.setProperty('--y0', y + 10 + 'px'); d.style.setProperty('--x1', x - 5 + Math.cos(a) * r + 'px'); d.style.setProperty('--y1', y + 10 + Math.sin(a) * r * 0.5 + 'px'); setTimeout(() => d.remove(), 650); }
+  }
+  function heart(x, y, ch = '❤️') { const h = mk('jz-heart', ch); h.style.setProperty('--x0', x - 10 + 'px'); h.style.setProperty('--y0', y + 'px'); setTimeout(() => h.remove(), 1150); }
+  function pop(el) { if (!el) return; el.classList.remove('jz-pop'); void el.offsetWidth; el.classList.add('jz-pop'); }
+  function flash(el) { const [x, y] = center(el); const f = mk('jz-flash'); f.style.setProperty('--fx', x + 'px'); f.style.setProperty('--fy', y + 'px'); setTimeout(() => f.remove(), 750); }
+  return { fly, bump, confetti, dust, heart, pop, flash };
+})();
+</script>
+<script>// Pulse Post — stand-in art, drawn at startup: flat shapes, a thick even ink outline, one hard shadow down-right, the 6 colours
+// of the art direction only (post blue, mail yellow, stamp red, paper cream, lime green, ink). No text in the pictures.
+// Each one is replaced by the painted PNG of the same name in src/sprites/ (window.PP_SPR). ART.get(name) -> canvas, ART.url(name) -> data URL.
+window.PPART = (() => {
+  const P = { blue: '#2F5DA8', yellow: '#FFC93C', red: '#E0453A', cream: '#FBF3E0', green: '#7CC36A', ink: '#22223B' };
+  const TAU = Math.PI * 2, cache = {}, urls = {};
+  // draws on its own layer at 2 px per unit, then lays one hard shadow under the whole silhouette
+  function make(w, h, fn, shadow = 0.05, k = 2) {
+    const f = document.createElement('canvas'); f.width = w * k; f.height = h * k; const c = f.getContext('2d'); c.scale(k, k); c.lineJoin = 'round'; c.lineCap = 'round'; fn(c, w, h);
+    if (!shadow) return f;
+    const out = document.createElement('canvas'); out.width = f.width; out.height = f.height; const o = out.getContext('2d'), d = Math.round(Math.min(f.width, f.height) * shadow);
+    const sh = document.createElement('canvas'); sh.width = f.width; sh.height = f.height; const s = sh.getContext('2d'); s.drawImage(f, 0, 0); s.globalCompositeOperation = 'source-in'; s.fillStyle = 'rgba(34,34,59,.32)'; s.fillRect(0, 0, sh.width, sh.height);
+    o.drawImage(sh, d, d); o.drawImage(f, 0, 0); return out;
+  }
+  const fs = (c, fill, lw = 5) => { if (fill) { c.fillStyle = fill; c.fill(); } if (lw) { c.lineWidth = lw; c.strokeStyle = P.ink; c.stroke(); } };
+  const circle = (c, x, y, r, fill, lw) => { c.beginPath(); c.arc(x, y, r, 0, TAU); fs(c, fill, lw); };
+  const ell = (c, x, y, rx, ry, fill, lw, rot = 0) => { c.beginPath(); c.ellipse(x, y, rx, ry, rot, 0, TAU); fs(c, fill, lw); };
+  const rect = (c, x, y, w, h, fill, lw, r = 6) => { c.beginPath(); c.roundRect ? c.roundRect(x, y, w, h, r) : c.rect(x, y, w, h); fs(c, fill, lw); };
+  const poly = (c, pts, fill, lw) => { c.beginPath(); c.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) c.lineTo(pts[i], pts[i + 1]); c.closePath(); fs(c, fill, lw); };
+  const line = (c, pts, lw = 5, col = P.ink) => { c.beginPath(); c.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) c.lineTo(pts[i], pts[i + 1]); c.lineWidth = lw; c.strokeStyle = col; c.stroke(); };
+  const eyes = (c, x, y, gap, s = 1, mood) => { for (const d of [-1, 1]) { if (mood === 'shut') line(c, [x + d * gap - 4 * s, y, x + d * gap + 4 * s, y - 2], 3.5); else if (mood === 'dizzy') { line(c, [x + d * gap - 4, y - 4, x + d * gap + 4, y + 4], 3); line(c, [x + d * gap + 4, y - 4, x + d * gap - 4, y + 4], 3); } else ell(c, x + d * gap, y, 3.6 * s, 5 * s, P.ink, 0); } };
+  const star = (c, x, y, r, fill, lw = 4, n = 5) => { const pts = []; for (let i = 0; i < n * 2; i++) { const a = -Math.PI / 2 + i * Math.PI / n, rr = i % 2 ? r * 0.45 : r; pts.push(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } poly(c, pts, fill, lw); };
+  // a postage stamp: a rectangle with a perforated (scalloped) edge
+  function perforated(c, x, y, w, h, fill, lw = 4) {
+    const r = 4; c.beginPath(); c.moveTo(x, y);
+    for (let i = x; i < x + w; i += 2 * r) c.arc(i + r, y, r, Math.PI, 0, true);
+    for (let i = y; i < y + h; i += 2 * r) c.arc(x + w, i + r, r, -Math.PI / 2, Math.PI / 2, true);
+    for (let i = x + w; i > x; i -= 2 * r) c.arc(i - r, y + h, r, 0, Math.PI, true);
+    for (let i = y + h; i > y; i -= 2 * r) c.arc(x, i - r, r, Math.PI / 2, -Math.PI / 2, true);
+    c.closePath(); fs(c, fill, lw);
+  }
+
+  // ---------- Pip, the pigeon postman: cream body, post-blue jacket and cap, mail-yellow beak and feet, a red bag ----------
+  function pip(pose) {
+    return make(128, 140, c => {
+      const tilt = pose === 2 ? 0.18 : 0, up = pose === 1;
+      c.translate(64, 76); c.rotate(tilt); c.translate(-64, -76);
+      for (const x of [52, 76]) { c.beginPath(); c.moveTo(x, 112); c.lineTo(x, 127); c.lineTo(x + 9, 130); c.lineWidth = 8; c.strokeStyle = P.ink; c.stroke(); c.lineWidth = 4; c.strokeStyle = P.yellow; c.stroke(); }
+      ell(c, 64, 90, 34, 28, P.blue);                                   // jacket
+      rect(c, 60, 66, 8, 44, P.yellow, 3, 3);                           // buttons strip
+      // wings
+      if (up) { ell(c, 24, 58, 10, 24, P.cream, 5, -0.6); ell(c, 104, 58, 10, 24, P.cream, 5, 0.6); }
+      else if (pose === 3) { ell(c, 24, 62, 10, 24, P.cream, 5, -0.7); ell(c, 100, 96, 10, 22, P.cream, 5, -0.3); }
+      else { ell(c, 30, 92, 10, 22, P.cream, 5, 0.25); ell(c, 98, 92, 10, 22, P.cream, 5, -0.25); }
+      rect(c, 80, 84, 30, 24, P.red, 5, 5); line(c, [82, 86, 50, 64], 5);   // the mail bag and its strap
+      ell(c, 64, 44, 28, 26, P.cream);                                  // head
+      if (pose === 1) poly(c, [62, 50, 80, 46, 64, 58], P.yellow, 4), poly(c, [62, 54, 76, 58, 63, 60], P.yellow, 4);
+      else poly(c, [60, 48, 80, 52, 60, 58], P.yellow, 4);
+      eyes(c, 64, 38, 10, 1, pose === 2 ? 'dizzy' : pose === 3 ? 'shut' : null);
+      circle(c, 46, 50, 4, P.red, 0); circle(c, 82, 50, 4, P.red, 0);    // cheeks
+      c.beginPath(); c.moveTo(38, 26); c.quadraticCurveTo(64, 2, 90, 26); c.closePath(); fs(c, P.blue); rect(c, 34, 24, 60, 8, P.ink, 0, 3); rect(c, 58, 10, 12, 8, P.yellow, 3, 2);   // post cap
+    });
+  }
+  // ---------- Madame Tampon, the old goose, head of the post office, with a giant red stamp ----------
+  function tampon(mood) {
+    return make(140, 150, c => {
+      ell(c, 70, 118, 40, 30, P.blue);                                  // uniform
+      rect(c, 54, 92, 32, 10, P.yellow, 3, 4);                          // collar ribbon
+      c.beginPath(); c.moveTo(62, 96); c.quadraticCurveTo(50, 60, 70, 40); c.lineTo(84, 44); c.quadraticCurveTo(74, 66, 80, 96); c.closePath(); fs(c, P.cream);   // neck
+      ell(c, 76, 34, 24, 20, P.cream);                                  // head
+      poly(c, [94, 30, 120, 36, 94, 44], P.yellow, 4);                  // beak
+      if (mood === 1) eyes(c, 76, 28, 8, 1, 'shut'); else ell(c, 82, 28, 3.6, mood === 2 ? 6 : 5, P.ink, 0), ell(c, 68, 28, 3.6, mood === 2 ? 6 : 5, P.ink, 0);
+      circle(c, 75, 30, 8, null, 3); circle(c, 85, 30, 8, null, 3); line(c, [83, 30, 77, 30], 3);   // spectacles
+      c.beginPath(); c.moveTo(56, 22); c.quadraticCurveTo(76, 0, 98, 20); c.closePath(); fs(c, P.blue); rect(c, 52, 18, 50, 7, P.ink, 0, 3);   // cap
+      // the giant stamp: raised when stamping, held otherwise
+      c.save(); if (mood === 3) { c.translate(20, -30); c.rotate(-0.35); }
+      rect(c, 12, 70, 14, 34, P.yellow, 4, 4); ell(c, 19, 66, 12, 8, P.yellow, 4); rect(c, 0, 102, 38, 16, P.red, 5, 4);
+      c.restore(); ell(c, 34, mood === 3 ? 74 : 96, 12, 10, P.cream, 5);   // wing holding it
+    });
+  }
+  // ---------- the 6 habitants of the market, as busts in their window, each with its noisy object ----------
+  const HABS = [
+    // (stand-ins; the painted set has: Lola the rabbit, Mimi the cat, Bruno the bear, Glouglou the frog, Hector the owl, Souricette the mouse)
+    c => { ell(c, 64, 112, 40, 26, P.cream); ell(c, 64, 62, 30, 30, P.cream); poly(c, [50, 36, 56, 22, 64, 34, 70, 20, 78, 34], P.red, 4); poly(c, [62, 64, 76, 70, 62, 76], P.yellow, 4); ell(c, 66, 82, 5, 7, P.red, 3);
+      eyes(c, 64, 56, 10); rect(c, 84, 88, 34, 20, P.blue, 5, 6); line(c, [84, 96, 66, 104], 6); ell(c, 101, 88, 17, 5, P.blue, 4); },
+    // Bruno, the bear, and his accordion
+    c => { circle(c, 38, 36, 12, P.yellow); circle(c, 90, 36, 12, P.yellow); ell(c, 64, 112, 44, 26, P.yellow); ell(c, 64, 60, 32, 28, P.yellow); ell(c, 64, 72, 13, 9, P.cream, 4); circle(c, 64, 67, 4, P.ink, 0); eyes(c, 64, 54, 12);
+      rect(c, 30, 92, 18, 28, P.red, 4, 3); for (let i = 0; i < 4; i++) rect(c, 48 + i * 8, 90 + (i % 2) * 2, 8, 30, P.cream, 3, 1); rect(c, 80, 92, 18, 28, P.red, 4, 3); },
+    // Mimi, the cat, and her bicycle bell
+    c => { poly(c, [36, 48, 40, 16, 58, 36], P.blue); poly(c, [92, 48, 88, 16, 70, 36], P.blue); ell(c, 64, 112, 40, 26, P.blue); ell(c, 64, 58, 32, 26, P.blue); eyes(c, 64, 54, 11);
+      poly(c, [60, 64, 68, 64, 64, 68], P.red, 3); line(c, [40, 64, 26, 60], 3); line(c, [88, 64, 102, 60], 3); circle(c, 98, 100, 14, P.yellow); circle(c, 98, 100, 4, P.ink, 0); rect(c, 94, 82, 8, 6, P.yellow, 3, 2); },
+    // Gustave, the badger, and his drill
+    c => { ell(c, 64, 112, 42, 26, P.ink, 0); ell(c, 64, 112, 42, 26, null); ell(c, 64, 58, 30, 30, P.cream); c.save(); c.beginPath(); c.ellipse(64, 58, 30, 30, 0, 0, TAU); c.clip(); rect(c, 42, 24, 10, 70, P.ink, 0, 2); rect(c, 76, 24, 10, 70, P.ink, 0, 2); c.restore(); ell(c, 64, 58, 30, 30, null);
+      ell(c, 47, 58, 3, 4, P.cream, 0); ell(c, 81, 58, 3, 4, P.cream, 0); circle(c, 64, 74, 5, P.ink, 0); rect(c, 18, 82, 36, 18, P.red, 5, 5); rect(c, 28, 98, 12, 18, P.red, 4, 3); poly(c, [54, 86, 74, 91, 54, 96], P.cream, 4); },
+    // Lulu, the frog DJ, headphones and a record
+    c => { ell(c, 64, 112, 42, 26, P.green); ell(c, 64, 64, 36, 24, P.green); circle(c, 46, 42, 12, P.green); circle(c, 82, 42, 12, P.green); circle(c, 46, 42, 4.5, P.ink, 0); circle(c, 82, 42, 4.5, P.ink, 0);
+      line(c, [44, 72, 64, 78, 84, 72], 4); c.beginPath(); c.arc(64, 50, 38, Math.PI * 1.05, Math.PI * 1.95); c.lineWidth = 7; c.strokeStyle = P.ink; c.stroke(); rect(c, 18, 46, 12, 22, P.blue, 4, 4); rect(c, 98, 46, 12, 22, P.blue, 4, 4);
+      circle(c, 64, 108, 18, P.ink, 0); circle(c, 64, 108, 6, P.red, 3); },
+    // Léon, the hedgehog, and his drum
+    c => { for (let i = 0; i < 9; i++) { const a = Math.PI * (1.05 + i * 0.1); poly(c, [64 + Math.cos(a - 0.12) * 30, 66 + Math.sin(a - 0.12) * 30, 64 + Math.cos(a) * 52, 66 + Math.sin(a) * 52, 64 + Math.cos(a + 0.12) * 30, 66 + Math.sin(a + 0.12) * 30], P.ink, 3); }
+      ell(c, 64, 112, 42, 26, P.ink, 0); ell(c, 64, 68, 30, 26, P.yellow); eyes(c, 64, 62, 10); circle(c, 64, 76, 5, P.ink, 0);
+      ell(c, 64, 108, 30, 9, P.cream, 4); rect(c, 34, 108, 60, 18, P.red, 4, 2); ell(c, 64, 108, 30, 9, P.cream, 4); line(c, [20, 86, 46, 104], 5); line(c, [108, 86, 82, 104], 5); },
+  ];
+  const res = i => make(128, 128, c => HABS[i](c));
+
+  // ---------- the façade: a dolls'-house front, 2 columns × 3 floors of windows (same layout as LAYOUT below) ----------
+  const LAYOUT = { w: 600, h: 720, win: [[150, 200], [450, 200], [150, 380], [450, 380], [150, 560], [450, 560]], ww: 190, wh: 130 };
+  function facade() {
+    return make(600, 720, c => {
+      poly(c, [10, 120, 300, 10, 590, 120], P.blue, 7);                 // roof
+      rect(c, 270, 40, 60, 50, P.cream, 5, 8); circle(c, 300, 65, 14, P.yellow, 4);   // dormer with a round window
+      rect(c, 30, 110, 540, 600, P.cream, 7, 4);                        // wall
+      for (let y = 140; y < 700; y += 40) line(c, [36, y, 564, y], 2, 'rgba(34,34,59,.12)');
+      rect(c, 30, 640, 540, 70, P.red, 7, 2);                           // shop front
+      for (const [x, y] of LAYOUT.win) { rect(c, x - 108, y + 76, 216, 14, P.blue, 5, 3); }   // sills
+      rect(c, 255, 655, 90, 55, P.blue, 5, 4);                          // the door
+    }, 0.02, 1);
+  }
+  const windowPane = lit => make(200, 140, c => {
+    rect(c, 6, 6, 188, 128, lit ? P.yellow : P.blue, 6, 10); if (!lit) rect(c, 14, 14, 172, 112, 'rgba(34,34,59,.35)', 0, 6);
+    line(c, [100, 8, 100, 132], 5); line(c, [8, 70, 192, 70], 0); poly(c, [6, 6, 30, 6, 6, 50], lit ? P.cream : P.blue, 0);
+    rect(c, 6, 6, 188, 128, null, 6, 10); }, 0.03, 1);
+  function street() {
+    return make(390, 844, c => {
+      rect(c, 0, 0, 390, 844, P.blue, 0, 0);
+      c.fillStyle = 'rgba(251,243,224,.12)'; for (let i = 0; i < 6; i++) { c.beginPath(); c.arc(40 + i * 70, 60 + (i % 2) * 30, 18 + (i % 3) * 6, 0, TAU); c.fill(); }   // flat clouds
+      for (let i = 0; i < 9; i++) { const x = -10 + i * 46, h = 60 + (i * 37) % 50; rect(c, x, 200 - h, 44, h + 600, 'rgba(34,34,59,.35)', 0, 0); }
+      rect(c, 0, 690, 390, 154, P.green, 0, 0); rect(c, 0, 690, 390, 12, P.ink, 0, 0); for (let i = 0; i < 8; i++) rect(c, 10 + i * 50, 740, 30, 8, 'rgba(34,34,59,.18)', 0, 3);
+    }, 0, 1);
+  }
+  // ---------- objects ----------
+  const letter = () => make(80, 56, c => { rect(c, 4, 4, 72, 48, P.cream, 5, 5); line(c, [6, 8, 40, 32, 74, 8], 4); rect(c, 54, 12, 14, 14, P.red, 3, 2); });
+  const parcel = () => make(80, 72, c => { rect(c, 6, 12, 68, 54, P.yellow, 5, 4); line(c, [40, 12, 40, 66], 6, P.red); line(c, [6, 38, 74, 38], 6, P.red); ell(c, 32, 10, 9, 6, P.red, 4); ell(c, 48, 10, 9, 6, P.red, 4); rect(c, 6, 12, 68, 54, null, 5, 4); });
+  const stampShape = (fill, inner) => make(160, 120, c => { c.translate(80, 60); c.rotate(-0.08); c.translate(-80, -60); rect(c, 10, 10, 140, 100, null, 0); c.beginPath(); c.ellipse(80, 60, 72, 50, 0, 0, TAU); fs(c, fill, 0);
+    c.beginPath(); c.ellipse(80, 60, 72, 50, 0, 0, TAU); c.lineWidth = 8; c.strokeStyle = fill; c.stroke(); c.beginPath(); c.ellipse(80, 60, 62, 41, 0, 0, TAU); c.lineWidth = 4; c.strokeStyle = P.cream; c.stroke(); if (inner) inner(c); }, 0.03);
+  const stampStar = () => make(96, 96, c => { perforated(c, 10, 10, 76, 76, P.yellow); rect(c, 18, 18, 60, 60, null, 3, 2); star(c, 48, 50, 24, P.red, 4); });
+  const firework = () => make(128, 128, c => { for (let i = 0; i < 12; i++) { const a = i / 12 * TAU, col = [P.yellow, P.red, P.green, P.cream][i % 4]; line(c, [64 + Math.cos(a) * 18, 64 + Math.sin(a) * 18, 64 + Math.cos(a) * 56, 64 + Math.sin(a) * 56], 9); line(c, [64 + Math.cos(a) * 18, 64 + Math.sin(a) * 18, 64 + Math.cos(a) * 56, 64 + Math.sin(a) * 56], 5, col); } circle(c, 64, 64, 12, P.yellow, 4); }, 0);
+  const note = () => make(64, 80, c => { ell(c, 22, 62, 14, 10, P.ink, 0, -0.4); rect(c, 31, 8, 7, 56, P.ink, 0, 2); poly(c, [36, 8, 58, 20, 58, 34, 38, 24], P.ink, 0); }, 0.04);
+  // ---------- interface icons ----------
+  const icon = fn => make(96, 96, fn);
+  const ui = {
+    ui_gift: icon(c => { rect(c, 14, 40, 68, 46, P.red); rect(c, 10, 28, 76, 16, P.red); rect(c, 42, 28, 12, 58, P.yellow, 4, 2); ell(c, 36, 22, 12, 8, P.yellow, 4, 0.4); ell(c, 60, 22, 12, 8, P.yellow, 4, -0.4); }),
+    ui_settings: icon(c => { c.beginPath(); for (let i = 0; i < 16; i++) { const a = i / 16 * TAU, r = i % 2 ? 30 : 40; c.lineTo(48 + Math.cos(a) * r, 48 + Math.sin(a) * r); } c.closePath(); fs(c, P.blue); circle(c, 48, 48, 12, P.cream, 4); }),
+    ui_shop: icon(c => { rect(c, 14, 36, 68, 50, P.yellow); c.beginPath(); c.arc(48, 36, 18, Math.PI, 0); c.lineWidth = 6; c.strokeStyle = P.ink; c.stroke(); rect(c, 30, 52, 36, 18, P.red, 4, 4); }),
+    ui_album: icon(c => { rect(c, 12, 14, 72, 70, P.blue, 5, 6); line(c, [48, 16, 48, 82], 4); perforated(c, 20, 24, 22, 26, P.yellow, 3); perforated(c, 54, 24, 22, 26, P.red, 3); perforated(c, 20, 56, 22, 22, P.green, 3); perforated(c, 54, 56, 22, 22, P.cream, 3); }),
+    ui_tri: icon(c => { rect(c, 12, 30, 72, 54, P.yellow); for (let i = 0; i < 3; i++) rect(c, 18 + i * 22, 20 + (i % 2) * 6, 18, 28, P.cream, 3, 2); line(c, [12, 56, 84, 56], 4); circle(c, 72, 26, 14, P.cream, 4); line(c, [72, 26, 72, 18], 3); line(c, [72, 26, 78, 30], 3); }),
+    ui_train: icon(c => { circle(c, 48, 50, 34, P.green); circle(c, 48, 50, 22, P.cream, 4); circle(c, 48, 50, 9, P.red, 4); }),
+    stamp_blank: icon(c => perforated(c, 12, 8, 72, 80, P.cream)),
+    ico_timbre: icon(c => { perforated(c, 16, 12, 64, 72, P.red); rect(c, 24, 20, 48, 56, P.cream, 3, 2); c.beginPath(); c.moveTo(48, 62); c.bezierCurveTo(20, 44, 34, 24, 48, 38); c.bezierCurveTo(62, 24, 76, 44, 48, 62); fs(c, P.red, 3); }),
+    ico_plume: icon(c => { c.beginPath(); c.moveTo(20, 84); c.quadraticCurveTo(30, 20, 84, 10); c.quadraticCurveTo(72, 60, 20, 84); fs(c, P.yellow); line(c, [16, 90, 66, 30], 4); for (let i = 0; i < 4; i++) line(c, [40 + i * 8, 62 - i * 9, 48 + i * 9, 58 - i * 10], 3); }),
+  };
+  // ---------- Pip's costumes (worn on the head, or the neck for the scarf and the bow) ----------
+  // (the painted costume_N are Pip already dressed and replace him; these stand-ins are accessories worn over the drawn Pip)
+  const COS = [
+    c => { c.beginPath(); c.moveTo(14, 70); c.quadraticCurveTo(50, 0, 110, 24); c.quadraticCurveTo(84, 40, 110, 70); c.closePath(); fs(c, P.blue); circle(c, 112, 24, 12, P.yellow); rect(c, 10, 62, 108, 16, P.cream, 5, 6); star(c, 58, 42, 10, P.yellow, 3); },   // night postman's cap
+    c => { c.beginPath(); c.moveTo(14, 66); c.quadraticCurveTo(64, -6, 114, 66); c.closePath(); fs(c, P.red); for (let i = 0; i < 3; i++) line(c, [40 + i * 24, 24, 40 + i * 24, 60], 4, P.cream); rect(c, 10, 60, 108, 10, P.ink, 0, 4); },   // bike helmet
+    c => { rect(c, 8, 34, 112, 26, P.red, 5, 12); rect(c, 78, 50, 22, 56, P.red, 5, 6); for (let i = 0; i < 3; i++) line(c, [30 + i * 26, 36, 30 + i * 26, 58], 4, P.cream); },   // winter scarf
+    c => { poly(c, [6, 70, 30, 24, 64, 34, 98, 24, 122, 70], P.ink); circle(c, 64, 52, 9, P.cream, 3); },   // pirate hat
+    c => { rect(c, 8, 40, 50, 32, P.ink, 5, 10); rect(c, 70, 40, 50, 32, P.ink, 5, 10); line(c, [58, 50, 70, 50], 6); line(c, [16, 48, 30, 48], 4, P.cream); line(c, [78, 48, 92, 48], 4, P.cream); },   // sunglasses
+    c => { poly(c, [64, 6, 30, 96, 98, 96], P.yellow); circle(c, 64, 8, 9, P.red, 3); circle(c, 54, 60, 5, P.red, 0); circle(c, 74, 78, 5, P.green, 0); },   // party hat
+  ];
+  const costume = i => make(128, 112, c => COS[i](c));
+  function logo() {
+    return make(320, 130, c => {
+      c.font = '900 64px ui-rounded, "Nunito", system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.lineWidth = 14; c.strokeStyle = P.ink; c.strokeText('PULSE', 160, 40); c.fillStyle = P.yellow; c.fillText('PULSE', 160, 40);
+      c.strokeText('POST', 160, 98); c.fillStyle = P.red; c.fillText('POST', 160, 98);
+      letterMini(c, 268, 92);
+    }, 0.03);
+  }
+  const letterMini = (c, x, y) => { c.save(); c.translate(x, y); c.rotate(0.25); rect(c, -20, -14, 40, 28, P.cream, 4, 3); line(c, [-18, -11, 0, 2, 18, -11], 3); c.restore(); };
+  function titleBg() {
+    return make(300, 300, c => {
+      circle(c, 150, 150, 120, P.yellow, 7); for (let i = 0; i < 16; i++) { const a = i / 16 * TAU; line(c, [150 + Math.cos(a) * 128, 150 + Math.sin(a) * 128, 150 + Math.cos(a) * 146, 150 + Math.sin(a) * 146], 7, P.red); }
+      c.drawImage(pip(1), 70, 66, 160, 175);
+      c.save(); c.translate(52, 70); c.rotate(-0.3); c.drawImage(letter(), 0, 0, 64, 45); c.restore(); c.save(); c.translate(214, 50); c.rotate(0.3); c.drawImage(letter(), 0, 0, 56, 40); c.restore();
+      c.drawImage(note(), 232, 150, 36, 45); c.drawImage(note(), 30, 170, 30, 38);
+    }, 0.03);
+  }
+  const R = {
+    facade, window_lit: () => windowPane(1), window_dark: () => windowPane(0), bg_street: street, letter, parcel, firework, note, logo, title_bg: titleBg,
+    stamp_perfect: () => stampShape(P.red, c => star(c, 80, 60, 14, P.cream, 0)), stamp_oops: () => stampShape(P.blue, c => { line(c, [64, 50, 70, 56], 6, P.cream); line(c, [70, 50, 64, 56], 6, P.cream); line(c, [90, 50, 96, 56], 6, P.cream); line(c, [96, 50, 90, 56], 6, P.cream); line(c, [66, 76, 94, 72], 6, P.cream); }), stamp_star: stampStar,
+  };
+  for (let i = 0; i < 4; i++) { R['pip_' + i] = () => pip(i); R['tampon_' + i] = () => tampon(i); }
+  for (let i = 0; i < 6; i++) { R['res_' + i] = () => res(i); R['costume_' + i] = () => costume(i); }
+  for (const k in ui) R[k] = () => ui[k];
+  return {
+    P, LAYOUT,
+    get(k) { if (!cache[k] && R[k]) cache[k] = R[k](); return cache[k]; },
+    url(k) { if (!urls[k]) { const c = this.get(k); urls[k] = c ? c.toDataURL() : ''; } return urls[k]; },
+    names: () => Object.keys(R),
+  };
+})();
+</script>
+<script>// Pulse Post — sound: the clock, the procedural band (drums, bass, chords, melody, the habitants' noisy objects) and the effects.
+// Everything is synthesised with WebAudio from patterns written for this game: no sample, no known tune, every melody is
+// composed by the seeded generator below from the song's key, scale and chord progression (see credits.md).
+//
+// THE CLOCK. The tempo never comes from setTimeout: a song is a time line on AudioContext.currentTime. To read that clock
+// smoothly between audio callbacks (and to date a touch), we keep m = currentTime − performance.now(), filtered between songs
+// and frozen when a song starts, so that clock = performance.now() + m and every note is scheduled at currentTime = clock.
+// Touches carry their own performance stamp (event.timeStamp), so a tap is dated to the millisecond even when the frame is late.
+// In the BETA IA mode (time is virtual, see beta.js) the clock is performance.now() itself, which beta.js drives: the robot, the judge and the drawing stay on one clock.
+window.PPAUDIO = (() => {
+  const AU = { ctx: null, master: null, music: null, sfx: null, noise: null, m: 0, mOk: false, musicOn: true, soundOn: true };
+  const BETA_ON = !!(window.BETA && window.BETA.on);
+  function init() {
+    if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume().catch(() => {}); return; }
+    try { AU.ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' }); } catch (e) { return; }
+    const c = AU.ctx; AU.master = c.createGain(); AU.master.gain.value = 0.8; AU.master.connect(c.destination);
+    const comp = c.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4; comp.connect(AU.master);
+    AU.music = c.createGain(); AU.music.gain.value = AU.musicOn ? 0.5 : 0; AU.music.connect(comp);
+    AU.sfx = c.createGain(); AU.sfx.gain.value = AU.soundOn ? 0.75 : 0; AU.sfx.connect(comp);
+    const len = c.sampleRate * 1, b = c.createBuffer(1, len, c.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; AU.noise = b;
+    if (c.state === 'suspended') c.resume().catch(() => {});
+  }
+  const setMusic = on => { AU.musicOn = on; if (AU.music) AU.music.gain.value = on ? 0.5 : 0; };
+  const setSound = on => { AU.soundOn = on; if (AU.sfx) AU.sfx.gain.value = on ? 0.75 : 0; };
+  const running = () => !!(AU.ctx && AU.ctx.state === 'running');
+  // ---- the clock ----
+  const CLK = {
+    audio: false,   // true when the songs run on the audio clock (decided at the start of each song)
+    live: false,    // a song is playing: m does not move
+    // an audio clock that does not move (no output device, a suspended route) is not trusted: m keeps its last good value,
+    // so the song clock goes on smoothly on performance.now
+    sync() { if (!running() || BETA_ON) return; const ct = AU.ctx.currentTime, p = performance.now() / 1000;
+      if (ct !== AU.lastCt) { AU.lastCt = ct; AU.lastMove = p; } AU.healthy = ct > 0 && p - AU.lastMove < 0.25; if (!AU.healthy) return;
+      if (this.live) return;   // during a song m is frozen: the song clock is performance.now + a constant, the notes sit on currentTime
+      const raw = ct - p; if (!AU.mOk || Math.abs(raw - AU.m) > 0.05) { AU.m = raw; AU.mOk = true; } else AU.m += (raw - AU.m) * 0.05; },
+    off: 0,         // clock = performance.now() + off; off only changes when a song (or a calibration) starts
+    pick() { const was = this.live; this.live = false; this.sync(); this.live = was; this.audio = !BETA_ON && running() && AU.mOk && !!AU.healthy; if (this.audio) this.off = AU.m; return this.audio; },
+    now() { return performance.now() / 1000 + this.off; },
+    // the time of a touch on the same clock: its own stamp when it is a performance stamp, otherwise "now"
+    ofEvent(e) {
+      if (BETA_ON || !e || !(e.timeStamp > 0)) return this.now();
+      const p = performance.now(), ts = e.timeStamp; if (ts > p + 5 || p - ts > 500) return this.now();
+      return ts / 1000 + this.off;
+    },
+    // what the ear hears lags the clock by the output latency (drawn letters arrive with the sound)
+    outLat() { return this.audio && AU.ctx ? (AU.ctx.outputLatency || AU.ctx.baseLatency || 0) : 0; },
+    toCtx(t) { if (!AU.ctx) return 0; return this.audio ? t : AU.ctx.currentTime + (t - this.now()); },
+  };
+
+  // ---- voices (w = AudioContext time) ----
+  function env(g, w, a, peak, dur) { g.gain.setValueAtTime(0.0001, w); g.gain.linearRampToValueAtTime(peak, w + a); g.gain.exponentialRampToValueAtTime(0.0008, w + dur); }
+  function osc(type, f, w, dur, peak, dest, o = {}) {
+    const c = AU.ctx, n = c.createOscillator(), g = c.createGain(); n.type = type; n.frequency.setValueAtTime(f, w);
+    if (o.slide) n.frequency.exponentialRampToValueAtTime(o.slide, w + (o.slideT || dur)); if (o.detune) n.detune.value = o.detune;
+    let last = n; if (o.lp) { const fl = c.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.setValueAtTime(o.lp, w); if (o.lpTo) fl.frequency.exponentialRampToValueAtTime(o.lpTo, w + dur); fl.Q.value = o.q || 1; n.connect(fl); last = fl; } else last = n;
+    last.connect(g); env(g, w, o.a || 0.005, peak, dur); g.connect(dest); n.start(w); n.stop(w + dur + 0.05);
+  }
+  function hiss(w, dur, f, q, peak, dest, type = 'bandpass', o = {}) {
+    const c = AU.ctx, s = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain(); s.buffer = AU.noise; fl.type = type; fl.frequency.setValueAtTime(f, w);
+    if (o.to) fl.frequency.exponentialRampToValueAtTime(o.to, w + dur); fl.Q.value = q; s.connect(fl); fl.connect(g); env(g, w, o.a || 0.002, peak, dur); g.connect(dest); s.start(w, Math.random() * 0.5); s.stop(w + dur + 0.05);
+  }
+  const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  const DR = {
+    kick: (w, d, v = 1) => { osc('sine', 160, w, 0.32, 0.9 * v, d, { slide: 42, slideT: 0.12 }); osc('triangle', 90, w, 0.08, 0.3 * v, d); },
+    snare: (w, d, v = 1) => { hiss(w, 0.16, 1900, 0.8, 0.45 * v, d); osc('triangle', 190, w, 0.1, 0.25 * v, d, { slide: 140 }); },
+    clap: (w, d, v = 1) => { for (let i = 0; i < 3; i++) hiss(w + i * 0.012, 0.09, 1400, 1.4, 0.35 * v, d); },
+    hat: (w, d, v = 1) => hiss(w, 0.035, 8000, 1, 0.16 * v, d, 'highpass'),
+    ohat: (w, d, v = 1) => hiss(w, 0.18, 7000, 1, 0.13 * v, d, 'highpass'),
+    rim: (w, d, v = 1) => { osc('square', 1700, w, 0.03, 0.12 * v, d, { lp: 3000 }); },
+    block: (w, d, v = 1, hi) => { osc('sine', hi ? 1250 : 880, w, 0.06, 0.5 * v, d); hiss(w, 0.02, 2500, 3, 0.2 * v, d); },
+  };
+  // the habitants' noisy objects (light cues): Lola's saucepans, Mimi's accordion, Bruno's drill, Glouglou's glasses, Hector's tuba, Souricette's castanets
+  const CUE = {
+    pan: (w, d, k) => { const f = 700 + k * 90; osc('sine', f, w, 0.25, 0.22, d); osc('sine', f * 1.47, w, 0.18, 0.12, d); hiss(w, 0.05, 3000, 2, 0.12, d); },
+    accordion: (w, d, k) => { const m = 60 + [0, 2, 4, 5, 7, 9, 11][k % 7]; for (const x of [0, 4, 7]) osc('sawtooth', hz(m + x), w, 0.22, 0.05, d, { lp: 1800, a: 0.02 }); },
+    glass: (w, d, k) => { const f = 1568 * Math.pow(2, [0, 2, 4, 7][k % 4] / 12); osc('sine', f, w, 0.45, 0.16, d); osc('sine', f * 2.76, w, 0.2, 0.05, d); },
+    drill: (w, d, k) => { osc('square', 110 + k * 25, w, 0.14, 0.09, d, { lp: 1400, slide: 160 + k * 25 }); hiss(w, 0.12, 2400, 4, 0.08, d); },
+    tuba: (w, d, k) => { const m = 41 + [0, 2, 4, 5, 7, 9][k % 6]; osc('sawtooth', hz(m), w, 0.22, 0.14, d, { lp: 500, a: 0.03 }); osc('sine', hz(m), w, 0.22, 0.2, d, { a: 0.03 }); },
+    castanets: (w, d, k) => { hiss(w, 0.03, 3200 + k * 300, 3, 0.35, d); osc('square', 1900 + k * 100, w, 0.02, 0.05, d, { lp: 4000 }); },
+  };
+
+  // ---- the composer: a seeded generator writes the band's parts for each song ----
+  const SCALE = { maj: [0, 2, 4, 5, 7, 9, 11], min: [0, 2, 3, 5, 7, 8, 10], dor: [0, 2, 3, 5, 7, 9, 10], mix: [0, 2, 4, 5, 7, 9, 10] };
+  const DRUMS = {   // 16 steps per bar: k kick, s snare, c clap, h hat, o open hat, r rim
+    pop: { k: 'x.......x.x.....', s: '....x.......x...', h: 'x.x.x.x.x.x.x.x.' },
+    waltz: { k: 'x.......x.......', r: '....x.......x...', h: '..x...x...x...x.' },
+    swing: { k: 'x.......x.......', s: '....x.......x...', h: 'x..xx..xx..xx..x' },
+    funk: { k: 'x..x..x...x.....', s: '....x..x.x..x..x', h: 'xxxxxxxxxxxxxxxx' },
+    disco: { k: 'x...x...x...x...', s: '....x.......x...', o: '..x...x...x...x.' },
+    march: { k: 'x.......x.......', s: '....x..x....x.xx', h: 'x...x...x...x...' },
+    electro: { k: 'x.....x...x.....', c: '....x.......x...', h: 'xxxxxxxxxxxxxxxx' },
+    house: { k: 'x...x...x...x...', c: '....x.......x...', o: '..x...x...x...x.' },
+  };
+  function rng(seed) { let a = seed >>> 0 || 1; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  // a 2-bar motif: [step, scale degree offset, length in steps]; three variants make the A A' B A'' form over 8 bars
+  function compose(mus) {
+    const r = rng(mus.seed), rhythms = ['x.x.x...x.x.x.x.', 'x..x..x.x...x...', 'x.xx.x..x.x.x...', 'x...x.x.x..x.x..', '..x.x.x...x.xx..', 'x.x...x.x.x...x.'];
+    const motif = () => { const out = []; for (let bar = 0; bar < 2; bar++) { const rh = rhythms[Math.floor(r() * rhythms.length)]; let deg = Math.floor(r() * 3) * 2;
+      for (let s = 0; s < 16; s++) if (rh[s] === 'x' && !(bar === 1 && s > 11)) { const strong = s % 4 === 0; deg += strong ? (r() < 0.5 ? 0 : (r() < 0.5 ? 2 : -2)) : (r() < 0.5 ? 1 : -1); deg = Math.max(-2, Math.min(9, deg)); let len = 2; while (s + len < 16 && rh[s + len] !== 'x' && len < 4) len++; out.push([bar * 16 + s, deg, len, strong]); } }
+      out.push([28, 0, 4, true]); return out; };
+    const A = motif(), B = motif(), A2 = A.map(([s, d, l, st], i) => [s, i > A.length - 4 ? d + 2 : d, l, st]);
+    return { phrases: [A, A2, B, A], r };
+  }
+  const MUS = { song: null, S0: 0, step: 0, parts: null, bars: [] };
+  function start(song, tab, S0, fromBeat = 0) {
+    CLK.live = true; MUS.song = song; MUS.tab = tab; MUS.S0 = S0; MUS.step = Math.max(0, Math.floor(fromBeat * 4)); MUS.parts = compose(song.mus);
+    MUS.bars = []; for (const [name, reps] of song.sections) { const len = window.PPR.PH[name].len; for (let i = 0; i < reps * len / 4; i++) MUS.bars.push(name); }
+    // light cues: one per lit cell, rising along the window sill
+    MUS.cues = []; for (const p of tab.pats) p.cells.forEach((b, k) => MUS.cues.push([b, p.w, k])); MUS.cues.sort((a, b) => a[0] - b[0]); MUS.ci = 0;
+    while (MUS.ci < MUS.cues.length && MUS.cues[MUS.ci][0] < fromBeat) MUS.ci++;
+  }
+  const stop = () => { MUS.song = null; CLK.live = false; };
+  // schedules what falls before clock time `until` (called every frame; the times themselves come from the tempo map)
+  function tick(until) {
+    const song = MUS.song; if (!song || !AU.ctx) return; const R = window.PPR, mus = song.mus, sc = SCALE[mus.scale], d = AU.music, totalSteps = MUS.bars.length * 16;
+    while (MUS.step < totalSteps + 16) {
+      const s = MUS.step, beat = s / 4, t = MUS.S0 + R.timeOf(song, beat); if (t > until) break; MUS.step++;
+      const w = CLK.toCtx(t); if (w < AU.ctx.currentTime - 0.05) continue;
+      const bar = Math.floor(s / 16), st = s % 16, kind = MUS.bars[bar];
+      if (kind == null) { if (st === 0 && bar === MUS.bars.length) { DR.kick(w, d); DR.ohat(w, d); osc('triangle', hz(mus.root - 12), w, 1.6, 0.3, d); } continue; }   // final hit
+      const chordDeg = mus.prog[bar % mus.prog.length], cTone = k => mus.root + sc[(chordDeg + k) % 7] + 12 * Math.floor((chordDeg + k) / 7);
+      if (kind === 'count') { if (st % 4 === 0) DR.block(w, d, 0.9, st === 0); continue; }   // the count-in: wood block on every beat
+      const brk = kind === 'rest', pat = DRUMS[mus.drums], at = (str) => str && str[st] === 'x';
+      if (at(pat.k) && !(brk && st)) DR.kick(w, d, brk ? 0.7 : 1);
+      if (!brk) { if (at(pat.s)) DR.snare(w, d); if (at(pat.c)) DR.clap(w, d); if (at(pat.h)) DR.hat(w, d, st % 4 ? 0.7 : 1); if (at(pat.o)) DR.ohat(w, d); if (at(pat.r)) DR.rim(w, d); }
+      // bass
+      const root = cTone(0) - 24, fifth = cTone(4) - 24, bl = 60 / R.bpmAt(song, beat) / 4;
+      const bass = (m, len, v = 0.32) => osc(mus.drums === 'electro' || mus.drums === 'house' ? 'sawtooth' : 'triangle', hz(m), w, bl * len, v, d, { lp: 700, lpTo: 300 });
+      switch (mus.bass) {
+        case 'root': if (st === 0 || st === 8 || st === 11) bass(root, 3); break;
+        case 'oompah': if (st === 0) bass(root, 3); else if (st === 8) bass(fifth, 3); break;
+        case 'walk': if (st % 4 === 0) bass(mus.root - 24 + sc[(chordDeg + [0, 2, 4, 5][st / 4]) % 7], 3); break;
+        case 'octave': if (st % 2 === 0) bass(root + (st % 4 ? 12 : 0), 1.6, 0.28); break;
+        case 'pulse': bass(root + (st === 14 ? 12 : 0), 0.9, 0.2); break;
+        case 'offbeat': if (st % 4 === 2) bass(root + 12, 1.8, 0.3); else if (st === 0) bass(root, 2, 0.25); break;
+      }
+      // chords: a soft pad on the bar, stabs for the oompah and the house
+      if (st === 0 && !brk) for (const k of [0, 2, 4]) osc(mus.pad === 'piano' ? 'triangle' : mus.pad === 'synth' ? 'sawtooth' : 'square', hz(cTone(k)), w, bl * 15, mus.pad === 'synth' ? 0.035 : 0.03, d, { lp: mus.pad === 'synth' ? 1500 : 1100, a: 0.04 });
+      if (!brk && (mus.bass === 'oompah' || mus.drums === 'house') && st % 8 === 4) for (const k of [0, 2, 4]) osc('square', hz(cTone(k) + 12), w, bl * 1.5, 0.03, d, { lp: 2200 });
+      // melody: the 8-bar form A A' B A, in the song's lead voice (silent during the breaks)
+      if (!brk) { const ph = MUS.parts.phrases[Math.floor(bar / 2) % 4], rel = (bar % 2) * 16 + st;
+        for (const [ms, deg, len, strong] of ph) if (ms === rel) { const dd = chordDeg + deg, m = mus.root + 12 + sc[((dd % 7) + 7) % 7] + 12 * Math.floor(dd / 7);
+          const type = mus.lead === 'reed' ? 'sawtooth' : mus.lead === 'saw' ? 'sawtooth' : mus.lead; osc(type, hz(m), w, bl * len * 0.95, strong ? 0.11 : 0.085, d, { lp: type === 'sawtooth' ? 2400 : 3800, a: 0.01 }); } }
+    }
+    // the habitants' cues: one sound per lit cell (to the effects bus: it is part of the game, kept when the music is off)
+    while (MUS.ci < MUS.cues.length) { const [b, wnd, k] = MUS.cues[MUS.ci], t = MUS.S0 + R.timeOf(song, b); if (t > until) break; MUS.ci++; const w = CLK.toCtx(t); if (w < AU.ctx.currentTime - 0.05) continue; CUE[R.HAB[wnd].inst](w, AU.sfx, k); }
+  }
+  // calibration beeps (scheduled on the audio clock)
+  const beep = (t, hi) => { if (!AU.ctx) return; const w = CLK.toCtx(t); osc('sine', hi ? 1320 : 880, w, 0.12, 0.6, AU.sfx); };
+
+  // ---- effects (now) ----
+  const now = () => AU.ctx ? AU.ctx.currentTime : 0;
+  const rate = {}, ok = (k, ms) => { const n = performance.now(); if (n - (rate[k] || 0) < ms) return false; rate[k] = n; return true; };
+  const live = () => !!(AU.ctx && AU.soundOn);
+  const SFX = {
+    tchak() { if (!live()) return; const w = now(); hiss(w, 0.06, 2600, 1.2, 0.5, AU.sfx); osc('triangle', 520, w, 0.08, 0.3, AU.sfx, { slide: 300 }); },   // the letter lands in the bag
+    perfect() { if (!live()) return; const w = now(); hiss(w, 0.05, 3200, 1, 0.45, AU.sfx); osc('square', 1046, w, 0.09, 0.08, AU.sfx, { lp: 4000 }); osc('sine', 1568, w + 0.03, 0.12, 0.1, AU.sfx); },
+    good() { if (!live()) return; const w = now(); hiss(w, 0.05, 1800, 1, 0.35, AU.sfx); osc('triangle', 660, w, 0.08, 0.15, AU.sfx); },
+    miss() { if (!live() || !ok('miss', 60)) return; const w = now(); osc('triangle', 300, w, 0.22, 0.25, AU.sfx, { slide: 140 }); hiss(w, 0.1, 400, 1, 0.25, AU.sfx, 'lowpass'); },
+    tap() { if (!live() || !ok('tap', 40)) return; hiss(now(), 0.03, 1200, 1, 0.12, AU.sfx); },
+    stamp() { if (!live() || !ok('stamp', 80)) return; const w = now(); hiss(w, 0.12, 220, 0.7, 0.8, AU.sfx, 'lowpass'); osc('sine', 85, w, 0.22, 0.6, AU.sfx); },
+    click() { if (live()) osc('square', 1400, now(), 0.03, 0.05, AU.sfx); },
+    chime() { if (!live()) return; [784, 988, 1319].forEach((f, i) => osc('triangle', f, now() + i * 0.07, 0.4, 0.12, AU.sfx)); },
+    coins() { if (!live()) return; for (let i = 0; i < 5; i++) osc('sine', 1200 + i * 120, now() + i * 0.05, 0.1, 0.08, AU.sfx); },
+    fanfare() { if (!live()) return; [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => osc('triangle', f, now() + i * 0.11, i > 4 ? 0.7 : 0.25, 0.14, AU.sfx)); },
+    lose() { if (!live()) return; osc('triangle', 392, now(), 0.5, 0.15, AU.sfx, { slide: 150 }); osc('triangle', 196, now() + 0.2, 0.5, 0.1, AU.sfx, { slide: 90 }); },
+    firework() { if (!live() || !ok('fw', 90)) return; const w = now(); osc('sine', 300, w, 0.3, 0.12, AU.sfx, { slide: 1400 }); hiss(w + 0.3, 0.5, 2000, 0.5, 0.4, AU.sfx); for (let i = 0; i < 6; i++) hiss(w + 0.35 + i * 0.05, 0.04, 5000, 2, 0.15, AU.sfx); },
+    whoosh() { if (live() && ok('wh', 90)) hiss(now(), 0.2, 600, 1, 0.12, AU.sfx, 'bandpass', { to: 3000 }); },
+    glue() { if (!live()) return; const w = now(); hiss(w, 0.08, 900, 1, 0.3, AU.sfx); osc('sine', 660, w + 0.05, 0.2, 0.15, AU.sfx); },
+    levelup() { if (!live()) return; [659, 784, 988, 1319].forEach((f, i) => osc('square', f, now() + i * 0.08, 0.2, 0.06, AU.sfx, { lp: 3000 })); },
+    beepNow() { if (live()) osc('sine', 880, now(), 0.1, 0.4, AU.sfx); },
+  };
+  return { AU, CLK, init, running, setMusic, setSound, start, stop, tick, beep, SFX, MUS, CUE, now };
+})();
+</script>
+<script>// Pulse Post — Pip the pigeon postman catches the letters the habitants of a musical town send on the beat.
+// One finger: tap anywhere right on the beat. Each window of the façade is a habitant with a musical habit; the light that
+// walks over the cells of its window sill counts the beats up to the letter. Canvas for the street, DOM for the interface.
+// The rhythm (tables, judge) lives in rhythm.js, the band and the clock in audio.js, the numbers in econ.js.
+(() => {
+'use strict';
+const R = window.PPR, E = window.PPE, A = window.PPAUDIO, CLK = A.CLK, SFX = A.SFX, I = window.I18N, t = I.t, SPR = window.PP_SPR || {}, ART = window.PPART;
+const BETA_ON = !!(window.BETA && window.BETA.on);
+const TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a);
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+const $ = s => document.querySelector(s);
+function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
+const PAL = ART.P;
+// the façade: the painted one (540 × 810, windows at 35 % / 64 % across, 27 / 45 / 63 % down, 22 % × 13 %) or the drawn stand-in
+const PAINTED = !!SPR.facade;
+const LAY = PAINTED ? { w: 540, h: 810, ww: 0.22 * 540, wh: 0.13 * 810, win: [0.27, 0.45, 0.63].flatMap(y => [0.35, 0.64].map(x => [x * 540, y * 810])) } : ART.LAYOUT;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+// ---------- save ----------
+const KEY = 'pulsepost.save.v1';
+function fresh() {
+  return { v: 1, lang: I.detect(), sound: true, music: true, vib: true, consent: null, tut: 0, lat: null, timbres: 0, plumes: 0, xp: 0, plv: 1,
+    best: {}, album: {}, newAlbum: [], owned: {}, costume: -1, costumes: {}, tri: null, login: { last: '', streak: 0, pending: false },
+    plays: 0, lastAdAt: 0, said: {}, train: false, letters: 0, theme: '' };
+}
+let S;
+try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+S.login = Object.assign(fresh().login, S.login);
+I.set(S.lang); A.setMusic(S.music); A.setSound(S.sound);
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+const track = (ev, data) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
+const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
+// the latency the judge removes from a touch: the measured one, or the phone's own output latency until calibrated (0 for the robot)
+const latS = () => BETA_ON ? 0 : S.lat != null ? S.lat / 1000 : CLK.outLat();
+
+// ---------- ads & purchases (test overlays on the web, AdMob once the native plugin is in) ----------
+const AdMob = () => window.Capacitor?.Plugins?.AdMob;
+const AD_IDS = { rewarded: 'ca-app-pub-3940256099942544/1712485313', inter: 'ca-app-pub-3940256099942544/4411468910' };
+const Ads = {
+  async init() { const M = AdMob(); if (!M) return; try { await M.initialize({ initializeForTesting: true }); await M.requestTrackingAuthorization(); } catch (e) {} },
+  async rewarded(kind) { if (G.mode === 'song') return false; track('ad_rewarded', { kind }); const M = AdMob(); if (M) { try { await M.prepareRewardVideoAd({ adId: AD_IDS.rewarded, isTesting: true, npa: S.consent !== true }); await M.showRewardVideoAd(); return true; } catch (e) { return false; } } return testAd(); },
+  // between two songs only (never during one), from the 3rd song played, at most every 3 minutes, never with "No ads"
+  async interstitial() { if (G.mode === 'song' || S.owned.noads || S.plays < E.ads.interFromPlay) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); track('ad_interstitial'); const M = AdMob(); if (M) { try { await M.prepareInterstitial({ adId: AD_IDS.inter, isTesting: true, npa: S.consent !== true }); await M.showInterstitial(); } catch (e) {} return; } await testAd(); },
+};
+function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart"><img src="${src('pip_3')}" alt=""></div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 1000); }); }
+// Real purchases go through Apple (StoreKit 2) via the iOS shell's `store` message handler (ios/Shared/NativeStore.swift);
+// on the web there is no handler and a test box stands in (nothing is charged).
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.pulsepost.' + id;
+const iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
+const Store = {
+  prices: {},
+  price(it) { return this.prices[it.id] || it.price; },
+  async init() {
+    if (!IAP || this.ready) return; this.ready = true;
+    window.nativeStoreUpdate = pid => this.deliver(pid, true);
+    try { for (const p of await iap('products', { ids: E.store.map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {}
+    try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid, true); } catch (e) {}
+    if (modal.querySelector('[data-shop]')) shopModal();
+  },
+  deliver(pid, loud) { const it = E.store.find(x => PID(x.id) === pid); if (!it || (it.once && S.owned[it.id])) return; grant(it, loud); },
+  own(pids) { for (const pid of pids || []) { const it = E.store.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) grant(it, false); } },
+  async buy(it) {
+    track('iap_start', { id: it.id });
+    if (!IAP) { const okk = await confirmBox(t('testBuy') + `<br><b>${storeName(it)} — ${it.price}</b>`); if (okk) grant(it); return okk; }
+    try { const r = await iap('buy', { id: PID(it.id) }); if (r.ok) { track('iap_done', { id: it.id }); grant(it); return true; }
+      if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); }
+    return false;
+  },
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return; } } toast(t('restored')); if (modal.querySelector('[data-shop]')) shopModal(); },
+};
+const SKEY = { noads: 's_noads', starter: 's_starter', album_nuit_electro: 's_album', plumes: 's_plumes', pass_hiver_2026: 's_pass' };
+const storeName = it => t(SKEY[it.id]), storeSub = it => t(SKEY[it.id] + 'Sub');
+const storeIcon = it => src({ noads: 'ui_shop', starter: 'costume_0', album_nuit_electro: 'note', plumes: 'ico_plume', pass_hiver_2026: 'costume_2' }[it.id]);
+function grant(it, loud = true) {
+  if (it.id === 'plumes') S.plumes += it.n;
+  else { S.owned[it.id] = true;
+    if (it.id === 'starter') { S.costumes[0] = 1; S.timbres += E.starterTimbres; }
+    if (it.id === 'pass_hiver_2026') { S.costumes[2] = 1; S.theme = 'winter'; } }
+  save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } renderHomeHead(); if (G.mode === 'home') renderHome();
+}
+
+// ---------- images: painted sprites (src/sprites, window.PP_SPR) when present, drawn stand-ins (art.js) otherwise ----------
+const IMG = {};
+for (const k in SPR) { const im = new Image(); im.onload = () => { IMG[k] = im; }; im.src = SPR[k]; }
+// a few extras of the painted set stand in for icons that have no picture of their own
+const ALIAS = { ico_timbre: 'stamp_blank', ui_tri: 'mailbox' }, al = k => ALIAS[k] && SPR[ALIAS[k]] && !SPR[k] ? ALIAS[k] : k;
+const img = k => IMG[al(k)] || ART.get(k);
+const src = k => SPR[al(k)] || ART.url(k);
+const pipIcon = () => S.costume >= 0 ? 'costume_' + S.costume : 'pip_0';
+const UIIMG = (k, alt) => `<img class="ui" src="${src(k)}" alt="${alt || ''}">`;
+{ const st = document.createElement('style'); st.textContent = `i.ti{background-image:url(${src('ico_timbre')})}i.pl{background-image:url(${src('ico_plume')})}`; document.head.appendChild(st); }
+
+// ---------- the street on screen ----------
+const cv = $('#cv'), cx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1, FA = { x: 0, y: 0, w: 300, h: 360, k: 0.5 }, PIP = { x: 0, y: 0, s: 100 }, SKY = { y: 60, h: 60 };
+function resize() {
+  DPR = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  const top = ($('#hud').classList.contains('on') ? $('#hud').getBoundingClientRect().bottom : 56) + 4;
+  SKY = { y: top, h: Math.max(40, Math.min(70, H * 0.075)) };
+  const minPip = clamp(H * 0.15, 90, 140), avail = H - (SKY.y + SKY.h * 0.6) - minPip - 24;
+  const fw = Math.min(W - 12, avail * LAY.w / LAY.h, 560), fh = fw * LAY.h / LAY.w;
+  FA = { x: (W - fw) / 2, y: SKY.y + SKY.h * 0.6, w: fw, h: fh, k: fw / LAY.w };
+  const room = H - (FA.y + fh) - 10, pipH = clamp(room * 0.72, minPip, 200);   // Pip fills the street under the façade
+  PIP = { x: W / 2, y: FA.y + fh + 8 + room * 0.42, s: pipH };
+}
+const winXY = i => [FA.x + LAY.win[i][0] * FA.k, FA.y + LAY.win[i][1] * FA.k];
+function spr(k, x, y, w, rot, alpha, sx = 1, sy = 1) { const im = img(k); if (!im) return; const h = w * im.height / im.width; cx.save(); cx.translate(x, y); if (rot) cx.rotate(rot); if (sx !== 1 || sy !== 1) cx.scale(sx, sy); if (alpha != null) cx.globalAlpha *= alpha; cx.drawImage(im, -w / 2, -h / 2, w, h); cx.restore(); }
+function cover(k) { const im = img(k); if (!im) return; const s = Math.max(W / im.width, H / im.height); cx.drawImage(im, (W - im.width * s) / 2, (H - im.height * s) / 2, im.width * s, im.height * s); }
+
+// ---------- state ----------
+const G = { mode: 'title', song: null, tab: null, S0: 0, res: [], errs: [], from: 0, combo: 0, best: 0, score: 0, bag: 1, train: false, tut: false,
+  paused: false, ended: false, failed: false, lights: 0, lastBeat: -99, fx: [], parts: [], floats: [], shake: 0, time: 0, pipT: 0, pipPose: 0, habBump: [0, 0, 0, 0, 0, 0],
+  downs: [], resumed: 0, firstHit: false, endAt: 0, fw: 0, cpUsed: false };
+const songT = () => CLK.now() - G.S0;                    // the song clock (seconds from beat 0)
+const visT = () => CLK.now() - CLK.outLat() - G.S0;      // what is heard now (the drawing follows the ear)
+const songs = hood => R.SONGS.filter(s => s.hood === hood);
+const unlocked = s => { if (s.pack) return !!S.owned.album_nuit_electro; const list = songs('market'), i = list.indexOf(s); return i <= 0 || !!(S.best[list[i - 1].id] && S.best[list[i - 1].id].stars > 0); };
+
+// ---------- a song ----------
+async function startSong(id, o = {}) {
+  closeModal(); A.init(); const song = R.song(id); if (!song) return showHome();
+  G.song = song; G.tab = R.table(song); G.res = new Array(G.tab.notes.length).fill(null); G.errs = []; G.from = 0; G.combo = 0; G.best = 0; G.score = 0; G.bag = 1;
+  G.tut = !!song.tut && !S.tut; G.train = !!(o.train ?? S.train) && !G.tut; G.paused = false; G.ended = false; G.failed = false; G.lights = 0; G.lastBeat = -99; G.fx = []; G.parts = []; G.floats = [];
+  G.firstHit = false; G.cpUsed = false; G.fw = 0; G.downs = []; G.saidCombo = 0;
+  G.mode = 'song'; $('#home').classList.remove('on'); $('#title').classList.remove('on'); buildHud(); $('#hud').classList.add('on'); resize();
+  S.plays++; save(); track('song_start', { id });
+  // Madame Tampon introduces the habitant (the tutorial waits a little longer before the count-in)
+  const intro = G.tut ? 'mt_hello' : song.boss ? 'mt_boss' : song.feat >= 0 ? 'mt_' + R.HAB[song.feat].key : null;
+  if (intro && (G.tut || !S.said[intro] || o.intro)) { say(intro, G.tut ? 0 : 1, G.tut ? 2400 : 3800, 'top'); S.said[intro] = 1; }
+  else if (G.train) say('mt_train', 0, 2600, 'top');
+  if (!G.tut) banner(`${t('s_' + song.id)}<small>${t(song.rule)}</small>`, 'c');
+  for (const p of G.tab.pats) p.seen = 0;
+  // the song begins on the clock, 1.4 s (2.6 s in the tutorial) from now
+  CLK.pick(); const lead = G.tut ? 2.6 : 1.4, from = o.from || 0;
+  if (from > 0) { if (!o.skip) { for (const n of G.tab.notes) if (n.beat < from) G.res[n.i] = 'P'; recount(); } G.from = G.tab.notes.findIndex(n => n.beat >= from); if (G.from < 0) G.from = G.tab.notes.length; }
+  G.S0 = CLK.now() + lead - R.timeOf(song, from);
+  A.start(song, G.tab, G.S0, from);
+  if (G.tut) setTimeout(() => { if (G.mode === 'song' && G.tut) say('mt_count', 1, 0, 'top'); }, 2300);
+}
+// back to an earlier beat (pause, rewarded resume): what follows is played again, with a count-in of one bar
+function resumeAt(beat) {
+  const song = G.song; for (const n of G.tab.notes) if (n.beat >= beat) G.res[n.i] = null; recount();
+  G.from = G.tab.notes.findIndex(n => n.beat >= beat); if (G.from < 0) G.from = G.tab.notes.length;
+  CLK.pick(); const lead = 4 * 60 / R.bpmAt(song, beat), t0 = CLK.now() + 0.6; G.S0 = t0 + lead - R.timeOf(song, beat);
+  for (let i = 0; i < 4; i++) A.beep(t0 + i * lead / 4, i === 0);
+  A.start(song, G.tab, G.S0, beat); G.paused = false; G.failed = false; G.ended = false; G.lastBeat = -99; G.lights = 0;
+}
+function recount() {
+  let combo = 0, best = 0, score = 0;
+  for (const n of G.tab.notes) { const r = G.res[n.i]; if (!r) continue; combo = r === 'M' ? 0 : combo + 1; best = Math.max(best, combo); score += R.points(r, combo); }
+  G.combo = combo; G.best = best; G.score = score;
+}
+// a finger comes down: date it on the song clock, find its letter, judge it
+function onDown(e) {
+  if (G.mode === 'calib') return calibTap(e);
+  if (G.mode !== 'song' || G.paused || G.ended || G.failed) return;
+  const tc = CLK.ofEvent(e); G.downs.push(tc); if (G.downs.length > 64) G.downs.shift();
+  const tj = tc - G.S0 - latS(), n = R.pick(G.tab.notes, G.res, tj, G.from);
+  if (!n) { SFX.tap(); G.pipT = 0.12; G.pipPose = 1; return; }
+  judge(n, R.grade(tj - n.t), tj - n.t);
+}
+function judge(n, r, err) {
+  G.res[n.i] = r; if (err != null) G.errs.push(err); while (G.from < G.res.length && G.res[G.from]) G.from++;
+  const prev = G.combo; recount();
+  const [wx, wy] = winXY(n.w);
+  if (r === 'M') {
+    G.bag = Math.max(0, G.bag - (G.tut || G.train ? 0 : E.bag.miss)); SFX.miss(); buzz(40); G.shake = 0.5; G.pipPose = 2; G.pipT = 0.45;
+    stamp('stamp_oops', PIP.x + rnd(-30, 30), PIP.y - PIP.s * 0.9, 0.55, t('oops'), PAL.blue);
+    if (prev >= 10 || (G.tut && !G.firstHit)) say(G.tut ? 'mt_timing' : 'mt_oops', 2, 2200, 'top');
+    if (!G.tut && !G.train && G.bag <= 0) fail();
+  } else {
+    G.bag = Math.min(1, G.bag + (r === 'P' ? E.bag.perfect : E.bag.good)); S.letters++;
+    r === 'P' ? SFX.perfect() : SFX.good(); SFX.tchak(); buzz(r === 'P' ? 18 : 10); G.pipPose = 1; G.pipT = 0.2; G.habBump[n.w] = 1;
+    burst(PIP.x + PIP.s * 0.25, PIP.y - PIP.s * 0.1, r === 'P' ? 8 : 4, [PAL.yellow, PAL.cream, PAL.red]);
+    const big = !G.firstHit || (G.combo > 0 && G.combo % 10 === 0);
+    if (big) { stamp('stamp_perfect', W / 2, FA.y + FA.h * 0.45, 1.25, r === 'P' ? t('perfect') : t('good'), PAL.red); SFX.stamp(); }
+    else floatText(PIP.x + rnd(-40, 40), PIP.y - PIP.s * 0.85, r === 'P' ? t('perfect') : t('good'), r === 'P' ? PAL.yellow : PAL.cream, r === 'P' ? 22 : 18);
+    if (!G.firstHit) { G.firstHit = true; if (G.tut) say('mt_first', 3, 2600, 'top'); track('first_catch', { t: +(performance.now() / 1000).toFixed(1) }); }
+    if (G.combo >= 20 && G.saidCombo < 1) { G.saidCombo = 1; say('mt_combo', 0, 2200, 'top'); }
+    if (G.combo === 50) unlockStamp('ms_combo50');
+  }
+  if (S.letters >= 300) unlockStamp('ms_300');
+}
+function fail() {
+  G.failed = true; A.stop(); SFX.lose(); G.pipPose = 2; G.pipT = 9; track('song_fail', { id: G.song.id });
+  const cp = G.tab.checkpoints.filter(b => b <= R.beatOf(G.song, songT())).pop() || 0;
+  setTimeout(() => {
+    if (G.mode !== 'song') return; say('mt_fail', 2, 3000, 'top');
+    openModal(`<div class="big-ico s"><img src="${src('stamp_oops')}" alt=""></div><h2>${t('lost')}</h2>
+      ${!G.cpUsed && cp > 0 ? `<button class="b1 bad adbtn" data-cp>▶ ${t('resumeAd')}</button>` : ''}<button class="b1 big" data-retry>${t('retry')}</button><button class="b2" data-home>${t('quit')}</button>`);
+    const b = modal.querySelector('[data-cp]'); if (b) b.onclick = async () => { closeModal(); G.mode = 'menu'; const ok = await Ads.rewarded('resume'); G.mode = 'song'; if (ok) { G.cpUsed = true; G.bag = 0.6; resumeAt(cp); } else fail(); };
+    modal.querySelector('[data-retry]').onclick = () => startSong(G.song.id);
+    modal.querySelector('[data-home]').onclick = () => { closeModal(); showHome(); };
+  }, 900);
+}
+function pause() {
+  if (G.mode !== 'song' || G.paused || G.ended || G.failed || BETA_ON) return;
+  const beat = R.beatOf(G.song, songT()); G.paused = true; A.stop(); SFX.click();
+  const rb = Math.max(0, Math.floor(beat / 4) * 4 - 4);
+  openModal(`<h2>${t('pause')}</h2><button class="b1 big" data-c>${t('resume')}</button><button class="b2" data-r>${t('restart')}</button><button class="b2" data-q>${t('quit')}</button>`);
+  modal.querySelector('[data-c]').onclick = () => { closeModal(); resumeAt(rb); };
+  modal.querySelector('[data-r]').onclick = () => startSong(G.song.id);
+  modal.querySelector('[data-q]').onclick = () => { closeModal(); A.stop(); showHome(); };
+}
+// per frame while a song runs: the letters nobody caught, the strong beats, the district lights, the end
+function songFrame() {
+  if (G.paused || G.failed) return;
+  const st = songT(), tj = st - latS(), notes = G.tab.notes;
+  A.tick(G.S0 + st + 0.3);
+  for (let i = G.from; i < notes.length && notes[i].t < tj - R.WIN.good; i++) if (!G.res[i]) judge(notes[i], 'M', null);
+  const vb = R.beatOf(G.song, visT()), b = Math.floor(vb);
+  if (b !== G.lastBeat) { G.lastBeat = b;
+    const bar = Math.floor(b / 4), kind = A.MUS.bars[bar];
+    if (b >= 0 && b % 4 === 0 && kind && kind !== 'count') buzz(12);   // a light pulse on each downbeat
+    const target = Math.min(8, Math.floor(G.combo / 3)); if (G.lights < target) G.lights++; else if (G.lights > target) G.lights--;   // one house per beat
+    if (kind === 'count' && b >= 0) floatText(W / 2, FA.y + FA.h * 0.12, String(b % 4 + 1), PAL.cream, 54, 0.5);
+    if (G.tut) tutCount(vb);
+    if (G.tut && b === 40) say('mt_two', 1, 3000, 'top');
+  }
+  if (!G.ended && st > G.tab.dur + (G.song.boss ? 0.2 : 0.8)) endSong();
+}
+// the tutorial: Madame Tampon counts on her wing along Lola's light for the first letters
+function tutCount(vb) {
+  if (G.res.filter(Boolean).length > 6 || vb > 40) { if ($('#mt .pt .cnt')) mtHide(); return; }
+  const p = G.tab.pats.find(p => p.w === 0 && vb >= p.b0 - 0.01 && vb < p.b0 + p.dur - 0.5); if (!p) return;
+  const k = Math.floor(vb - p.b0 + 0.01), nums = p.cells.length + 1; if (k >= nums) return;
+  const s = Array.from({ length: nums }, (_, i) => i < k ? `${i + 1}` : i === k ? `<b class="cnt">${i + 1}${i === nums - 1 ? ' !' : '…'}</b>` : '·').join('  ');
+  showMt(1, s + (k === nums - 1 ? '<br>' + t('tapAnywhere') : ''), 'top');
+}
+function endSong() {
+  G.ended = true; const sc = R.score(G.res.map(r => r || 'M')), song = G.song, prev = S.best[song.id], first = !prev || !prev.stars;
+  track('song_end', { id: song.id, acc: +sc.acc.toFixed(3), letter: sc.letter });
+  if (song.boss) { G.fw = 3.5; SFX.fanfare(); }
+  if (G.tut) S.tut = 1;
+  let timbres = 0, xp = 0; const news = [];
+  if (G.train) xp = 5;
+  else { timbres = sc.stars ? E.timbres(sc.stars, first) : 4; xp = E.xp(sc.stars);
+    if (!prev || sc.stars > prev.stars || (sc.stars === prev.stars && G.score > prev.score)) S.best[song.id] = { stars: Math.max(sc.stars, prev ? prev.stars : 0), letter: better(sc.letter, prev && prev.letter), score: Math.max(G.score, prev ? prev.score : 0), acc: Math.max(sc.acc, prev ? prev.acc : 0) };
+    if (sc.stars > 0 && E.album.includes('st_' + song.id) && unlockStamp('st_' + song.id, true)) news.push('st_' + song.id);
+    if (sc.letter === 'S' && unlockStamp('ms_s', true)) news.push('ms_s'); }
+  S.timbres += timbres; save();
+  setTimeout(() => { A.stop(); results(sc, timbres, xp, news); }, song.boss ? 3600 : 900);
+}
+const better = (a, b) => { const o = ['C', 'B', 'A', 'S']; return !b || o.indexOf(a) > o.indexOf(b) ? a : b; };
+function results(sc, timbres, xp, news) {
+  if (G.mode !== 'song') return; G.mode = 'results'; const song = G.song, list = R.SONGS.filter(s => s.hood === song.hood), nx = list[list.indexOf(song) + 1];
+  const canNext = nx && unlocked(nx) && !G.train;
+  openModal(`<h2>${song.boss && sc.stars ? t('bossDone') : t('done')}</h2><div class="sub">${t('s_' + song.id)}</div>
+    <div class="stars">${[1, 2, 3].map(i => `<img src="${src('stamp_star')}" class="${sc.stars >= i ? 'on' : ''}" style="animation-delay:${0.3 + i * 0.35}s" alt="">`).join('')}</div>
+    <div class="grade ${sc.letter}" style="animation-delay:1.5s">${sc.letter}</div>
+    <div class="stat"><span>${t('perfect')}</span><b>${sc.P}</b></div><div class="stat"><span>${t('good')}</span><b>${sc.B}</b></div><div class="stat"><span>${t('miss')}</span><b>${sc.M}</b></div>
+    <div class="stat"><span>${t('accuracy')}</span><b>${Math.round(sc.acc * 100)} %</b></div><div class="stat"><span>${t('bestCombo')}</span><b>${sc.best}</b></div><div class="stat"><span>${t('score')}</span><b>${G.score}</b></div>
+    ${timbres ? `<div class="gain">+${timbres} <i class="ti"></i></div>` : ''}${news.length ? `<div class="sub" data-newstamp>📮 ${t('newStamp')}</div>` : ''}
+    ${timbres && !G.train ? `<button class="b1 bad adbtn" data-x2>▶ ${t('x2')} (+${timbres})</button>` : ''}
+    ${canNext ? `<button class="b1 big" data-next>${t('next')}</button>` : ''}<div class="row2"><button class="b2" data-again>${t('again')}</button><button class="b2" data-home>${t('home')}</button></div>`);
+  [1, 2, 3].forEach(i => { if (sc.stars >= i) setTimeout(() => { SFX.stamp(); buzz(20); }, 300 + i * 350); });
+  setTimeout(() => { if (sc.letter === 'S') { document.body.appendChild(div('goldwash', '')); setTimeout(() => document.querySelector('.goldwash')?.remove(), 1700); SFX.chime(); if (!S.said.mt_s) { say('mt_s', 3, 2600); S.said.mt_s = 1; } } else SFX.click(); }, 1500);
+  if (song.boss && sc.stars) setTimeout(() => say('mt_bosswin', 0, 3200), 2200);
+  addXp(xp); if (sc.stars >= 2) setTimeout(() => JUICE.confetti(60), 1300);
+  const x2 = modal.querySelector('[data-x2]'); if (x2) x2.onclick = async () => { if (await Ads.rewarded('x2')) { S.timbres += timbres; save(); x2.remove(); SFX.coins(); JUICE.confetti(40); } };
+  const go = async f => { closeModal(); G.mode = 'menu'; await Ads.interstitial(); f(); };
+  const nb = modal.querySelector('[data-next]'); if (nb) nb.onclick = () => go(() => startSong(nx.id));
+  modal.querySelector('[data-again]').onclick = () => go(() => startSong(song.id));
+  modal.querySelector('[data-home]').onclick = () => go(() => showHome(news.length ? 'album' : ''));
+}
+function addXp(n) {
+  S.xp += n; let up = 0; while (S.xp >= E.xpLevel(S.plv)) { S.xp -= E.xpLevel(S.plv); S.plv++; up++; S.timbres += E.levelGift(S.plv); }
+  if (up) setTimeout(() => { banner(t('levelUp', { n: S.plv }), 'c'); SFX.levelup(); }, 2000); save();
+}
+function unlockStamp(id, quiet) { if (S.album[id]) return false; S.album[id] = 1; S.newAlbum.push(id); save(); if (!quiet) { toast('📮 ' + t('newStamp') + ' · ' + t(id)); SFX.glue(); } return true; }
+
+// ---------- effects ----------
+function stamp(k, x, y, s, label, col) { G.fx.push({ type: 'stamp', k, x, y, s, label, col, t: 0, d: 0.9, rot: rnd(-0.25, 0.15) }); }
+function burst(x, y, n, cols, pow = 1) { for (let i = 0; i < n; i++) { const a = rnd(0, TAU), v = rnd(80, 260) * pow; G.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 120 * pow, t: 0, life: rnd(0.4, 0.9), col: cols[i % cols.length], r: rnd(3, 6), g: 500 }); } }
+function floatText(x, y, s, col, size = 22, d = 0.8) { G.floats.push({ x, y, s, col, t: 0, d, size }); }
+function firework() { const x = rnd(W * 0.15, W * 0.85), y = rnd(SKY.y, FA.y + FA.h * 0.4); G.fx.push({ type: 'fw', x, y, t: 0, d: 1.1, s: rnd(0.8, 1.3) }); burst(x, y, 26, [PAL.yellow, PAL.red, PAL.green, PAL.cream], 1.4); SFX.firework(); }
+
+// ---------- Madame Tampon ----------
+let mtTimer = 0;
+function showMt(mood, html, pos) { const el = $('#mt'); el.querySelector('.pf').src = src('tampon_' + mood); el.querySelector('.pt').innerHTML = html; el.className = 'on' + (pos ? ' ' + pos : ''); }
+function say(key, mood = 0, ms = 3200, pos) { clearTimeout(mtTimer); showMt(mood, t(key), pos || (G.mode === 'song' ? 'top' : '')); if (ms) mtTimer = setTimeout(mtHide, ms); }
+function mtHide() { $('#mt').classList.remove('on'); }
+
+// ---------- modals, toasts, banners ----------
+const modal = $('#modal');
+function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); }
+function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
+function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row2"><button class="b2" data-v="0">${t('cancel')}</button><button class="b1" data-v="1">${t('ok')}</button></div></div>`); el.onclick = e => { const v = e.target.closest('[data-v]'); if (v) { el.remove(); res(v.dataset.v === '1'); } }; document.body.appendChild(el); }); }
+const TQ = []; let tBusy = false;
+function toast(s) { if (TQ.length > 3) TQ.shift(); TQ.push(s); if (!tBusy) nextToast(); }
+function nextToast() { const s = TQ.shift(); if (s == null) { tBusy = false; return; } tBusy = true; const box = $('#toasts'); box.innerHTML = ''; const el = div('toast', s); box.appendChild(el); setTimeout(() => el.classList.add('out'), 1500); setTimeout(() => { el.remove(); nextToast(); }, 1800); }
+function banner(s, cls = '') { const el = div('banner ' + cls, s); document.body.appendChild(el); setTimeout(() => el.remove(), 1800); }
+
+// ---------- HUD ----------
+function buildHud() {
+  $('#hud').innerHTML = `<button class="rb" id="pausebtn" aria-label="${t('pause')}">❚❚</button><div id="sinfo"><b>${t('s_' + G.song.id)} · ${t(G.song.rule)}</b><div id="bag"><i></i></div></div>
+    <div class="chip" id="hcombo">×<b>1</b></div><div class="chip" id="hscore"><b>0</b></div>`;
+  $('#pausebtn').onclick = pause; G.hudKey = '';
+}
+function renderHud() {
+  if (G.mode !== 'song' && G.mode !== 'results') return; const key = G.combo + '|' + G.score + '|' + G.bag.toFixed(2); if (key === G.hudKey) return; G.hudKey = key;
+  $('#hcombo b').textContent = R.mult(G.combo) + (G.combo >= 5 ? ' · ' + G.combo : ''); $('#hcombo').classList.toggle('hot', G.combo >= 10); $('#hscore b').textContent = G.score;
+  const bag = $('#bag'); bag.style.visibility = G.tut || G.train ? 'hidden' : 'visible'; bag.querySelector('i').style.width = G.bag * 100 + '%'; bag.classList.toggle('low', G.bag < 0.3);
+}
+
+// ---------- the district (home) ----------
+function ensureLogin() { if (S.login.last === today()) return; const y = new Date(Date.now() - 864e5), ys = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); S.login.streak = S.login.last === ys ? (S.login.streak % 7) + 1 : 1; S.login.last = today(); S.login.pending = true; save(); }
+const triReady = () => !!(S.tri && Date.now() >= S.tri.end);
+const fmtTime = s => { s = Math.ceil(s); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return h ? `${h} h ${String(m).padStart(2, '0')}` : m ? `${m} min` : `${s} s`; };
+function buildHome() {
+  $('#hfoot').innerHTML = [['gift', 'ui_gift', 'gift'], ['album', 'ui_album', 'album'], ['tri', 'ui_tri', 'tri'], ['co', pipIcon(), 'costumes'], ['shop', 'ui_shop', 'shop'], ['set', 'ui_settings', 'settings']]
+    .map(([id, k, l]) => `<div><button class="rb" id="h_${id}">${UIIMG(k)}</button><small>${t(l)}</small></div>`).join('');
+  $('#h_gift').onclick = () => { SFX.click(); giftModal(); }; $('#h_album').onclick = () => { SFX.click(); albumModal(); };
+  $('#h_tri').onclick = () => { SFX.click(); triModal(); }; $('#h_co').onclick = () => { SFX.click(); costumesModal(); };
+  $('#h_shop').onclick = () => { SFX.click(); shopModal(); }; $('#h_set').onclick = () => { SFX.click(); settingsModal(); };
+  renderHome();
+}
+function renderHomeHead() {
+  if (!$('#home').classList.contains('on')) return;
+  $('#hhead').innerHTML = `<div class="mrow"><span id="plv">${t('level')} ${S.plv}</span><div id="xpbar"><i style="width:${clamp(S.xp / E.xpLevel(S.plv), 0, 1) * 100}%"></i></div></div>
+    <div class="mrow"><div class="chip" style="flex:1"><i class="ti"></i> <b id="mti">${S.timbres}</b></div><div class="chip" style="flex:1"><i class="pl"></i> <b>${S.plumes}</b></div></div>`;
+  $('#h_gift').classList.toggle('dot', !!S.login.pending); $('#h_tri').classList.toggle('dot', triReady() || !S.tri); $('#h_album').classList.toggle('dot', S.newAlbum.length > 0);
+}
+const nextSong = () => songs('market').find(s => unlocked(s) && !(S.best[s.id] && S.best[s.id].stars)) || songs('market')[0];
+function songCard(s, cur) {
+  const b = S.best[s.id], lock = !unlocked(s), hab = s.feat >= 0 ? 'res_' + s.feat : 'firework';
+  return `<button class="sc ${lock ? 'lock' : ''} ${cur ? 'cur' : ''} ${s.boss ? 'boss' : ''}" data-song="${s.id}"><img class="r" src="${src(hab)}" alt=""><span class="tx"><b>${s.boss ? '★ ' : ''}${t('s_' + s.id)}</b><small>${lock ? (s.pack ? '🔒 ' + t('packLock') : '🔒 ' + t('locked')) : t(s.rule) + ' · ' + s.tempo[0][1] + ' BPM'}</small></span>
+    <span class="st">${[1, 2, 3].map(i => `<img src="${src('stamp_star')}" class="${b && b.stars >= i ? '' : 'off'}" alt="">`).join('')}</span>${b && b.letter ? `<span class="gr ${b.letter}">${b.letter}</span>` : ''}</button>`;
+}
+function triHtml() {
+  if (!S.tri) return `<div class="hcard" data-tricard><img src="${src('ui_tri')}" alt=""><div class="tx"><b>${t('triTitle')}</b>${t('triIdle')}</div></div>`;
+  const left = Math.max(0, S.tri.end - Date.now()) / 1000, tot = E.tri[S.tri.i].min * 60, k = 1 - left / tot;
+  return `<div class="hcard"><img src="${src('ui_tri')}" alt=""><div class="tx"><b>${t('triTitle')}</b><div class="pbar"><i style="width:${k * 100}%"></i></div>${left > 0 ? t('triRun', { s: fmtTime(left) }) : t('triReady')}
+    ${left > 0 ? `<div class="row2" style="margin-top:4px"><button class="buy ad adbtn" data-tad>▶ ${t('finish')}</button><button class="buy pl" data-tpl>${t('finishP', { n: E.finishPlumes(left / 60) })} <i class="pl"></i></button></div>` : `<button class="b1 bad" data-tcol>${t('collect')}</button>`}</div></div>`;
+}
+function bindTri(root, again) {
+  const a = root.querySelector('[data-tad]'); if (a) a.onclick = async () => { if (await Ads.rewarded('tri')) { S.tri.end = Date.now(); save(); again(); } };
+  const b = root.querySelector('[data-tpl]'); if (b) b.onclick = () => { const n = E.finishPlumes(Math.max(0, S.tri.end - Date.now()) / 60000); if (S.plumes < n) { SFX.miss(); return toast(t('notEnough')); } S.plumes -= n; S.tri.end = Date.now(); SFX.coins(); save(); renderHomeHead(); again(); };
+  const c = root.querySelector('[data-tcol]'); if (c) c.onclick = () => { collectTri(); again(); };
+  const d = root.querySelector('[data-tricard]'); if (d) d.onclick = () => triModal();
+}
+function collectTri() { if (!triReady()) return; const T = E.tri[S.tri.i]; S.timbres += T.timbres; unlockStamp('tr_' + S.tri.i); toast(`+${T.timbres} ${t('timbres')}`); S.tri = null; SFX.fanfare(); JUICE.confetti(50); addXp(15); save(); renderHome(); }
+function renderHome() {
+  if (!$('#home').classList.contains('on')) return; renderHomeHead();
+  const cur = nextSong(), mk = songs('market'), nt = songs('night'), got = h => songs(h).reduce((a, s) => a + (S.best[s.id] ? S.best[s.id].stars : 0), 0);
+  $('#hmid').innerHTML = `<img class="logo" src="${src('logo')}" alt="Pulse Post"><button class="b1 big" data-play style="max-width:400px">${t('play')} · ${t('s_' + cur.id)}</button>
+    <label class="trainrow"><img src="${src('ui_train')}" alt=""><span>${t('training')}<small>${t('trainingSub')}</small></span><input type="checkbox" data-train ${S.train ? 'checked' : ''}></label>
+    ${triHtml()}
+    <div class="hood"><h4>${t('quarter')} 1 · ${t('hood_market')}<small><img src="${src('stamp_star')}" alt="">${got('market')}/${mk.length * 3}</small></h4>${mk.map(s => songCard(s, s === cur)).join('')}</div>
+    <div class="hood night"><h4>${t('hood_night')}<small><img src="${src('stamp_star')}" alt="">${got('night')}/${nt.length * 3}</small></h4>${nt.map(s => songCard(s, false)).join('')}</div>`;
+  $('#hmid [data-play]').onclick = () => { A.init(); startSong(cur.id); };
+  $('#hmid [data-train]').onchange = e => { S.train = e.target.checked; save(); SFX.click(); };
+  $('#hmid').querySelectorAll('[data-song]').forEach(b => b.onclick = () => { A.init(); const s = R.song(b.dataset.song); if (!unlocked(s)) { SFX.miss(); if (s.pack) shopModal(); else toast(t('locked')); return; } startSong(s.id); });
+  bindTri($('#hmid'), renderHome);
+}
+function showHome(open) {
+  G.mode = 'home'; G.song = null; A.stop(); $('#hud').classList.remove('on'); $('#title').classList.remove('on'); mtHide();
+  $('#home').style.backgroundImage = `linear-gradient(rgba(47,93,168,.55),rgba(47,93,168,.55)),url(${src('bg_street')})`; $('#home').classList.add('on');
+  ensureLogin(); buildHome(); save();
+  if (open === 'album') setTimeout(albumModal, 300);
+  else if (S.login.pending && S.tut) setTimeout(giftModal, 450);
+  else if (!S.tri && !S.said.mt_tri && S.tut) { say('mt_tri', 0, 3600); S.said.mt_tri = 1; save(); }
+}
+
+// ---------- meta screens ----------
+function giftModal() {
+  ensureLogin(); const k = S.login.streak, mul = S.owned.pass_hiver_2026 ? 2 : 1;
+  const row = E.login.map((g, i) => `<div class="lg ${i < k - (S.login.pending ? 1 : 0) ? 'got' : ''} ${i === k - 1 && S.login.pending ? 'now' : ''}"><small>${t('dayK')}${i + 1}</small><i class="ti"></i><b>${g * mul}</b>${i === 6 ? `<i class="pl"></i><b>${E.loginPlumes}</b>` : ''}</div>`).join('');
+  openModal(`<div class="big-ico s"><img src="${src('ui_gift')}" alt=""></div><h2>${t('login')}</h2><div class="login">${row}</div>${S.login.pending ? `<button class="b1 big" data-claim>${t('claim')}</button>` : `<p class="sub">${t('comeBack')}</p>`}<button class="b2" data-close>${t('close')}</button>`);
+  const b = modal.querySelector('[data-claim]'); if (b) b.onclick = () => { const v = E.login[k - 1] * mul; S.login.pending = false; S.timbres += v; if (k === 7) S.plumes += E.loginPlumes; SFX.coins(); JUICE.confetti(60); save(); renderHome(); giftModal(); if (!S.said.mt_gift) { say('mt_gift', 0, 3000); S.said.mt_gift = 1; } };
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+const stampIcon = id => id.startsWith('st_') ? (id === 'st_boss' ? 'firework' : 'res_' + (+id.slice(4) - 1)) : id.startsWith('tr_') ? 'ui_tri' : { ms_combo50: 'note', ms_s: 'stamp_star', ms_calib: 'stamp_perfect', ms_300: 'letter' }[id];
+function albumModal() {
+  const fresh = S.newAlbum.slice(); S.newAlbum = []; save(); renderHomeHead();
+  const n = E.album.filter(id => S.album[id]).length;
+  openModal(`<div class="big-ico s"><img src="${src('ui_album')}" alt=""></div><h2>${t('album')}</h2><p class="sub" style="text-align:center">${t('albumSub', { n, m: E.album.length })}</p>
+    <div class="alb">${E.album.map((id, i) => { const on = !!S.album[id], how = id.startsWith('st_') ? 'how_song' : id.startsWith('tr_') ? 'how_tri' : 'how_ms';
+      return `<div class="stp c${i % 4} ${on ? '' : 'off'} ${fresh.includes(id) ? 'new' : ''}" data-stp="${id}" style="animation-delay:${0.2 + fresh.indexOf(id) * 0.4}s;background-image:url(${src('stamp_blank')})" title="${t(how)}"><i class="bgc"></i><img src="${src(stampIcon(id))}" alt=""><span>${t(id)}</span></div>`; }).join('')}</div>
+    <button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  fresh.forEach((id, i) => setTimeout(() => { SFX.glue(); buzz(15); }, 200 + i * 400));
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function triModal() {
+  const rows = E.tri.map((T, i) => `<div class="it"><div class="ico"><img src="${src(S.album['tr_' + i] ? 'ui_tri' : 'parcel')}" alt=""></div><div class="tx"><b>${fmtTime(T.min * 60)}</b><small>+${T.timbres} ${t('timbres')}${S.album['tr_' + i] ? '' : ' · 📮 ' + t('tr_' + i)}</small></div>
+    <button class="buy ${S.tri ? 'off' : ''}" data-tri="${i}">${t('triStart')}</button></div>`).join('');
+  openModal(`<h2>${t('triTitle')}</h2>${triHtml()}<div style="height:6px"></div>${rows}<button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  bindTri(modal, triModal);
+  modal.querySelectorAll('[data-tri]').forEach(b => b.onclick = () => { if (S.tri) { SFX.miss(); return toast(t('busy')); } const i = +b.dataset.tri; S.tri = { i, end: Date.now() + E.tri[i].min * 60000 }; SFX.whoosh(); SFX.chime(); save(); renderHome(); triModal(); });
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+const COSFIT = [{ y: 0.15, w: 0.56 }, { y: 0.17, w: 0.5 }, { y: 0.47, w: 0.62 }, { y: 0.1, w: 0.46 }, { y: 0.28, w: 0.5 }, { y: 0.04, w: 0.4 }];   // stand-in accessories only
+const wearHtml = id => { const o = COSFIT[id]; if (id < 0) return `<span class="wear"><img class="pb" src="${src('pip_0')}" alt=""></span>`; if (SPR['costume_' + id]) return `<span class="wear"><img class="pb" src="${src('costume_' + id)}" alt=""></span>`; return `<span class="wear"><img class="pb" src="${src('pip_0')}" alt=""><img style="left:${50 - o.w * 50}%;width:${o.w * 100}%;top:${o.y * 100 - 12}%;height:${o.w * 90}%" src="${src('costume_' + id)}" alt=""></span>`; };
+function costumesModal() {
+  const how = c => c.how === 'starter' ? t('ch_starter') : c.how === 'pass' ? t('ch_pass') : c.plumes ? `${c.plumes} <i class="pl"></i>` : `${c.timbres} <i class="ti"></i>`;
+  openModal(`<h2>${t('costumes')}</h2><div class="cos"><button class="co ${S.costume < 0 ? 'on' : ''}" data-co="-1">${wearHtml(-1)}${t('co_n')}<small>${S.costume < 0 ? t('used') : t('use')}</small></button>${E.costumes.map(c => { const own = !!S.costumes[c.id]; return `<button class="co ${own ? '' : 'lock'} ${S.costume === c.id ? 'on' : ''}" data-co="${c.id}">${wearHtml(c.id)}${t('co_' + c.id)}<small>${own ? (S.costume === c.id ? t('used') : t('use')) : how(c)}</small></button>`; }).join('')}</div>
+    <div class="row2" style="justify-content:center;font-weight:900;margin-top:8px"><span><i class="pl"></i> ${S.plumes}</span><span><i class="ti"></i> ${S.timbres}</span></div><button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  modal.querySelectorAll('[data-co]').forEach(b => b.onclick = async () => { SFX.click(); if (+b.dataset.co < 0) { S.costume = -1; save(); SFX.chime(); buildHome(); return costumesModal(); } const c = E.costumes[+b.dataset.co];
+    if (S.costumes[c.id]) { S.costume = c.id; save(); SFX.chime(); buildHome(); return costumesModal(); }
+    if (!c.plumes && !c.timbres) return toast(b.querySelector('small').textContent);
+    const cur = c.plumes ? 'plumes' : 'timbres', price = c.plumes || c.timbres;
+    if (S[cur] < price) { SFX.miss(); return toast(t('notEnough')); }
+    if (!await confirmBox(`<span class="co" style="display:inline-flex;border:0">${wearHtml(c.id)}</span><br><b>${t('co_' + c.id)}</b> · ${price} <i class="${cur === 'plumes' ? 'pl' : 'ti'}"></i>`)) return;
+    S[cur] -= price; S.costumes[c.id] = 1; S.costume = c.id; SFX.fanfare(); JUICE.confetti(50); save(); buildHome(); costumesModal(); });
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function shopModal() {
+  openModal(`<h2 data-shop>${t('shop')}</h2><div class="note">${t('webNote')}</div>${E.store.map(it => `<div class="it"><div class="ico"><img src="${storeIcon(it)}" alt=""></div><div class="tx"><b>${storeName(it)}</b><small>${storeSub(it)}</small></div>${it.once && S.owned[it.id] ? `<span class="own">${t('owned')}</span>` : `<button class="buy price" data-buy="${it.id}">${Store.price(it)}</button>`}</div>`).join('')}
+    <button class="b2" data-restore>${t('restore')}</button><button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { SFX.click(); if (await Store.buy(E.store.find(x => x.id === b.dataset.buy))) shopModal(); });
+  modal.querySelector('[data-restore]').onclick = () => Store.restore();
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function settingsModal() {
+  const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
+  openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
+    <div class="sw"><span>${t('latency')} · ${S.lat == null ? t('latAuto') : t('latVal', { n: S.lat })}</span><button class="mini" data-lat>${t('latencyBtn')}</button></div>
+    <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
+    <button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Pulse Post ${window.PP_VERSION || ''}</div>`);
+  modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); A.setMusic(S.music); A.setSound(S.sound); });
+  modal.querySelector('[data-lat]').onclick = () => { closeModal(); calibrate(); };
+  modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); if (G.mode === 'home') buildHome(); settingsModal(); };
+  modal.querySelector('[data-restore]').onclick = () => Store.restore();
+  modal.querySelector('[data-consent]').onclick = () => consentModal(true);
+  modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.PP_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = () => settingsModal(); };
+  modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); S = fresh(); save(); location.reload(); } };
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); if (G.mode === 'home') renderHome(); };
+}
+function consentModal(fromSettings) {
+  openModal(`<div class="big-ico s"><img src="${src('tampon_0')}" alt=""></div><h2>${t('consentTitle')}</h2><p>${t('consentText')}</p><div class="row2"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>`);
+  modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); fromSettings ? settingsModal() : (closeModal(), afterConsent()); });
+}
+
+// ---------- latency: tap on 8 beeps, keep the average offset ----------
+const CAL = { n: 8, lead: 2, gap: 0.6 };
+function calibrate() {
+  A.init(); G.mode = 'calib'; const el = $('#calib'); el.classList.add('on');
+  el.innerHTML = `<img src="${src('tampon_0')}" style="width:90px" alt=""><p>${t('mt_calib')}</p><div class="ring">♪</div><div class="dots">${'<i></i>'.repeat(CAL.n)}</div><button class="b1 big" data-cs>${t('calStart')}</button><button class="b2" data-cc>${t('cancel')}</button>`;
+  el.querySelector('[data-cc]').onclick = e => { e.stopPropagation(); endCalib(); };
+  el.querySelector('[data-cs]').onclick = e => { e.stopPropagation(); A.init(); setTimeout(runCalib, 120); };
+}
+function runCalib() {
+  const el = $('#calib'); el.querySelector('[data-cs]').style.visibility = 'hidden'; el.querySelector('p').textContent = t('calText');
+  CLK.pick(); const t0 = CLK.now() + 0.8; CAL.beeps = []; CAL.taps = []; CAL.on = true;
+  for (let i = 0; i < CAL.lead + CAL.n; i++) { const tb = t0 + i * CAL.gap; A.beep(tb, i < CAL.lead); if (i >= CAL.lead) CAL.beeps.push(tb); }
+  CAL.t0 = t0; CAL.end = t0 + (CAL.lead + CAL.n) * CAL.gap + 0.3;
+}
+function calibTap(e) {
+  if (!CAL.on) return; const tc = CLK.ofEvent(e); let best = null;
+  for (const b of CAL.beeps) if (best == null || Math.abs(tc - b) < Math.abs(tc - best)) best = b;
+  if (best != null && Math.abs(tc - best) < 0.35) { CAL.taps.push(tc - best); const d = $('#calib .dots').children[CAL.taps.length - 1]; if (d) d.classList.add('on'); }
+}
+function calibFrame() {
+  if (!CAL.on) return; const now = CLK.now() - CLK.outLat(), ring = $('#calib .ring'); if (!ring) return;
+  const k = (now - CAL.t0) / CAL.gap, i = Math.floor(k), frac = k - i; ring.classList.toggle('flash', k >= 0 && frac < 0.18 && i < CAL.lead + CAL.n); if (k >= 0 && i < CAL.lead + CAL.n) ring.textContent = i < CAL.lead ? '·' : String(i - CAL.lead + 1);
+  if (CLK.now() > CAL.end) { CAL.on = false; finishCalib(); }
+}
+function finishCalib() {
+  const el = $('#calib'), d = CAL.taps.slice().sort((a, b) => a - b);
+  if (d.length < 5) { el.querySelector('p').textContent = t('calFew'); el.querySelector('[data-cs]').style.visibility = 'visible'; el.querySelector('[data-cs]').textContent = t('calAgain'); return; }
+  const core = d.slice(1, -1), ms = Math.round(clamp(core.reduce((a, b) => a + b, 0) / core.length, -0.1, 0.35) * 1000);
+  el.querySelector('p').textContent = t('calDone', { n: ms }); el.querySelector('.ring').textContent = ms;
+  const cs = el.querySelector('[data-cs]'); cs.style.visibility = 'visible'; cs.textContent = t('calKeep'); cs.onclick = e => { e.stopPropagation(); S.lat = ms; save(); unlockStamp('ms_calib'); SFX.chime(); endCalib(); };
+  el.querySelector('[data-cc]').textContent = t('calAgain'); el.querySelector('[data-cc]').onclick = e => { e.stopPropagation(); calibrate(); };
+}
+function endCalib() { CAL.on = false; $('#calib').classList.remove('on'); showHome(); settingsModal(); }
+
+// ---------- title ----------
+function titleScreen() {
+  G.mode = 'title'; const el = $('#title');
+  el.style.backgroundImage = `linear-gradient(rgba(47,93,168,.5),rgba(47,93,168,.5)),url(${src('bg_street')})`;
+  el.innerHTML = `<div class="logo"><img src="${src('logo')}" alt="Pulse Post"><p>${t('subtitle')}</p></div><img class="tbg" src="${src('title_bg')}" alt=""><button class="b1 big" data-play>${S.tut ? t('cont') : t('play')}</button>`;
+  el.classList.add('on');
+  el.querySelector('[data-play]').onclick = () => { A.init(); SFX.chime(); el.classList.remove('on'); S.consent == null ? consentModal(false) : afterConsent(); };
+}
+function afterConsent() { Ads.init(); Store.init(); if (!S.tut) startSong('m1'); else showHome(); }
+
+// ---------- drawing ----------
+const HOUSES = 8;
+function drawSky(vb, pulse) {
+  // the district behind: 8 little houses that light up one by one with the combo
+  const hw = W / HOUSES;
+  for (let i = 0; i < HOUSES; i++) {
+    const x = i * hw, h = SKY.h * (0.75 + ((i * 37) % 5) / 10), y = SKY.y + SKY.h - h, lit = i < G.lights, col = [PAL.red, PAL.cream, PAL.green, PAL.yellow][i % 4];
+    const sq = lit ? 1 + pulse * 0.06 : 1; cx.save(); cx.translate(x + hw / 2, SKY.y + SKY.h); cx.scale(1 / sq, sq); cx.translate(-(x + hw / 2), -(SKY.y + SKY.h));
+    cx.fillStyle = col; cx.strokeStyle = PAL.ink; cx.lineWidth = 3; cx.beginPath(); cx.rect(x + 3, y + h * 0.3, hw - 6, h * 0.7 + 2); cx.fill(); cx.stroke();
+    cx.beginPath(); cx.moveTo(x, y + h * 0.32); cx.lineTo(x + hw / 2, y); cx.lineTo(x + hw, y + h * 0.32); cx.closePath(); cx.fillStyle = PAL.blue; cx.fill(); cx.stroke();
+    for (const [dx, dy] of [[0.28, 0.5], [0.72, 0.5]]) { cx.fillStyle = lit ? PAL.yellow : PAL.ink; cx.globalAlpha = lit ? 1 : 0.55; cx.fillRect(x + hw * dx - hw * 0.1, y + h * dy, hw * 0.2, h * 0.2); cx.globalAlpha = 1; cx.strokeRect(x + hw * dx - hw * 0.1, y + h * dy, hw * 0.2, h * 0.2); }
+    if (lit) { cx.globalAlpha = 0.25 + pulse * 0.3; cx.fillStyle = PAL.yellow; cx.beginPath(); cx.arc(x + hw / 2, y + h * 0.6, hw * 0.55, 0, TAU); cx.fill(); cx.globalAlpha = 1; }
+    cx.restore();
+  }
+}
+// the window i at the visual beat vb: the active habit (lights, letters), the habitant dancing
+function activePat(i, vb) {
+  let best = null; for (const p of G.tab.pats) { if (p.w !== i) continue; const last = p.b0 + (p.cells.length ? Math.max(...p.hits.map(h => h.beat - p.b0)) : 0);
+    if (vb >= p.b0 - 1 && vb < p.b0 + Math.max(p.dur - 0.25, last - p.b0 + 0.6)) { if (!best || p.b0 > best.b0) best = p; } if (p.b0 > vb + 1) break; }
+  return best;
+}
+function drawWindows(vb, pulse) {
+  const k = FA.k, ww = LAY.ww * k, wh = LAY.wh * k;
+  for (let i = 0; i < 6; i++) {
+    const [x, y] = winXY(i), p = G.song ? activePat(i, vb) : null, on = !!p && vb >= p.b0 - 0.5, feat = G.song && (G.song.feat === i || G.song.boss || G.tab.pats.some(q => q.w === i));
+    if (!PAINTED) spr(on ? 'window_lit' : 'window_dark', x, y, ww * 1.05);
+    else if (!feat) { spr('window_dark', x, y + wh * 0.04, ww * 1.06); continue; }   // shutters closed: nobody plays at this window in this song
+    // the habitant, bust in its window, bouncing on its own lights
+    { const bump = G.habBump[i], own = p ? Math.max(0, 1 - Math.min(...p.cells.concat(p.hits.map(h => h.beat)).map(c => Math.abs(vb - c))) * 3) : 0, sq = 1 + 0.08 * Math.max(own, bump) + (on ? 0.03 * pulse : 0);
+      cx.save(); cx.beginPath(); cx.rect(x - ww * 0.46, y - wh * 0.44, ww * 0.92, wh * 0.88); cx.clip(); if (!on) cx.globalAlpha = feat ? (PAINTED ? 0.75 : 0.55) : 0.3;
+      const im = img('res_' + i), bw = wh * (PAINTED ? 1.0 : 0.95), bh = im ? bw * im.height / im.width : bw; cx.translate(x, y + wh * (PAINTED ? 0.52 : 0.46)); cx.scale(1 / sq, sq); cx.drawImage(im, -bw / 2, -bh, bw, bh); cx.restore();
+      if (PAINTED && !on) { cx.fillStyle = 'rgba(34,34,59,.28)'; cx.fillRect(x - ww * 0.46, y - wh * 0.44, ww * 0.92, wh * 0.88); } }
+    // the cells of the sill: one per light, then the letter(s)
+    if (p) {
+      const n = p.cells.length + p.hits.length, cw = Math.min(ww * 0.3, ww * 1.12 / n), cy = y + wh * 0.5 + (PAINTED ? cw * 0.42 : 10 * k + cw * 0.3), x0 = x - (n * cw) / 2;
+      for (let c = 0; c < n; c++) {
+        const isHit = c >= p.cells.length, b = isHit ? p.hits[c - p.cells.length].beat : p.cells[c], passed = vb >= b - 0.02, d = Math.abs(vb - b), flash = passed ? Math.max(0, 1 - (vb - b) * 2.5) : 0;
+        const nt = isHit ? p.hits[c - p.cells.length] : null, rr = nt ? G.res[nt.i] : null;
+        const cxp = x0 + c * cw + cw / 2, s = cw * 0.78 * (1 + flash * 0.25);
+        cx.fillStyle = isHit ? (rr === 'M' ? PAL.blue : rr ? PAL.green : passed ? PAL.red : PAL.cream) : passed ? PAL.yellow : PAL.cream;
+        if (!isHit && passed && flash > 0) { cx.globalAlpha = flash * 0.6; cx.fillStyle = PAL.yellow; cx.beginPath(); cx.arc(cxp, cy, s * 0.9, 0, TAU); cx.fill(); cx.globalAlpha = 1; cx.fillStyle = PAL.yellow; }
+        cx.strokeStyle = PAL.ink; cx.lineWidth = 3; cx.beginPath(); cx.roundRect ? cx.roundRect(cxp - s / 2, cy - s / 2, s, s, s * 0.25) : cx.rect(cxp - s / 2, cy - s / 2, s, s); cx.fill(); cx.stroke();
+        if (isHit) spr('letter', cxp, cy, s * 0.78, 0, rr ? 0.5 : 1);
+        if (!isHit && passed && d < 0.6) { cx.globalAlpha = flash; cx.fillStyle = PAL.cream; cx.beginPath(); cx.arc(cxp, cy, s * 0.2, 0, TAU); cx.fill(); cx.globalAlpha = 1; }
+        if (p.p === 'sy' && isHit) { cx.font = `900 ${Math.round(s * 0.42)}px ui-rounded, system-ui`; cx.textAlign = 'center'; cx.fillStyle = PAL.ink; cx.fillText('&', cxp, cy - s * 0.55); }
+      }
+    }
+  }
+}
+// letters in flight: each leaves its window one beat before its time and lands in Pip's bag exactly on it
+function drawLetters(vt) {
+  for (const n of G.tab.notes) {
+    const fl = Math.min(0.75, 60 / R.bpmAt(G.song, n.beat)), t0 = n.t - fl;
+    if (vt < t0) break; const r = G.res[n.i]; if (r && r !== 'M') continue;
+    let k = (vt - t0) / fl; if (r === 'M' && k > 1.8) continue; if (!r && k > 1.5) continue;
+    const [wx, wy] = winXY(n.w), tx = PIP.x + PIP.s * 0.22, ty = PIP.y - PIP.s * 0.05;
+    let x, y; if (k <= 1) { x = wx + (tx - wx) * k; y = wy + (ty - wy) * k - Math.sin(k * Math.PI) * FA.h * 0.18; } else { x = tx + (k - 1) * 60; y = ty + (k - 1) * (k - 1) * 400; }
+    spr('letter', x, y, PIP.s * 0.32 * (0.7 + 0.3 * Math.min(1, k)), Math.sin(k * 9 + n.i) * 0.4, r === 'M' ? Math.max(0, 1.8 - k) : 1);
+  }
+}
+const COSWEAR = COSFIT;
+function drawPip(pulse) {
+  const pose = G.pipT > 0 ? G.pipPose : (G.mode === 'song' && G.combo >= 20 && Math.floor(G.time * 2) % 2 ? 3 : 0);
+  // a painted costume is Pip already dressed: it replaces the poses, which become a hop (catch), a wobble (miss), a sway (dance)
+  const full = S.costume >= 0 && !!SPR['costume_' + S.costume], im = img(full ? 'costume_' + S.costume : 'pip_' + pose); if (!im) return;
+  const w = PIP.s * 0.95, h = w * im.height / im.width, sq = 1 + pulse * 0.07 + (G.pipT > 0 && pose === 1 ? 0.06 : 0);
+  cx.save(); cx.translate(PIP.x, PIP.y + h * 0.5); cx.scale(1 / sq, sq); if (pose === 2) cx.rotate(Math.sin(G.time * 18) * (full ? 0.12 : 0.06));
+  if (full && pose === 1) cx.translate(0, -h * 0.08 * Math.max(0, G.pipT) / 0.2); if (full && pose === 3) cx.rotate(Math.sin(G.time * 8) * 0.08);
+  cx.fillStyle = 'rgba(34,34,59,.3)'; cx.beginPath(); cx.ellipse(0, 0, w * 0.4, w * 0.08, 0, 0, TAU); cx.fill();
+  cx.drawImage(im, -w / 2, -h, w, h);
+  const ac = !full && S.costume >= 0 ? img('costume_' + S.costume) : null, o = COSWEAR[S.costume]; if (ac && o) { const aw = w * o.w, ah = aw * ac.height / ac.width; cx.drawImage(ac, -aw / 2, -h + h * o.y - ah / 2, aw, ah); }
+  cx.restore();
+}
+function drawFx(dt) {
+  for (const p of G.parts) { cx.globalAlpha = clamp(1 - p.t / p.life, 0, 1); cx.fillStyle = p.col; cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, TAU); cx.fill(); } cx.globalAlpha = 1;
+  for (const f of G.fx) { const k = f.t / f.d;
+    if (f.type === 'stamp') { const s = f.s * (k < 0.12 ? 2.4 - k / 0.12 * 1.4 : 1), a = k > 0.7 ? 1 - (k - 0.7) / 0.3 : 1, w = Math.min(W * 0.55, 200) * s;
+      cx.save(); cx.translate(f.x, f.y); cx.rotate(f.rot); cx.globalAlpha = a; const im = img(f.k); if (im) cx.drawImage(im, -w / 2, -w * im.height / im.width / 2, w, w * im.height / im.width);
+      if (f.label) { cx.font = `900 ${Math.round(w * 0.17)}px ui-rounded, system-ui`; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.lineWidth = w * 0.035; cx.strokeStyle = PAL.ink; cx.strokeText(f.label, 0, 0); cx.fillStyle = PAL.cream; cx.fillText(f.label, 0, 0); }
+      cx.restore(); }
+    else if (f.type === 'fw') spr('firework', f.x, f.y, 140 * f.s * (0.4 + k), k * 0.6, 1 - k); }
+  for (const f of G.floats) { const k = clamp(f.t / f.d, 0, 1); cx.globalAlpha = clamp(1.6 - k * 1.6, 0, 1); cx.font = `900 ${f.size}px ui-rounded, system-ui`; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.lineWidth = Math.max(4, f.size * 0.18); cx.strokeStyle = PAL.ink; cx.strokeText(f.s, f.x, f.y - k * 40); cx.fillStyle = f.col; cx.fillText(f.s, f.x, f.y - k * 40); cx.globalAlpha = 1; }
+}
+function draw() {
+  cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if (G.mode === 'title' || G.mode === 'home' || G.mode === 'calib') { cx.fillStyle = PAL.blue; cx.fillRect(0, 0, W, H); return; }
+  if (!G.song) { cx.fillStyle = PAL.blue; cx.fillRect(0, 0, W, H); return; }
+  const vt = G.paused || G.failed ? G.frozenT : visT(), vb = R.beatOf(G.song, vt), frac = vb - Math.floor(vb), pulse = vb > 0 ? Math.exp(-frac * 6) : 0;
+  const sh = G.shake > 0 ? G.shake * 8 : 0; cx.save(); if (sh) cx.translate(rnd(-sh, sh), rnd(-sh, sh));
+  { const bg = ART.get('bg_street'); cx.drawImage(bg, 0, 0, W, H); }   // the drawn street (the painted bg_street is the façade itself)
+  if (G.song.hood === 'night') { cx.fillStyle = 'rgba(34,34,59,.55)'; cx.fillRect(0, 0, W, H); }
+  drawSky(vb, pulse);
+  // the façade dances: squashed on the beat, stretched between
+  const sq = 1 + 0.022 * pulse; cx.save(); cx.translate(W / 2, FA.y + FA.h); cx.scale(1 + 0.012 * pulse, 1 / sq); cx.translate(-W / 2, -(FA.y + FA.h));
+  const fim = img('facade'); if (fim) cx.drawImage(fim, FA.x, FA.y, FA.w, FA.h);
+  drawWindows(vb, pulse); cx.restore();
+  drawPip(pulse); drawLetters(vt);
+  if (S.theme === 'winter') { cx.fillStyle = '#fff'; for (let i = 0; i < 40; i++) { const x = (i * 53.1 + Math.sin(G.time + i) * 20) % W, y = ((i * 97.7 + G.time * (30 + i % 5 * 10)) % H + H) % H; cx.globalAlpha = 0.8; cx.beginPath(); cx.arc(x, y, 1.5 + i % 3, 0, TAU); cx.fill(); } cx.globalAlpha = 1; }
+  drawFx(); cx.restore();
+}
+
+// ---------- the loop ----------
+let last = performance.now(), saveT = 0, homeT = 0;
+function frame(now) {
+  const dt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now; G.time += dt; CLK.sync();
+  if (G.mode === 'song' || G.mode === 'results') { if (G.mode === 'song') songFrame(); if (!G.paused && !G.failed) G.frozenT = visT(); renderHud(); }
+  if (G.mode === 'calib') calibFrame();
+  if (G.pipT > 0) G.pipT -= dt; for (let i = 0; i < 6; i++) G.habBump[i] = Math.max(0, G.habBump[i] - dt * 5);
+  for (const f of G.fx) f.t += dt; G.fx = G.fx.filter(f => f.t < f.d);
+  for (const p of G.parts) { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += p.g * dt; } G.parts = G.parts.filter(p => p.t < p.life); if (G.parts.length > 400) G.parts.splice(0, G.parts.length - 400);
+  for (const f of G.floats) f.t += dt; G.floats = G.floats.filter(f => f.t < f.d);
+  if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 2.4);
+  if (G.fw > 0) { const before = G.fw; G.fw -= dt; if (Math.floor(before * 3.2) !== Math.floor(G.fw * 3.2)) firework(); }
+  draw();
+  if ((saveT += dt) > 5) { saveT = 0; save(); }
+  if ((homeT += dt) > 1 && G.mode === 'home') { homeT = 0; if (S.tri && !modal.classList.contains('on')) renderHome(); else if (S.tri && modal.querySelector('.pbar')) { const m = modal.querySelector('[data-tri]') ? triModal : null; if (m) m(); } }
+  requestAnimationFrame(frame);
+}
+cv.addEventListener('pointerdown', onDown);
+$('#calib').addEventListener('pointerdown', onDown);
+document.addEventListener('visibilitychange', () => { if (document.hidden) { save(); pause(); } });
+addEventListener('pagehide', save);
+addEventListener('resize', resize);
+window.PP = { S: () => S, G, R, E, A, SFX, CLK, startSong, resumeAt, showHome, save, src, unlocked, unlockStamp, albumModal, latS,
+  noteClock: n => G.S0 + n.t + latS(), cal: () => CAL, tapPoint: () => [PIP.x, Math.min(H - 40, PIP.y + PIP.s * 0.2)], view: () => ({ W, H, FA, PIP, SKY }), winXY };
+resize(); titleScreen(); requestAnimationFrame(frame);
+})();
+</script>
+<script>// Pulse Post scenes for the BETA IA simulated player (shared core: beta.js, spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// The robot reads the song's beat table and taps with real gestures (A.tap) on the street, timed on the game clock:
+// a tap takes a little while to come down (the finger moves, then presses), so it starts each one ahead of its letter and
+// learns that delay from its own touches (the times the game stamped on them). Style `pro` aims at ±20 ms; `debutant`
+// is late or early by up to ~70 ms and sometimes misses on purpose. In BETA the clock is performance.now (virtual in capture).
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const H = window.PP, G = H.G, S = () => H.S(), R = H.R;
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}.adbtn{display:none!important}#h_shop{visibility:hidden!important}.price{visibility:hidden!important}'; document.head.appendChild(st); }
+  const visible = sel => { const e = typeof sel === 'string' ? document.querySelector(sel) : sel; return e && e.offsetParent ? e : null; };
+  const until = async (A, f, ms = 15000) => { const t0 = performance.now(); while (A.running() && !f() && performance.now() - t0 < ms) await A.wait(100); return f(); };
+  function propre(A) {
+    if (A.opts.ui === 'propre' && S().consent == null) S().consent = false;   // clean takes: no consent window on camera (refused = no personalised ads)
+    if (A.opts.ui === 'propre') S().owned.noads = true;                       // clean takes: no interstitials, no price on screen
+  }
+  async function clean(A) {   // close what a player would close: gift, pop-ups
+    for (let i = 0; i < 4; i++) { const b = visible('#modal [data-claim]') || visible('#modal [data-close]'); if (!b) return; await A.wait(A.jitter(400, 700)); await A.tapEl(b, 'fermer'); await A.wait(400); }
+  }
+  // ---- the rhythm hand ----
+  let D = 0.24;   // seconds between the call of A.tap and the finger touching the glass (learned)
+  async function playSong(A, o = {}) {
+    const [x, y] = H.tapPoint(), planned = new Set(), calls = []; let seen = G.downs.length;
+    await A.tap(x, y, 'doigt prêt');   // the finger settles on the street during the count-in (a tap in the void)
+    seen = G.downs.length;
+    const deb = A.opts.style === 'debutant', stopAt = o.stopAfter ? performance.now() + o.stopAfter : 0;
+    while (A.running() && G.mode === 'song' && !G.ended && !G.failed) {
+      if (stopAt && performance.now() > stopAt) break;
+      const now = H.CLK.now(), notes = G.tab.notes;
+      for (let i = G.from; i < notes.length; i++) {
+        const n = notes[i]; if (planned.has(i) || G.res[i]) continue; const tc = H.noteClock(n); if (tc - now > 0.8) break;
+        planned.add(i); if (deb && A.rnd() < 0.07) continue;                     // a beginner lets one go now and then
+        const aim = tc + (deb ? (A.rnd() - 0.5) * 0.14 : 0), ms = (aim - D - H.CLK.now()) * 1000; if (ms < -20) continue;
+        A.wait(Math.max(0, ms)).then(() => { if (!A.running() || G.mode !== 'song' || G.ended) return; calls.push(H.CLK.now()); A.tap(x, y, 'lettre ' + (i + 1)); });
+      }
+      while (G.downs.length > seen) { const d = G.downs[seen++], c = calls.shift(); if (c != null) { const dl = d - c; if (dl > 0.1 && dl < 0.5) D = D * 0.75 + dl * 0.25; } }
+      await A.wait(30);
+    }
+  }
+  async function afterSong(A, which = 'next') {   // the results card: let the stamps clack, then a button
+    await until(A, () => visible('#modal [data-again]'), 15000); if (!A.running()) return;
+    await A.wait(A.jitter(2600, 3400));
+    const b = (which === 'next' && visible('#modal [data-next]')) || (which === 'home' && visible('#modal [data-home]')) || visible('#modal [data-again]');
+    if (b) await A.tapEl(b, which); await A.wait(800);
+  }
+  // ---- moments worth cutting on ----
+  function watch(A) {
+    const cnt = r => G.res ? G.res.filter(x => r ? x === r : x && x !== 'M').length : 0;   // start from what is already on screen (a scene may open mid-song)
+    let hits = cnt(), P = cnt('P'), combo = G.combo, lights = G.lights, fw = false, grade = '', miss = cnt('M'), glued = 0;
+    const iv = setInterval(() => { if (!A.running()) return clearInterval(iv);
+      if (G.mode === 'song' && G.res) { const h = G.res.filter(r => r && r !== 'M').length, p = G.res.filter(r => r === 'P').length, m = G.res.filter(r => r === 'M').length;
+        if (h > 0 && !hits) A.mark('première lettre attrapée'); if (p > 0 && !P) A.mark('tampon PARFAIT'); hits = h; P = p;
+        if (m > miss && A.opts.style === 'debutant') A.mark('OUPS'); miss = m;
+        if (G.combo - combo <= 4) for (const c of [10, 20, 30, 50]) if (G.combo >= c && combo < c) A.mark('combo ×' + c); combo = G.combo;   // (a cut song starts with its combo: no mark)
+        if (G.lights >= 8 && lights < 8) A.mark('le quartier est illuminé'); lights = G.lights;
+        if (G.fw > 0 && !fw) { fw = true; A.mark('feu d’artifice final'); } }
+      const gr = document.querySelector('#modal .grade'); if (gr && gr.textContent !== grade) { grade = gr.textContent; A.mark('note ' + grade); } if (!gr) grade = '';
+      const g = document.querySelectorAll('#modal .stp.new').length; if (g > glued) A.mark('nouveau timbre collé dans l’album'); glued = g;
+    }, 100);
+  }
+  // ---- off camera: a district that has been played ----
+  function makeSave(kind) {
+    const s = S(), d = new Date(); s.tut = 1; s.lat = 0; s.train = false; s.consent = s.consent == null ? false : s.consent; s.login = { last: d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(), streak: 3, pending: false };
+    const upto = kind === 'avance' ? 7 : kind === 'milieu' ? 4 : 1, ids = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'boss']; s.best = {}; s.album = {};
+    for (let i = 0; i < upto; i++) { s.best[ids[i]] = { stars: i % 3 ? 3 : 2, letter: i % 3 ? 'S' : 'A', score: 20000, acc: 0.95 }; s.album['st_' + ids[i]] = 1; }
+    if (kind !== 'neuf') { s.album.tr_0 = 1; s.album.ms_calib = 1; }
+    s.timbres = kind === 'avance' ? 1800 : 340; s.plumes = 0; s.plv = kind === 'avance' ? 8 : kind === 'milieu' ? 4 : 2; s.xp = 40; s.newAlbum = [];
+    s.said = { mt_hello: 1, mt_lola: 1, mt_mimi: 1, mt_bruno: 1, mt_glouglou: 1, mt_hector: 1, mt_souricette: 1, mt_boss: 1, mt_tri: 1, mt_gift: 1, mt_s: 1 };
+    if (kind === 'avance') { s.costumes = { 1: 1, 3: 1, 5: 1 }; s.costume = 3; }
+    H.save();
+  }
+  BETA.game({
+    sfx: H.SFX,
+    logo: () => H.src('logo'),
+    endText: () => document.documentElement.lang === 'en' ? 'Play free' : 'Joue gratuitement',
+    progress: () => G.mode === 'song' ? [G.song && G.song.id, G.from, G.combo, G.ended] : [G.mode, document.querySelector('#modal') && document.querySelector('#modal').className],
+    async prepare(save, A) {
+      propre(A);
+      if (A.opts.scene === 'onboarding') { S().lat = 0; return; }   // onboarding starts from the title screen of a new game
+      makeSave(A.opts.scene === 'progression' ? 'neuf' : save === 'neuf' ? 'milieu' : save); propre(A);
+      if (A.opts.scene === 'boucle') { const T = R.table(R.song('m4')); H.startSong('m4', { from: T.checkpoints[1], skip: 1 }); }
+      else if (A.opts.scene === 'moment') { const T = R.table(R.song('boss')); H.startSong('boss', { from: T.beats - 12 }); }
+      else { H.showHome(); await A.wait(400); await clean(A); }
+      await A.wait(150); document.getElementById('mt').classList.remove('on');
+    },
+    scenes: {
+      // title -> Play -> Madame Tampon's tutorial: she counts "1, 2, 3", the first letter is caught, the PARFAIT stamp claps
+      async onboarding(A) { watch(A); await A.wait(800); await A.tapEl('#title [data-play]', 'jouer'); await A.wait(500);
+        if (visible('#modal [data-c]')) { await A.think(); await A.tapEl('#modal [data-c="0"]', 'consentement'); }
+        await until(A, () => G.mode === 'song', 5000); await playSong(A); },
+      // the core: Glouglou's double strokes on her glasses with the whole street dancing, the district lighting up house by house with the combo
+      async boucle(A) { watch(A); await playSong(A); await A.wait(1500); },
+      // time-lapse: a new player clears song after song (their last bars), the stamps clack, the album fills up
+      async progression(A) { watch(A);   // (no speed-up: a tap needs real time to be on the beat; the cut is in the songs)
+        for (let k = 0; k < 4 && A.running(); k++) {
+          const cur = document.querySelector('#hmid .sc.cur') || document.querySelector('#hmid [data-play]'); if (!cur) break;
+          const id = cur.dataset.song || 'm2', T = R.table(R.song(id));
+          await clean(A); const sel = cur.dataset.song ? `#hmid [data-song="${id}"]` : '#hmid [data-play]'; document.querySelector(sel).scrollIntoView({ block: 'center', behavior: 'smooth' }); await A.wait(700); await A.tapEl(sel, 'morceau ' + id);   // the list scrolls the card above the bottom bar await until(A, () => G.mode === 'song', 4000); if (G.mode !== 'song' || !G.song) { A.ev('note', { msg: 'le morceau ne démarre pas', mode: G.mode }); await A.wait(800); continue; }
+          const cut = T.beats - 16; H.resumeAt(cut); for (const n of T.notes) if (n.beat < cut) G.res[n.i] = 'P';   // time-lapse: only the last bars of each song are played
+          await playSong(A); await afterSong(A, 'home'); await until(A, () => visible('#modal .alb'), 4000);
+          await A.wait(2600); await clean(A); await A.wait(500);
+        } },
+      // the wow: the boss song's last bars, every habitant at its window, the last letter, the fireworks
+      async moment(A) { watch(A); await playSong(A); await A.wait(4000); },
+      // plays on until stopped (long tests): song after song
+      async idle(A) { watch(A);
+        while (A.running()) { if (G.mode !== 'song') { const s = R.SONGS.find(s => H.unlocked(s) && !(S().best[s.id] && S().best[s.id].stars === 3)) || R.SONGS[0]; H.startSong(s.id); await A.wait(500); continue; }
+          await playSong(A); if (G.failed) { await A.wait(1500); H.startSong(G.song.id); continue; } await afterSong(A, 'next'); } },
+    },
+  });
+})();
+</script>
+
+</body>
+</html>
