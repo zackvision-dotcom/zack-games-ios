@@ -1789,8 +1789,10 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       const sc = A.opts.scene;
       if (sc === 'boucle' || sc === 'idle') { simTo(r => r.night >= 3 && r.phase === 'day'); R().berries += 60; R().dayT = C.DAY; }
       if (sc === 'moment') {   // the last shadows of the 7th night (the Great Fog weakened, or gone): a few taps, then the victorious sunrise
-        simTo(r => r.phase === 'won' || r.phase === 'lost' || (r.night === 7 && r.phase === 'night' && r.si >= r.spawn.length && (r.e.some(e => e.boss && e.hp < e.max * 0.3) || r.e.length <= 4)));
+        // the boss is gone and a last pack of 3 to 8 weakened shadows is coming: defences and a few taps clear it on camera, every take
+        simTo(r => r.phase === 'won' || r.phase === 'lost' || (r.night === 7 && r.phase === 'night' && r.si >= r.spawn.length && !r.e.some(e => e.boss) && r.e.length <= 8));
         if (R().phase === 'lost') { R().phase = 'night'; R().lan.hp = R().lan.max; }
+        for (const e of R().e || []) { if (e.boss) e.hp = Math.min(e.hp, e.max * 0.1); else e.hp = Math.min(e.hp, e.max * 0.35); }
       }
       H.events(); R().ev.length = 0; G.dark = R().phase === 'night' ? 1 : 0; G.sun = 0;
       document.getElementById('pomme').classList.remove('on'); await A.wait(400);
