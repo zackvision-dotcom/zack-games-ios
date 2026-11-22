@@ -216,16 +216,6 @@ def previews_v2(suffix):
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
-    if os.environ.get('CLEAN_OLD'):
-        # remove the old-API app previews (all ended in ASSET_FAILED) and their empty sets
-        for g in sys.argv[1:]:
-            app = find_app(g); ver = edit_version(app['id'])
-            for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
-                for s in call('GET', f"/appStoreVersionLocalizations/{l['id']}/appPreviewSets?limit=50")['data']:
-                    for pv in call('GET', f"/appPreviewSets/{s['id']}/appPreviews?limit=50")['data']:
-                        call('DELETE', f"/appPreviews/{pv['id']}")
-                        print('CLEAN', g, l['attributes']['locale'], pv['attributes']['fileName'])
-        sys.exit(0)
     if os.environ.get('PREVIEWS2'):
         bad = []
         for g in sys.argv[1:]:
