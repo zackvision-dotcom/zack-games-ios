@@ -1,10 +1,6 @@
-CLEAN lanternhold fr-FR 1.mp4
-CLEAN lanternhold fr-FR 2.mp4
-CLEAN lanternhold en-US 1.mp4
-CLEAN lanternhold en-US 2.mp4
-CLEAN crumblecrew fr-FR 1.mp4
-CLEAN crumblecrew en-US 1.mp4
-CLEAN circuitcaper en-US 1.mp4
-CLEAN circuitcaper en-US 2.mp4
-CLEAN circuitcaper fr-FR 1.mp4
-CLEAN circuitcaper fr-FR 2.mp4
+CHECK lanternhold fr-FR desc=604 kw=91 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
+CHECK lanternhold en-US desc=560 kw=99 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
+CHECK circuitcaper en-US desc=669 kw=81 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
+CHECK circuitcaper fr-FR desc=696 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
+CHECK vanvoyage en-US desc=747 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17083373, 'fileName': '1.mp4', 'sourceFileChecksum': 'f306ae7cc8941f80924ac87c773811e7', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK vanvoyage fr-FR desc=810 kw=97 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17083373, 'fileName': '1.mp4', 'sourceFileChecksum': 'f306ae7cc8941f80924ac87c773811e7', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
