@@ -158,7 +158,8 @@ def check(suffix):
         sets = call('GET', f"/appStoreVersionLocalizations/{l['id']}/appScreenshotSets?include=appScreenshots&limit=50")
         prev = call('GET', f"/appStoreVersionLocalizations/{l['id']}/appPreviewSets?include=appPreviews&limit=50")
         st = [s['attributes'].get('assetDeliveryState', {}).get('state') for s in sets.get('included', [])]
-        pv = [s['attributes'].get('assetDeliveryState', {}).get('state') for s in prev.get('included', [])]
+        pv = [(s['attributes'].get('assetDeliveryState') or {}) for s in prev.get('included', [])]
+        pv = [d.get('state') + (' ' + json.dumps(d.get('errors')) if d.get('errors') else '') for d in pv]
         a = l['attributes']
         print(f"CHECK {suffix} {a['locale']} desc={len(a.get('description') or '')} kw={len(a.get('keywords') or '')} screens={st} previews={pv}")
 
