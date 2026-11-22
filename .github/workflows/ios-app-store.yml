@@ -99,6 +99,19 @@ jobs:
             ADS_TEST="$ADS_TEST"
           if [ "$ADS_TEST" = "0" ]; then echo "::warning::AdMob: REAL ad units in this build (release only, never test it with real ads)"; else echo "AdMob: Google TEST ad units"; fi
 
+      - name: Unsign the embedded frameworks (the export signs them)
+        if: ${{ !inputs.build_only }}
+        # The unsigned archive leaves the SPM frameworks (GoogleMobileAds, UserMessagingPlatform) with the linker's
+        # ad-hoc signature; re-signed over it at export they fail Apple's check (ITMS-90035 "not properly signed").
+        # Without any signature, the export signs them cleanly with the distribution certificate.
+        run: |
+          shopt -s nullglob
+          for f in "$ARCHIVE_PATH"/Products/Applications/*.app/Frameworks/*.framework; do
+            codesign --remove-signature "$f/$(basename "$f" .framework)"
+            rm -rf "$f/_CodeSignature"
+            echo "unsigned $(basename "$f")"
+          done
+
       - name: Export signed IPA
         if: ${{ !inputs.build_only }}
         run: |
