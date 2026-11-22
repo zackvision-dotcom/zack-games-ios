@@ -1,4 +1,1 @@
-BUILD vanvoyage v1002 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:58
-BUILD vanvoyage v53 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T01:01
-BUILD gullstreet v1003 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T03:02
-BUILD gullstreet v1002 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:57
+LOOTBOX coralstack True
