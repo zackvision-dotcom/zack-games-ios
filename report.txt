@@ -1,3 +1,143 @@
+== silkhop
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 545644)]
+    shot 01.jpg 532 KB
+    ops 1 [(0, 590887)]
+    shot 02.jpg 577 KB
+    ops 1 [(0, 566074)]
+    shot 03.jpg 552 KB
+    ops 1 [(0, 407781)]
+    shot 04.jpg 398 KB
+    ops 1 [(0, 580299)]
+    shot 05.jpg 566 KB
+  media fr-FR 5 screens, 1 previews
+    ops 1 [(0, 545644)]
+    shot 01.jpg 532 KB
+    ops 1 [(0, 590887)]
+    shot 02.jpg 577 KB
+    ops 1 [(0, 566074)]
+    shot 03.jpg 552 KB
+    ops 1 [(0, 407781)]
+    shot 04.jpg 398 KB
+    ops 1 [(0, 580299)]
+    shot 05.jpg 566 KB
+  media en-US 5 screens, 1 previews
+== previews silkhop
+  uploaded 1.mp4 6581 KB -> fe400019-7926-8d24-8127-deb3c22cfe2c
+  video fe400019-7926-8d24-8127-deb3c22cfe2c PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+== coralstack
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 898639)]
+    shot 01.jpg 877 KB
+    ops 1 [(0, 1135880)]
+    shot 02.jpg 1109 KB
+    ops 1 [(0, 906287)]
+    shot 03.jpg 885 KB
+    ops 1 [(0, 1160446)]
+    shot 04.jpg 1133 KB
+    ops 1 [(0, 1149829)]
+    shot 05.jpg 1122 KB
+  media fr-FR 5 screens, 2 previews
+    ops 1 [(0, 898639)]
+    shot 01.jpg 877 KB
+    ops 1 [(0, 1135880)]
+    shot 02.jpg 1109 KB
+    ops 1 [(0, 906287)]
+    shot 03.jpg 885 KB
+    ops 1 [(0, 1160446)]
+    shot 04.jpg 1133 KB
+    ops 1 [(0, 1149829)]
+    shot 05.jpg 1122 KB
+  media en-US 5 screens, 2 previews
+== previews coralstack
+  uploaded 1.mp4 16006 KB -> a4000019-788b-8eda-812d-0bc4a3d290d5
+  uploaded 2.mp4 8805 KB -> a1c00019-788b-8eda-8136-7c1f623a3b2d
+  video a4000019-788b-8eda-812d-0bc4a3d290d5 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video a1c00019-788b-8eda-8136-7c1f623a3b2d PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+== clockpawsquad
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 570267)]
+    shot 01.jpg 556 KB
+    ops 1 [(0, 514325)]
+    shot 02.jpg 502 KB
+    ops 1 [(0, 482296)]
+    shot 03.jpg 470 KB
+    ops 1 [(0, 528214)]
+    shot 04.jpg 515 KB
+    ops 1 [(0, 510263)]
+    shot 05.jpg 498 KB
+  media fr-FR 5 screens, 2 previews
+    ops 1 [(0, 570267)]
+    shot 01.jpg 556 KB
+    ops 1 [(0, 514325)]
+    shot 02.jpg 502 KB
+    ops 1 [(0, 482296)]
+    shot 03.jpg 470 KB
+    ops 1 [(0, 528214)]
+    shot 04.jpg 515 KB
+    ops 1 [(0, 510263)]
+    shot 05.jpg 498 KB
+  media en-US 5 screens, 2 previews
+== previews clockpawsquad
+  uploaded 1.mp4 18123 KB -> b4800019-7926-8d68-813f-4ff4fd91ce07
+  uploaded 2.mp4 7432 KB -> 06000019-7926-8d68-8120-b7b92b31f1fc
+  video b4800019-7926-8d68-813f-4ff4fd91ce07 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 06000019-7926-8d68-8120-b7b92b31f1fc PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+== pulsepost
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 567903)]
+    shot 01.jpg 554 KB
+    ops 1 [(0, 575805)]
+    shot 02.jpg 562 KB
+    ops 1 [(0, 623869)]
+    shot 03.jpg 609 KB
+    ops 1 [(0, 535261)]
+    shot 04.jpg 522 KB
+    ops 1 [(0, 587592)]
+    shot 05.jpg 573 KB
+  media fr-FR 5 screens, 2 previews
+    ops 1 [(0, 567903)]
+    shot 01.jpg 554 KB
+    ops 1 [(0, 575805)]
+    shot 02.jpg 562 KB
+    ops 1 [(0, 623869)]
+    shot 03.jpg 609 KB
+    ops 1 [(0, 535261)]
+    shot 04.jpg 522 KB
+    ops 1 [(0, 587592)]
+    shot 05.jpg 573 KB
+  media en-US 5 screens, 2 previews
+== previews pulsepost
+  uploaded 1.mp4 18194 KB -> 79c00019-7926-8d6b-8130-e9990974325c
+  uploaded 2.mp4 8488 KB -> 50c00019-7926-8d6b-812c-5fc76c1083f3
+  video 79c00019-7926-8d6b-8130-e9990974325c PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 50c00019-7926-8d6b-812c-5fc76c1083f3 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+  placement en-US ACTIVE
 == dungeondash
   version text fr-FR ok
   version text en-US ok
@@ -13,7 +153,7 @@
     shot 04.jpg 367 KB
     ops 1 [(0, 368600)]
     shot 05.jpg 359 KB
-  media fr-FR 5 screens, 1 previews
+  media fr-FR 5 screens, 2 previews
     ops 1 [(0, 381060)]
     shot 01.jpg 372 KB
     ops 1 [(0, 269834)]
@@ -24,12 +164,138 @@
     shot 04.jpg 367 KB
     ops 1 [(0, 368600)]
     shot 05.jpg 359 KB
-  media en-US 5 screens, 1 previews
+  media en-US 5 screens, 2 previews
 == previews dungeondash
-  uploaded 1.mp4 17180 KB -> 74400019-7926-8d4c-8135-8c54460ee51e
-  video 74400019-7926-8d4c-8135-8c54460ee51e PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  uploaded 1.mp4 17191 KB -> 68000019-7926-8d4c-8136-39df717313a7
+  uploaded 2.mp4 6612 KB -> bf400019-7926-8d4c-813f-8dedac64bb55
+  video 68000019-7926-8d4c-8136-39df717313a7 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video bf400019-7926-8d4c-813f-8dedac64bb55 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
   placement fr-FR ACTIVE
   placement en-US ACTIVE
-CHECK dungeondash fr-FR desc=616 kw=92 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17593140, 'fileName': '1.mp4', 'sourceFileChecksum': 'f19706ab1281f136a02c520d7ebc2be8', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK dungeondash en-US desc=554 kw=91 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17593140, 'fileName': '1.mp4', 'sourceFileChecksum': 'f19706ab1281f136a02c520d7ebc2be8', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+  placement en-US ACTIVE
+== vanvoyage
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 790570)]
+    shot 01.jpg 772 KB
+    ops 1 [(0, 630360)]
+    shot 02.jpg 615 KB
+    ops 1 [(0, 772719)]
+    shot 03.jpg 754 KB
+    ops 1 [(0, 626864)]
+    shot 04.jpg 612 KB
+    ops 1 [(0, 506451)]
+    shot 05.jpg 494 KB
+  media fr-FR 5 screens, 2 previews
+    ops 1 [(0, 790570)]
+    shot 01.jpg 772 KB
+    ops 1 [(0, 630360)]
+    shot 02.jpg 615 KB
+    ops 1 [(0, 772719)]
+    shot 03.jpg 754 KB
+    ops 1 [(0, 626864)]
+    shot 04.jpg 612 KB
+    ops 1 [(0, 506451)]
+    shot 05.jpg 494 KB
+  media en-US 5 screens, 2 previews
+== previews vanvoyage
+  uploaded 1.mp4 16711 KB -> be400019-78f0-812a-8123-c1fb1e340f99
+  uploaded 2.mp4 5778 KB -> 47000019-78f0-812a-8129-f309fac82964
+  video be400019-78f0-812a-8123-c1fb1e340f99 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 47000019-78f0-812a-8129-f309fac82964 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+== gullstreet
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 1070602)]
+    shot 01.jpg 1045 KB
+    ops 1 [(0, 1077781)]
+    shot 02.jpg 1052 KB
+    ops 1 [(0, 818245)]
+    shot 03.jpg 799 KB
+    ops 1 [(0, 1178374)]
+    shot 04.jpg 1150 KB
+    ops 1 [(0, 984890)]
+    shot 05.jpg 961 KB
+  media fr-FR 5 screens, 2 previews
+    ops 1 [(0, 1070602)]
+    shot 01.jpg 1045 KB
+    ops 1 [(0, 1077781)]
+    shot 02.jpg 1052 KB
+    ops 1 [(0, 818245)]
+    shot 03.jpg 799 KB
+    ops 1 [(0, 1178374)]
+    shot 04.jpg 1150 KB
+    ops 1 [(0, 984890)]
+    shot 05.jpg 961 KB
+  media en-US 5 screens, 2 previews
+== previews gullstreet
+  uploaded 1.mp4 15710 KB -> 1e000019-783f-810d-813b-4ec1f19a962c
+  uploaded 2.mp4 5995 KB -> 98c00019-783f-810d-8136-8cf4d7bc54c8
+  video 1e000019-783f-810d-813b-4ec1f19a962c PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 98c00019-783f-810d-8136-8cf4d7bc54c8 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+== crumblecrew
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 689890)]
+    shot 01.jpg 673 KB
+    ops 1 [(0, 701895)]
+    shot 02.jpg 685 KB
+    ops 1 [(0, 679414)]
+    shot 03.jpg 663 KB
+    ops 1 [(0, 682701)]
+    shot 04.jpg 666 KB
+    ops 1 [(0, 686791)]
+    shot 05.jpg 670 KB
+  media fr-FR 5 screens, 2 previews
+    ops 1 [(0, 689890)]
+    shot 01.jpg 673 KB
+    ops 1 [(0, 701895)]
+    shot 02.jpg 685 KB
+    ops 1 [(0, 679414)]
+    shot 03.jpg 663 KB
+    ops 1 [(0, 682701)]
+    shot 04.jpg 666 KB
+    ops 1 [(0, 686791)]
+    shot 05.jpg 670 KB
+  media en-US 5 screens, 2 previews
+== previews crumblecrew
+  uploaded 1.mp4 17462 KB -> b1800019-78da-8381-813a-72d7ae2c382e
+  uploaded 2.mp4 10487 KB -> 81800019-78da-8381-813b-8d7ff3f19f3d
+  video b1800019-78da-8381-813a-72d7ae2c382e PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 81800019-78da-8381-813b-8d7ff3f19f3d PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+CHECK silkhop fr-FR desc=564 kw=93 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 6739113, 'fileName': '1.mp4', 'sourceFileChecksum': '5c56af376686f62c53a541186570802d', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': 'https://apptrailers.itunes.apple.com/itunes-assets/PurpleVideo221/v4/d4/78/c2/d478c2bb-390c-286c-9159-8d0f5422d92f/P1560287768_default.m3u8', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/b0/43/b1/b043b1d5-00dd-5501-511c-5962dc37a84d/rvop_53c90782_d6034c4f26e04f429f2b423112a5d53a_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/b0/43/b1/b043b1d5-00dd-5501-511c-5962dc37a84d/rvop_53c90782_d6034c4f26e04f429f2b423112a5d53a_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}]
+CHECK silkhop en-US desc=538 kw=98 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 6739113, 'fileName': '1.mp4', 'sourceFileChecksum': '5c56af376686f62c53a541186570802d', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': 'https://apptrailers.itunes.apple.com/itunes-assets/PurpleVideo221/v4/d4/78/c2/d478c2bb-390c-286c-9159-8d0f5422d92f/P1560287768_default.m3u8', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/b0/43/b1/b043b1d5-00dd-5501-511c-5962dc37a84d/rvop_53c90782_d6034c4f26e04f429f2b423112a5d53a_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/b0/43/b1/b043b1d5-00dd-5501-511c-5962dc37a84d/rvop_53c90782_d6034c4f26e04f429f2b423112a5d53a_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}]
+CHECK coralstack en-US desc=791 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16391001, 'fileName': '1.mp4', 'sourceFileChecksum': '57547b77db66911bed2575c4a617398e', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/c1/08/bb/c108bbfd-19ae-1a56-c70c-0a604a0d209d/rvop_a65e5dac_a9b921eb947a425f9acb60c1f8338e99_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/c1/08/bb/c108bbfd-19ae-1a56-c70c-0a604a0d209d/rvop_a65e5dac_a9b921eb947a425f9acb60c1f8338e99_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 9016850, 'fileName': '2.mp4', 'sourceFileChecksum': '041a4b7b242270ca4964d620e906498f', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/cf/e6/36/cfe63683-29bf-8103-a799-73fa5e83225a/rvop_367d4e41_451c84066a834a8d9547af3b41e0e99c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/cf/e6/36/cfe63683-29bf-8103-a799-73fa5e83225a/rvop_367d4e41_451c84066a834a8d9547af3b41e0e99c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK coralstack fr-FR desc=866 kw=98 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16391001, 'fileName': '1.mp4', 'sourceFileChecksum': '57547b77db66911bed2575c4a617398e', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/c1/08/bb/c108bbfd-19ae-1a56-c70c-0a604a0d209d/rvop_a65e5dac_a9b921eb947a425f9acb60c1f8338e99_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/c1/08/bb/c108bbfd-19ae-1a56-c70c-0a604a0d209d/rvop_a65e5dac_a9b921eb947a425f9acb60c1f8338e99_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 9016850, 'fileName': '2.mp4', 'sourceFileChecksum': '041a4b7b242270ca4964d620e906498f', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/cf/e6/36/cfe63683-29bf-8103-a799-73fa5e83225a/rvop_367d4e41_451c84066a834a8d9547af3b41e0e99c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/cf/e6/36/cfe63683-29bf-8103-a799-73fa5e83225a/rvop_367d4e41_451c84066a834a8d9547af3b41e0e99c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK clockpawsquad fr-FR desc=564 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18558582, 'fileName': '1.mp4', 'sourceFileChecksum': '40e0fffb2a353bad8a37678fa5b8e1bb', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/e6/b4/75/e6b4750b-c3a8-8f7b-7e5f-4f4d459b4219/rvop_536dc657_4a076cac453048f59e30ad1ebf518bb2_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/e6/b4/75/e6b4750b-c3a8-8f7b-7e5f-4f4d459b4219/rvop_536dc657_4a076cac453048f59e30ad1ebf518bb2_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 7611048, 'fileName': '2.mp4', 'sourceFileChecksum': 'ff86e868251b821d99a692a2fe4b3893', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/d3/8c/79/d38c7949-d4e2-c150-9148-c6a4a53ff1be/rvop_3db4bcda_2e81c2ebd2b54e4ba914f44fd71815c8_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/d3/8c/79/d38c7949-d4e2-c150-9148-c6a4a53ff1be/rvop_3db4bcda_2e81c2ebd2b54e4ba914f44fd71815c8_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK clockpawsquad en-US desc=529 kw=74 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18558582, 'fileName': '1.mp4', 'sourceFileChecksum': '40e0fffb2a353bad8a37678fa5b8e1bb', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/e6/b4/75/e6b4750b-c3a8-8f7b-7e5f-4f4d459b4219/rvop_536dc657_4a076cac453048f59e30ad1ebf518bb2_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/e6/b4/75/e6b4750b-c3a8-8f7b-7e5f-4f4d459b4219/rvop_536dc657_4a076cac453048f59e30ad1ebf518bb2_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 7611048, 'fileName': '2.mp4', 'sourceFileChecksum': 'ff86e868251b821d99a692a2fe4b3893', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/d3/8c/79/d38c7949-d4e2-c150-9148-c6a4a53ff1be/rvop_3db4bcda_2e81c2ebd2b54e4ba914f44fd71815c8_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/d3/8c/79/d38c7949-d4e2-c150-9148-c6a4a53ff1be/rvop_3db4bcda_2e81c2ebd2b54e4ba914f44fd71815c8_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK pulsepost fr-FR desc=462 kw=84 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18630753, 'fileName': '1.mp4', 'sourceFileChecksum': '33808110c96ea8ba8e57f8af3b0a6d88', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e9/af/fb/e9affb59-def3-15aa-d556-f68041ec7298/rvop_3473bd74_fbbf43856361472d93bbc1d963b6648c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e9/af/fb/e9affb59-def3-15aa-d556-f68041ec7298/rvop_3473bd74_fbbf43856361472d93bbc1d963b6648c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 8692056, 'fileName': '2.mp4', 'sourceFileChecksum': 'c7a5ba13ced365292a9c44bf4255428d', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e6/c6/d3/e6c6d3b7-f223-864e-7614-825ae4626615/rvop_e78dbaa8_7ac14bfdf05d476183caa55baebb7c09_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e6/c6/d3/e6c6d3b7-f223-864e-7614-825ae4626615/rvop_e78dbaa8_7ac14bfdf05d476183caa55baebb7c09_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK pulsepost en-US desc=461 kw=82 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18630753, 'fileName': '1.mp4', 'sourceFileChecksum': '33808110c96ea8ba8e57f8af3b0a6d88', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e9/af/fb/e9affb59-def3-15aa-d556-f68041ec7298/rvop_3473bd74_fbbf43856361472d93bbc1d963b6648c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e9/af/fb/e9affb59-def3-15aa-d556-f68041ec7298/rvop_3473bd74_fbbf43856361472d93bbc1d963b6648c_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 8692056, 'fileName': '2.mp4', 'sourceFileChecksum': 'c7a5ba13ced365292a9c44bf4255428d', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e6/c6/d3/e6c6d3b7-f223-864e-7614-825ae4626615/rvop_e78dbaa8_7ac14bfdf05d476183caa55baebb7c09_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/e6/c6/d3/e6c6d3b7-f223-864e-7614-825ae4626615/rvop_e78dbaa8_7ac14bfdf05d476183caa55baebb7c09_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK dungeondash fr-FR desc=616 kw=92 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17604287, 'fileName': '1.mp4', 'sourceFileChecksum': 'c77947f9bccd62b65a5722d00917fbda', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/1d/11/d0/1d11d0b8-7fa2-d516-af47-cf71981f8745/rvop_d45aa003_8f87b155f6d140508e57a028a9a1e586_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/1d/11/d0/1d11d0b8-7fa2-d516-af47-cf71981f8745/rvop_d45aa003_8f87b155f6d140508e57a028a9a1e586_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 6771711, 'fileName': '2.mp4', 'sourceFileChecksum': '7ea5990379c10fa9b69be4144b5358bc', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/5f/bd/29/5fbd2970-7cb5-a33f-131f-8065e0bd7da8/rvop_c8918ec1_517cef0d18ad48f18b185c96e42c0ce6_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/5f/bd/29/5fbd2970-7cb5-a33f-131f-8065e0bd7da8/rvop_c8918ec1_517cef0d18ad48f18b185c96e42c0ce6_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK dungeondash en-US desc=554 kw=91 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17604287, 'fileName': '1.mp4', 'sourceFileChecksum': 'c77947f9bccd62b65a5722d00917fbda', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/1d/11/d0/1d11d0b8-7fa2-d516-af47-cf71981f8745/rvop_d45aa003_8f87b155f6d140508e57a028a9a1e586_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/1d/11/d0/1d11d0b8-7fa2-d516-af47-cf71981f8745/rvop_d45aa003_8f87b155f6d140508e57a028a9a1e586_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 6771711, 'fileName': '2.mp4', 'sourceFileChecksum': '7ea5990379c10fa9b69be4144b5358bc', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/5f/bd/29/5fbd2970-7cb5-a33f-131f-8065e0bd7da8/rvop_c8918ec1_517cef0d18ad48f18b185c96e42c0ce6_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/5f/bd/29/5fbd2970-7cb5-a33f-131f-8065e0bd7da8/rvop_c8918ec1_517cef0d18ad48f18b185c96e42c0ce6_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK vanvoyage en-US desc=747 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17112125, 'fileName': '1.mp4', 'sourceFileChecksum': '1caa4a22aecb76177f88130d05759b46', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 5916855, 'fileName': '2.mp4', 'sourceFileChecksum': '8e9f82134aac042c046e1e30f5746700', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/79/40/78/79407846-c7ab-ed2a-d3bc-95b76a69f73b/rvop_663458c7_4f32ce700f394f8f92f3a17d8beb8998_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/79/40/78/79407846-c7ab-ed2a-d3bc-95b76a69f73b/rvop_663458c7_4f32ce700f394f8f92f3a17d8beb8998_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK vanvoyage fr-FR desc=810 kw=97 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17112125, 'fileName': '1.mp4', 'sourceFileChecksum': '1caa4a22aecb76177f88130d05759b46', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 5916855, 'fileName': '2.mp4', 'sourceFileChecksum': '8e9f82134aac042c046e1e30f5746700', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/79/40/78/79407846-c7ab-ed2a-d3bc-95b76a69f73b/rvop_663458c7_4f32ce700f394f8f92f3a17d8beb8998_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/79/40/78/79407846-c7ab-ed2a-d3bc-95b76a69f73b/rvop_663458c7_4f32ce700f394f8f92f3a17d8beb8998_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK gullstreet fr-FR desc=844 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16087108, 'fileName': '1.mp4', 'sourceFileChecksum': 'b0e5b6997a70821e867f99d5332c306e', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 6139830, 'fileName': '2.mp4', 'sourceFileChecksum': '5c5c63e315fb95df9a4e6626bf25edbd', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK gullstreet en-US desc=833 kw=89 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16087108, 'fileName': '1.mp4', 'sourceFileChecksum': 'b0e5b6997a70821e867f99d5332c306e', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 6139830, 'fileName': '2.mp4', 'sourceFileChecksum': '5c5c63e315fb95df9a4e6626bf25edbd', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK crumblecrew fr-FR desc=877 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17881265, 'fileName': '1.mp4', 'sourceFileChecksum': '7f60af06401ec3e9c051da5bec17a9e1', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 10738901, 'fileName': '2.mp4', 'sourceFileChecksum': '3ce4f990ae5792fbc2e28fc5153da7c5', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK crumblecrew en-US desc=789 kw=80 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17881265, 'fileName': '1.mp4', 'sourceFileChecksum': '7f60af06401ec3e9c051da5bec17a9e1', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 10738901, 'fileName': '2.mp4', 'sourceFileChecksum': '3ce4f990ae5792fbc2e28fc5153da7c5', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
 done; failed: []
