@@ -1,0 +1,24 @@
+== lanternhold
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    shot 01.jpg 500 KB
+    shot 02.jpg 590 KB
+    shot 03.jpg 529 KB
+    shot 04.jpg 441 KB
+    shot 05.jpg 357 KB
+    preview 1.mp4 9924 KB
+    preview 2.mp4 6908 KB
+  media fr-FR 5 screens, 2 previews
+    shot 01.jpg 500 KB
+    shot 02.jpg 590 KB
+    shot 03.jpg 529 KB
+    shot 04.jpg 441 KB
+    shot 05.jpg 357 KB
+    preview 1.mp4 9924 KB
+    preview 2.mp4 6908 KB
+  media en-US 5 screens, 2 previews
+CHECK lanternhold fr-FR desc=604 kw=91 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=['FAILED', 'FAILED']
+CHECK lanternhold en-US desc=560 kw=99 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=['FAILED', 'FAILED']
+done; failed: []
