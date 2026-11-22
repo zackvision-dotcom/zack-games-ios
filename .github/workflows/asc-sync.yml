@@ -25,7 +25,8 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           ASC_KEY_PATH: /home/runner/keys/key.p8
         run: |
-          GAMES=$(grep -v '^#' todo.txt | tr '\n' ' ')
+          GAMES=$(grep -v '^#' todo.txt | grep -v '^check' | tr '\n' ' ')
+          if grep -q '^check' todo.txt; then export CHECK_ONLY=1; fi
           echo "games: $GAMES"
           test -n "$GAMES" && python asc_sync.py $GAMES 2>&1 | tee report.txt
       - name: Publish the report on the branch (readable without signing in)
