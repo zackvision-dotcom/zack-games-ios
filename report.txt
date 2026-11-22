@@ -1,8 +1,4 @@
-IAPDESC com.zvisionclub.lanternhold.starter fr-FR L'archère dès le départ et la lanterne Ruban
-IAPDESC com.zvisionclub.lanternhold.starter en-US The archer from the start and the Ribbon lantern
-IAPDESC com.zvisionclub.clockpawsquad.starter fr-FR Le hibou-pendule et le nœud papillon
-IAPDESC com.zvisionclub.clockpawsquad.starter en-US The pendulum owl and the bow tie
-IAPDESC com.zvisionclub.dungeondash.starter fr-FR Le pyjama étoilé, une tenue exclusive
-IAPDESC com.zvisionclub.dungeondash.starter en-US The starry pyjamas, an exclusive outfit
-IAPDESC com.zvisionclub.coralstack.starter fr-FR 4 créatures fixes, aucun tirage
-IAPDESC com.zvisionclub.coralstack.starter en-US 4 fixed creatures, no draws
+BUILD gullstreet v1009 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:28
+BUILD gullstreet v1007 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:08
+BUILD silkhop v1007 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:06
+BUILD silkhop v1001 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:20
