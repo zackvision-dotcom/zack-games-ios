@@ -1,2 +1,10 @@
-# one bundle suffix per line (a line "check" = only report)
+# one bundle suffix per line ("check" = only report, "builds" = latest builds)
+builds
+silkhop
+lanternhold
+clockpawsquad
+pulsepost
+dungeondash
+crumblecrew
 circuitcaper
+coralstack

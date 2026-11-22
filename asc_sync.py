@@ -167,6 +167,15 @@ def check(suffix):
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('BUILDS'):
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            b = call('GET', f"/builds?filter[app]={app['id']}&sort=-uploadedDate&limit=2&include=buildBetaDetail")
+            det = {x['id']: x['attributes'] for x in b.get('included', [])}
+            for x in b['data']:
+                d = det.get(x['relationships']['buildBetaDetail']['data']['id'], {})
+                print(f"BUILD {g} v{x['attributes']['version']} {x['attributes']['processingState']} internal={d.get('internalBuildState')} uploaded={x['attributes']['uploadedDate'][:16]}")
+        sys.exit(0)
     if os.environ.get('CHECK_ONLY'):
         for g in sys.argv[1:]:
             check(g)
