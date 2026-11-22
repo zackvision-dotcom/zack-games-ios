@@ -5736,7 +5736,7 @@ schedule();
   const K = window.KGAME, E = K.ext, D = () => K.dbg(), $ = s => document.querySelector(s);
   // clean takes: no chat handle or "Système" lines, no mission tracker banner, no tutorial, no route GPS, no hidden max-account button
   if (BETA.opts.ui === 'propre') { const st = document.createElement('style');
-    st.textContent = ['#k-chath', '#k-chat', '#k-track', '#k-tu', '#k-gps', '#k-max'].map(q => 'html body.beta-propre ' + q).join(',') + '{display:none!important}'; document.head.appendChild(st); }
+    st.textContent = ['#k-chath', '#k-chat', '#k-track', '#k-tu', '#k-gps', '#k-max', '#k-toast', '#k-stick', '#k-sealpad .hint'].map(q => 'html body.beta-propre ' + q).join(',') + '{display:none!important}'; document.head.appendChild(st); }
   const H = () => E.hero();
   const live = () => E.enemies.filter(e => !e.dead && !e.pvp);
   const pack = () => live().filter(e => e.beta);   // the enemies of the take (the village's own stay in their woods)
@@ -5788,6 +5788,8 @@ schedule();
     const h = H(), p = scr(h.x, h.y, 0), q = scr(tx, ty, 0), dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1;
     const sx = innerWidth * A.jitter(.14, .2), sy = innerHeight * A.jitter(.62, .7); await A.drag(sx, sy, sx + dx / l * 60, sy + dy / l * 60, 'courir', ms || 700);
   }
+  // the pack stays in the frame: an enemy that drifted away comes back in front of the hero (south, the camera side)
+  function regroup(r) { const h = H(); let k = 0; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d > r) { const a = (k++ / 4 - .5) * 1.8, rr = 3 + Math.random() * 1.5, x = h.x + Math.sin(a) * rr, y = h.y + Math.cos(a) * rr * .75 + .6; if (E.free(x, y, .8)) { e.x = x; e.y = y; } e.home = [h.x, h.y]; e.state = 'chase'; e.show = 3; } } }
   const nearest = () => { const h = H(); let b = null, bd = 1e9; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d < bd) { bd = d; b = e; } } return [b, bd]; };
 
   // ---- the pack at the gate of Aozora: wolves from the southern woods and bandits, all around the hero ----
@@ -5830,7 +5832,7 @@ schedule();
       for (const e of live()) if (Math.hypot(e.x - h.x, e.y - h.y) < 30) e.dead = 1e9;
       const sc = A.opts.scene;
       if (sc === 'moment') { h.y = 158; __k.snap(); await A.wait(400); wave(6, 2.6, 4.2, ['bandit', 'wolf'], .3); }
-      else wave(5, 6, 9, ['wolf', 'bandit', 'wolf']);
+      else wave(5, 3.2, 5, ['wolf', 'bandit', 'wolf']);
       // let the frames of every actor be painted before filming, then hide the hint that pops up after the start
       for (let i = 0; i < 30; i++) { await A.wait(100); }
       await A.wait(4600); hideToast();
@@ -5845,8 +5847,9 @@ schedule();
         await A.wait(600); let i = 0;
         while (A.running()) {
           const [e, d] = nearest();
-          if (!e) { if (E.enemies.filter(q => q.beta).length < 12) wave(4, 6, 9, ['wolf', 'bandit', 'wolf']); await A.wait(900); continue; }
-          if (d > 6) { await run(A, e.x, e.y, Math.min(900, 250 + d * 60)); await A.wait(A.jitter(80, 180)); continue; }
+          if (!e) { wave(4, 3, 5, ['wolf', 'bandit', 'wolf']); await A.wait(600); continue; }
+          if (d > 5) { regroup(5); await A.wait(250); continue; }
+          if (pack().length < 3) wave(3, 3.5, 5, ['bandit', 'wolf', 'bandit']);
           const id = plan[i++ % plan.length];
           if (id && d < 5.5) { const ok = await sign(A, id); if (ok) { A.mark(NAME[id]); await A.wait(A.jitter(500, 800)); continue; } }
           if (!(await slash(A))) await A.wait(200); await A.wait(A.jitter(160, 320));
@@ -5859,7 +5862,7 @@ schedule();
         for (let k = 0; k < 4 && A.running() && live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 6); k++) { await slash(A); await A.wait(A.jitter(200, 320)); }
         if (live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 5)) { await sign(A, 'sphere'); A.mark('sphère de souffle'); }
         await A.wait(1200);
-        while (A.running()) { if (!(await slash(A))) await A.wait(400); await A.wait(300); } },
+        while (A.running()) { if (pack().length < 3) wave(4, 2.8, 4.2, ['bandit', 'wolf'], .4); regroup(4.5); if (!(await slash(A))) { const [e, d] = nearest(); if (e && d < 5.5 && A.rnd() < .5) await sign(A, ['fire', 'chidori'][(A.rnd() * 2) | 0]); else await A.wait(300); } await A.wait(250); } },
       // plays on until stopped (long tests): the same fight, the pack coming back
       async idle(A) { watch(A); while (A.running()) { const [e, d] = nearest(); if (!e) { wave(4, 6, 9, ['wolf', 'bandit']); await A.wait(1000); continue; }
         if (d > 6) await run(A, e.x, e.y, 700); else if (A.rnd() < .25) await sign(A, ['fire', 'chidori', 'sphere', 'wind'][(A.rnd() * 4) | 0]); else await slash(A); await A.think(); } },

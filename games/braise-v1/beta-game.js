@@ -36,10 +36,11 @@
     for (let k = 0; k < 6 && A.running() && P().stats.logs === logs; k++) { await until(A, () => !P().target || P().stats.logs > logs, 2600); if (P().stats.logs > logs || e.dead) break; await A.wait(A.jitter(500, 800)); await tapWorld(A, e.x, e.y - 30, 'abattre ' + e.type); }
     if (P().stats.logs > logs) A.mark('arbre abattu');
   }
-  async function fire(A) {   // the workshop: Atelier, the "light" tab, Campfire, then a tap on the ground where it goes
+  async function fire(A) { const ok = await fire1(A); if (!ok) { try { D().closeCraft && D().closeCraft(); } catch (e) {} if (D().placing() && window.BRAISE_TOUCH) BRAISE_TOUCH.cancel(); } return ok; }
+  async function fire1(A) {   // the workshop: Atelier, the "light" tab, Campfire, then a tap on the ground where it goes
     await A.think(); if (!(await A.tapEl('#tCraft', 'atelier'))) return false; await A.wait(A.jitter(350, 550));
     await A.tapEl('#craft .tab[data-tab="light"]', 'onglet lumière'); await A.wait(A.jitter(400, 600));
-    const rec = [...document.querySelectorAll('#rec .rec, .rec')].find(el => D().RECIPES[+el.dataset.r] && D().RECIPES[+el.dataset.r].id === 'campfire');
+    const R = D().RECIPES || [], rec = [...document.querySelectorAll('#rec .rec, .rec')].find(el => R[+el.dataset.r] && R[+el.dataset.r].id === 'campfire');
     if (!rec) return false; await A.tapEl(rec, 'fabriquer un feu de camp'); await A.wait(A.jitter(500, 700));
     if (!D().placing()) return false;
     const n0 = D().fires().length; let ok = false;
@@ -47,11 +48,12 @@
     if (!ok) return false; await until(A, () => D().fires().length > n0, 4000); if (D().fires().length > n0) { A.mark('feu allumé'); return true; } return false;
   }
   async function spear(A) { const i = item('spear'); if (i >= 0) { await A.tapEl(`#inv .slot[data-i="${i}"]`, 'prendre la lance'); await A.wait(400); } }
-  async function hunt(A, ms) {   // tap the beast (hyena, wolf, antelope) again and again until it falls
+  async function hunt(A, ms, home) {   // tap the beast (hyena, wolf, antelope) again and again until it falls
     const t0 = performance.now(); let kills = P().stats.kills;
     while (A.running() && performance.now() - t0 < ms) {
-      const m = near(D().mobs(), m => ['hyena', 'antelope', 'machairodont'].includes(m.kind) && m.dying == null && !m.hidden, 900)[0];
+      const m = near(D().mobs(), m => ['hyena', 'antelope', 'machairodont', 'wolf'].includes(m.kind) && m.dying == null && !m.hidden, 900)[0];
       if (P().hp < P().maxHp * .4) P().hp = P().maxHp * .8;   // a take never ends on Ka's death
+      if (home && Math.hypot(P().x - home.x, P().y - home.y) > 170) { await tapWorld(A, home.x + A.jitter(-40, 40), home.y + 40, 'revenir au feu'); await A.wait(700); continue; }
       if (!m) { await A.wait(300); continue; }
       await tapWorld(A, m.x + A.jitter(-6, 6), m.y - 26, 'attaquer ' + m.kind); await A.wait(A.jitter(450, 700));
       if (P().stats.kills > kills) { kills = P().stats.kills; A.mark('bête abattue'); }
@@ -60,7 +62,8 @@
   function beasts(n, r) { D().hyenas(n, r); for (const m of D().mobs()) if (m.kind === 'hyena' && dist(m) < r + 60) { m.angry = 30; m.state = 'stalk'; } }
   function setUp(kind) {   // a Ka who has played a while: tools made, a little stock, the first goals done
     const p = P(); Object.assign(p.stats, { gotTwig: true, gotFlint: true, logs: 2, days: 2 }); p.stats.crafted.axe = 1;
-    D().give('axe', 1); D().give('spear', 1); D().give('grass', 6); D().give('log', 3); D().give('twigs', 4); D().give('flint', 2);
+    D().give('axe', 1); D().give('spear', 1); D().give('grass', 9); D().give('log', 6); D().give('twigs', 4); D().give('flint', 2);
+    if (D().capture) D().capture();   // the acacia's fire is already captured: the campfire recipe is open
     p.hp = p.maxHp; p.hunger = p.maxHunger * .8; p.san = p.maxSan * .9;
   }
   async function start(A, era) {
@@ -90,7 +93,7 @@
       // the most beautiful moment: night falls on the savanna, the fires glow, hyena eyes in the dark, Ka feeds the fire and faces them
       async moment(A) { watch(A); await A.wait(800);
         const f = D().fires().filter(f => !f.sourceFire).sort((a, b) => dist(a) - dist(b))[0]; if (f) { await tapWorld(A, f.x, f.y - 10, 'alimenter le feu'); await until(A, () => !P().target, 3000); A.mark('le feu reprend'); }
-        await A.wait(1200); await hunt(A, 60000); },
+        await A.wait(600); beasts(3, 230); await hunt(A, 60000, f || P()); },
       // the second era, the Great Cold of the Vézère valley: gather in the snow, a fire, a wolf hunt
       async ere2(A) { watch(A); await gather(A, 2); await fire(A); await spear(A); beasts(2, 340); await hunt(A, 60000); },
       async idle(A) { watch(A); while (A.running()) { await gather(A, 2); await chop(A); if (D().fires().length < 3) await fire(A); await spear(A); beasts(2, 340); await hunt(A, 15000); } },
