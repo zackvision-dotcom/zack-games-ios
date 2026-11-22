@@ -1,11 +1,5 @@
 # one game per line (project.yml target), optionally "Game ADS_TEST=0" for a release build: pushing this file builds and uploads to TestFlight
-SilkHop
+CoralStack
 LanternHold
 ClockpawSquad
-PulsePost
 DungeonDash
-GullStreet
-CoralStack
-CrumbleCrew
-CircuitCaper
-VanVoyage
