@@ -1,5 +1,2 @@
 # one game per line (project.yml target): pushing this file builds them and uploads them to TestFlight
-VanVoyage
 GullStreet
-KunaiGaiden
-Braise

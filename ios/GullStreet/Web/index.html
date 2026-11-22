@@ -1831,8 +1831,9 @@ function buildSheet(i) {
   }).join('');
   openSheet(`<h3>${t('shopPick')}</h3><div class="list">${list}</div>`);
   sheet.querySelectorAll('[data-build]').forEach(b => b.onclick = () => {
-    const s = SHOP[b.dataset.build]; if (S.coins < s.cost) return toast(t('noMoney'));
-    S.coins -= s.cost; S.lots[i] = { type: s.id, lvl: 1, price: 'normal', sales: 0 }; G.builtAt[i] = G.t; save(); SFX.build(); buzz(15);
+    // replaying the tutorial (Settings) never costs anything: that first shop is a free demo
+    const s = SHOP[b.dataset.build], cost = G.tutReplay && S.tut < 6 ? 0 : s.cost; if (S.coins < cost) return toast(t('noMoney'));
+    S.coins -= cost; S.lots[i] = { type: s.id, lvl: 1, price: 'normal', sales: 0 }; G.builtAt[i] = G.t; save(); SFX.build(); buzz(15);
     track('shop_built', { type: s.id, lot: i, day: S.day });
     if (S.tut <= 2) { S.tut = 3; save(); }
     closeSheet(); refreshHud(); tutTargets();
@@ -2016,8 +2017,8 @@ function afterConsent() {
 }
 function tutTargets() {
   G.tutLot = S.tut <= 2 ? LOTS.findIndex(L => !S.lots[L.i] && districtOpen(L.district)) : null; if (G.tutLot === -1) G.tutLot = null;
-  // the bakery for a first shop; on a replay, the cheapest shop the player can afford today
-  const afford = ECO.shops.filter(s => s.unlockDay <= S.day && s.cost <= S.coins).sort((a, b) => a.cost - b.cost);
+  // the bakery for a first shop; on a replay (free demo shop), the cheapest shop open today
+  const afford = ECO.shops.filter(s => s.unlockDay <= S.day && (G.tutReplay || s.cost <= S.coins)).sort((a, b) => a.cost - b.cost);
   G.tutPick = S.tut <= 2 ? (afford.some(s => s.id === 'bakery') ? 'bakery' : (afford[0] || {}).id || null) : null;
   if (S.tut <= 2 && (G.tutLot == null || !G.tutPick)) { S.tut = 3; G.tutLot = null; G.tutPick = null; }   // no free spot or no coins: straight to "open"
   if (S.tut <= 2 && G.tutLot != null && G.phase === 'morning') { const L = LOTS[G.tutLot]; G.camY = clamp(L.y - viewH * 0.4, CAMY0, Math.max(CAMY0, WORLD_H - viewH)); G.camX = clamp(L.x - viewW / 2, 0, Math.max(0, W - viewW)); }
