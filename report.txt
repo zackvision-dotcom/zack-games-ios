@@ -1,8 +1,2 @@
-SUBMIT gullstreet iap shells120 ERR ENTITY_ERROR.RELATIONSHIP.INVALID | InAppPurchase 6837781025 has no pending version for submission
-SUBMIT gullstreet iap shells20 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
-SUBMIT gullstreet iap shells260 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
-SUBMIT gullstreet iap shells600 ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
-SUBMIT gullstreet iap facades ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
-SUBMIT gullstreet iap starter ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
-SUBMIT gullstreet iap noads ERR STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID | This in-app purchase cannot be reviewed, please check associated errors. | STATE_ERROR.FIRST_NON_CONSUMABLE_MUST_BE_SUBMITTED_ON_VERSION
-SUBMIT gullstreet draft only, items: [dict_keys([]), dict_keys([])]
+SUBMIT silkhop version item added
+SUBMIT silkhop draft only, items: [dict_keys([])]
