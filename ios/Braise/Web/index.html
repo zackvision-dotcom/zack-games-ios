@@ -1040,7 +1040,7 @@ let hitStop=0;
 function shake(v){cam.shake=Math.max(cam.shake,v*(reduceMotion?.3:1));}
 function hurtPlayer(d,src,cause){
   if(src&&shelterAt(P))return;
-  if(P.inv>0||P.dead||mode!=='play')return;let dmg=d;
+  if(P.inv>0||P.dead||mode!=='play'||tu)return;let dmg=d;
   if(P.body){const ab=ITEMS[P.body.id].absorb,take=dmg*ab;P.body.dur-=take;dmg-=take;if(P.body.dur<=0){P.body=null;say('Mon armure part en lambeaux.');}invDirty=true;}
   P.hp-=dmg;P.inv=.7;hurtFlash=1;shake(9);sfx.hurt();
   if(src){const dx=P.x-src.x,dy=P.y-src.y,l=Math.hypot(dx,dy)||1;P.kx=dx/l*320;P.ky=dy/l*220;}
@@ -1980,6 +1980,9 @@ function loadGame(){
   victoryPending=false;audioInit();if(AU.c&&AU.c.state==='suspended')AU.c.resume();say('La flamme se souvient.');if(eraState.won){paused=true;showEraEnding();victorySaveStatus(true);}return true;
 }
 function installSaveUI(){
+  const rt=document.createElement('button');rt.className='big';rt.id='btnTuto';rt.setAttribute('translate','no');rt.textContent='☝️ '+tuT('replay');
+  addEventListener('braise-language',()=>{rt.textContent='☝️ '+tuT('replay');});
+  rt.onclick=()=>{tuSetSeen(false);if(paused)togglePause();if(mode==='play'&&!P.dead)setTimeout(tuStart,250);};$('#pause').appendChild(rt);
   const btn=document.createElement('button');btn.className='ib';btn.id='btnSave';btn.title='Sauvegarder';btn.setAttribute('aria-label','Sauvegarder la partie');btn.textContent='▣';btn.onclick=()=>saveGame(true);$('#topbar').appendChild(btn);
   const status=document.createElement('p');status.id='saveStatus';status.className='best';status.textContent='Sauvegarde automatique au repos, toutes les 30 secondes. Stockée dans ce navigateur.';$('#pause').appendChild(status);
   const manual=document.createElement('button');manual.className='big';manual.textContent='Sauvegarder';manual.onclick=()=>saveGame(true);$('#pause').appendChild(manual);
@@ -2002,6 +2005,55 @@ function newGame(){
   setTimeout(()=>{if(!P.stats.gotTwig)say('Des brindilles et un silex… de quoi faire une hache.',4.5);},7000);
   timers.push({at:realTime+1e9,fn:()=>{}});
   saveGame();
+  if(!tuSeen())setTimeout(tuStart,1400);
+}
+
+/* ---------------- first-run tutorial: walk, gather, workshop (3 real gestures, no damage meanwhile) ----------------
+   Flag in localStorage 'braise_tuto' (next to 'braise_era1_best'); players who already had a save or a record count it as seen.
+   Texts: French, English for every other language (the elements are translate="no" for i18n.js). */
+const TU_TXT={walk:['Touche le sol pour marcher','Tap the ground to walk'],walkK:['Clique sur le sol pour marcher','Click the ground to walk'],
+  gather:['Touche ✋ pour ramasser','Tap ✋ to gather'],gatherK:['Espace pour ramasser','Space to gather'],
+  craft:['Touche 🔨 pour l’atelier','Tap 🔨 for the workshop'],craftK:['C pour ouvrir l’atelier','C to open the workshop'],
+  skip:['Passer','Skip'],replay:['Revoir le tutoriel','Replay the tutorial']};
+const tuT=k=>TU_TXT[k][/^fr/i.test(document.documentElement.lang||'fr')?0:1];
+let tu=null;
+const tuSeen=()=>{try{return localStorage.getItem('braise_tuto')==='1';}catch(e){return true;}};
+function tuSetSeen(v){try{v?localStorage.setItem('braise_tuto','1'):localStorage.removeItem('braise_tuto');}catch(e){}}
+try{if(localStorage.getItem('braise_tuto')==null&&(localStorage.getItem(SAVE_KEY)||localStorage.getItem('braise_era1_best')))tuSetSeen(true);}catch(e){}
+const tuItems=()=>P.items.reduce((a,it)=>a+(it?it.n:0),0);
+function tuStart(){
+  if(tu)return;const touch=!!document.getElementById('tGather');
+  const el=document.createElement('div');el.id='tuto';el.setAttribute('translate','no');
+  el.innerHTML=`<style>#tuto{position:fixed;inset:0;z-index:45;pointer-events:none}#tuto .tv{position:absolute;inset:0}
+    #tuto .th{position:absolute;width:48px;height:56px}#tuto .th i{display:block;font-style:normal;font-size:46px;line-height:1;filter:drop-shadow(0 4px 4px rgba(0,0,0,.7))}
+    #tuto .th i{animation:tuTap .9s ease-in-out infinite}@keyframes tuTap{0%,100%{transform:translateY(-4px)}45%{transform:translateY(8px) scale(.88)}}
+    #tuto .th::before{content:'';position:absolute;left:2px;top:-20px;width:44px;height:44px;border-radius:50%;border:4px solid var(--bone);animation:tuRing .9s ease-out infinite}@keyframes tuRing{0%,40%{transform:scale(.3);opacity:0}50%{opacity:1}100%{transform:scale(1.6);opacity:0}}
+    #tuto .tb{position:absolute;transform:translate(-50%,-100%);width:max-content;max-width:min(340px,80vw);padding:9px 16px;font:20px/1.2 var(--f-body);color:var(--bone);text-align:center;background:linear-gradient(#33291f,#1d1712);border:2px solid var(--ink);border-radius:10px 14px 9px 12px;box-shadow:0 4px 0 rgba(0,0,0,.45),0 0 0 1px rgba(239,228,204,.18) inset;animation:tuPop .35s cubic-bezier(.3,1.6,.5,1)}@keyframes tuPop{from{opacity:0;transform:translate(-50%,-100%) scale(.6)}}
+    #tuto .ts{position:absolute;right:calc(14px + env(safe-area-inset-right,0px));top:calc(12px + env(safe-area-inset-top,0px));min-width:100px;min-height:46px;padding:0 16px;pointer-events:auto;touch-action:manipulation;font:18px var(--f-label);color:var(--bone);background:linear-gradient(var(--wood-lt),var(--wood));border:2px solid var(--ink);border-radius:9px 12px 8px 11px;box-shadow:0 3px 0 rgba(0,0,0,.45);cursor:pointer}</style>
+    <div class="tv"></div><div class="th"><i>☝️</i></div><div class="tb"></div><button class="ts" type="button"></button>`;
+  document.body.appendChild(el);tu={el,touch,step:'',x0:0,y0:0,n0:0,hit:0};
+  el.querySelector('.ts').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();tuEnd(true);});
+  tuGo('walk');requestAnimationFrame(tuLoop);
+}
+function tuGo(step){if(!tu)return;Object.assign(tu,{step,x0:P.x,y0:P.y,n0:tuItems(),hit:0,key:''});}
+function tuNext(){if(!tu)return;sfx.pick&&sfx.pick();tu.step==='walk'?tuGo('gather'):tu.step==='gather'?tuGo('craft'):tuEnd(false);}
+function tuEnd(skipped){if(!tu)return;tu.el.remove();tu=null;tuSetSeen(true);if(!skipped)say('Bien. Maintenant, le feu.',3);}
+function tuLoop(){
+  if(!tu)return;requestAnimationFrame(tuLoop);
+  const busy=mode!=='play'||paused||P.dead||!$('#title').hidden;tu.el.style.display=busy?'none':'';if(busy)return;
+  const k=tu.step+(tu.touch?'':'K')+document.documentElement.lang;
+  if(k!==tu.key){tu.key=k;const b=tu.el.querySelector('.tb');b.textContent=tuT(tu.touch?tu.step:tu.step+'K');b.style.animation='none';void b.offsetWidth;b.style.animation='';tu.el.querySelector('.ts').textContent=tuT('skip')+' ⏭';}
+  if(tu.step==='walk'&&!tu.hit&&Math.hypot(P.x-tu.x0,P.y-tu.y0)>70){tu.hit=1;setTimeout(tuNext,300);}
+  if(tu.step==='gather'&&!tu.hit&&tuItems()>tu.n0){tu.hit=1;setTimeout(tuNext,500);}
+  if(tu.step==='craft'&&!tu.hit&&openTab){tu.hit=1;setTimeout(tuNext,700);}
+  // where to touch: a patch of ground beside Ka, then the ✋ / 🔨 buttons (on a computer: Ka herself, and the workshop tab)
+  const r=cv.getBoundingClientRect(),px=r.left+(P.x-cam.x)*Z+W/2,py=r.top+(P.y-cam.y)*Z+H/2;let x,y,rad;
+  if(tu.step==='walk'){x=px+Math.min(160,W*.2);y=py+30;rad=70;}
+  else{const b=document.getElementById(tu.step==='gather'?'tGather':'tCraft')||(tu.step==='craft'?document.querySelector('#craft .tab'):null),bc=b&&b.getBoundingClientRect();
+    if(bc&&bc.width){x=bc.left+bc.width/2;y=bc.top+bc.height/2;rad=Math.max(bc.width,bc.height)*.75;}else{x=px;y=py-20;rad=70;}}
+  const hd=tu.el.querySelector('.th');hd.style.left=(x-22)+'px';hd.style.top=(y-4)+'px';hd.style.display=tu.step==='gather'&&!tu.touch?'none':'';
+  const b=tu.el.querySelector('.tb'),bw=b.offsetWidth||200;b.style.left=Math.max(bw/2+10,Math.min(innerWidth-bw/2-10,x))+'px';b.style.top=Math.max(b.offsetHeight+70,y-rad-12)+'px';
+  tu.el.querySelector('.tv').style.background=`radial-gradient(circle at ${x}px ${y}px, transparent ${rad}px, rgba(8,6,8,.5) ${rad+36}px)`;
 }
 let duskSaid=-1;
 function narrative(){if(mode!=='play'||P.dead)return;const t=dayFrac(),d=dayNum();if(t>DUSK+.02&&duskSaid!==d){duskSaid=d;say(fires.some(f=>f.fuel>0&&Math.hypot(f.x-P.x,f.y-P.y)<900)?'La nuit tombe. Je reste près du feu.':'La nuit tombe. Il me faut de la lumière, vite.',4);}}

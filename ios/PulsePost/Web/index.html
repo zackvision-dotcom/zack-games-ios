@@ -119,6 +119,13 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
 #calib .ring.flash{background:var(--yellow);transform:scale(1.12)}#calib .dots{display:flex;gap:6px}#calib .dots i{width:16px;height:16px;border-radius:50%;border:3px solid var(--ink);background:var(--cream)}#calib .dots i.on{background:var(--green)}
 #calib p{font-weight:900;font-size:18px;margin:0;max-width:340px}#calib .b1,#calib .b2{max-width:300px;color:var(--ink)}
 /* title */
+/* first-run tutorial: the hand (drawn in CSS), the skip button (top right, where the score chips are, hidden meanwhile) */
+#tuto{position:fixed;inset:0;z-index:7;pointer-events:none;display:none}#tuto.on{display:block}
+.thand{position:absolute;left:0;top:0;width:44px;height:62px;filter:drop-shadow(3px 4px 0 rgba(0,0,0,.35));transform-origin:22px 0}
+.thand::before{content:'';position:absolute;left:13px;top:0;width:18px;height:38px;border-radius:9px 9px 4px 4px;background:var(--cream);border:3px solid var(--ink);box-sizing:border-box}
+.thand::after{content:'';position:absolute;left:3px;top:24px;width:38px;height:36px;border-radius:12px 14px 18px 18px;background:var(--cream);border:3px solid var(--ink);box-sizing:border-box;box-shadow:inset 0 -5px 0 rgba(34,34,59,.12)}
+#tskip{position:fixed;z-index:9;top:calc(env(safe-area-inset-top) + 8px);right:8px;min-width:88px;height:44px;padding:0 14px;border-radius:999px;background:var(--cream);border:3px solid var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:16px;display:none}
+body.tuto #tskip{display:block}body.tuto #hcombo,body.tuto #hscore{visibility:hidden}
 #title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 30px) 24px calc(env(safe-area-inset-bottom) + 40px);background:var(--blue) center/cover no-repeat}
 #title.on{display:flex}#title .logo img{width:min(84vw,400px)}#title .tbg{width:min(78vw,44vh);animation:pbob 2.4s ease-in-out infinite}
 #title p{font-weight:900;margin:4px 0;font-size:16px;color:var(--cream);text-align:center;text-shadow:0 2px 0 var(--ink)}#title .b1{max-width:320px}
@@ -646,11 +653,11 @@ window.I18N = (() => {
     consentTitle: ['Les publicités', 'Ads'], consentText: ['Pulse Post est gratuit grâce à la publicité (jamais pendant un morceau). Acceptes-tu des pubs adaptées à tes goûts ? Tu peux changer d’avis dans les réglages.', 'Pulse Post is free thanks to ads (never during a song). Do you accept ads tailored to you? You can change your mind in the settings.'],
     accept: ['J’accepte', 'I accept'], refuse: ['Non merci', 'No thanks'], testAd: ['Publicité de test', 'Test ad'],
     // Madame Tampon (20 lines)
-    mt_hello: ['Bonjour, Pip ! Je suis Madame Tampon, cheffe du bureau de poste. Ici, le courrier arrive en musique.', 'Hello, Pip! I am Madame Tampon, head of the post office. Here, the mail arrives in music.'],
-    mt_count: ['Regarde la fenêtre de Lola : la lumière avance… 1, 2… et sur 3, touche l’écran !', 'Watch Lola’s window: the light moves… 1, 2… and on 3, tap the screen!'],
-    mt_first: ['Attrapée ! Et pile sur le temps : PARFAIT !', 'Caught! Right on the beat: PERFECT!'],
-    mt_timing: ['Presque ! Touche quand la lumière arrive sur la lettre.', 'Almost! Tap when the light reaches the letter.'],
-    mt_two: ['Lola presse le pas : maintenant 1, 2 ! La lumière te montre toujours le moment.', 'Lola speeds up: now 1, 2! The light always shows you when.'],
+    mt_hello: ['Bonjour Pip ! Le courrier arrive en musique.', 'Hello Pip! The mail comes in music.'],
+    mt_count: ['Regarde Lola : 1, 2… et touche sur 3 !', 'Watch Lola: 1, 2… tap on 3!'],
+    mt_first: ['PARFAIT ! Pile sur le temps !', 'PERFECT! Right on the beat!'],
+    mt_timing: ['Touche quand la lumière arrive sur la lettre.', 'Tap when the light reaches the letter.'],
+    mt_two: ['Plus vite : 1, 2 ! Touche sur 2 !', 'Faster: 1, 2! Tap on 2!'],
     mt_mimi: ['Mimi la chatte n’envoie que sur le 7e temps : six lumières, puis la lettre.', 'Mimi the cat only sends on the 7th beat: six lights, then the letter.'],
     mt_bruno: ['Bruno et sa perceuse font une syncope : la lettre tombe juste APRÈS le 4e temps. Laisse passer, puis hop !', 'Bruno and his drill are syncopated: the letter falls just AFTER the 4th beat. Let it pass, then hop!'],
     mt_glouglou: ['Glouglou et ses verres : toujours deux coups. Ding-ding !', 'Glouglou and her glasses: always two strokes. Ding-ding!'],
@@ -665,6 +672,7 @@ window.I18N = (() => {
     mt_tri: ['Le bureau de tri attend : lance un tri, il travaille même quand tu dors.', 'The sorting office is waiting: start a sorting, it works even while you sleep.'],
     mt_gift: ['Un colis pour toi ! Reviens demain, il y en a un chaque jour.', 'A parcel for you! Come back tomorrow, there is one every day.'],
     mt_train: ['En entraînement, rien ne se perd : répète autant que tu veux.', 'In training, nothing is lost: practise as much as you like.'],
+    tut_done: ['Bravo ! À toi de jouer !', 'Well done! Your turn!'], skip: ['Passer', 'Skip'], tutAgain: ['Revoir le tutoriel', 'Replay the tutorial'],
     mt_bosswin: ['Bravo ! Tout le marché danse. Le prochain quartier arrive bientôt !', 'Well done! The whole market is dancing. The next district is coming soon!'],
   };
   let lang = 'fr'; const idx = () => Math.max(0, L.indexOf(lang));
@@ -1121,11 +1129,14 @@ const KEY = 'pulsepost.save.v1';
 function fresh() {
   return { v: 1, lang: I.detect(), sound: true, music: true, vib: true, consent: null, tut: 0, lat: null, timbres: 0, plumes: 0, xp: 0, plv: 1,
     best: {}, album: {}, newAlbum: [], owned: {}, costume: -1, costumes: {}, tri: null, login: { last: '', streak: 0, pending: false },
-    plays: 0, lastAdAt: 0, said: {}, train: false, letters: 0, theme: '' };
+    plays: 0, lastAdAt: 0, said: {}, train: false, letters: 0, theme: '', tv: 1 };
 }
 let S;
-try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+let S0 = null; try { S0 = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+try { S = Object.assign(fresh(), S0 || {}); } catch (e) { S = fresh(); }
 S.login = Object.assign(fresh().login, S.login);
+// saves from before the guided tutorial (no `tv`): a player who already played has seen it
+if (S0 && !S0.tv && S.plays > 0) S.tut = 1;
 I.set(S.lang); A.setMusic(S.music); A.setSound(S.sound);
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 const track = (ev, data) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
@@ -1220,10 +1231,10 @@ const unlocked = s => { if (s.pack) return !!S.owned.album_nuit_electro; const l
 async function startSong(id, o = {}) {
   closeModal(); A.init(); const song = R.song(id); if (!song) return showHome();
   G.song = song; G.tab = R.table(song); G.res = new Array(G.tab.notes.length).fill(null); G.errs = []; G.from = 0; G.combo = 0; G.best = 0; G.score = 0; G.bag = 1;
-  G.tut = !!song.tut && !S.tut; G.train = !!(o.train ?? S.train) && !G.tut; G.paused = false; G.ended = false; G.failed = false; G.lights = 0; G.lastBeat = -99; G.fx = []; G.parts = []; G.floats = [];
+  G.tut = !!song.tut && (!S.tut || !!o.tut); G.guide = G.tut; G.step = 1; G.handN = -1; G.train = !!(o.train ?? S.train) && !G.tut; G.paused = false; G.ended = false; G.failed = false; G.lights = 0; G.lastBeat = -99; G.fx = []; G.parts = []; G.floats = [];
   G.firstHit = false; G.cpUsed = false; G.fw = 0; G.downs = []; G.saidCombo = 0; G.rings = []; G.tier = 0; G.hitstop = 0; G.cad = false; G.jf = null;
   G.twoAt = (G.tab.pats.find(p => p.p === 'p2') || { b0: -1 }).b0;   // the tutorial: the beat where Lola switches to "1, 2!"
-  G.mode = 'song'; $('#home').classList.remove('on'); $('#title').classList.remove('on'); buildHud(); $('#hud').classList.add('on'); resize();
+  G.mode = 'song'; $('#home').classList.remove('on'); $('#title').classList.remove('on'); buildHud(); $('#hud').classList.add('on'); resize(); guideUi();
   S.plays++; save(); track('song_start', { id });
   // Madame Tampon introduces the habitant (the tutorial waits a little longer before the count-in)
   const intro = G.tut ? 'mt_hello' : song.boss ? 'mt_boss' : song.feat >= 0 ? 'mt_' + R.HAB[song.feat].key : null;
@@ -1268,7 +1279,7 @@ function judge(n, r, err) {
     G.bag = Math.max(0, G.bag - (G.tut || G.train ? 0 : E.bag.miss)); SFX.miss(); buzz(40); G.shake = 0.5; G.pipPose = 2; G.pipT = 0.45; G.jf = null;
     if (G.tier > 0) { G.tier = 0; A.MUS.tier = 0; }   // the combo is broken: the band drops its extra layers
     stamp('stamp_oops', PIP.x + rnd(-30, 30), PIP.y - PIP.s * 0.9, 0.55, t('oops'), PAL.blue);
-    if (prev >= 10 || (G.tut && !G.firstHit)) say(G.tut ? 'mt_timing' : 'mt_oops', 2, 2200, 'top');
+    if (G.guide ? G.step === 1 && !G.firstHit : prev >= 10) say(G.guide ? 'mt_timing' : 'mt_oops', 2, 2200, 'top');
     if (!G.tut && !G.train && G.bag <= 0) fail();
   } else {
     G.bag = Math.min(1, G.bag + (r === 'P' ? E.bag.perfect : E.bag.good)); S.letters++;
@@ -1283,7 +1294,8 @@ function judge(n, r, err) {
     if (up) tierUp(tier);
     if (big) { stamp('stamp_perfect', W / 2, FA.y + FA.h * 0.45, 1.25, up ? t('tierUp', { n: tier + 1 }) : r === 'P' ? t('perfect') : t('good'), PAL.red); SFX.stamp(); G.jf = null; }
     else judgeText(r, n);
-    if (!G.firstHit) { G.firstHit = true; if (G.tut) say('mt_first', 3, 2600, 'top'); track('first_catch', { t: +(performance.now() / 1000).toFixed(1) }); }
+    if (G.guide) guideHit(n);
+    if (!G.firstHit) { G.firstHit = true; track('first_catch', { t: +(performance.now() / 1000).toFixed(1) }); }
     if (G.combo >= 20 && G.saidCombo < 1) { G.saidCombo = 1; say('mt_combo', 0, 2200, 'top'); }
     if (G.combo === 50) unlockStamp('ms_combo50');
   }
@@ -1337,18 +1349,56 @@ function songFrame() {
     if (b >= 0 && b % 4 === 0 && kind && kind !== 'count') buzz(12);   // a light pulse on each downbeat
     const target = Math.min(8, Math.floor(G.combo / 3)); if (G.lights < target) G.lights++; else if (G.lights > target) G.lights--;   // one house per beat
     if (kind === 'count' && b >= 0) floatText(W / 2, FA.y + FA.h * 0.12, String(b % 4 + 1), PAL.cream, 54, 0.5);
-    if (G.tut) tutCount(vb);
-    if (G.tut && b === G.twoAt) say('mt_two', 1, 3000, 'top');
+    if (G.guide && G.step === 1) tutCount(vb);
+    if (G.guide && G.step === 2 && b === G.twoAt) say('mt_two', 1, 0, 'top');
     // the boss end: fireworks on the beats after the last downbeat
     if (G.song.boss && b >= G.tab.beats && b < G.tab.beats + 7) { if (b === G.tab.beats) G.fw = 3.5; firework(); }
   }
   // the end of the song, scheduled half a second ahead ON the last downbeat (with the band's final hit): fanfare for the boss, "ta-da" otherwise
-  if (!G.cad && st > G.tab.dur - 0.5) { G.cad = true; const at = CLK.toCtx(G.S0 + G.tab.dur), step = 30 / R.bpmAt(G.song, G.tab.beats); G.song.boss ? SFX.fanfare(at, step) : SFX.cadence(at, step); }
-  if (!G.ended && st > G.tab.dur + (G.song.boss ? 0.2 : 0.8)) endSong();
+  if (!G.cad && !G.guide && st > G.tab.dur - 0.5) { G.cad = true; const at = CLK.toCtx(G.S0 + G.tab.dur), step = 30 / R.bpmAt(G.song, G.tab.beats); G.song.boss ? SFX.fanfare(at, step) : SFX.cadence(at, step); }
+  if (G.guide) guideFrame(vb);
+  if (!G.ended && !G.guide && st > G.tab.dur + (G.song.boss ? 0.2 : 0.8)) endSong();
 }
-// the tutorial: Madame Tampon counts on her wing along Lola's light for the first letters
+// the tutorial (first song, Lola's window only), two steps that each wait for a real catch:
+// 1. "1, 2… and on 3, tap": Madame Tampon counts on her wing, the hand taps Pip's bag on each letter;
+// 2. "faster: 1, 2!": one letter caught in the quicker part. A step not done when its part of the song is over plays that part again.
+// The bag never empties and the song always ends on a first stamp. "Skip" (top right) ends the guiding, the song goes on.
+function guideHit(n) {
+  if (G.step === 1) { G.step = 2; say('mt_first', 3, 2600, 'top'); }
+  else if (n.beat >= G.twoAt) endGuide(false);
+}
+function guideFrame(vb) {
+  const hits = s => G.tab.notes.filter(n => s ? n.beat >= G.twoAt : n.beat < G.twoAt), lastOf = a => a.length ? a[a.length - 1].beat : 0;
+  if (G.step === 1 && vb > lastOf(hits(0)) + 0.7) { resumeAt(G.tab.checkpoints[0]); say('mt_timing', 2, 0, 'top'); }
+  else if (G.step === 2 && vb > lastOf(hits(1)) + 0.5) { resumeAt(G.twoAt); say('mt_two', 1, 0, 'top'); }
+}
+function endGuide(skipped) {
+  if (!G.guide) return; G.guide = false; S.tut = 1; save(); track(skipped ? 'tutorial_skip' : 'tutorial_done');
+  guideUi(); if (skipped) mtHide(); else say('tut_done', 3, 2200, 'top');
+}
+// the hand, the skip button and the HUD chips (hidden while guiding: nothing to count yet)
+const TUT = div('', ''); TUT.id = 'tuto'; TUT.innerHTML = `<div class="thand"></div>`; document.body.appendChild(TUT);
+const SKIP = document.createElement('button'); SKIP.id = 'tskip'; document.body.appendChild(SKIP);
+SKIP.addEventListener('pointerdown', e => e.stopPropagation()); SKIP.onclick = () => { SFX.click(); endGuide(true); };
+function guideUi() { const on = G.mode === 'song' && !!G.guide; document.body.classList.toggle('tuto', on); SKIP.textContent = t('skip'); if (!on) TUT.classList.remove('on'); }
+// per frame: the hand rests above Pip's bag and comes down on each of Lola's letters, exactly on its beat
+function handFrame(vt) {
+  const on = G.mode === 'song' && G.guide && !G.paused && !G.failed && !G.ended; TUT.classList.toggle('on', on); if (!on) return;
+  const n = G.tab.notes[G.from], [x, y] = catchXY(), dt = n ? n.t - vt : 9, k = clamp(1 - Math.abs(dt) / 0.14, 0, 1);
+  TUT.firstChild.style.transform = `translate(${x - 22}px,${y - 4 - 30 * (1 - k)}px) scale(${1 - 0.1 * k})`;
+  if (n && dt <= 0 && G.handN !== n.i) { G.handN = n.i; G.rings.push({ x, y, t: 0, d: 0.4, col: PAL.cream, w: 4, s: 14 }); }
+}
+// the useful zone: a light veil over the street, with Lola's window and Pip's bag left clear
+function drawGuide(pulse) {
+  if (!G.guide) return; const [wx, wy] = winXY(0), [tx, ty] = catchXY(), rw = LAY.ww * FA.k * 0.85, rt = PIP.s * 0.42;
+  cx.save(); cx.fillStyle = 'rgba(20,20,40,.42)'; cx.beginPath(); cx.rect(0, 0, W, H);
+  cx.moveTo(wx + rw, wy); cx.arc(wx, wy, rw, 0, TAU, true); cx.moveTo(tx + rt, ty); cx.arc(tx, ty, rt, 0, TAU, true); cx.fill('evenodd');
+  cx.strokeStyle = PAL.yellow; cx.lineWidth = 4 + pulse * 3; cx.globalAlpha = 0.6 + pulse * 0.4;
+  cx.beginPath(); cx.arc(wx, wy, rw, 0, TAU); cx.stroke(); cx.beginPath(); cx.arc(tx, ty, rt, 0, TAU); cx.stroke(); cx.restore();
+}
+// Madame Tampon counts on her wing along Lola's light for the first letters
 function tutCount(vb) {
-  if (G.res.filter(Boolean).length > 6 || vb > G.tab.beats) { if ($('#mt .pt .cnt')) mtHide(); return; }
+  if (vb > G.tab.beats) { if ($('#mt .pt .cnt')) mtHide(); return; }
   const p = G.tab.pats.find(p => p.w === 0 && vb >= p.b0 - 0.01 && vb < p.b0 + p.dur - 0.5); if (!p) return;
   const k = Math.floor(vb - p.b0 + 0.01), nums = p.cells.length + 1; if (k >= nums) return;
   const s = Array.from({ length: nums }, (_, i) => i < k ? `${i + 1}` : i === k ? `<b class="cnt">${i + 1}${i === nums - 1 ? ' !' : '…'}</b>` : '·').join('  ');
@@ -1358,7 +1408,7 @@ function endSong() {
   G.ended = true; const sc = R.score(G.res.map(r => r || 'M')), song = G.song, prev = S.best[song.id], first = !prev || !prev.stars;
   if (G.tut && !sc.stars) sc.stars = 1;   // the tutorial cannot be lost: it always ends on a first stamp (and opens the next song)
   track('song_end', { id: song.id, acc: +sc.acc.toFixed(3), letter: sc.letter });
-  if (G.tut) S.tut = 1;
+  if (G.tut) { S.tut = 1; if (G.guide) { G.guide = false; guideUi(); } }
   const rec = !G.train && !!prev && prev.score > 0 && G.score > prev.score;   // a new record on a song already played
   let timbres = 0, xp = 0; const news = [];
   if (G.train) xp = 5;
@@ -1497,7 +1547,7 @@ function renderHome() {
   bindTri($('#hmid'), renderHome);
 }
 function showHome(open) {
-  G.mode = 'home'; G.song = null; A.stop(); $('#hud').classList.remove('on'); $('#title').classList.remove('on'); mtHide();
+  G.mode = 'home'; G.song = null; A.stop(); guideUi(); $('#hud').classList.remove('on'); $('#title').classList.remove('on'); mtHide();
   $('#home').style.backgroundImage = `linear-gradient(rgba(47,93,168,.55),rgba(47,93,168,.55)),url(${src('bg_street')})`; $('#home').classList.add('on');
   ensureLogin(); buildHome(); save();
   if (open === 'album') setTimeout(albumModal, 300);
@@ -1559,9 +1609,10 @@ function settingsModal() {
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
     <div class="sw"><span>${t('latency')} · ${S.lat == null ? t('latAuto') : t('latVal', { n: S.lat })}</span><button class="mini" data-lat>${t('latencyBtn')}</button></div>
     <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
-    <button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Pulse Post ${window.PP_VERSION || ''}</div>`);
+    <button class="b2" data-tut>${t('tutAgain')}</button><button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Pulse Post ${window.PP_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); A.setMusic(S.music); A.setSound(S.sound); });
   modal.querySelector('[data-lat]').onclick = () => { closeModal(); calibrate(); };
+  modal.querySelector('[data-tut]').onclick = () => { A.init(); startSong('m1', { tut: 1 }); };
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); if (G.mode === 'home') buildHome(); settingsModal(); };
   modal.querySelector('[data-restore]').onclick = () => Store.restore();
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
@@ -1738,7 +1789,7 @@ function draw() {
   const sq = 1 + 0.022 * pulse; cx.save(); cx.translate(W / 2, FA.y + FA.h); cx.scale(1 + 0.012 * pulse, 1 / sq); cx.translate(-W / 2, -(FA.y + FA.h));
   const fim = img('facade'); if (fim) cx.drawImage(fim, FA.x, FA.y, FA.w, FA.h);
   drawWindows(vb, pulse); cx.restore(); drawTier(vb, pulse, 1);
-  drawPip(pulse); drawLetters(vt);
+  drawGuide(pulse); drawPip(pulse); drawLetters(vt);
   if (S.theme === 'winter') { cx.fillStyle = '#fff'; for (let i = 0; i < 40; i++) { const x = (i * 53.1 + Math.sin(G.time + i) * 20) % W, y = ((i * 97.7 + G.time * (30 + i % 5 * 10)) % H + H) % H; cx.globalAlpha = 0.8; cx.beginPath(); cx.arc(x, y, 1.5 + i % 3, 0, TAU); cx.fill(); } cx.globalAlpha = 1; }
   drawFx(); cx.restore();
 }
@@ -1748,6 +1799,7 @@ let last = performance.now(), saveT = 0, homeT = 0;
 function frame(now) {
   const dt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now; G.time += dt; CLK.sync();
   if (G.mode === 'song' || G.mode === 'results') { if (G.mode === 'song') songFrame(); if (!G.paused && !G.failed) G.frozenT = visT(); renderHud(); }
+  handFrame(G.song ? visT() : 0);
   if (G.mode === 'calib') calibFrame();
   // hit-stop: on a combo level the effects (stamps, sparks, words, Pip) freeze for 60 ms; the song and its clock never stop
   const fdt = G.hitstop > 0 ? 0 : dt; if (G.hitstop > 0) G.hitstop -= dt;

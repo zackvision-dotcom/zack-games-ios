@@ -57,6 +57,8 @@ i.ff,i.ac,i.br{display:inline-block;width:1.15em;height:1.15em;background:center
 #pomme.on{opacity:1;transform:none}
 #pomme .pf{width:80px;height:80px;flex:none;object-fit:contain;animation:pbob 1.6s ease-in-out infinite}@keyframes pbob{50%{transform:translateY(-4px) rotate(-2deg)}}
 #pomme .pt{background:var(--cream);border:3px solid var(--night);border-radius:16px 16px 16px 4px;padding:9px 12px;font-weight:800;font-size:15px;line-height:1.3;box-shadow:4px 4px 0 rgba(0,0,0,.35);max-width:290px;margin-bottom:22px}
+#tskip{position:fixed;right:8px;top:calc(env(safe-area-inset-top) + 60px);z-index:9;display:none;min-width:96px;min-height:48px;padding:8px 16px;border-radius:999px;background:var(--cream);color:var(--night);border:3px solid var(--night);box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:17px}#tskip.on{display:block}#tskip:active{transform:translateY(3px)}
+#thand{position:fixed;left:0;top:0;z-index:9;pointer-events:none;display:none;filter:drop-shadow(0 5px 4px rgba(0,0,0,.45))}#thand.on{display:block}#thand svg{display:block;transform-origin:24px 6px}#thand.tap svg{animation:thtap .9s ease-in-out infinite}@keyframes thtap{0%,100%{transform:translateY(16px) scale(1)}45%,60%{transform:translateY(0) scale(.9)}}#thand.down svg{animation-name:thtapd}@keyframes thtapd{0%,100%{transform:rotate(180deg) translateY(16px) scale(1)}45%,60%{transform:rotate(180deg) translateY(0) scale(.9)}}
 #pomme.home{bottom:calc(env(safe-area-inset-bottom) + 96px)}
 /* home (the village between runs) */
 #home{position:fixed;inset:0;z-index:4;display:none;flex-direction:column;background:var(--night) center/cover no-repeat}
@@ -887,14 +889,12 @@ window.I18N = (() => {
     p_bigWave: ['Une grande vague ! Tape au milieu du tas !', 'A big wave! Tap right into the crowd!'],
     wave: ['Vague {n}', 'Wave {n}'], bossCome: ['Le Grand Brouillard !', 'The Great Fog!'], lanUp: ['La lanterne grandit !', 'The lantern grows!'], dawnB: ['Aube {n}', 'Dawn {n}'], nightB: ['Nuit {n}', 'Night {n}'],
     // Gardienne Pomme (20+ lines)
-    p_hello: ['Bonjour, petit hérisson ! Je suis Pomme, gardienne de la grande lanterne.', 'Hello, little hedgehog! I am Pomme, keeper of the great lantern.'],
-    p_tower: ['Glisse une tour à frondes près du chemin du nord.', 'Drag a sling tower next to the north path.'],
-    p_wall: ['Bien ! Maintenant une palissade sur le chemin, juste devant la lanterne.', 'Good! Now a palisade on the path, right in front of the lantern.'],
-    p_harvest: ['Le buisson a donné des baies. Touche-les pour les ramasser !', 'The bush gave berries. Tap them to pick them up!'],
-    p_night: ['Prêt ? Touche « Nuit » quand tu veux. Pas de presse le premier jour.', 'Ready? Tap “Night” whenever you like. No rush on day one.'],
-    p_tap: ['Les voilà ! Touche les ombres pour leur lancer un éclair !', 'Here they come! Tap the shadows to throw a bolt of light!'],
-    p_swipe: ['Des lucioles ! Glisse ton doigt dessus pour nourrir la lanterne.', 'Fireflies! Slide your finger over them to feed the lantern.'],
-    p_dawn: ['L’aube ! Tu as tenu ta première nuit. Choisis un cadeau du matin.', 'Dawn! You held your first night. Pick a morning gift.'],
+    p_tower: ['Glisse une tour près du chemin.', 'Drag a tower next to the path.'], tSkip: ['Passer ✕', 'Skip ✕'], tReplay: ['Revoir le tutoriel', 'Replay the tutorial'],
+    p_wall: ['Bravo ! Une palissade sur le chemin.', 'Great! Now a palisade on the path.'],
+    p_night: ['Prêt ? Touche « Nuit » !', 'Ready? Tap “Night”!'],
+    p_tap: ['Touche les ombres : éclair de lumière !', 'Tap the shadows to throw light!'],
+    p_swipe: ['Glisse ton doigt sur les lucioles !', 'Slide your finger over the fireflies!'],
+    p_dawn: ['L’aube ! Choisis un cadeau du matin.', 'Dawn! Pick a morning gift.'],
     p_day: ['Le jour, on construit. Six nuits encore, et le Grand Brouillard à la septième.', 'By day we build. Six more nights, and the Great Fog on the seventh.'],
     p_north: ['Ils arrivent par le nord !', 'They come from the north!'], p_east: ['Attention, par l’est !', 'Watch out, from the east!'],
     p_west: ['À l’ouest, à l’ouest !', 'West, from the west!'], p_south: ['Par le sud, maintenant !', 'From the south now!'],
@@ -1238,7 +1238,8 @@ function startRun(resume) {
   G.mode = 'run'; G.tut = G.R.tut && !S.tut ? 1 : 0; G.dark = G.R.phase === 'night' ? 1 : 0;
   $('#home').classList.remove('on'); $('#title').classList.remove('on'); $('#hud').classList.add('on'); $('#tray').classList.add('on'); pommeHide();
   buildHud(); buildTray(); resize(); save();
-  if (G.tut) { say('p_hello', 1, 2600); setTimeout(() => { if (G.tut === 1) { say('p_tower', 2, 0, true); } }, 2700); }
+  tutSkipBtn(!!G.tut);
+  if (G.tut) say('p_tower', 2, 0, true);
   else if (resume && G.R.phase === 'night') { G.paused = true; openModal(`<div class="big-ico s"><img src="${src('pomme_2')}" alt=""></div><h2>${t('resumeTitle')}</h2><button class="b1 big" data-go>${t('cont')}</button>`); modal.querySelector('[data-go]').onclick = () => { closeModal(); G.paused = false; audioInit(); }; }
   else if (G.R.phase === 'dawn') showDawn();
   else if (G.R.phase === 'lost') lostModal();
@@ -1312,13 +1313,13 @@ function events() {
       case 'place': { SFX.place(); buzz(12); G.pop[ev.id] = 0.001; G.shake = Math.max(G.shake, 0.12); const [x, y] = [C.cc(ev.c), C.cc(ev.r)];
         for (let i = 0; i < 12; i++) G.parts.push({ k: 'dot', x: x + rnd(-24, 24), y: y + 24, vx: rnd(-70, 70), vy: rnd(-90, -20), t: 0, life: 0.5, col: i % 2 ? PAL.cream : PAL.wood, r: 3, g: 1 });
         if (G.tut === 1 && ev.k === 'tower') { G.tut = 2; SFX.chime(); JUICE.confetti(40); floatText(x, y - 40, 'Bravo !', PAL.yellow); addXp(10); say('p_wall', 2, 0, true); }
-        else if (G.tut === 2 && ev.k === 'wall') { G.tut = 3; say('p_harvest', 2, 0, true); if (!R.hops.length) { G.tut = 4; say('p_night', 1, 0, true); } }
+        else if (G.tut === 2 && ev.k === 'wall') { G.tut = 4; say('p_night', 1, 0, true); }   // the harvest is gathered at dusk anyway: no step for it
         if (ev.k === 'burrow' && !S.said.hero) { S.said.hero = 1; say('p_hero', 2, 3000); }
         renderHud(); renderTray(); break; }
       case 'upgrade': SFX.upgrade(); buzz(15); G.pop[ev.id] = 0.001; for (let i = 0; i < 14; i++) { const b = C.bById(R, ev.id), a = i / 14 * TAU; G.parts.push({ k: 'star', x: C.cc(b.c), y: C.cc(b.r), vx: Math.cos(a) * 120, vy: Math.sin(a) * 120, t: 0, life: 0.6, col: PAL.yellow, r: 5 }); } renderHud(); break;
       case 'hero': SFX.fanfare(); G.pop[ev.id] = 0.001; toast('🦔 ' + t('h_' + ev.h)); renderHud(); break;
       case 'hop': SFX.hop(); buzz(6); { const [sx, sy] = toScreen(ev.x, ev.y); flyTo(sx, sy, ev.k === 'berry' ? 'berry' : 'firefly', ev.k === 'berry' ? '#hbr' : '#hff', 3); floatText(ev.x, ev.y - 10, '+' + ev.n, ev.k === 'berry' ? PAL.orange : PAL.yellow); }
-        if (G.tut === 3 && !R.hops.length) { G.tut = 4; say('p_night', 1, 0, true); } renderHud(); break;
+        renderHud(); break;
       case 'night': SFX.horn(); banner(t('nightB', { n: ev.n }), 'v'); G.dawnShown = false; hideSel(); buildTray(); if (G.tut) { G.tut = 5; say('p_tap', 2, 0, true); } break;
       case 'wave': { if (ev.big) { SFX.surge(); banner(t('bigWave'), 'o surge'); G.surge = 7; G.shake = Math.max(G.shake, 0.45); buzz([30, 40, 30]); if (!G.said.bigw && (!G.tut || G.tut === 7)) { G.said.bigw = 1; say('p_bigWave', 2, 2600); } break; }
         SFX.horn(); banner(t('wave', { n: ev.w + 1 }), 'v'); if (!G.tut && G.pommeKey !== 'p_help') say({ N: 'p_north', E: 'p_east', W: 'p_west', S: 'p_south' }[ev.lane], 2, 2200);
@@ -1348,7 +1349,7 @@ function events() {
       case 'bossDown': banner('✨', 'o'); SFX.fanfare(); break;
       case 'dawn': nightWon(ev.n); onDawn(ev.n); break;
       case 'help': say('p_help', 1, 4200); JUICE.confetti(25); SFX.chime(); renderHud(); break;
-      case 'day': hideSel(); buildTray(); renderHud(); if (G.tut) { S.tut = 1; G.tut = 0; save(); say('p_day', 0, 3800); } break;
+      case 'day': hideSel(); buildTray(); renderHud(); if (G.tut) { G.tut = 0; tutEnd(); say('p_day', 0, 3800); } break;
       case 'win': nightWon(7); onWin(); break;
       case 'lose': onLose(); break;
       case 'revive': SFX.shield(); JUICE.flash(document.body); G.shake = 0.4; for (let i = 0; i < 40; i++) { const a = i / 40 * TAU; G.parts.push({ k: 'star', x: C.LX, y: C.LY - 20, vx: Math.cos(a) * 260, vy: Math.sin(a) * 260, t: 0, life: 0.7, col: PAL.yellow, r: 5 }); } break;
@@ -1504,10 +1505,11 @@ function settingsModal(back) {
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
     <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
     ${themes.length > 1 ? `<label class="sw"><span>${t('theme')}</span><select data-theme>${themes.map(([k, n]) => `<option value="${k}" ${S.theme === k ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
-    <button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Lantern Hold ${window.LH_VERSION || ''}</div>`);
+    ${G.mode === 'run' ? '' : `<button class="b2" data-tuto>${t('tReplay')}</button>`}<button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Lantern Hold ${window.LH_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); if (G.mode === 'home') buildHome(); else if (G.mode === 'run') { buildHud(); buildTray(); } settingsModal(back); };
   const th = modal.querySelector('[data-theme]'); if (th) th.onchange = () => { S.theme = th.value; save(); };
+  const tb = modal.querySelector('[data-tuto]'); if (tb) tb.onclick = async () => { SFX.click(); if (S.run && !await confirmBox(t('newRun') + ' ?')) return; S.run = null; S.tut = 0; save(); startRun(false); };   // a fresh tutorial run
   modal.querySelector('[data-restore]').onclick = () => Store.restore();
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.LH_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = () => settingsModal(back); };
@@ -1522,7 +1524,7 @@ function pauseModal() {
   G.paused = true; SFX.click();
   openModal(`<h2>${t('pause')}</h2><button class="b1 big" data-c>${t('cont')}</button><button class="b2" data-q>${t('quit')}<br><small>${t('quitSub')}</small></button><button class="b2" data-s>${t('settings')}</button>`);
   modal.querySelector('[data-c]').onclick = () => { closeModal(); G.paused = false; };
-  modal.querySelector('[data-q]').onclick = () => { save(); closeModal(); G.paused = false; showHome(); };
+  modal.querySelector('[data-q]').onclick = () => { if (G.tut) { G.tut = 0; tutEnd(); } save(); closeModal(); G.paused = false; showHome(); };
   modal.querySelector('[data-s]').onclick = () => settingsModal(pauseModal);
 }
 
@@ -1543,6 +1545,21 @@ function say(key, m = 0, ms = 3200, sticky = false) {
   clearTimeout(pommeTimer); if (!sticky) pommeTimer = setTimeout(pommeHide, ms || 3200); G.pommeKey = key;
 }
 function pommeHide() { $('#pomme').classList.remove('on'); G.pommeKey = ''; }
+// the first-run guide (Pomme's tutorial night): a drawn hand shows each gesture, "Skip" ends it for good (S.tut), "Replay" lives in the settings
+const HAND = '<svg viewBox="-24 -6 52 70" width="52" height="70"><g transform="rotate(-10)" fill="#fff" stroke="#1F2A4A" stroke-width="3" stroke-linejoin="round"><rect x="-7" y="-2" width="14" height="34" rx="7"/><rect x="-12" y="20" width="34" height="30" rx="11"/><rect x="6" y="22" width="18" height="9" rx="4.5"/><rect x="6" y="30" width="18" height="9" rx="4.5"/><rect x="6" y="38" width="18" height="9" rx="4.5"/><rect x="-19" y="30" width="14" height="10" rx="5"/><rect x="-7" y="-2" width="14" height="34" rx="7"/><rect x="-10" y="48" width="30" height="10" rx="4" fill="#FF9F43"/></g></svg>';
+function tutSkipBtn(on) { let b = $('#tskip'); if (!b) { b = document.createElement('button'); b.id = 'tskip'; b.onclick = () => { SFX.click(); G.tut = 0; tutEnd(); pommeHide(); renderTray(); }; document.body.appendChild(b); } b.textContent = t('tSkip'); b.classList.toggle('on', on); }
+function tutEnd() { S.tut = 1; save(); tutSkipBtn(false); tutHand(null); }
+// the hand: fingertip on (x, y) in screen pixels; mode 'tap' presses and pulses (CSS), 'move' follows the given point (drag, swipe)
+function tutHand(x, y, mode) { let h = $('#thand'); if (!h) { h = div('', HAND); h.id = 'thand'; document.body.appendChild(h); }
+  if (x == null) { h.className = ''; return; } h.className = 'on ' + mode; h.style.transform = `translate(${Math.round(x - 24)}px,${Math.round(y - 6)}px)`; }
+function tutGuide() {   // where the hand goes for the current step
+  const R = G.R; if (!G.tut || !R || G.mode !== 'run' || modal.classList.contains('on') || G.paused) return tutHand(null);
+  if (G.tut === 4) { const b = $('#gonight'); if (!b) return tutHand(null); const r = b.getBoundingClientRect(); return tutHand(r.left + r.width * 0.4, r.top + r.height * 0.45, 'tap down'); }   // from above: the button sits at the bottom edge
+  if (G.tut === 5 && R.e.length) { const [x, y] = toScreen(R.e[0].x, R.e[0].y); return tutHand(x, y - 10, 'tap'); }
+  if (G.tut === 6 && R.drops.length) { const [x, y] = toScreen(R.drops[0].x, R.drops[0].y), q = Math.sin(G.time * 3.2); return tutHand(x + q * 46 * SC, y + 6, 'move'); }
+  if ((G.tut === 1 || G.tut === 2) && G.tutPath) return tutHand(G.tutPath[0], G.tutPath[1], 'move');
+  tutHand(null);
+}
 
 // ---------- run screens: HUD, tray ----------
 function buildHud() {
@@ -1625,7 +1642,7 @@ function bindWsHome() {
   const c = $('#hmid [data-wcol]'); if (c) c.onclick = () => collectWs();
 }
 function showHome() {
-  G.mode = 'home'; G.R = null; hideSel(); $('#hud').classList.remove('on'); $('#tray').classList.remove('on'); $('#title').classList.remove('on'); pommeHide();
+  G.mode = 'home'; G.R = null; hideSel(); tutSkipBtn(false); tutHand(null); $('#hud').classList.remove('on'); $('#tray').classList.remove('on'); $('#title').classList.remove('on'); pommeHide();
   $('#home').style.backgroundImage = `linear-gradient(rgba(31,42,74,.55),rgba(31,42,74,.55)),url(${src('bg_forest')})`; $('#home').classList.add('on');
   ensureLogin(); buildHome(); save();
   if (S.login.pending && S.tut) setTimeout(giftModal, 450);
@@ -1656,7 +1673,7 @@ function drawBg() {
     if (open) { const L = C.LANES[ln], p = L.pts; cx.save(); cx.setLineDash([6 * SC, 10 * SC]); cx.lineDashOffset = -G.time * 20 * SC; cx.beginPath(); for (let i = 0; i < p.length - 1; i++) { const [x, y] = toScreen(p[i][0], p[i][1]); i ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.lineWidth = 3 * SC; cx.strokeStyle = 'rgba(255,246,220,.45)'; cx.stroke(); cx.restore(); } }
 }
 function drawDragTargets() {
-  const R = G.R, d = G.drag; if (!d && !(G.tut === 1 || G.tut === 2)) return;
+  G.tutPath = null; const R = G.R, d = G.drag; if (!d && !(G.tut === 1 || G.tut === 2)) return;
   const k = d ? d.k : G.tut === 1 ? 'tower' : 'wall';
   if (d) for (let c = 0; c < C.COLS; c++) for (let r = 0; r < C.ROWS; r++) { if (!C.canPlace(R, k, c, r, true)) continue; const [x, y] = toScreen(c * 60 + 3, r * 60 + 3); cx.fillStyle = 'rgba(255,230,109,.18)'; cx.fillRect(x, y, 54 * SC, 54 * SC); }
   // the tutorial target (pulsing) and a ghost finger that shows the gesture
@@ -1664,7 +1681,7 @@ function drawDragTargets() {
     const cell = G.tut === 1 ? C.bestCell(R, 'tower') : [2, 2]; if (!cell) return; const [x, y] = cellCenter(cell[0], cell[1]), p = (G.time * 1.5) % 1;
     cx.beginPath(); cx.arc(x, y, (24 + p * 16) * SC, 0, TAU); cx.lineWidth = 5 * (1 - p) + 1; cx.strokeStyle = PAL.yellow; cx.stroke();
     if (!d) { const card = document.querySelector(`#cards [data-k="${k}"]`); if (card) { const r = card.getBoundingClientRect(), q = (G.time * 0.6) % 1, e = q < 0.7 ? q / 0.7 : 1, sx = r.left + r.width / 2, sy = r.top + 10, fx = sx + (x - sx) * e * e * (3 - 2 * e), fy = sy + (y - sy) * e * e * (3 - 2 * e);
-      cx.globalAlpha = 0.85 * (q < 0.85 ? 1 : (1 - q) / 0.15); spr('b_' + k, fx, fy - 26, 44 * SC); cx.beginPath(); cx.arc(fx, fy + 14, 14, 0, TAU); cx.fillStyle = 'rgba(255,255,255,.85)'; cx.fill(); cx.lineWidth = 3; cx.strokeStyle = PAL.night; cx.stroke(); cx.globalAlpha = 1; } }
+      cx.globalAlpha = 0.85 * (q < 0.85 ? 1 : (1 - q) / 0.15); spr('b_' + k, fx, fy - 26, 44 * SC); cx.globalAlpha = 1; G.tutPath = q < 0.85 ? [fx, fy + 6] : null; } }
   }
 }
 function drawBuilding(b) {
@@ -1752,6 +1769,7 @@ function draw() {
     const [x, y] = toScreen(f.x, f.y - k * 40); cx.globalAlpha = clamp(1.5 - k * 1.5, 0, 1); const fs = 20 * (f.sz || 1) * (k < 0.15 ? 1 + (0.15 - k) * 3 : 1); cx.font = `900 ${fs}px ui-rounded, system-ui`; cx.textAlign = 'center'; cx.lineWidth = 5; cx.strokeStyle = PAL.night; cx.strokeText(f.s, x, y); cx.fillStyle = f.col; cx.fillText(f.s, x, y); cx.globalAlpha = 1; }
   if (G.flash > 0) { cx.globalAlpha = clamp(G.flash * 1.6, 0, 0.55); cx.fillStyle = PAL.cream; cx.fillRect(0, 0, W, H); cx.globalAlpha = 1; }
   // the tutorial ring on the first shadow to tap
+  if (G.tut === 6 && R.drops.length) { const [x, y] = toScreen(R.drops[0].x, R.drops[0].y), p = (G.time * 1.6) % 1; cx.beginPath(); cx.arc(x, y, (22 + p * 20) * SC, 0, TAU); cx.lineWidth = 5 * (1 - p) + 1; cx.strokeStyle = PAL.yellow; cx.stroke(); }
   if (G.tut === 5 && R.e.length) { const e = R.e[0], [x, y] = toScreen(e.x, e.y), p = (G.time * 1.6) % 1; cx.beginPath(); cx.arc(x, y - 10, (22 + p * 20) * SC, 0, TAU); cx.lineWidth = 5 * (1 - p) + 1; cx.strokeStyle = PAL.yellow; cx.stroke(); }
 }
 
@@ -1763,7 +1781,7 @@ function frame(now) {
   G.time += rdt; if (G.comboT > 0) G.comboT -= rdt; if (G.flash > 0) G.flash = Math.max(0, G.flash - rdt * 2.5); if (G.surge > 0) G.surge -= rdt;
   const R = G.R;
   if (G.mode === 'run' && R && !G.paused && !modal.classList.contains('on')) {
-    if (R.phase === 'night' || (R.phase === 'day' && R.dayT > 0 && !G.drag)) { acc += rdt; let n = 0; while (acc >= C.DT && n < 6) { C.step(R, C.DT); events(); acc -= C.DT; n++; } if (n >= 6) acc = 0; }
+    if (R.phase === 'night' || (R.phase === 'day' && R.dayT > 0 && !G.drag)) { acc += rdt; let n = 0; while (acc >= C.DT && n < 6) { if (G.tut) R.lan.hp = Math.max(R.lan.hp, R.lan.max * 0.6);   /* nobody loses during the guide */ C.step(R, C.DT); events(); acc -= C.DT; n++; } if (n >= 6) acc = 0; }
   }
   if (R) {
     const target = R.phase === 'night' || R.phase === 'lost' ? 1 : 0; G.dark += (target - G.dark) * Math.min(1, rdt * 1.5);
@@ -1779,7 +1797,7 @@ function frame(now) {
   G.parts = G.parts.filter(p => p.t < p.life); if (G.parts.length > 400) G.parts.splice(0, G.parts.length - 400);
   for (const f of G.floats) { f.t += rdt; if (f.k === 'fly' && f.t >= f.d && !f.done) { f.done = true; JUICE.bump(f.el); } }
   G.floats = G.floats.filter(f => f.t < f.d);
-  musicTick(); draw(); renderHud();
+  musicTick(); draw(); renderHud(); tutGuide();
   if ((saveT += rdt) > 4) { saveT = 0; if (G.mode === 'run') save(); if (G.mode === 'home' && Math.random() < 0.25) renderHome(); }
   requestAnimationFrame(frame);
 }
@@ -1914,8 +1932,8 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       document.getElementById('pomme').classList.remove('on'); await A.wait(400);
     },
     scenes: {
-      // title -> consent -> Pomme's tutorial: drag a tower, a palisade, pick the harvest, night, tap the shadows, swipe the fireflies, dawn
-      async onboarding(A) { watch(A); await start(A); await A.wait(2600);
+      // title -> consent -> Pomme's tutorial: drag a tower, a palisade, (pick the harvest), night, tap the shadows, swipe the fireflies, dawn
+      async onboarding(A) { watch(A); await start(A); await A.wait(1400);
         for (let i = 0; i < 2 && A.running(); i++) { const r = R(); if (!r) break; const k = G.tut === 1 ? 'tower' : 'wall', c = k === 'tower' ? C.bestCell(r, 'tower') : [2, 2]; await A.think(); await build(A, { k, c: c[0], r: c[1] }); await A.wait(900); }
         await A.wait(600); await pickHops(A); await A.wait(800); await A.think(); await A.tapEl('#gonight', 'nuit');
         const res = await night(A, 60); if (res === 'dawn') await dawnPick(A); await A.wait(1500); },

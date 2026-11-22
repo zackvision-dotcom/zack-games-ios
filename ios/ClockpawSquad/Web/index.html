@@ -55,6 +55,8 @@ i.bo,i.ky{display:inline-block;width:1.15em;height:1.15em;background:center/cont
 #tic.on{opacity:1;transform:none}
 #tic .pf{width:76px;height:76px;flex:none;object-fit:contain;animation:pbob 1.6s ease-in-out infinite}@keyframes pbob{50%{transform:translateY(-4px) rotate(-2deg)}}
 #tic .pt{background:var(--cream);border:3px solid var(--ink);border-radius:16px 16px 16px 4px;padding:9px 12px;font-weight:800;font-size:15px;line-height:1.3;box-shadow:4px 4px 0 rgba(0,0,0,.35);max-width:300px;margin-bottom:20px}
+#tskip{position:fixed;right:8px;top:calc(env(safe-area-inset-top) + 58px);z-index:9;display:none;min-width:96px;min-height:48px;padding:8px 16px;border-radius:999px;background:var(--cream);color:var(--ink);border:3px solid var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:17px}#tskip.on{display:block}#tskip:active{transform:translateY(3px)}
+body.tuton #tic.top{top:calc(env(safe-area-inset-top) + 112px)}
 #tic.home{bottom:calc(env(safe-area-inset-bottom) + 96px)}
 #tic.top{bottom:auto;top:calc(env(safe-area-inset-top) + 54px);align-items:flex-start}#tic.top .pf{width:60px;height:60px}#tic.top .pt{margin:8px 0 0;border-radius:4px 16px 16px 16px;font-size:14px;padding:7px 10px}
 .bub{position:fixed;z-index:7;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:6px 10px;font-weight:800;font-size:13px;max-width:200px;box-shadow:3px 3px 0 rgba(0,0,0,.35);pointer-events:none;animation:pop .3s cubic-bezier(.3,1.6,.5,1);transition:opacity .3s}
@@ -775,13 +777,13 @@ window.I18N = (() => {
     ko: ['K.O.', 'K.O.'], chain: ['Chaîne ×{n} !', 'Chain ×{n}!'],
     // Maître Tic (25 lines)
     t_hello: ['Bonjour, petit rouage ! Je suis Maître Tic, horloger de mon état. Des robots grincheux ont pris ma tour…', 'Hello, little cog! I am Master Tic, clockmaker by trade. Grumpy robots took my tower…'],
-    t_tapCat: ['Touche le chat pour le choisir.', 'Tap the cat to pick it.'],
-    t_tapBot: ['Maintenant, touche le robot : tu vois ce qui va se passer avant d’agir.', 'Now tap the robot: you see what will happen before you act.'],
-    t_confirm: ['La flèche montre la pousse. Touche encore le robot pour lancer !', 'The arrow shows the shove. Tap the robot again to go!'],
+    t_tapCat: ['Touche le chat pour le choisir.', 'Tap the cat to pick it.'], tSkip: ['Passer ✕', 'Skip ✕'], tReplay: ['Revoir le tutoriel', 'Replay the tutorial'],
+    t_tapBot: ['Touche le robot : tu vois l’effet.', 'Tap the robot to see the move.'],
+    t_confirm: ['Touche encore le robot pour pousser !', 'Tap the robot again to shove!'],
     t_ko1: ['Dans l’engrenage ! Pas mal… pour un débutant !', 'Into the gear! Not bad… for a beginner!'],
-    t_rabbit: ['Le lapin-ressort saute, et repousse tout ce qui l’entoure en atterrissant. Vise entre les deux robots.', 'The spring rabbit jumps and shoves everything around it on landing. Aim between the two robots.'],
+    t_rabbit: ['Le lapin saute entre les robots et repousse !', 'The rabbit jumps between robots and shoves!'],
     t_window: ['Par la fenêtre ! Il ira réfléchir dans la cour.', 'Out the window! He can think it over in the yard.'],
-    t_turtle: ['La tortue charge en ligne et pousse fort. Trois robots alignés devant un engrenage… tu vois l’idée ?', 'The turtle charges in a line and shoves hard. Three robots lined up before a gear… see the idea?'],
+    t_turtle: ['La tortue charge en ligne : pousse les trois !', 'The turtle charges in a line: shove all three!'],
     t_chain: ['Une pousse en chaîne ! J’en ai le monocle qui tremble.', 'A chain push! My monocle is trembling.'],
     t_rules: ['Un seul tour par salle : chaque héros agit une fois, puis les robots frappent. Les flèches rouges te disent où.', 'One turn per room: each hero acts once, then the robots strike. The red arrows tell you where.'],
     t_rewind: ['Remontons le temps, veux-tu ?', 'Shall we turn back time?'],
@@ -1205,6 +1207,7 @@ function startRoom(id) {
   if (L.tut || L.phases) G.team = {};
   $('#home').classList.remove('on'); $('#title').classList.remove('on'); $('#hud').classList.add('on'); $('#tray').classList.add('on'); ticHide();
   loadPhase(); track('room_start', { id });
+  tutSkipBtn(!!tutRoom());
   if (tutRoom()) tutorialStart();
   else if (!S.said['r' + id]) { S.said['r' + id] = 1; save(); const line = { 4: 't_rules', 5: 't_rewindFree', 6: 't_mini', 7: 't_shield', 8: 't_joke1', 9: 't_joke3', 10: 't_joke2', 12: 't_mini', 13: 't_joke4', 14: 't_joke5', 18: 't_mini', 24: 't_boss' }[id];
     if (line) setTimeout(() => say(line, id === 24 ? 2 : 0, 3800), 400); else setTimeout(banter, 500); }
@@ -1259,6 +1262,7 @@ async function doAct() {
 }
 async function endTurn() {
   if (G.busy || G.tl || G.rw || !G.S || G.S.phase !== 'play' || G.replay) return; audioInit();
+  if (tutRoom()) { SFX.miss(); return; }   // nobody loses during the guide
   G.sel = null; G.prev = null; G.pulse = ''; G.hist.push(C.clone(G.S)); G.seq.push({ end: 1 }); G.busy = true; renderTray();
   const ev = C.enemyTurn(G.S); await play(ev); G.busy = false;
   if (G.S.phase === 'won') return onWon();
@@ -1448,6 +1452,16 @@ function tutorialStart() {
   else if (n === 2) say('t_rabbit', 2, 0, true);
   else say('t_turtle', 2, 0, true);
 }
+// the first-run guide's "Skip" (top right, under the HUD): ends the 3 guided rooms for good (S.tut); "Replay" lives in the settings
+function tutSkipBtn(on) { let b = $('#tskip'); if (!b) { b = document.createElement('button'); b.id = 'tskip'; b.onclick = () => { SFX.click(); tutEnd(); ticHide(); renderHud(); renderTray(); }; document.body.appendChild(b); } b.textContent = t('tSkip'); b.classList.toggle('on', on); document.body.classList.toggle('tuton', on); }
+function tutEnd() { S.tut = 1; save(); tutSkipBtn(false); }
+// a cartoon pointing hand (cream, ink outline, brass cuff), fingertip on (x, y); k = scale
+function drawHand(x, y, k) {
+  const rr = (x0, y0, w, h, r) => { cx.beginPath(); cx.roundRect(x0, y0, w, h, r); cx.fill(); cx.stroke(); };
+  cx.save(); cx.translate(x, y); cx.scale(k, k); cx.rotate(-0.18); cx.lineWidth = 3; cx.strokeStyle = PAL.ink; cx.lineJoin = 'round';
+  cx.shadowColor = 'rgba(0,0,0,.45)'; cx.shadowBlur = 8; cx.shadowOffsetY = 5; cx.fillStyle = '#fff'; rr(-7, -2, 14, 34, 7); cx.shadowColor = 'transparent';
+  rr(-12, 20, 34, 30, 11); for (let i = 0; i < 3; i++) rr(6, 22 + i * 8, 18, 9, 4.5); rr(-19, 30, 14, 10, 5); rr(-7, -2, 14, 34, 7); cx.fillStyle = PAL.brass; rr(-10, 48, 30, 10, 4); cx.restore();
+}
 function tutRing() {   // where the tutorial points: the hero to pick, then the cell to aim at
   if (!tutRoom() || G.busy || G.S.phase !== 'play') return null; const sol = SOL[roomKey()]; if (!sol) return null; const m = sol.seq[G.seq.length]; if (!m) return null;
   if (G.sel !== m.h) { const h = C.hero(G.S, m.h); return h ? [h.c, h.r] : null; }
@@ -1462,7 +1476,7 @@ function finishRoom() {
   const bolts = Math.round(E.bolts(n, first) * (1 + 0.15 * S.up.bolts)), f = E.floorOf(id);
   S.bolts += bolts; if (first) S.floorEarn[f] = (S.floorEarn[f] || 0) + bolts;
   const wasCur = S.cur; S.cur = Math.max(S.cur, Math.min(25, id + 1)); S.plays++; S.totals.rooms++;
-  if (L.tut === 3) S.tut = 1;
+  if (L.tut === 3 && !S.tut) tutEnd();
   addXp(E.xp(n, first));
   for (const h of ['owl', 'hamster']) if (wasCur <= E.unlock[h] && S.cur > E.unlock[h] && !(h === 'owl' && S.owned.starter)) setTimeout(() => toast('✨ ' + t('newHero', { s: t('h_' + h) })), 1800);
   save(); track('room_end', { id, cogs: n });
@@ -1586,10 +1600,11 @@ function settingsModal(back) {
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
     <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
     ${themes.length > 1 ? `<label class="sw"><span>${t('theme')}</span><select data-theme>${themes.map(([k, n]) => `<option value="${k}" ${S.theme === k ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
-    <button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Clockpaw Squad ${window.CP_VERSION || ''}</div>`);
+    <button class="b2" data-tuto>${t('tReplay')}</button><button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Clockpaw Squad ${window.CP_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); if (G.mode === 'home') buildHome(); else if (G.mode === 'room') { buildHud(); buildTray(); } settingsModal(back); };
   const th = modal.querySelector('[data-theme]'); if (th) th.onchange = () => { S.theme = th.value; save(); };
+  modal.querySelector('[data-tuto]').onclick = () => { SFX.click(); S.tut = 0; save(); startRoom(1); };   // the 3 guided rooms again (progress is kept)
   modal.querySelector('[data-restore]').onclick = () => Store.restore();
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.CP_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = () => settingsModal(back); };
@@ -1605,7 +1620,7 @@ function pauseModal() {
   openModal(`<h2>${t('pause')}</h2><button class="b1 big" data-c>${t('cont')}</button><button class="b2" data-r>${t('restart')}</button><button class="b2" data-q>${t('quit')}</button><button class="b2" data-s>${t('settings')}</button>`);
   modal.querySelector('[data-c]').onclick = () => closeModal();
   modal.querySelector('[data-r]').onclick = () => { closeModal(); startRoom(G.L.id); };
-  modal.querySelector('[data-q]').onclick = () => { closeModal(); showHome(); };
+  modal.querySelector('[data-q]').onclick = () => { closeModal(); if (tutRoom()) tutEnd(); showHome(); };
   modal.querySelector('[data-s]').onclick = () => settingsModal(pauseModal);
 }
 
@@ -1680,7 +1695,7 @@ function renderHome() {
   bindWs($('#hmid'), renderHome);
 }
 function showHome() {
-  G.mode = 'home'; G.L = null; G.S = null; $('#hud').classList.remove('on'); $('#tray').classList.remove('on'); $('#title').classList.remove('on'); ticHide();
+  G.mode = 'home'; G.L = null; G.S = null; $('#hud').classList.remove('on'); $('#tray').classList.remove('on'); $('#title').classList.remove('on'); ticHide(); tutSkipBtn(false);
   $('#home').style.backgroundImage = `linear-gradient(rgba(35,32,43,.55),rgba(35,32,43,.55)),url(${src('bg_room')})`; $('#home').classList.add('on');
   ensureLogin(); buildHome(); save();
   if (S.consent == null) setTimeout(() => { if (G.mode === 'home') consentModal(false, renderHome); }, 300);   // left the tutorial early
@@ -1828,7 +1843,8 @@ function draw() {
   // the tutorial / hint ring
   const ring = tutRing() || (G.ring && G.sel ? [G.ring.c, G.ring.r] : null);
   if (ring && !G.tl && !G.rw) { const [x, y] = cellCenter(ring[0], ring[1]), p = (G.time * 1.5) % 1; cx.beginPath(); cx.arc(x, y, SC * (0.4 + p * 0.3), 0, TAU); cx.lineWidth = 6 * (1 - p) + 1; cx.strokeStyle = PAL.brass; cx.stroke();
-    if (tutRoom() || G.ring) { const tap = Math.max(0, Math.sin(G.time * 5)), hx = x + SC * 0.28, hy = y + SC * (0.42 + 0.14 * (1 - tap)); cx.save(); cx.font = `${Math.round(SC * 0.62)}px system-ui, sans-serif`; cx.textAlign = 'left'; cx.textBaseline = 'top'; cx.translate(hx, hy); cx.rotate(-0.35); cx.fillText('👆', 0, 0); cx.restore(); } }
+    if (tutRoom()) { cx.save(); cx.fillStyle = 'rgba(35,32,43,.38)'; cx.beginPath(); cx.rect(-50, -50, W + 100, H + 100); cx.arc(x, y, SC * 0.85, 0, TAU, true); cx.fill('evenodd'); cx.restore(); }   // a soft veil around the spot
+    if (tutRoom() || G.ring) { const q = 0.5 + 0.5 * Math.cos(G.time * 4.4); if (q < 0.3) { cx.beginPath(); cx.arc(x, y, SC * (0.2 + (0.3 - q) * 0.8), 0, TAU); cx.fillStyle = 'rgba(255,250,235,.45)'; cx.fill(); } drawHand(x + SC * 0.06, y + SC * 0.05 + q * SC * 0.32, SC / 60 * (1 - (1 - q) * 0.08)); } }
   if (S.theme === 'winter') { cx.fillStyle = '#fff'; for (let i = 0; i < 40; i++) { const x = (i * 53.1 + Math.sin(G.time + i) * 20) % W, y = ((i * 97.7 + G.time * (30 + i % 5 * 10)) % H + H) % H; cx.globalAlpha = 0.8; cx.beginPath(); cx.arc(x, y, 1.5 + i % 3, 0, TAU); cx.fill(); } cx.globalAlpha = 1; }
   if (G.slow && G.tl) { cx.fillStyle = 'rgba(35,32,43,.12)'; cx.fillRect(0, 0, W, H); }
   cx.restore();
@@ -1970,7 +1986,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     },
     scenes: {
       // title -> Maître Tic's tutorial at once (the ad consent comes after it): the cat shoves a robot into the gear, then the rabbit's jump
-      async onboarding(A) { watch(A); await start(A); await A.wait(2600);
+      async onboarding(A) { watch(A); await start(A); await A.wait(1200);
         for (let i = 0; i < 2 && A.running(); i++) { if (!G.L) break; const ok = await solveRoom(A); if (!ok) break; await next(A); await A.wait(1200); } },
       // the core: a room, the live preview, a wrong move rewound one time out of two, then the right line and the slow-motion chain
       async boucle(A) { watch(A); await A.wait(800); await solveRoom(A, { mistake: A.rnd() < 0.5 ? 1 : 0 }); await A.wait(2500); },

@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#2a1d2e">
 <title>Crumble Crew</title>
 <style>
-:root{--ink:#3a2414;--paper:#fff3dc;--clay:#c8743c;--deep:#3a2414;--gold:#ffcf33;--teal:#4fd0d0;--panel:#4a3226}
+:root{--ink:#3a2414;--paper:#fff3dc;--clay:#c8743c;--deep:#3a2414;--gold:#ffcf33;--teal:#4fd0d0;--panel:#4a3226;--tu-bg:var(--paper);--tu-ink:var(--ink);--tu-line:var(--deep);--tu-accent:var(--gold)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;background:#2a1d2e;font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:manipulation}
 #cv{position:fixed;inset:0;display:block;touch-action:none}
@@ -456,9 +456,8 @@ window.I18N = (() => {
     g_tap: ['Touche le rocher {n} fois', 'Tap the boulder {n} times'], g_layer: ['Brise la couche {n}', 'Break layer {n}'], g_buy: ['Achète : {s}', 'Buy: {s}'], g_have: ['Aie {n} × {s}', 'Have {n} × {s}'],
     levelUp: ['Niveau {n} !', 'Level {n}!'], nugget: ['Pépite !', 'Nugget!'],
     // Cheffe Pioche
-    c_welcome: ['Salut ! Je suis la Cheffe Pioche. Ce rocher ne va pas se casser tout seul !', 'Hi! I’m Chief Pickaxe. This boulder won’t break itself!'],
-    c_tap: ['Tape sur le rocher, fort !', 'Tap the boulder, hard!'],
-    c_hireMiner: ['Bien ! Avec ces pièces, engage ton premier mineur (en bas).', 'Nice! Use those coins to hire your first miner (below).'],
+    tu_tap: ['Tape sur le rocher !', 'Tap the boulder!'], tu_miner: ['Engage un mineur !', 'Hire a miner!'],
+    skip: ['Passer', 'Skip'], tuReplay: ['Revoir le tutoriel', 'Replay the tutorial'],
     c_hirePorter: ['Les éclats s’entassent… Il nous faut un porteur pour les vendre !', 'Chunks are piling up… We need a hauler to sell them!'],
     c_frenzy: ['Tape très vite : quand la Frénésie est pleine, toute l’équipe va ×3 !', 'Tap really fast: when Frenzy is full, the whole crew goes ×3!'],
     c_goal: ['Prochain objectif : {s} !', 'Next goal: {s}!'],
@@ -530,6 +529,81 @@ window.JUICE = (() => {
   return { fly, bump, confetti, dust, heart, pop, flash };
 })();
 </script>
+<script>// First-run tutorial overlay: an animated hand at the exact spot of the gesture, a very short bubble,
+// a dimmed veil with a hole on the useful area, and a Skip button. No images: the hand is the ☝️ emoji with a shadow.
+// The game drives the steps: TUTO.show(step) for each step, TUTO.hide() at the end; the game decides when a gesture is done.
+// step = { rect: () => {x, y, w, h} | Element, at: () => [x, y] (hand point, default: rect centre), gesture: 'tap'|'hold'|'swipe',
+//          swipe: () => [dx, dy], text, round (hole radius, px), pad (px), bubble: 'above'|'below' }
+// TUTO.config({ skip: 'Passer', skipTop: () => px, onSkip }) — colours come from --tu-bg, --tu-ink, --tu-line, --tu-accent.
+window.TUTO = (() => {
+  const css = `
+#tuto{position:fixed;inset:0;z-index:28;pointer-events:none}
+#tuto .tu-v{position:fixed;left:0;top:0;width:0;height:0;background:rgba(8,4,12,.62)}
+#tuto .tu-hole{position:fixed;left:0;top:0;border-radius:18px}
+#tuto .tu-hole::after{content:'';position:absolute;inset:-5px;border-radius:inherit;border:3px solid var(--tu-accent,#ffcf33);animation:tuRing 1.1s ease-out infinite}
+#tuto .tu-hole.none::after{display:none}
+@keyframes tuRing{from{opacity:.95;transform:scale(.97)}to{opacity:0;transform:scale(1.1)}}
+#tuto .tu-hand{position:fixed;left:0;top:0;width:0;height:0}
+#tuto .tu-hand i{position:absolute;left:-27px;top:-3px;font-size:54px;line-height:1;font-style:normal;filter:drop-shadow(0 5px 3px rgba(0,0,0,.55));transform-origin:50% 0}
+#tuto .tu-hand.tap i{animation:tuTap 1s ease-in-out infinite}
+@keyframes tuTap{0%,100%{transform:translate(10px,20px) rotate(-10deg)}45%,60%{transform:translate(0,0) scale(.88)}}
+#tuto .tu-hand.hold i{animation:tuHold 1.4s ease-in-out infinite}
+@keyframes tuHold{0%{transform:translate(8px,18px) rotate(-8deg)}22%,86%{transform:translate(0,0) scale(.86)}100%{transform:translate(8px,18px) rotate(-8deg)}}
+#tuto .tu-hand.hold::before{content:'';position:absolute;left:-24px;top:-24px;width:48px;height:48px;border-radius:50%;background:var(--tu-accent,#ffcf33);animation:tuPulse 1.4s ease-out infinite}
+@keyframes tuPulse{0%,22%{transform:scale(.3);opacity:.8}86%,100%{transform:scale(1.5);opacity:0}}
+#tuto .tu-hand.swipe i{animation:tuSwipe 1.5s ease-in-out infinite}
+@keyframes tuSwipe{0%{transform:translate(0,0);opacity:.4}14%{transform:translate(0,0) scale(.9);opacity:1}72%{transform:translate(var(--dx),var(--dy)) scale(.9);opacity:1}100%{transform:translate(var(--dx),var(--dy));opacity:.4}}
+#tuto .tu-bub{position:fixed;left:0;top:0;max-width:min(80vw,300px);background:var(--tu-bg,#fff);color:var(--tu-ink,#222);border:3px solid var(--tu-line,#222);border-radius:16px;padding:8px 14px;font-weight:900;font-size:18px;line-height:1.2;text-align:center;box-shadow:0 4px 0 var(--tu-line,#222);white-space:normal}
+#tuto .tu-bub.in{animation:tuIn .3s cubic-bezier(.3,1.6,.5,1)}@keyframes tuIn{from{transform:scale(.6);opacity:0}}
+#tuto .tu-skip{position:fixed;right:calc(env(safe-area-inset-right) + 10px);top:0;min-width:96px;min-height:46px;padding:8px 18px;border-radius:999px;background:var(--tu-bg,#fff);color:var(--tu-ink,#222);border:3px solid var(--tu-line,#222);box-shadow:0 3px 0 var(--tu-line,#222);font:inherit;font-weight:900;font-size:16px;pointer-events:auto;cursor:pointer}
+#tuto .tu-skip:active{transform:translateY(2px)}`;
+  let root = null, veil = [], hole, hand, bub, skip, step = null, cfg = {}, raf = 0, lastText = '';
+  function build() {
+    if (root) return;
+    const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
+    root = document.createElement('div'); root.id = 'tuto';
+    root.innerHTML = '<div class="tu-v"></div><div class="tu-v"></div><div class="tu-v"></div><div class="tu-v"></div><div class="tu-hole"></div><div class="tu-hand"><i>☝️</i></div><div class="tu-bub"></div><button class="tu-skip"></button>';
+    veil = [...root.querySelectorAll('.tu-v')]; hole = root.querySelector('.tu-hole'); hand = root.querySelector('.tu-hand'); bub = root.querySelector('.tu-bub'); skip = root.querySelector('.tu-skip');
+    skip.addEventListener('pointerdown', e => e.stopPropagation());
+    skip.addEventListener('click', e => { e.stopPropagation(); const f = cfg.onSkip; hide(); if (f) f(); });
+  }
+  const rectOf = r => { if (!r) return null; if (r instanceof Element) { if (!r.isConnected || !r.offsetParent && getComputedStyle(r).position !== 'fixed') return null; const b = r.getBoundingClientRect(); return { x: b.left, y: b.top, w: b.width, h: b.height }; } return r; };
+  function place() {
+    raf = 0; if (!step) return; raf = requestAnimationFrame(place);
+    const r = rectOf(typeof step.rect === 'function' ? step.rect() : step.rect), W = innerWidth, H = innerHeight;
+    root.style.display = ''; skip.style.top = Math.round(cfg.skipTop ? cfg.skipTop() : 12) + 'px';
+    const box = (el, x, y, w, h) => Object.assign(el.style, { transform: `translate(${x}px,${y}px)`, width: Math.max(0, w) + 'px', height: Math.max(0, h) + 'px' });
+    if (!r) { hole.style.opacity = hand.style.opacity = bub.style.opacity = 0; box(veil[0], 0, 0, W, H); veil.slice(1).forEach(v => box(v, 0, 0, 0, 0)); return; }
+    hole.style.opacity = hand.style.opacity = bub.style.opacity = 1;
+    const p = step.pad == null ? 8 : step.pad, rad = step.round == null ? 18 : step.round;
+    hole.classList.toggle('none', !!step.noHole);
+    const x0 = r.x - p, y0 = r.y - p, x1 = r.x + r.w + p, y1 = r.y + r.h + p;   // the veil: four panels around the useful area
+    if (step.noHole) veil.forEach(v => box(v, 0, 0, 0, 0));
+    else { box(veil[0], 0, 0, W, y0); box(veil[1], 0, y1, W, H - y1); box(veil[2], 0, y0, x0, y1 - y0); box(veil[3], x1, y0, W - x1, y1 - y0); }
+    Object.assign(hole.style, { width: r.w + 2 * p + 'px', height: r.h + 2 * p + 'px', borderRadius: rad + 'px', transform: `translate(${r.x - p}px,${r.y - p}px)` });
+    const at = step.at ? step.at() : [r.x + r.w / 2, r.y + r.h / 2];
+    const down = at[1] > H - 100;   // near the bottom edge the hand comes from above (turned over) so it stays on screen
+    hand.style.transform = `translate(${at[0]}px,${at[1]}px)` + (down ? ' rotate(180deg)' : '');
+    if (step.gesture === 'swipe') { const d = step.swipe ? step.swipe() : [0, -80]; hand.style.setProperty('--dx', (down ? -d[0] : d[0]) + 'px'); hand.style.setProperty('--dy', (down ? -d[1] : d[1]) + 'px'); }
+    const bw = bub.offsetWidth, bh = bub.offsetHeight, cx = at[0];
+    const above = step.bubble ? step.bubble === 'above' : at[1] > H * 0.5;
+    let y = above ? Math.min(r.y - p, at[1] - (down ? 72 : 10)) - bh - 14 : Math.max(r.y + r.h + p, at[1] + 70) + 12;
+    y = Math.max(8, Math.min(H - bh - 8, y));
+    const x = Math.max(8, Math.min(W - bw - 8, cx - bw / 2));
+    bub.style.transform = `translate(${x}px,${y}px)`;
+  }
+  function show(s) {
+    build(); if (!root.isConnected) document.body.appendChild(root);
+    step = s; skip.textContent = cfg.skip || 'Skip';
+    hand.className = 'tu-hand ' + (s.gesture || 'tap'); hand.style.display = s.noHand ? 'none' : '';
+    if (s.text !== lastText) { bub.textContent = s.text || ''; bub.classList.remove('in'); void bub.offsetWidth; bub.classList.add('in'); lastText = s.text; }
+    bub.style.display = s.text ? '' : 'none';
+    if (!raf) place();
+  }
+  function hide() { step = null; lastText = ''; if (raf) cancelAnimationFrame(raf); raf = 0; if (root && root.isConnected) root.remove(); }
+  return { config: c => { cfg = Object.assign(cfg, c); if (skip) skip.textContent = cfg.skip || 'Skip'; }, show, hide, active: () => !!step, step: () => step };
+})();
+</script>
 <script>// Crumble Crew — an idle game: a crew of moles breaks a giant boulder. Canvas for the mine, DOM for the interface.
 (() => {
 'use strict';
@@ -543,11 +617,11 @@ function div(cls, html) { const d = document.createElement('div'); d.className =
 const KEY = 'crumblecrew.save.v1';
 function fresh() {
   return { v: 1, coins: 0, w: {}, m: {}, pick: 0, stars: 0, rock: 0, layer: 0, hp: E.layerHp(0, 0), pile: 0, res: {}, job: null, boostEnd: 0, golden: false,
-    lastSeen: 0, lang: I.detect(), sound: true, music: true, vib: true, consent: null, tut: 0, goal: 0, quests: null, login: { last: '', streak: 0, pending: false },
+    lastSeen: 0, lang: I.detect(), sound: true, music: true, vib: true, consent: null, tut: 0, tuto: 1, goal: 0, quests: null, login: { last: '', streak: 0, pending: false },
     owned: {}, theme: '', lastAdAt: 0, sessions: 0, best: 0, xp: 0, level: 1, totals: { taps: 0, earned: 0, nuggets: 0, chests: 0, layers: 0, prestiges: 0, hired: 0, frenzies: 0 } };
 }
 let S;
-try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+try { const raw = JSON.parse(localStorage.getItem(KEY) || 'null'); S = Object.assign(fresh(), raw || {}); if (raw && raw.tuto == null) { S.tut = Math.max(S.tut || 0, 4); S.tuto = 1; } } catch (e) { S = fresh(); }   // saves from before the guided tutorial: already seen
 S.totals = Object.assign(fresh().totals, S.totals);
 I.set(S.lang);
 function save() { S.lastSeen = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
@@ -662,7 +736,7 @@ const IMG = {};
 for (const k in SPR) { const im = new Image(); im.onload = () => { IMG[k] = im; }; im.src = SPR[k]; }
 
 // ---------- entities ----------
-const G = { phase: 'title', t: 0, crew: [], parts: [], floats: [], nuggets: [], chests: [], shake: 0, flash: 0, squash: 0, frenzy: 0, frenzyT: 0, taps: 0, nugT: 6, idleT: 0, lastHit: 0, resistSaid: 0, incomeEMA: 0, recordT: 0, coinCombo: 0, coinComboT: 0 };
+const G = { phase: 'title', t: 0, tuTaps: 0, crew: [], parts: [], floats: [], nuggets: [], chests: [], shake: 0, flash: 0, squash: 0, frenzy: 0, frenzyT: 0, taps: 0, nugT: 6, idleT: 0, lastHit: 0, resistSaid: 0, incomeEMA: 0, recordT: 0, coinCombo: 0, coinComboT: 0 };
 const CAP = { miner: 33, porter: 12, blaster: 8, cart: 6, geo: 6 };   // drawn workers per job; the rest are counted, not drawn
 function slotOf(k, i) {   // spread across the floor in rows (back rows a little higher), never in one heap
   if (k === 'miner') { const r = Math.floor(i / 11), c = i % 11, order = [5, 4, 6, 3, 7, 2, 8, 1, 9, 0, 10][c]; return { x: 52 + order * 29.6 + (r % 2) * 14, y: L.ground - 8 + r * 11 }; }
@@ -729,10 +803,10 @@ function tapRock(x, y, sx, sy) {
   floatText(x, y - 10, (crit ? t('crit') + ' ' : '+') + fmt(coins), crit ? 'crit' : '');
   crit ? (SFX.crack(true), buzz(25)) : (SFX.crack(false), buzz(6));
   if (G.frenzyT <= 0) { G.frenzy = Math.min(1, G.frenzy + E.frenzy.perTap); if (G.frenzy >= 1) startFrenzy(); }
-  if (S.tut === 0 && S.totals.taps >= 5) { S.tut = 1; chef('c_hireMiner', 2); renderPanel(); }
+  if (S.tut === 0 && ++G.tuTaps >= 4 && S.coins >= E.workerCost('miner', S.w.miner || 0)) { S.tut = 1; save(); tutoShow(); }
   checkGoal();
 }
-function startFrenzy() { G.frenzy = 0; G.frenzyT = E.frenzy.time; S.totals.frenzies++; questProg('frenzy', 1); banner(t('frenzyOn'), 'fz'); SFX.fanfare(); buzz([20, 30, 20, 30, 60]); if (S.tut === 3) { S.tut = 4; chefNextGoal(); } }
+function startFrenzy() { G.frenzy = 0; G.frenzyT = E.frenzy.time; S.totals.frenzies++; questProg('frenzy', 1); banner(t('frenzyOn'), 'fz'); SFX.fanfare(); buzz([20, 30, 20, 30, 60]); }
 function catchNugget(n) {
   n.dead = true; S.totals.nuggets++; questProg('nugget', 1);
   const v = Math.max(20, E.nugget.secs * (income() + E.tapDmg(st()) * value())) * (S.res.lamp ? 2 : 1);
@@ -763,8 +837,8 @@ function hire(k) {
   S.coins -= b.c; S.w[k] = have + b.n; S.totals.hired += b.n; questProg('hire', b.n);
   for (let i = 0; i < Math.min(b.n, 30); i++) spawnWorker(k, true);
   SFX.pop(); buzz(10); JUICE.pop(document.querySelector(`[data-hire="${k}"]`));
-  if (S.tut === 1 && k === 'miner') { S.tut = 2; setTimeout(() => chef('c_hirePorter', 2), 3500); }
-  if (S.tut === 2 && k === 'porter') { S.tut = 3; setTimeout(() => chef('c_frenzy', 2), 1500); }
+  if (S.tut === 1 && k === 'miner') tutoEnd();
+  if (k === 'porter' && have === 0 && !S.totals.frenzies && S.tut >= 4) setTimeout(() => chef('c_frenzy', 2), 1500);
   checkGoal(); save(); renderPanel();
 }
 function upgrade(k) {
@@ -815,15 +889,24 @@ const minutesOf = m => Math.max(20 * m, (income() + E.tapDmg(st()) * value() * 1
 // ---------- Cheffe Pioche ----------
 let chefTimer = 0;
 function chef(key, mood = 0, vars) {
-  const el = $('#chef'); if (!el) return;
+  const el = $('#chef'); if (!el || TUTO.active()) return;
   el.querySelector('.cf').style.backgroundImage = SPR['chef_' + mood] ? `url(${SPR['chef_' + mood]}), radial-gradient(circle, #ffe9c0, #e8b77a)` : ''; el.querySelector('.cf').classList.toggle('m3', mood === 3);
   el.querySelector('.cf').textContent = SPR['chef_' + mood] ? '' : ['😄', '☝️', '😮', '😤'][mood];
   el.querySelector('.ct').textContent = t(key, vars); el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
-  clearTimeout(chefTimer); const sticky = S.tut < 4 && ['c_tap', 'c_hireMiner', 'c_hirePorter', 'c_frenzy', 'c_welcome'].includes(key);
-  if (!sticky) chefTimer = setTimeout(() => el.classList.remove('on'), 4200);
+  clearTimeout(chefTimer); chefTimer = setTimeout(() => el.classList.remove('on'), 4200);
   SFX.click();
 }
-function tutorialPrompt() { const k = ['c_tap', 'c_hireMiner', 'c_hirePorter', 'c_frenzy'][S.tut]; if (k) chef(k, S.tut === 0 ? 0 : 1); }
+
+// ---------- first-run tutorial: 1) tap the boulder, 2) hire a miner. A hand shows the spot; Skip at top right ----------
+TUTO.config({ skipTop: () => $('#top').getBoundingClientRect().bottom + 8, onSkip: () => { S.tut = 4; save(); renderPanel(); track('tuto_skip'); } });
+function tutoShow() {
+  if (G.phase !== 'play' || S.tut >= 4) return TUTO.hide();
+  TUTO.config({ skip: t('skip') }); const c = $('#chef'); if (c) c.classList.remove('on');
+  if (S.tut === 0) TUTO.show({ gesture: 'tap', text: t('tu_tap'), rect: () => { const [x, y] = toScreen(L.rockX, L.rockY), r = L.rockR * SC; return { x: x - r, y: y - r, w: 2 * r, h: 2 * r }; }, round: 999, pad: 4 });
+  else { tab = 'crew'; buyMode = 1; renderPanel(); $('#list').scrollTop = 0; TUTO.show({ gesture: 'tap', text: t('tu_miner'), rect: () => document.querySelector('#list [data-hire="miner"]'), round: 14, pad: 5, bubble: 'above' }); }
+}
+function tutoEnd() { S.tut = 4; TUTO.hide(); save(); track('tuto_done'); setTimeout(() => chef('c_hirePorter', 2), 3000); }
+function tutoReplay() { closeModal(); S.tut = 0; G.tuTaps = 0; save(); renderPanel(); tutoShow(); }
 
 // ---------- update ----------
 function machinePos(k) { return k === 'crusher' ? [L.crushX, L.ground - 6] : k === 'foundry' ? [372, L.ground - 70] : k === 'polisher' ? [300, L.ground - 74] : [ (L.pileX + L.crushX) / 2, L.ground + 4]; }
@@ -1023,7 +1106,7 @@ function renderPanel() {
   if (tab === 'crew') for (const k of E.order) {
     const W0 = E.workers[k], lock = W0.unlock > S.layer && !S.stars, have = S.w[k] || 0, b = bulk(n => E.workerCost(k, n), have);
     const desc = t('d_' + k, { n: k === 'miner' ? fmt(E.minerDmg(s)) : k === 'blaster' ? fmt(E.blastDmg(s)) : k === 'porter' || k === 'cart' ? E.haulCap(k, s) : '' });
-    const hl = (S.tut === 1 && k === 'miner') || (S.tut === 2 && k === 'porter');
+    const hl = S.tut === 1 && k === 'miner';
     h += `<div class="it ${lock ? 'lock' : ''} ${hl ? 'hl' : ''}"><div class="ico">${SPR['w_' + k + '_0'] ? `<img src="${SPR['w_' + k + '_0']}" alt="">` : { miner: '⛏️', porter: '🎒', blaster: '🧨', cart: '🛒', geo: '🔍' }[k]}</div>
       <div class="tx"><b>${t('w_' + k)} <em>×${have}</em></b><small>${lock ? t('locked', { n: W0.unlock + 1 }) : desc}</small></div>
       ${lock ? '<span class="lk">' + UI('lock', '🔒') + '</span>' : `<button class="buy ${b.c <= S.coins && b.n ? '' : 'off'}" data-hire="${k}"><span>+${b.n}</span><b><i class="cn"></i> ${fmt(b.c)}</b></button>`}</div>`;
@@ -1103,10 +1186,11 @@ function settingsModal() {
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
     <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
     ${S.owned.theme ? `<label class="sw"><span>${t('sTheme')}</span><input type="checkbox" data-theme ${S.theme === 'night' ? 'checked' : ''}></label>` : ''}
-    <button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Crumble Crew ${window.CC_VERSION || ''}</div>`);
+    <button class="b2" data-tuto>${t('tuReplay')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Crumble Crew ${window.CC_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); buildUI(); renderAll(); settingsModal(); };
   const th = modal.querySelector('[data-theme]'); if (th) th.onchange = () => { S.theme = th.checked ? 'night' : ''; save(); };
+  modal.querySelector('[data-tuto]').onclick = tutoReplay;
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.CC_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = settingsModal; };
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
@@ -1139,7 +1223,7 @@ function startPlay() {
   const gain = Math.min(away, cap) * income() * rate;
   if (away > 60 && gain > 1) setTimeout(() => offlineModal(Math.min(away, cap), gain), 400);
   else if (S.login.pending && S.totals.taps) setTimeout(questsModal, 500);
-  if (S.tut === 0) setTimeout(() => chef('c_welcome', 0), 300), setTimeout(tutorialPrompt, 3300); else if (S.tut < 4) setTimeout(tutorialPrompt, 800);
+  if (S.tut < 4) { G.tuTaps = 0; setTimeout(tutoShow, 500); }
   if (away > 60 && S.sessions >= E.ads.interFromSession) setTimeout(() => Ads.interstitial(), 200);
   save(); track('session_start', { rock: S.rock, layer: S.layer });
 }
@@ -1148,7 +1232,7 @@ addEventListener('resize', resize);
 let last = performance.now(), uiT = 0, saveT = 0;
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
-  update(dt); musicTick(); draw();
+  update(dt); musicTick(); draw(); if (TUTO.active() && (S.tut >= 4 || G.phase !== 'play')) TUTO.hide();
   if (G.phase === 'play') { if ((uiT += dt) > 0.25) { uiT = 0; renderTop(); if (tab !== 'shop') refreshButtons(); } if ((saveT += dt) > 5) { saveT = 0; save(); } }
   requestAnimationFrame(frame);
 }
@@ -1201,7 +1285,8 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     if (modalOpen()) return clearPopups(A);
     const tab = document.querySelector('#tabs [data-tab="crew"]'); if (tab && !tab.classList.contains('on') && !document.querySelector('[data-hire]')) { await A.tapEl(tab, 'onglet équipe'); await A.wait(300); }
     const pick = ['miner', 'porter', 'blaster', 'cart', 'geo'].map(k => document.querySelector(`[data-hire="${k}"]:not(.off)`)).filter(Boolean);
-    if (pick.length) { const b = pick[Math.floor(A.rnd() * Math.min(2, pick.length))]; await A.think(); await A.tapEl(b, 'embauche'); A.mark('embauche ' + b.dataset.hire); return true; }
+    const tutB = S().tut === 1 && document.querySelector('[data-hire="miner"]:not(.off)');   // the first-run tutorial asks for a miner: follow the hand
+    if (pick.length) { const b = tutB || pick[Math.floor(A.rnd() * Math.min(2, pick.length))]; await A.think(); await A.tapEl(b, 'embauche'); A.mark('embauche ' + b.dataset.hire); return true; }
     return false;
   }
   async function machines(A) {

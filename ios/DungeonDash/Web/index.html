@@ -141,6 +141,15 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
 #flash{position:fixed;inset:0;z-index:3;pointer-events:none;box-shadow:inset 0 0 80px 30px rgba(232,74,95,.0);transition:box-shadow .25s}
 #flash.on{box-shadow:inset 0 0 80px 30px rgba(232,74,95,.65);transition:none}
 /* title */
+/* first-run tutorial: the hand (drawn in CSS), the skip button (top right, in place of the gold chip, hidden meanwhile) */
+#tuto{position:fixed;inset:0;z-index:7;pointer-events:none;display:none}#tuto.on{display:block}
+.thand{position:absolute;left:0;top:0;width:44px;height:62px;filter:drop-shadow(3px 4px 0 rgba(0,0,0,.4));transform-origin:22px 0}
+.thand::before{content:'';position:absolute;left:13px;top:0;width:18px;height:38px;border-radius:9px 9px 4px 4px;background:var(--cream);border:3px solid var(--violet);box-sizing:border-box}
+.thand::after{content:'';position:absolute;left:3px;top:24px;width:38px;height:36px;border-radius:12px 14px 18px 18px;background:var(--cream);border:3px solid var(--violet);box-sizing:border-box;box-shadow:inset 0 -5px 0 rgba(59,46,90,.15)}
+.tring{position:absolute;left:0;top:0;width:52px;height:52px;border-radius:50%;border:4px solid var(--orange);box-sizing:border-box;transition:opacity .15s}
+.tring.hold{animation:tpulse 1s ease-out infinite}@keyframes tpulse{0%{box-shadow:0 0 0 0 rgba(255,179,71,.7)}100%{box-shadow:0 0 0 22px rgba(255,179,71,0)}}
+#tskip{position:fixed;z-index:9;top:calc(env(safe-area-inset-top) + 8px);right:8px;min-width:88px;height:44px;padding:0 14px;border-radius:999px;background:var(--cream);color:var(--violet);border:3px solid var(--violet);box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:16px;display:none}
+body.tuto #tskip{display:block}body.tuto #hgold{visibility:hidden}
 #title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 30px) 24px calc(env(safe-area-inset-bottom) + 40px);background:var(--violet) center/cover no-repeat}
 #title.on{display:flex}#title .logo img{width:min(88vw,430px)}#title .tbg{width:min(76vw,44vh);border-radius:32px;border:4px solid var(--cream);box-shadow:6px 6px 0 rgba(0,0,0,.4);animation:gbob 2.4s ease-in-out infinite}
 #title p{font-weight:900;margin:4px 0;font-size:17px;color:var(--cream);text-align:center}#title .b1{max-width:320px}
@@ -847,6 +856,9 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
     emit(R, 'tut', { step: R.tut });
   }
 
+  // "Skip": the tutorial room becomes a real first room (the tame slime already there stays harmless)
+  function skipTut(R) { if (R.tut < 0) return; R.tut = -1; R.waves = roomPlan(R); R.wi = 0; R.t = 0; R.waveT = 0; }
+
   // ---- room cleared: the coins fly to the hero, then a chest or a fountain (every 3 rooms), then the 3 cards ----
   function clearRoom(R) {
     R.phase = 'clear'; R.t = 0; R.stats.rooms++; if (!R.roomHurt) R.stats.noHit++;
@@ -943,7 +955,7 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   function botEvent(R) { const h = R.h; if (!R.evt) return null; if (R.evt.k === 'chest') return h.hp < h.max * 0.5 ? 'potion' : 'relic'; return h.hp < h.max * 0.75 ? 'drink' : 'vigor'; }
 
   const C = { W, H, DT, BX0, BX1, BY0, BY1, CTRL, HERO, HEROES, EN, BOSS, SPR, UP, UPS, RAR, rarity, COMBOS, LAYOUTS, FLOORS, ROOMS, EVENT_ROOMS, hyp, clamp,
-    stick, newRun, step, setInput, release, pickCard, moreCard, chooseEvent, revive, blocked, pack, unpack, progress, calc, lv, has, isBossRoom, think, botPick, botEvent, rng, draw, nearest };
+    stick, newRun, step, setInput, release, skipTut, pickCard, moreCard, chooseEvent, revive, blocked, pack, unpack, progress, calc, lv, has, isBossRoom, think, botPick, botEvent, rng, draw, nearest };
   root.DDC = C; if (typeof module !== 'undefined') module.exports = C;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
@@ -1098,12 +1110,13 @@ window.I18N = (() => {
     consentTitle: ['Publicités', 'Ads'], consentText: ['Le jeu est gratuit grâce à la publicité. Acceptes-tu des pubs personnalisées ? Tu peux changer d’avis dans les réglages.', 'The game is free thanks to ads. Do you accept personalised ads? You can change your mind in the settings.'],
     refuse: ['Non merci', 'No thanks'], accept: ['Accepter', 'Accept'],
     // Gus (27 lines)
-    g_hello: ['Bienvenue dans ma taverne ! Le donjon est juste en dessous.', 'Welcome to my tavern! The dungeon is right below.'],
+    g_hello: ['Bienvenue ! Le donjon est juste en dessous.', 'Welcome! The dungeon is right below.'],
     g_move: ['Glisse ton doigt n’importe où pour marcher.', 'Slide your finger anywhere to walk.'],
-    g_stop: ['Maintenant arrête-toi : ton héros tire tout seul !', 'Now stand still: your hero shoots by himself!'],
-    g_roll: ['Bravo ! Lâche le doigt pour faire une roulade. Pendant la roulade, rien ne te touche !', 'Well done! Lift your finger to roll. Nothing can hit you mid-roll!'],
+    g_stop: ['Arrête-toi : ton héros tire tout seul !', 'Stand still: your hero shoots by himself!'],
+    g_roll: ['Lâche le doigt : ton héros fait une roulade !', 'Lift your finger: your hero rolls!'],
     g_coins: ['Les pièces viennent toutes seules. Garde-les : même si tu tombes, l’or reste à toi.', 'Coins come to you. Keep them: even if you fall, the gold is yours.'],
     g_cards: ['Choisis une carte. Chaque descente est différente !', 'Pick a card. Every run is different!'],
+    g_tutgo: ['Bravo ! Bats ces trois slimes.', 'Well done! Beat these three slimes.'], skip: ['Passer', 'Skip'], tutAgain: ['Revoir le tutoriel', 'Replay the tutorial'],
     g_red: ['Tout ce qui est rouge fait mal. Roule à travers !', 'Everything red hurts. Roll through it!'],
     g_boss_king: ['Le Roi Champignon ! Quand il saute, sors du cercle rouge.', 'The Mushroom King! When he jumps, get out of the red circle.'],
     g_boss_jelly: ['La Reine Gelée se coupe en petits slimes. Garde tes distances !', 'The Jelly Queen splits into little slimes. Keep your distance!'],
@@ -1330,11 +1343,14 @@ function fresh() {
   return { v: 1, lang: I.detect(), sound: true, music: true, vib: true, consent: null, tut: 0, gold: 0, gems: 0, xp: 0, plv: 1,
     perm: { hp: 0, power: 0, speed: 0, gold: 0, roll: 0, crit: 0, potion: 0, magnet: 0 }, forge: null, owned: {}, heroes: { knight: 1 }, hero: 'knight', dungeon: 'caves',
     outfit: 'none', outfits: { none: 1 }, dye: '', dyes: {}, token: null, run: null, login: { last: '', streak: 0, pending: false }, plays: 0, lastAdAt: 0, said: {},
-    quests: { day: '', list: [] }, trophies: {}, totals: { runs: 0, wins: 0, kills: 0, rooms: 0, combos: 0, gold: 0, noHit: 0, bosses: {}, heroWins: {}, cite: 0, best: 0, bestP: 0 } };
+    quests: { day: '', list: [] }, tv: 1, trophies: {}, totals: { runs: 0, wins: 0, kills: 0, rooms: 0, combos: 0, gold: 0, noHit: 0, bosses: {}, heroWins: {}, cite: 0, best: 0, bestP: 0 } };
 }
 let S;
-try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+let S0 = null; try { S0 = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+try { S = Object.assign(fresh(), S0 || {}); } catch (e) { S = fresh(); }
 for (const k of ['totals', 'login', 'perm', 'quests']) S[k] = Object.assign(fresh()[k], S[k]);
+// saves from before the guided tutorial (no `tv`): a player who already played has seen it
+if (S0 && !S0.tv && S.plays > 0) S.tut = 1;
 I.set(S.lang);
 function save() { try { if (G && G.R && G.mode === 'run' && G.R.phase !== 'won' && !G.ended) S.run = C.pack(G.R); localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 const track = (ev, data) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
@@ -1491,13 +1507,13 @@ function startRun(resume, o) {
   if (resume && S.run) { try { G.R = C.unpack(S.run); } catch (e) { G.R = null; } }
   if (!G.R || !resume) {
     const hero = o.hero || S.hero, dg = o.dungeon || (S.dungeon === 'cite' && citeOpen() ? 'cite' : 'caves');
-    G.R = C.newRun({ seed: (Date.now() % 1e9) | 0, hero, meta: S.perm, tut: !S.tut, token: S.token, dungeon: dg });
+    G.R = C.newRun({ seed: (Date.now() % 1e9) | 0, hero, meta: S.perm, tut: !S.tut || !!o.tut, token: S.token, dungeon: dg });
     if (S.token) { toast('✨ ' + t('tokenHas', { s: t('u_' + S.token) })); S.token = null; }
     S.plays++; S.totals.runs++; track('run_start', { n: S.plays, hero });
   }
   G.mode = 'run'; G.fade = 1; G.gold0 = G.R.gold;
   $('#home').classList.remove('on'); $('#title').classList.remove('on'); $('#hud').classList.add('on'); gusHide();
-  buildHud(); resize(); save();
+  buildHud(); resize(); save(); tutUi();
   const R = G.R;
   if (R.tut >= 0) { say('g_hello', 1, 2400); setTimeout(() => { if (G.R && G.R.tut === 0) say('g_move', 2, 0, true); }, 2500); }
   else if (resume && (R.phase === 'room' || R.phase === 'clear')) { G.paused = true; openModal(`<div class="big-ico s"><img src="${src('gus_2')}" alt=""></div><h2>${t('resumeTitle')}</h2><p>${t('floorRoom', { f: R.floor, r: R.room })}</p><button class="b1 big" data-go>${t('cont')}</button>`); modal.querySelector('[data-go]').onclick = () => { closeModal(); G.paused = false; audioInit(); }; }
@@ -1578,9 +1594,32 @@ function events() {
       case 'win': onWin(); break;
       case 'revive': SFX.heal(); JUICE.flash(document.body); G.shake = 0.4; ring(R.h.x, R.h.y, 90, PAL.green, 0.6, 8); renderHud(); break;
       case 'tut': if (ev.step === 1) say('g_stop', 2, 0, true); else if (ev.step === 2) { SFX.chime(); JUICE.confetti(30); say('g_roll', 1, 0, true); G.tutKillAt = performance.now(); }
-        else if (ev.step === 3) { say('g_coins', 1, 3200); } break;
+        else if (ev.step === 3) { say('g_tutgo', 1, 3200); tutDone(); } break;
     }
   }
+}
+// ---------- the first-run tutorial (rules in core.js: a tame room, three steps that each wait for the gesture) ----------
+// 0. slide to walk, 1. stand still and the hero shoots the tame slime, 2. lift the finger to roll; then three tame slimes.
+// A hand drawn in CSS shows each gesture where the thumb rests; "Skip" (top right, in place of the gold chip) starts the real room.
+function tutDone() { if (!S.tut) { S.tut = 1; save(); track('tutorial_done'); } tutUi(); }
+function tutSkip() { const R = G.R; if (!R || R.tut < 0 || R.tut >= 3) return; C.skipTut(R); S.tut = 1; save(); track('tutorial_skip'); gusHide(); tutUi(); }
+const TUT = div('', '<div class="thand"></div><i class="tring"></i>'); TUT.id = 'tuto'; document.body.appendChild(TUT);
+const SKIP = document.createElement('button'); SKIP.id = 'tskip'; document.body.appendChild(SKIP);
+SKIP.addEventListener('pointerdown', e => e.stopPropagation()); SKIP.onclick = () => { SFX.click(); tutSkip(); };
+const tutOn = () => G.mode === 'run' && G.R && G.R.tut >= 0 && G.R.tut < 3;
+function tutUi() { document.body.classList.toggle('tuto', !!tutOn()); SKIP.textContent = t('skip'); }
+function handFrame() {
+  const R = G.R, on = tutOn() && !G.paused && !modalOpen(); TUT.classList.toggle('on', !!on); if (!on) return;
+  if (!document.body.classList.contains('tuto')) tutUi();
+  const x0 = W / 2, y0 = H * 0.78, hand = TUT.firstChild, rg = TUT.lastChild; let x = x0, y = y0, lift = 0, a = 1, hold = false;
+  if (R.tut === 0) { if (G.stick) a = 0; const q = (G.time / 1.8) % 1;   // press, slide up and to the right, lift, come back
+    if (q < 0.15) lift = 1 - q / 0.15; else if (q < 0.7) { const k = (q - 0.15) / 0.55, e = k * k * (3 - 2 * k); x = x0 + e * 70; y = y0 - e * 60; } else { x = x0 + 70; y = y0 - 60; lift = (q - 0.7) / 0.3; a = 1 - lift; } }
+  else if (R.tut === 1) { hold = true; lift = 0; }   // the thumb rests, still: the hero shoots by himself
+  else { const q = (G.time / 1.5) % 1;   // press, a short slide, then the finger flies off: a roll
+    if (q < 0.2) lift = 1 - q / 0.2; else if (q < 0.45) x = x0 + (q - 0.2) / 0.25 * 40; else { x = x0 + 40; lift = Math.min(1, (q - 0.45) / 0.12) * 1.6; a = q > 0.8 ? (1 - q) / 0.2 : 1; } }
+  const sc = hold ? 1 + Math.sin(G.time * 7) * 0.06 : 1 - 0.08 * (1 - Math.min(1, lift));
+  hand.style.transform = `translate(${x - 22}px,${y - 4 - lift * 34}px) scale(${sc})`; hand.style.opacity = a;
+  rg.style.transform = `translate(${x - 26}px,${y - 26}px)`; rg.style.opacity = lift < 0.1 && a > 0.5 ? 1 : 0; rg.classList.toggle('hold', hold);
 }
 function bossIntro() { G.shake = 0.3; }
 function onBossDown(ev) {
@@ -1795,10 +1834,11 @@ function settingsModal(back) {
   const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
     <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
-    <button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Pocket Dungeon Dash ${window.DD_VERSION || ''}</div>`);
+    <button class="b2" data-tut>${t('tutAgain')}</button><button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Pocket Dungeon Dash ${window.DD_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); if (G.mode === 'home') buildHome(); else if (G.mode === 'run') buildHud(); settingsModal(back); };
   modal.querySelector('[data-restore]').onclick = () => Store.restore();
+  modal.querySelector('[data-tut]').onclick = async () => { const busy = G.mode === 'run' ? G.R : S.run; if (busy && !await confirmBox(t('newRun') + ' ?')) return; audioInit(); S.run = null; G.R = null; G.paused = false; startRun(false, { tut: true }); };
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.DD_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = () => settingsModal(back); };
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); S = null; location.reload(); } };
@@ -1885,7 +1925,7 @@ function renderHome() {
   bindForge($('#hmid'), renderHome);
 }
 function showHome(fromRun) {
-  G.mode = 'home'; G.R = null; G.stick = null; hideCards(); $('#hud').classList.remove('on'); $('#bossbar').classList.remove('on'); $('#title').classList.remove('on'); gusHide();
+  G.mode = 'home'; G.R = null; G.stick = null; hideCards(); tutUi(); $('#hud').classList.remove('on'); $('#bossbar').classList.remove('on'); $('#title').classList.remove('on'); gusHide();
   $('#home').style.backgroundImage = `url(${src('tavern_wall')})`; $('#home').classList.add('on');
   G.goldShown = fromRun && G.lastRun ? S.gold - G.lastRun.gold * (G.x2used ? 2 : 1) : null;
   ensureLogin(); ensureQuests(); buildHome(); save();
@@ -2034,8 +2074,8 @@ function draw() {
   const s = G.stick; if (s) { const dx = s.x - s.ox, dy = s.y - s.oy, d = hyp(dx, dy), lim = C.CTRL.full, k = d > lim ? lim / d : 1;
     cx.globalAlpha = 0.35; cx.lineWidth = 4; cx.strokeStyle = PAL.cream; cx.beginPath(); cx.arc(s.ox, s.oy, lim, 0, TAU); cx.stroke(); cx.globalAlpha = 0.22; cx.fillStyle = PAL.cream; cx.beginPath(); cx.arc(s.ox, s.oy, C.CTRL.dead, 0, TAU); cx.fill();
     cx.globalAlpha = 0.6; cx.beginPath(); cx.arc(s.ox + dx * k, s.oy + dy * k, 22, 0, TAU); cx.fill(); cx.globalAlpha = 1; }
-  // tutorial hints: a ghost thumb that slides, then a ring on the first enemy
-  if (R.tut === 0 && !s) { const q = (G.time * 0.8) % 1, x0 = W / 2, y0 = H * 0.78, e2 = Math.sin(q * Math.PI); cx.globalAlpha = 0.8; cx.fillStyle = '#fff'; cx.beginPath(); cx.arc(x0 + e2 * 60, y0 - e2 * 30, 16, 0, TAU); cx.fill(); cx.lineWidth = 3; cx.strokeStyle = PAL.violet; cx.stroke(); cx.globalAlpha = 1; }
+  // tutorial hints (the hand itself is CSS, see handFrame): a halo on the hero, then a ring on the first enemy
+  if ((R.tut === 0 || R.tut === 2) && G.mode === 'run') { const [x, y] = toScreen(R.h.x, R.h.y), p = (G.time * 1.4) % 1; cx.beginPath(); cx.arc(x, y - 6, (26 + p * 22) * SC, 0, TAU); cx.lineWidth = 5 * (1 - p) + 1; cx.strokeStyle = PAL.orange; cx.globalAlpha = 0.9; cx.stroke(); cx.globalAlpha = 1; }
   if (R.tut === 1 && R.e[0]) { const e = R.e[0], [x, y] = toScreen(e.x, e.y), p = (G.time * 1.6) % 1; cx.beginPath(); cx.arc(x, y - 6, (22 + p * 20) * SC, 0, TAU); cx.lineWidth = 5 * (1 - p) + 1; cx.strokeStyle = PAL.orange; cx.stroke(); }
 }
 
@@ -2067,7 +2107,7 @@ function frame(now) {
   G.parts = G.parts.filter(p => p.t < p.life); if (G.parts.length > 450) G.parts.splice(0, G.parts.length - 450);
   for (const f of G.floats) f.t += gdt; G.floats = G.floats.filter(f => f.t < f.d);
   if (G.mode === 'home' && G.goldShown != null) { G.goldShown += Math.max(1, (S.gold - G.goldShown) * rdt * 2.2); if (G.goldShown >= S.gold) G.goldShown = null; const el = $('#mgold'); if (el) { el.textContent = G.goldShown == null ? S.gold : Math.round(G.goldShown); if (Math.random() < 0.3 && G.goldShown != null) SFX.coin(Math.floor(G.time * 10)); } }
-  musicTick(); draw(); renderHud();
+  musicTick(); draw(); renderHud(); handFrame();
   if ((saveT += rdt) > 3) { saveT = 0; if (G.mode === 'run') save(); if (G.mode === 'home' && S.forge && Math.random() < 0.3) renderHome(); }
   requestAnimationFrame(frame);
 }

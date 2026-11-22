@@ -2995,7 +2995,7 @@ window.KGAME = (() => {
       q: { q1: 'done', q2: 'done', q3: 'done', q4: 'done', q5: 'done' }, qp: { q1met: true, wolves: 6, roof: true, ramenGiven: true, bandits: 5, boss: true, q5back: true },
       kills: { wolf: 6, bandit: 5, boss: 1 }, scrolls: Array.from({ length: 12 }, (_, i) => 's' + i), perm: { atk: 24, hp: 120 },
       eq: { head: leg('head', undefined, 'Bandeau du Gardien'), body: leg('body', undefined, 'Gilet du Renard'), hands: leg('hands', undefined, 'Gantelets du Tonnerre'), feet: leg('feet', undefined, 'Sandales du Vent'), weapon: leg('weapon', 'katana', 'Katana du Dragon') },
-      bag: [leg('weapon', 'hache', 'Hache de la Lune'), leg('weapon', 'marteau', 'Marteau de l’Aube'), leg('weapon', 'fouet', 'Fouet de la Brume'), leg('weapon', 'kunai', 'Kunai de l’Ombre')], region: 'konoha' });
+      tutoDone: true, bag: [leg('weapon', 'hache', 'Hache de la Lune'), leg('weapon', 'marteau', 'Marteau de l’Aube'), leg('weapon', 'fouet', 'Fouet de la Brume'), leg('weapon', 'kunai', 'Kunai de l’Ombre')], region: 'konoha' });
     return m; }
   // equipment stats (+ permanent bonuses from the secret scrolls)
   const gear = () => { const g = { atk: S.perm.atk || 0, def: 0, hp: S.perm.hp || 0, ck: 0, crit: 0, spd: 0 }; for (const k in S.eq) { const it = S.eq[k]; if (it) for (const st in it.st) g[st] += it.st[st]; } return g; };
@@ -3579,7 +3579,7 @@ window.KGAME = (() => {
     if (kind === 'shop') { h += `<h2><span class="seal">店</span>Boutique d’Aiko</h2><p>Tu as <b>${S.ryo} ryō</b>.${S.herbs ? ` <button class="kbtn alt" id="k-sellh">Vendre ${S.herbs} herbe${S.herbs > 1 ? 's' : ''} (${S.herbs * 6} 両)</button>` : ''}</p><div class="grid" id="k-shop"></div>`; }
     if (kind === 'map') { h += '<h2><span class="seal">地</span>Carte ' + (A.region ? '· ' + A.region.name : 'd’Aozora') + (window.KREG ? '<button class="kbtn" id="k-towrld" style="margin-left:auto;min-height:0;padding:5px 12px;font-size:13px">🗺 Carte du monde · voyager</button>' : '') + '</h2><div id="k-mapview"><canvas id="k-bigmap"></canvas><div class="mz"><button data-z="in" aria-label="Zoomer">+</button><button data-z="out" aria-label="Dézoomer">−</button><button data-z="fit" aria-label="Voir toute la carte">⤢</button><button data-z="me" aria-label="Centrer sur moi">◎</button><button data-z="clr" aria-label="Retirer la destination" class="clr">✕</button></div><div class="mtip">Touche la carte pour poser ta destination</div></div><p class="help">Le point rouge, c’est toi. Touche un endroit pour y poser ta destination : le chemin s’affiche en violet, sur la carte et au sol. Touche le repère pour le retirer. Glisse pour te déplacer, pince ou molette pour zoomer.</p>'; }
     if (kind === 'opts') { h += `<h2><span class="seal">巻</span>Menu</h2><div style="display:grid;gap:10px;max-width:340px"><button class="kbtn" data-o="resume">Reprendre</button><button class="kbtn alt" data-o="save">Sauvegarder</button>
-        <button class="kbtn alt" data-o="sound">Son : ${S.sound ? 'activé' : 'coupé'}</button><button class="kbtn alt" data-o="quality">Qualité : ${({ high: 'haute', auto: 'auto', perf: 'performance' })[window.KMAP && KMAP.quality ? KMAP.quality() : 'high']}</button><button class="kbtn alt" data-o="look">Changer d’apparence</button><button class="kbtn alt" data-o="reset">Recommencer une partie</button></div>
+        <button class="kbtn alt" data-o="sound">Son : ${S.sound ? 'activé' : 'coupé'}</button><button class="kbtn alt" data-o="quality">Qualité : ${({ high: 'haute', auto: 'auto', perf: 'performance' })[window.KMAP && KMAP.quality ? KMAP.quality() : 'high']}</button><button class="kbtn alt" data-o="look">Changer d’apparence</button><button class="kbtn alt" data-o="tuto">☝️ ${tt('replay')}</button><button class="kbtn alt" data-o="reset">Recommencer une partie</button></div>
         <h2 style="margin-top:18px;font-size:18px">Commandes</h2><div class="help">Déplacement : ZQSD / WASD / flèches, ou maintenir le doigt · Tab ou clic : cibler un ennemi · T : techniques · Maj : course ninja · Espace : saut, double saut · E : parler · Dès le niveau 3, tu peux marcher sur l’eau (coûte un peu de chakra)<br>J : taijutsu · K : kunai · L : boule de feu · U : sphère de chakra · I : substitution · G : shunshin · P : dragon d’eau · H : multiclonage · O : Lame-tonnerre · Y : lame de vent · 1 2 3 : objets<br>B : sac · M : missions · N : carte · Échap : menu · Molette : zoom<br>Sur téléphone : joystick avec le pouce gauche, pincer à deux doigts pour zoomer, bouton 地 pour cacher la carte. Avec un katana, une hache, un marteau ou un fouet (boutique d’Aiko), glisse le doigt sur les ennemis pour trancher, plusieurs d’un seul geste pour un bonus.</div>`; }
     const TABS = [['bag', '袋', 'Sac'], ['jutsu', '術', 'Jutsus'], ['quests', '任', 'Missions'], ['map', '地', 'Carte'], ['opts', '巻', 'Menu']];
     if (kind !== 'shop') h = h.replace('<div class="scr">', '<div class="ptabs">' + TABS.map(([k, kj, n]) => `<button data-t="${k}" class="${k === kind ? 'on' : ''}"><b>${kj}</b>${n}</button>`).join('') + '</div><div class="scr">');
@@ -3597,6 +3597,7 @@ window.KGAME = (() => {
     if (kind === 'opts') P.querySelectorAll('[data-o]').forEach(b => b.onclick = () => { const o = b.dataset.o;
       if (o === 'resume') closePanel(); if (o === 'save') { save(); toastMini('Partie sauvegardée'); } if (o === 'quality' && window.KMAP) { const order = ['high', 'auto', 'perf'], q = order[(order.indexOf(KMAP.quality()) + 1) % 3]; KMAP.setQuality(q); openPanel('opts'); }
       if (o === 'sound') { S.sound = !S.sound; window.KAMB && KAMB.setMuted(!S.sound); openPanel('opts'); }
+      if (o === 'tuto') { closePanel(); S.tutoDone = false; save(); setTimeout(tuStart, 300); }
       if (o === 'look') { closePanel(); showCreator(true); } if (o === 'reset') { if (confirm('Effacer ta progression et recommencer ?')) { store.set('kunai-save', null); location.reload(); } } });
   }
   function closePanel() { panel = null; $('#k-panel').hidden = true; $('#k-dim').hidden = true; if (window.KTOUCH) KTOUCH.show(true); }
@@ -3713,7 +3714,7 @@ window.KGAME = (() => {
   /* ================= combat ================= */
   const H = () => A.hero;
   const ACT = { attack: { d: .42, hit: .2 }, kick: { d: .5, hit: .28 }, throw: { d: .4, hit: .22 }, seal: { d: .5 }, dash: { d: .4 }, cast: { d: .45, hit: .15 }, hurt: { d: .35 }, subst: { d: .01 } };
-  function useSkill(id, yawTo) { const k = SK[id], h = H(); if (!started || dlg || panel || h.dead) return; if (k.lock && k.lock()) { toastMini('🔒 ' + k.hint); return; } if ((cds[id] || 0) > 0) return; if (h.act && h.act !== 'hurt') return;
+  function useSkill(id, yawTo) { if (tu && tu.step === 'fist' && id === 'fist' && !tu.hit) tu.hit = 1; const k = SK[id], h = H(); if (!started || dlg || panel || h.dead) return; if (k.lock && k.lock()) { toastMini('🔒 ' + k.hint); return; } if ((cds[id] || 0) > 0) return; if (h.act && h.act !== 'hurt') return;
     if (S.ck < k.ck) { toastMini('Pas assez de chakra'); return; } if (k.item && !(S.inv[k.item] > 0)) { toastMini('Plus de kunai'); return; }
     S.ck -= k.ck; if (k.item) S.inv[k.item]--; cds[id] = k.cd * (1 - (S.rk[id] - 1) * .08); if (yawTo != null) h.yaw = yawTo; else faceTarget(); if (window.KSEAL && KSEAL.SEQ[id]) KSEAL.play(id, k.name);
     if (id === 'dash') { const r = h.yaw * Math.PI / 180; fx('leafSwirl', h.x, h.y, .5, .9); sfx('throw'); h.inv = .3; for (let d = 7; d > 0; d -= .5) { const nx = h.x + Math.sin(r) * d, ny = h.y + Math.cos(r) * d; if (!A.blocked(nx, ny)) { h.x = nx; h.y = ny; break; } } fx('leafSwirl', h.x, h.y, .5, .9); refresh(); return true; }
@@ -3991,7 +3992,7 @@ window.KGAME = (() => {
     if (fresh && !keepPos) setTimeout(() => toast('Kunai Gaiden', 'Parle au gardien de la porte (touche E)'), 600);
     else { const today = new Date().toDateString(); if (S.daily.last !== today) { const y = new Date(Date.now() - 864e5).toDateString(); S.daily.streak = S.daily.last === y ? S.daily.streak + 1 : 1; S.daily.last = today;
       const ry = 40 * Math.min(7, S.daily.streak) + S.lvl * 10; S.ryo += ry; setTimeout(() => { toast('Récompense du jour · série ' + S.daily.streak, ry + ' ryō' + (S.daily.streak % 3 === 0 ? ' + un équipement rare' : '')); if (S.daily.streak % 3 === 0) giveItem(genItem(S.lvl, 1)); refresh(); }, 900); } }
-    fillContracts(); save(); }
+    fillContracts(); save(); tuArm(); }
   function showEnd() { setTimeout(() => { openPanel('quests'); const P = $('#k-panel'); P.querySelector('.scr').insertAdjacentHTML('afterbegin', '<div style="text-align:center;margin-bottom:12px"><div style="font:900 54px serif;color:#b8322a">青空</div><h2 style="justify-content:center">Félicitations, Chûnin ' + S.name + ' !</h2><p>Tu as terminé l’histoire de Kunai Online. Le village est à toi : continue à explorer, à chasser et à t’entraîner.</p></div>'); }, 400); }
 
   let traveling = false;
@@ -4043,6 +4044,7 @@ window.KGAME = (() => {
   function init(api) { A = api; buildDom(); buildBar(); setTimeout(sealPad, 0);
     const sv = store.get('kunai-save'); if (sv && sv.v === 1) { S = Object.assign(NEW(), sv); S.inv = Object.assign(NEW().inv, sv.inv); S.skills = Object.assign(NEW().skills, sv.skills); S.rk = Object.assign(NEW().rk, sv.rk);
       // older saves: every ninja now starts with a katana (any other weapon goes to the bag)
+      if (sv.tutoDone == null) S.tutoDone = true;   // saves from before the first-run tutorial count it as seen
       if (!sv.gotKatana) { S.eq = Object.assign({}, sv.eq); if (S.eq.weapon && S.eq.weapon.w !== 'katana') S.bag.push(S.eq.weapon); if (!S.eq.weapon || S.eq.weapon.w !== 'katana') S.eq.weapon = { id: 'katana0', slot: 'weapon', w: 'katana', r: 0, lvl: 1, st: { atk: 3 }, name: 'Katana de genin' }; S.gotKatana = true; } }
     LOOKS.player = lookOf(S.look);
     document.querySelectorAll('#k-top [data-p]').forEach(b => tap(b, () => openPanel(b.dataset.p)));
@@ -4066,6 +4068,56 @@ window.KGAME = (() => {
     const ry = 8 + S.lvl * 5 + ((rnd() * 20) | 0); S.ryo += ry; addText(H().x, H().y, '+' + ry + ' 両', '#ffe08a'); const x = rnd();
     if (x < .3) { S.herbs += 2; addText(H().x, H().y, '+2 herbes', '#9aff7a'); } else if (x < .55) { const k = rnd() < .5 ? 'pillHp' : 'pillCk'; S.inv[k]++; addText(H().x, H().y, '+ ' + ICONS.LABELS[k], '#fff4dc'); } else if (x < .72) giveItem(genItem(S.lvl, 0));
     S.st.chests = (S.st.chests || 0) + 1; refresh(); save(); }
+
+  /* ================= first-run tutorial: run, jump, strike (3 real gestures; no damage meanwhile) =================
+     Starts on the map once the intro is over; "Passer" (top right) ends it; Menu > "Revoir le tutoriel" plays it again. */
+  const TUL = /^fr/i.test(navigator.language || 'fr') ? 0 : 1;
+  const TUT = { run: ['Glisse à gauche pour courir', 'Slide on the left to run'], runK: ['ZQSD ou flèches pour courir', 'WASD or arrows to run'],
+    jump: ['Touche 跳 pour sauter', 'Tap 跳 to jump'], jumpK: ['Espace pour sauter', 'Space to jump'],
+    fist: ['Touche ce bouton pour frapper', 'Tap this button to strike'], fistK: ['J pour frapper', 'J to strike'],
+    skip: ['Passer', 'Skip'], replay: ['Revoir le tutoriel', 'Replay the tutorial'], bravo: ['Bien joué !', 'Well done!'], bravoP: ['Parle au gardien de la porte', 'Talk to the gate guard'] };
+  const tt = k => TUT[k][TUL];
+  let tu = null, tuWatch = 0;
+  function tuArm() { clearInterval(tuWatch); if (S.tutoDone) return; tuWatch = setInterval(() => { if (S.tutoDone || tu) return clearInterval(tuWatch);
+    if (started && !(window.KINTRO && KINTRO.active()) && !panel && !dlg && !creatorOpen && A && !A.hero.dead) { clearInterval(tuWatch); tuStart(); } }, 400); }
+  function tuStart() {
+    if (tu || !started) return; const touch = document.body.classList.contains('touch');
+    const el = document.createElement('div'); el.id = 'k-tu';
+    el.innerHTML = `<style>#k-tu{position:fixed;inset:0;z-index:14;pointer-events:none}#k-tu .tv{position:absolute;inset:0}
+      #k-tu .th{position:absolute;width:48px;height:56px}#k-tu .th i{display:block;font-style:normal;font-size:46px;line-height:1;filter:drop-shadow(0 4px 3px rgba(0,0,0,.6))}
+      #k-tu .th.drag i{animation:ktuDrag 1.3s ease-in-out infinite}@keyframes ktuDrag{0%{transform:translate(0,0);opacity:0}15%{opacity:1}70%{transform:translate(70px,-34px);opacity:1}100%{transform:translate(70px,-34px);opacity:0}}
+      #k-tu .th.tap i{animation:ktuTap .9s ease-in-out infinite}@keyframes ktuTap{0%,100%{transform:translateY(-4px)}45%{transform:translateY(8px) scale(.88)}}
+      #k-tu .th.tap::before{content:'';position:absolute;left:2px;top:-20px;width:44px;height:44px;border-radius:50%;border:4px solid #f7f1de;animation:ktuRing .9s ease-out infinite}@keyframes ktuRing{0%,40%{transform:scale(.3);opacity:0}50%{opacity:1}100%{transform:scale(1.6);opacity:0}}
+      #k-tu .tb{position:absolute;transform:translate(-50%,-100%);width:max-content;max-width:min(320px,80vw);padding:9px 16px;border-radius:12px;font:800 17px 'M PLUS Rounded 1c',system-ui,sans-serif;text-align:center;animation:ktuPop .35s cubic-bezier(.3,1.6,.5,1)}@keyframes ktuPop{from{opacity:0;transform:translate(-50%,-100%) scale(.6)}}
+      #k-tu .ts{position:absolute;right:max(12px,env(safe-area-inset-right));top:120px;min-width:96px;min-height:46px;pointer-events:auto;touch-action:none;font-size:16px}</style>
+      <div class="tv"></div><div class="th"><i>☝️</i></div><div class="tb paper"></div><button class="ts kbtn">${tt('skip')} ⏭</button>`;
+    document.body.appendChild(el); tu = { el, step: '', touch, run: 0, last: null, prevNoDeath: noDeath, hit: 0 }; noDeath = true;
+    el.querySelector('.ts').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); sfx('ui'); tuEnd(true); });
+    tuGo('run'); requestAnimationFrame(tuLoop); }
+  function tuGo(step) { if (!tu) return; tu.step = step; tu.hit = 0; tu.run = 0; tu.last = null; const b = tu.el.querySelector('.tb'); b.textContent = tt(tu.touch ? step : step + 'K'); b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
+    tu.el.querySelector('.th').className = 'th ' + (step === 'run' && tu.touch ? 'drag' : 'tap'); }
+  function tuNext() { if (!tu) return; sfx('coin'); tu.step === 'run' ? tuGo('jump') : tu.step === 'jump' ? tuGo('fist') : tuEnd(false); }
+  function tuEnd(skipped) { if (!tu) return; tu.el.remove(); noDeath = tu.prevNoDeath; tu = null; S.tutoDone = true; save(); if (!skipped) { sfx('quest'); toast(tt('bravo'), tt('bravoP')); } }
+  function tuLoop() {
+    if (!tu) return; requestAnimationFrame(tuLoop);
+    const busy = !started || panel || dlg || creatorOpen || (window.KINTRO && KINTRO.active()); tu.el.style.display = busy ? 'none' : ''; if (busy) return;
+    const h = H(), W = innerWidth, Hh = innerHeight;
+    if (tu.step === 'run') { const v = window.KTOUCH && KTOUCH.vec(), d = tu.last ? Math.hypot(h.x - tu.last[0], h.y - tu.last[1]) : 0;   // only the player's own steps (not a teleport or a cutscene)
+      if (!h.air && d < 1 && (!tu.touch || (v && v.len > 0))) tu.run += d; tu.last = [h.x, h.y]; if (tu.run > 4 && !tu.hit) { tu.hit = 1; setTimeout(tuNext, 250); } }
+    if (tu.step === 'jump' && h.air && !tu.hit) { tu.hit = 1; setTimeout(tuNext, 600); }
+    if (tu.step === 'fist' && tu.hit === 1) { tu.hit = 2; setTimeout(tuNext, 500); }
+    // the hand, the bubble and the light on the spot to touch
+    let x, y, r, bx, by;
+    if (tu.step === 'run' && tu.touch) { x = W * 0.17; y = Hh * 0.66; r = Math.min(W * 0.16, 130); bx = Math.max(W * 0.22, 150); by = y - r - 6; }
+    else { const sl = slotEls[tu.step === 'run' ? 'fist' : tu.step], rc = sl && sl.getBoundingClientRect(); if (!rc || !rc.width) { x = W / 2; y = Hh * 0.6; r = 60; } else { x = rc.left + rc.width / 2; y = rc.top + rc.height / 2; r = Math.max(rc.width, rc.height) * 0.75; }
+      bx = Math.min(x, W - 175); by = y - r - 14; if (tu.step === 'run') { x = W / 2; y = Hh * 0.55; r = 90; bx = x; by = y - r; } }
+    const hd = tu.el.querySelector('.th'); hd.style.left = (x - 22) + 'px'; hd.style.top = (y - 4) + 'px'; hd.style.display = tu.step === 'run' && !tu.touch ? 'none' : '';
+    const b = tu.el.querySelector('.tb'); b.style.left = Math.max(170, Math.min(W - 170, bx)) + 'px'; b.style.top = Math.max(60, by) + 'px';
+    // "Passer": top right, under the menu button and the mini-map (and its clock line)
+    const mi = document.getElementById('mini'), mr = mi && mi.getBoundingClientRect(), mb = document.getElementById('k-menu'), br = mb && mb.getBoundingClientRect();
+    tu.el.querySelector('.ts').style.top = Math.max(mr && mr.height && mr.top < Hh / 2 ? mr.bottom + 40 : 0, br && br.height ? br.bottom + 10 : 0, 60) + 'px';
+    tu.el.querySelector('.tv').style.background = `radial-gradient(circle at ${x}px ${y}px, transparent ${r}px, rgba(14,10,20,.5) ${r + 36}px)`;
+  }
   const HUDS = ['#k-hud', '#k-top', '#k-track', '#k-bar', '#k-weather'];
   const intro = {
     begin: () => begin(true, true), showHud: on => { hudOn = on; for (const id of HUDS) $(id).hidden = !on; }, showBar: on => { $('#k-bar').hidden = !on; }, setNoDeath: v => { noDeath = v; }, setObjective: (h, p) => { objective = h ? [h, p] : null; refresh(); },
