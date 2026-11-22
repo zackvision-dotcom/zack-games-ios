@@ -225,6 +225,18 @@ if __name__ == '__main__':
             call('PATCH', f"/appStoreVersions/{ver['id']}", {'data': {'type': 'appStoreVersions', 'id': ver['id'], 'attributes': {'copyright': os.environ['COPYRIGHT']}}})
             print('COPYRIGHT', g, 'ok')
         sys.exit(0)
+    if os.environ.get('SETKW'):
+        # setkw.json: {suffix: {locale: keywords}}; other locales untouched
+        data = json.load(open(os.path.join(HERE, 'setkw.json'), encoding='utf-8'))
+        for g, locs in data.items():
+            ver = edit_version(find_app(g)['id'])
+            for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
+                kw = locs.get(l['attributes']['locale'])
+                if kw:
+                    assert len(kw) <= 100, kw
+                    call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'keywords': kw}}})
+                    print('SETKW', g, l['attributes']['locale'], kw)
+        sys.exit(0)
     if os.environ.get('RMKW'):
         word = os.environ['RMKW'].lower()
         for g in sys.argv[1:]:
