@@ -246,6 +246,8 @@ if __name__ == '__main__':
         import re as _re
         for g in sys.argv[1:]:
             app = find_app(g); ver = edit_version(app['id'])
+            if not app['attributes'].get('contentRightsDeclaration'):
+                call('PATCH', f"/apps/{app['id']}", {'data': {'type': 'apps', 'id': app['id'], 'attributes': {'contentRightsDeclaration': 'DOES_NOT_USE_THIRD_PARTY_CONTENT'}}}); print('SUBMIT', g, 'content rights: no third-party content')
             subs = call('GET', f"/reviewSubmissions?filter[app]={app['id']}&filter[platform]=IOS&limit=10")['data']
             sub = next((x for x in subs if x['attributes'].get('state') == 'READY_FOR_REVIEW'), None)
             if not sub:
