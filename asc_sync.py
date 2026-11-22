@@ -241,6 +241,18 @@ if __name__ == '__main__':
                     call('PATCH', f"/inAppPurchaseLocalizations/{l['id']}", {'data': {'type': 'inAppPurchaseLocalizations', 'id': l['id'], 'attributes': {'description': d}}})
                     print('IAPDESC', pid, l['attributes']['locale'], d)
         sys.exit(0)
+    if os.environ.get('CANCELSUB'):
+        # cancel the app's review submission still waiting (to resubmit it with its first in-app purchases), never deletes anything
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            for x in call('GET', f"/reviewSubmissions?filter[app]={app['id']}&filter[platform]=IOS&limit=10")['data']:
+                st = x['attributes'].get('state')
+                if st in ('WAITING_FOR_REVIEW', 'READY_FOR_REVIEW'):
+                    r = call('PATCH', f"/reviewSubmissions/{x['id']}", {'data': {'type': 'reviewSubmissions', 'id': x['id'], 'attributes': {'canceled': True}}})
+                    print('CANCELSUB', g, st, '->', r['data']['attributes'].get('state'))
+                else:
+                    print('CANCELSUB', g, 'keep', st)
+        sys.exit(0)
     if os.environ.get('SUBMIT'):
         # App Review submission, ONLY on Zack's written go in the Developer session ("Oui soumet", 22/11/2026 for Gull Street + Silk Hop)
         import re as _re

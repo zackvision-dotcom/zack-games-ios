@@ -25,7 +25,7 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           ASC_KEY_PATH: /home/runner/keys/key.p8
         run: |
-          GAMES=$(grep -v '^#' todo.txt | grep -v '^check' | grep -v '^builds' | grep -v '^lootbox' | grep -v '^refdata' | grep -v '^previews' | grep -v '^iapshot' | grep -v '^review' | grep -v '^iapstate' | grep -v '^textonly' | grep -v '^addkw' | grep -v '^rmkw' | grep -v '^setkw' | grep -v '^iapdesc' | grep -v '^lootboxoff' | grep -v '^copyright' | grep -v '^cleanold' | grep -v '^attach' | grep -v '^setbuild' | grep -v '^adsrating' | grep -v '^submit' | tr '\n' ' ')
+          GAMES=$(grep -v '^#' todo.txt | grep -v '^check' | grep -v '^builds' | grep -v '^lootbox' | grep -v '^refdata' | grep -v '^previews' | grep -v '^iapshot' | grep -v '^review' | grep -v '^iapstate' | grep -v '^textonly' | grep -v '^addkw' | grep -v '^rmkw' | grep -v '^setkw' | grep -v '^iapdesc' | grep -v '^lootboxoff' | grep -v '^copyright' | grep -v '^cleanold' | grep -v '^attach' | grep -v '^setbuild' | grep -v '^adsrating' | grep -v '^submit' | grep -v '^cancelsub' | tr '\n' ' ')
           if grep -q '^check' todo.txt; then export CHECK_ONLY=1; fi
           if grep -q '^builds' todo.txt; then export BUILDS=1; fi
           if grep -q '^lootbox' todo.txt; then export LOOTBOX=1; fi
@@ -35,6 +35,7 @@ jobs:
           if grep -q '^attach' todo.txt; then export ATTACH=1; fi
           if grep -q '^adsrating' todo.txt; then export ADSRATING=1; fi
           if grep -q '^submit' todo.txt; then export SUBMIT=1; fi
+          if grep -q '^cancelsub' todo.txt; then export CANCELSUB=1; fi
           if grep -q '^setbuild' todo.txt; then export SETBUILD=$(grep '^setbuild' todo.txt | cut -d' ' -f2); fi
           if grep -q '^iapstate' todo.txt; then export IAPSTATE=1; fi
           if grep -q '^textonly' todo.txt; then export ONLY_TEXT=1; fi
