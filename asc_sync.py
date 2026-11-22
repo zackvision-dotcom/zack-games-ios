@@ -287,6 +287,27 @@ if __name__ == '__main__':
                 call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'keywords': ','.join(kws)}}})
                 print('ADDKW', g, l['attributes']['locale'], ','.join(kws))
         sys.exit(0)
+    if os.environ.get('ATTACH'):
+        # App Review attachment: media/review/<suffix>.mp4 (Zack's iPhone screen recording) on the review details; never submits
+        for g in sys.argv[1:]:
+            path = os.path.join(HERE, 'media', 'review', g + '.mp4')
+            ver = edit_version(find_app(g)['id'])
+            rd = call('GET', f"/appStoreVersions/{ver['id']}/appStoreReviewDetail", ok=(200, 404)).get('data')
+            if not rd:
+                print('ATTACH', g, 'no review details: run review first'); continue
+            name = 'gameplay-' + g + '.mp4'
+            for old in call('GET', f"/appStoreReviewDetails/{rd['id']}/appStoreReviewAttachments?limit=50")['data']:
+                if old['attributes'].get('fileName') == name:
+                    call('DELETE', f"/appStoreReviewAttachments/{old['id']}"); print('ATTACH', g, 'replaced the previous', name)
+            data = open(path, 'rb').read()
+            r = call('POST', '/appStoreReviewAttachments', {'data': {'type': 'appStoreReviewAttachments', 'attributes': {'fileName': name, 'fileSize': len(data)},
+                     'relationships': {'appStoreReviewDetail': {'data': {'type': 'appStoreReviewDetails', 'id': rd['id']}}}}})['data']
+            upload(r['attributes']['uploadOperations'], data)
+            call('PATCH', f"/appStoreReviewAttachments/{r['id']}", {'data': {'type': 'appStoreReviewAttachments', 'id': r['id'],
+                 'attributes': {'uploaded': True, 'sourceFileChecksum': hashlib.md5(data).hexdigest()}}})
+            st = call('GET', f"/appStoreReviewAttachments/{r['id']}")['data']['attributes'].get('assetDeliveryState')
+            print('ATTACH', g, name, len(data) // 1024, 'KB', st)
+        sys.exit(0)
     if os.environ.get('REVIEW'):
         # App Review contact: same as Kunai Gaiden (Zack's OK, 22/11); never submits anything
         src = edit_version(find_app('kunaigaiden')['id'])
