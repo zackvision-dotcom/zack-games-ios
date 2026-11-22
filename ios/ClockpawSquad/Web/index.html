@@ -697,7 +697,7 @@ window.CPSOL = {"1":{"par":1,"seq":[{"h":"cat","a":"push","c":2,"r":4}]},"2":{"p
       { id: 'keys', price: '1,99 €', once: false, n: 100 },
       { id: 'pass_hiver_2026', price: '2,99 €', once: true },
     ],
-    starterBolts: 400,
+    // the starter pack gives NO bolts: bolts open the (random) toolbox, so they are never sold, even indirectly
     ads: { interFromPlay: 3, gapSec: 180 },
   };
   root.CPE = E; if (typeof module !== 'undefined') module.exports = E;
@@ -752,7 +752,7 @@ window.I18N = (() => {
     finish: ['Finir', 'Finish'], finishK: ['Finir · {n}', 'Finish · {n}'], busy: ['La forge est occupée', 'The forge is busy'], wsIdle: ['La forge attend une amélioration', 'The forge awaits an upgrade'],
     heroes: ['Héros', 'Heroes'], unlockAt: ['Salle {n}', 'Room {n}'], unlocked: ['Disponible', 'Available'], newHero: ['Nouveau héros : {s} !', 'New hero: {s}!'],
     toolbox: ['Caisse à outils', 'Toolbox'], boxTxt: ['Une caisse surprise, payée en boulons uniquement : des boulons, un costume ou 2 indices.', 'A surprise box, paid with bolts only: bolts, a costume or 2 hints.'],
-    openBox: ['Ouvrir', 'Open'], freeBox: ['Caisse bonus du jour', 'Daily bonus box'], gotBolts: ['+{n} boulons !', '+{n} bolts!'], gotCostume: ['Nouveau costume : {s} !', 'New costume: {s}!'], gotHints: ['+{n} indices !', '+{n} hints!'],
+    openBox: ['Ouvrir', 'Open'], boxOdds: ['Chances', 'Odds'], odd_bolts: ['{a} à {b} boulons', '{a} to {b} bolts'], odd_costume: ['costume', 'costume'], odd_hints: ['{n} indices', '{n} hints'], freeBox: ['Caisse bonus du jour', 'Daily bonus box'], gotBolts: ['+{n} boulons !', '+{n} bolts!'], gotCostume: ['Nouveau costume : {s} !', 'New costume: {s}!'], gotHints: ['+{n} indices !', '+{n} hints!'],
     costumes: ['Costumes', 'Costumes'], use: ['Porter', 'Wear'], used: ['Porté', 'Worn'],
     co_0: ['Haut-de-forme', 'Top hat'], co_1: ['Écharpe d’hiver', 'Winter scarf'], co_2: ['Lunettes d’aviateur', 'Flying goggles'], co_3: ['Couronne de rouages', 'Cog crown'],
     co_4: ['Nœud papillon', 'Bow tie'], co_5: ['Casque de pompier', 'Fire helmet'], co_6: ['Bonnet de nuit', 'Nightcap'], co_7: ['Cape de héros', 'Hero cape'],
@@ -761,7 +761,7 @@ window.I18N = (() => {
     levelUp: ['Niveau {n} !', 'Level {n}!'], shop: ['Boutique', 'Shop'], settings: ['Réglages', 'Settings'], gift: ['Cadeau', 'Gift'], notEnough: ['Pas assez', 'Not enough'],
     hintsLeft: ['{n} indice(s) en stock', '{n} hint(s) in stock'],
     s_noads: ['Sans pub', 'No ads'], s_noadsSub: ['Plus aucune publicité entre les salles', 'No more ads between rooms'],
-    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['Le hibou-pendule tout de suite, le nœud papillon et 400 boulons', 'The pendulum owl at once, the bow tie and 400 bolts'],
+    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['Le hibou-pendule tout de suite et le nœud papillon', 'The pendulum owl at once and the bow tie'],
     s_hints: ['Indices illimités', 'Unlimited hints'], s_hintsSub: ['Tous les indices sans pub, à vie', 'Every hint without ads, for life'],
     s_keys: ['100 clés dorées', '100 golden keys'], s_keysSub: ['Pour des costumes à prix fixe ou finir une forge', 'For fixed-price costumes or finishing a forge'],
     s_pass: ['Passe Hiver', 'Winter pass'], s_passSub: ['Thème neige, écharpe d’hiver, cadeaux du jour ×2. Achat unique, sans abonnement', 'Snow theme, winter scarf, daily gifts ×2. One-time purchase, no subscription'],
@@ -1165,7 +1165,7 @@ const storeIcon = it => src({ noads: 'ui_shop', starter: 'h_owl', hints: 'ui_hin
 function grant(it, loud = true) {
   if (it.id === 'keys') S.keys += it.n;
   else { S.owned[it.id] = true;
-    if (it.id === 'starter') { S.costumes[4] = 1; S.bolts += E.starterBolts; }
+    if (it.id === 'starter') { S.costumes[4] = 1; }
     if (it.id === 'pass_hiver_2026') { S.costumes[1] = 1; S.theme = 'winter'; } }
   save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } renderHomeHead(); renderHud();
 }
@@ -1504,7 +1504,7 @@ function finishRoom() {
       else { JUICE.pop(g.parentNode); SFX.coins(); JUICE.fly(g.parentNode, $('#hbo'), src('bolt'), 6, () => { const h = $('#hbo b'); if (h) h.textContent = S.bolts; }); } };
     step(); }, 350 + 3 * 420 + 350);
   if (n === 3 && !tutRoom()) setTimeout(() => say('t_well', 1, 2200), 1500); else if (L.tut === 3) setTimeout(() => say('t_cogs', 0, 3800), 1500);
-  // the ad consent is asked here once the tutorial is over (before anything can show an ad)
+  // safety net: an older save that never answered the ad consent is asked here (before anything can show an ad)
   const gate = fn => () => { if (S.consent == null && S.tut) { closeModal(); return consentModal(false, fn); } fn(); };
   const goNext = async () => { closeModal(); ticHide(); if (id % 6 === 0 && first) return floorModal(f); await Ads.interstitial(); startRoom(id + 1); };
   const nx = modal.querySelector('[data-next]'); if (nx) nx.onclick = gate(goNext);
@@ -1563,11 +1563,18 @@ function workshopModal() {
 }
 function boxModal(result) {
   const freeOk = S.boxDay !== today();
-  openModal(`<div class="big-ico"><img src="${src('toolbox')}" alt="" class="${result ? 'jz-pop' : ''}"></div><h2>${t('toolbox')}</h2>${result ? `<div class="gain">${result}</div>` : `<p>${t('boxTxt')}</p>`}
+  openModal(`<div class="big-ico"><img src="${src('toolbox')}" alt="" class="${result ? 'jz-pop' : ''}"></div><h2>${t('toolbox')}</h2>${result ? `<div class="gain">${result}</div>` : `<p>${t('boxTxt')}</p>`}<p class="sub odds">${boxOdds()}</p>
     <button class="b1 big ${S.bolts < E.box.cost ? 'off' : ''}" data-open>${t('openBox')} · ${E.box.cost} <i class="bo"></i></button>${freeOk ? `<button class="b1 bad adbtn" data-free>▶ ${t('freeBox')}</button>` : ''}<button class="b2" data-close>${t('close')}</button>`);
   modal.querySelector('[data-open]').onclick = () => { if (S.bolts < E.box.cost) { SFX.miss(); return toast(t('notEnough')); } S.bolts -= E.box.cost; boxModal(openBox()); SFX.fanfare(); JUICE.confetti(70); buzz([20, 40]); renderHomeHead(); };
   const fr = modal.querySelector('[data-free]'); if (fr) fr.onclick = async () => { if (S.boxDay === today()) return; if (await Ads.rewarded('box')) { S.boxDay = today(); save(); boxModal(openBox()); SFX.fanfare(); JUICE.confetti(70); } };
   modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+// the real odds of each prize, shown in the toolbox window: once every toolbox costume is owned, the costume's share
+// turns into bolts (that is what openBox gives), so it is added to the bolts
+function boxOdds() {
+  const can = { bolts: true, hints: true, costume: E.costumes.some(c => c.how === 'box' && !S.costumes[c.id]) };
+  const p = { bolts: 0, costume: 0, hints: 0 }; for (const [k, v] of E.box.table) p[can[k] ? k : 'bolts'] += v;
+  return t('boxOdds') + ' : ' + [['bolts', 'odd_bolts'], ['costume', 'odd_costume'], ['hints', 'odd_hints']].map(([k, s]) => `${t(s, { a: E.box.bolts[0], b: E.box.bolts[1], n: E.box.hints })} ${Math.round(p[k] * 100)} %`).join(' · ');
 }
 function openBox() {
   let r = Math.random(), kind = 'bolts'; for (const [k, p] of E.box.table) { if (r < p) { kind = k; break; } r -= p; }
@@ -1712,10 +1719,11 @@ function titleScreen() {
   el.style.backgroundImage = `linear-gradient(rgba(35,32,43,.45),rgba(35,32,43,.45)),url(${src('bg_room')})`;
   el.innerHTML = `<div class="logo"><img src="${src('logo')}" alt="Clockpaw Squad"><p>${t('subtitle')}</p></div><img class="tbg" src="${src('title_bg')}" alt=""><button class="b1 big" data-play>${S.tut ? t('cont') : t('play')}</button>`;
   el.classList.add('on');
-  // a new player plays at once (no ad can show in the 3 tutorial rooms); the ad consent comes when the tutorial is over
-  el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null && S.tut ? consentModal(false) : afterConsent(); };
+  // the ad consent is asked at the first launch, before the first room; Ads.init() then runs on every launch (on iOS its
+  // first call shows Google's consent form if required, then Apple's ATT prompt, then starts the SDK)
+  el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null ? consentModal(false) : afterConsent(); };
 }
-function afterConsent() { if (S.consent != null) Ads.init(); Store.init(); if (!S.tut) startRoom(Math.min(3, S.cur)); else showHome(); }
+function afterConsent() { Ads.init(); Store.init(); if (!S.tut) startRoom(Math.min(3, S.cur)); else showHome(); }
 
 // ---------- drawing the room ----------
 function drawTile(k, c, r, rot) { const [x, y] = cellCenter(c, r); spr(k, x, y, SC + 0.6, rot || 0); }
@@ -1989,7 +1997,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       document.querySelectorAll('.bub').forEach(b => b.remove()); await A.wait(500); document.getElementById('tic').classList.remove('on');
     },
     scenes: {
-      // title -> Maître Tic's tutorial at once (the ad consent comes after it): the cat shoves a robot into the gear, then the rabbit's jump
+      // title -> Maître Tic's tutorial at once (after the ad consent at first launch): the cat shoves a robot into the gear, then the rabbit's jump
       async onboarding(A) { watch(A); await start(A); await A.wait(1200);
         for (let i = 0; i < 2 && A.running(); i++) { if (!G.L) break; const ok = await solveRoom(A); if (!ok) break; await next(A); await A.wait(1200); } },
       // the core: a room, the live preview, a wrong move rewound one time out of two, then the right line and the slow-motion chain

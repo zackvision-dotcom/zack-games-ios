@@ -790,7 +790,7 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
       { id: 'acorns', price: '1,99 €', once: false, n: 100 },
       { id: 'pass_hiver_2026', price: '2,99 €', once: true },
     ],
-    starterFF: 500,
+    // the starter pack gives NO fireflies: fireflies open the merchant's (random) chest, so they are never sold, even indirectly
     ads: { interFromPlay: 3, gapSec: 180 },
   };
   root.LHE = E; if (typeof module !== 'undefined') module.exports = E;
@@ -854,7 +854,7 @@ window.I18N = (() => {
     finish: ['Finir', 'Finish'], finishAc: ['Finir · {n}', 'Finish · {n}'], busy: ['Le chantier est occupé', 'The worksite is busy'], wsIdle: ['Le chantier attend une amélioration', 'The worksite awaits an upgrade'],
     mill: ['Moulin', 'Mill'], millTxt: ['{n} lucioles moulues pendant ton absence', '{n} fireflies milled while you were away'], millEmpty: ['Le moulin tourne… (8 h max)', 'The mill is turning… (8 h max)'],
     merchant: ['Le marchand', 'The merchant'], chestTxt: ['Un coffre surprise, payé en lucioles uniquement : des lucioles, un bonus de départ ou une lanterne rare.', 'A surprise chest, paid with fireflies only: fireflies, a starting bonus or a rare lantern.'],
-    openChest: ['Ouvrir', 'Open'], gotFF: ['+{n} lucioles !', '+{n} fireflies!'], gotToken: ['Bonus de départ : {s}', 'Starting bonus: {s}'], gotLantern: ['Nouvelle lanterne : {s} !', 'New lantern: {s}!'],
+    openChest: ['Ouvrir', 'Open'], chestOdds: ['Chances', 'Odds'], odd_ff: ['{a} à {b} lucioles', '{a} to {b} fireflies'], odd_token: ['bonus de départ', 'starting bonus'], odd_lantern: ['lanterne rare', 'rare lantern'], gotFF: ['+{n} lucioles !', '+{n} fireflies!'], gotToken: ['Bonus de départ : {s}', 'Starting bonus: {s}'], gotLantern: ['Nouvelle lanterne : {s} !', 'New lantern: {s}!'],
     tokenHas: ['Bonus de départ prêt : {s}', 'Starting bonus ready: {s}'],
     lanterns: ['Lanternes', 'Lanterns'], use: ['Utiliser', 'Use'], used: ['Allumée', 'Lit'],
     ln_classic: ['Classique', 'Classic'], ln_moss: ['Mousse', 'Moss'], ln_amber: ['Ambre', 'Amber'], ln_violet: ['Crépuscule', 'Dusk'], ln_star: ['Étoile', 'Star'],
@@ -864,7 +864,7 @@ window.I18N = (() => {
     levelUp: ['Niveau {n} !', 'Level {n}!'], newHero: ['Nouveau héros : {s} !', 'New hero: {s}!'],
     shop: ['Boutique', 'Shop'], settings: ['Réglages', 'Settings'], gift: ['Cadeau', 'Gift'],
     s_noads: ['Sans pub', 'No ads'], s_noadsSub: ['Plus aucune publicité entre les parties', 'No more ads between runs'],
-    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['L’archère dès le départ, la lanterne Ruban et 500 lucioles', 'The archer from the start, the Ribbon lantern and 500 fireflies'],
+    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['L’archère dès le départ et la lanterne Ruban', 'The archer from the start and the Ribbon lantern'],
     s_festival: ['Lanternes de fête', 'Festival lanterns'], s_festivalSub: ['Thème visuel complet : nuit de fête, guirlandes, musique', 'Full visual theme: festival night, garlands, music'],
     s_acorns: ['100 glands d’or', '100 golden acorns'], s_acornsSub: ['Pour des lanternes à prix fixe ou finir un chantier', 'For fixed-price lanterns or finishing a worksite'],
     s_pass: ['Passe Hiver', 'Winter pass'], s_passSub: ['Thème neige, lanterne Neige, cadeaux du jour ×2. Achat unique, sans abonnement', 'Snow theme, Snow lantern, daily gifts ×2. One-time purchase, no subscription'],
@@ -1162,7 +1162,7 @@ const storeIcon = it => ({ noads: src('ui_shop'), starter: src('h_archer'), fest
 function grant(it, loud = true) {
   if (it.id === 'acorns') S.acorns += it.n;
   else { S.owned[it.id] = true;
-    if (it.id === 'starter') { S.lanterns.gift = 1; S.ff += E.starterFF; }
+    if (it.id === 'starter') { S.lanterns.gift = 1; }
     if (it.id === 'festival') { S.lanterns.fest = 1; S.theme = 'fest'; }
     if (it.id === 'pass_hiver_2026') { S.lanterns.snow = 1; S.theme = 'winter'; } }
   save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } renderHomeHead();
@@ -1470,10 +1470,17 @@ function bindWs(again) {
 }
 function collectWs() { if (!wsReady()) return; S.up[S.ws.id] = S.ws.lv; toast('✨ ' + t('up_' + S.ws.id) + ' ' + t('lvl', { n: S.ws.lv })); S.ws = null; SFX.fanfare(); JUICE.confetti(60); addXp(25); save(); renderHome(); }
 function chestModal(result) {
-  openModal(`<div class="big-ico"><img src="${src('merchant_chest')}" alt="" class="${result ? 'jz-pop' : ''}"></div><h2>${t('merchant')}</h2>${result ? `<div class="gain">${result}</div>` : `<p>${t('chestTxt')}</p>`}
+  openModal(`<div class="big-ico"><img src="${src('merchant_chest')}" alt="" class="${result ? 'jz-pop' : ''}"></div><h2>${t('merchant')}</h2>${result ? `<div class="gain">${result}</div>` : `<p>${t('chestTxt')}</p>`}<p class="sub odds">${chestOdds()}</p>
     <button class="b1 big ${S.ff < E.chest.cost ? 'off' : ''}" data-open>${t('openChest')} · ${E.chest.cost} <i class="ff"></i></button><button class="b2" data-close>${t('close')}</button>`);
   modal.querySelector('[data-open]').onclick = () => { if (S.ff < E.chest.cost) { SFX.miss(); return toast(t('notEnough')); } S.ff -= E.chest.cost; chestModal(openChest()); SFX.fanfare(); JUICE.confetti(70); buzz([20, 40]); renderHomeHead(); };
   modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+// the real odds of each prize, shown in the chest window: a prize that can no longer be won (no rare lantern left, a bonus
+// already waiting) turns into fireflies, so its share is added to the fireflies
+function chestOdds() {
+  const can = { ff: true, lantern: E.lanterns.some(l => l.how === 'chest' && !S.lanterns[l.id]), token: !S.token };
+  const p = { ff: 0, token: 0, lantern: 0 }; for (const [k, v] of E.chest.table) p[can[k] ? k : 'ff'] += v;
+  return t('chestOdds') + ' : ' + [['ff', 'odd_ff'], ['token', 'odd_token'], ['lantern', 'odd_lantern']].map(([k, s]) => `${t(s, { a: E.chest.ff[0], b: E.chest.ff[1] })} ${Math.round(p[k] * 100)} %`).join(' · ');
 }
 function openChest() {
   let r = Math.random(), kind = 'ff'; for (const [k, p] of E.chest.table) { if (r < p) { kind = k; break; } r -= p; }

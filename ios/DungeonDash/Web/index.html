@@ -54,6 +54,8 @@ i.gd,i.gm{display:inline-block;width:1.15em;height:1.15em;background:center/cont
 .cd.up .in{transform:rotateY(0)}
 .cd .fr,.cd .bk{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;border:4px solid var(--violet);box-shadow:0 5px 0 rgba(0,0,0,.45)}
 .cd .bk{transform:rotateY(180deg);background:var(--violet) center/cover no-repeat}
+/* the back is never a blank frame, even before its picture is decoded or during the deal: a big question mark */
+.cd .bk::after{content:'?';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(36px,12vw,70px);font-weight:900;color:var(--violet);text-shadow:0 4px 0 var(--orange),0 0 14px rgba(255,245,225,.9)}
 .cd .fr{background:var(--cream);display:flex;flex-direction:column;align-items:center;padding:6px 5px;text-align:center;overflow:hidden}
 .cd .fr img{width:54%;aspect-ratio:1;object-fit:contain;margin-top:2px}
 .cd .fr b{font-size:14px;line-height:1.1;margin-top:3px}.cd .fr small{font-size:10.5px;font-weight:800;line-height:1.15;margin-top:2px;opacity:.85}
@@ -1006,7 +1008,7 @@ body.tuto #tskip{display:block}body.tuto #hgold{visibility:hidden}
       { id: 'gems', price: '1,99 €', once: false, n: 100 },
       { id: 'pass_hiver_2026', price: '2,99 €', once: true },
     ],
-    starterGold: 500,
+    // the starter pack gives NO gold: gold opens the merchant's (random) chest, so it is never sold, even indirectly
     ads: { interFromPlay: 3, gapSec: 180 },
   };
   root.DDE = E; if (typeof module !== 'undefined') module.exports = E;
@@ -1083,7 +1085,7 @@ window.I18N = (() => {
     p_roll: ['Genouillères', 'Knee pads'], ps_roll: ['Roulade 7 % plus fréquente', 'Roll 7 % more often'], p_crit: ['Œil de lynx', 'Lynx eye'], ps_crit: ['+3 % de critiques', '+3 % criticals'],
     p_potion: ['Potion de Gus', 'Gus’s potion'], ps_potion: ['Plus de soin après chaque boss', 'More healing after each boss'], p_magnet: ['Aimant de poche', 'Pocket magnet'], ps_magnet: ['Pièces attirées de plus loin', 'Coins pulled from further away'],
     chestTxt: ['Le coffre du marchand, payé avec ton or de la taverne : de l’or ({a} à {b}), un bonus de départ, ou une teinture rare.', 'The merchant’s chest, paid with your tavern gold: gold ({a} to {b}), a starting bonus, or a rare dye.'],
-    openChest: ['Ouvrir', 'Open'], gotGold: ['+{n} or !', '+{n} gold!'], gotToken: ['Bonus pour ta prochaine descente : {s}', 'Bonus for your next run: {s}'], gotDye: ['Nouvelle teinture : {s}', 'New dye: {s}'],
+    openChest: ['Ouvrir', 'Open'], chestOdds: ['Chances', 'Odds'], odd_gold: ['{a} à {b} or', '{a} to {b} gold'], odd_token: ['bonus de départ', 'starting bonus'], odd_dye: ['teinture rare', 'rare dye'], gotGold: ['+{n} or !', '+{n} gold!'], gotToken: ['Bonus pour ta prochaine descente : {s}', 'Bonus for your next run: {s}'], gotDye: ['Nouvelle teinture : {s}', 'New dye: {s}'],
     wardNote: ['Des tenues pour la chevalière, juste pour le style, à prix fixe. Elles ne rendent pas plus fort.', 'Outfits for the knight, just for style, at a fixed price. They do not make you stronger.'], dyes: ['Teintures', 'Dyes'],
     o_none: ['Sans tenue', 'No outfit'], o_outfit_0: ['Armure dorée', 'Golden armour'], o_outfit_1: ['Tenue de pirate', 'Pirate outfit'], o_outfit_2: ['Pyjama étoilé', 'Starry pyjamas'], o_outfit_3: ['Armure de givre', 'Frost armour'],
     oh_starter: ['Pack de démarrage', 'Starter pack'], oh_pass: ['Passe d’hiver', 'Winter pass'], oh_chest: ['Coffre du marchand', 'Merchant’s chest'],
@@ -1095,7 +1097,7 @@ window.I18N = (() => {
     dayK: ['J', 'D'], claim: ['Récupérer', 'Claim'], comeBack: ['Reviens demain pour le prochain cadeau !', 'Come back tomorrow for the next gift!'],
     // shop
     s_noads: ['Sans pub', 'No ads'], s_noadsSub: ['Plus aucune publicité entre les parties. Les bonus par vidéo restent au choix.', 'No more ads between runs. Video bonuses stay optional.'],
-    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['Le pyjama étoilé + 500 or de taverne', 'The starry pyjamas + 500 tavern gold'],
+    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['Le pyjama étoilé, une tenue exclusive', 'The starry pyjamas, an exclusive outfit'],
     s_cite_engloutie: ['Donjon bonus : la Cité Engloutie', 'Bonus dungeon: the Sunken City'], s_cite_engloutieSub: ['Un 4e donjon, tout de suite (gratuit après ta 1re victoire)', 'A 4th dungeon, right now (free after your 1st win)'],
     s_gems: ['100 gemmes', '100 gems'], s_gemsSub: ['Pour les tenues à prix fixe et finir une forge', 'For fixed-price outfits and finishing a forge'],
     s_pass_hiver_2026: ['Passe d’hiver 2026', 'Winter pass 2026'], s_pass_hiver_2026Sub: ['L’armure de givre et cadeaux du jour doublés. Achat unique.', 'The frost armour and double daily gifts. One-time purchase.'],
@@ -1466,7 +1468,7 @@ const storeIcon = it => ({ noads: src('ui_shop'), starter: src('outfit_2'), cite
 function grant(it, loud = true) {
   if (it.id === 'gems') S.gems += it.n;
   else { S.owned[it.id] = true;
-    if (it.id === 'starter') { S.outfits.outfit_2 = 1; S.gold += E.starterGold; }
+    if (it.id === 'starter') { S.outfits.outfit_2 = 1; }
     if (it.id === 'pass_hiver_2026') S.outfits.outfit_3 = 1; }
   save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } renderHomeHead();
 }
@@ -1489,7 +1491,10 @@ let W = 0, H = 0, DPR = 1, SC = 1, OX = 0, OY = 0;
 function resize() {
   DPR = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
   const top = ($('#hud').classList.contains('on') ? $('#hud').getBoundingClientRect().bottom : 56) + 2, avail = Math.max(200, H - top - 6);
-  SC = Math.min(W / C.W, avail / C.H); OX = (W - C.W * SC) / 2; OY = top + (avail - C.H * SC) * 0.3;
+  // tall phones (6.1" to 6.9"): the room grows towards the full height; to get there its outer side walls may be cut by
+  // up to CROP world units on each side (the floor, the side torches and the inner wall stay whole). Wide screens: unchanged.
+  const CROP = 16, crop = Math.max(0, Math.min(CROP, (C.W - W * C.H / avail) / 2));
+  SC = Math.min(W / (C.W - 2 * crop), avail / C.H); OX = (W - C.W * SC) / 2; OY = top + (avail - C.H * SC) * 0.3;
   $('#bossbar').style.top = (OY + 66 * SC) + 'px';
 }
 const toScreen = (x, y) => [OX + x * SC, OY + y * SC];
@@ -1797,10 +1802,17 @@ function heroesModal() {
   modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
 }
 function chestModal(result) {
-  openModal(`<div class="big-ico"><img src="${src('chest')}" alt="" class="${result ? 'jz-pop' : ''}"></div><h2>${t('merchant')}</h2>${result ? `<div class="gain">${result}</div>` : `<p>${t('chestTxt', { a: E.chest.gold[0], b: E.chest.gold[1] })}</p>`}
+  openModal(`<div class="big-ico"><img src="${src('chest')}" alt="" class="${result ? 'jz-pop' : ''}"></div><h2>${t('merchant')}</h2>${result ? `<div class="gain">${result}</div>` : `<p>${t('chestTxt', { a: E.chest.gold[0], b: E.chest.gold[1] })}</p>`}<p class="sub odds">${chestOdds()}</p>
     <button class="b1 big ${S.gold < E.chest.cost ? 'off' : ''}" data-open>${t('openChest')} · ${E.chest.cost} <i class="gd"></i></button><button class="b2" data-close>${t('close')}</button>`);
   modal.querySelector('[data-open]').onclick = () => { if (S.gold < E.chest.cost) { SFX.miss(); return toast(t('notEnough')); } S.gold -= E.chest.cost; chestModal(openChest()); SFX.fanfare(); JUICE.confetti(70); buzz([20, 40]); renderHomeHead(); };
   modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+// the real odds of each prize, shown in the chest window: a prize that can no longer be won (every dye owned, a bonus
+// already waiting) turns into gold, so its share is added to the gold
+function chestOdds() {
+  const can = { gold: true, dye: E.dyes.some(d => !S.dyes[d]), token: !S.token };
+  const p = { gold: 0, token: 0, dye: 0 }; for (const [k, v] of E.chest.table) p[can[k] ? k : 'gold'] += v;
+  return t('chestOdds') + ' : ' + [['gold', 'odd_gold'], ['token', 'odd_token'], ['dye', 'odd_dye']].map(([k, s]) => `${t(s, { a: E.chest.gold[0], b: E.chest.gold[1] })} ${Math.round(p[k] * 100)} %`).join(' · ');
 }
 // paid with tavern gold only (earned by playing)
 function openChest() {
@@ -1950,6 +1962,8 @@ function afterConsent() { Ads.init(); Store.init(); if (!S.tut) startRun(!!S.run
 // ---------- drawing the room ----------
 function drawRoom() {
   const R = G.R; cx.fillStyle = '#2a2042'; cx.fillRect(0, 0, W, H);
+  // whatever is left above and below the room: the same dungeon stone, dimmed, so the screen never shows empty bands
+  if (OY > 8 || H - (OY + C.H * SC) > 8) { const bw = Math.max(W, H * C.W / C.H), bh = bw * C.H / C.W; cx.globalAlpha = 0.22; cx.drawImage(img('bg_room'), (W - bw) / 2, (H - bh) / 2, bw, bh); cx.globalAlpha = 1; }
   cx.drawImage(img('bg_room'), OX, OY, C.W * SC, C.H * SC);
   if (R.dg === 'cite') { cx.fillStyle = 'rgba(126,217,87,.13)'; cx.fillRect(OX, OY, C.W * SC, C.H * SC); for (let i = 0; i < 5; i++) { const y = OY + ((G.time * 18 + i * 120) % (C.H * SC)); cx.fillStyle = 'rgba(255,245,225,.08)'; cx.fillRect(OX, y, C.W * SC, 6 * SC); } }
   // the door at the top opens when the room is clear
