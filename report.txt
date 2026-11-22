@@ -1,69 +1,10 @@
-== vanvoyage
-  version text fr-FR ok
-  version text en-US ok
-  app info fr-FR ok
-  app info en-US ok
-    ops 1 [(0, 790570)]
-    shot 01.jpg 772 KB
-    ops 1 [(0, 630360)]
-    shot 02.jpg 615 KB
-    ops 1 [(0, 772719)]
-    shot 03.jpg 754 KB
-    ops 1 [(0, 626864)]
-    shot 04.jpg 612 KB
-    ops 1 [(0, 506451)]
-    shot 05.jpg 494 KB
-  media fr-FR 5 screens, 1 previews
-    ops 1 [(0, 790570)]
-    shot 01.jpg 772 KB
-    ops 1 [(0, 630360)]
-    shot 02.jpg 615 KB
-    ops 1 [(0, 772719)]
-    shot 03.jpg 754 KB
-    ops 1 [(0, 626864)]
-    shot 04.jpg 612 KB
-    ops 1 [(0, 506451)]
-    shot 05.jpg 494 KB
-  media en-US 5 screens, 1 previews
-== previews vanvoyage
-  uploaded 1.mp4 16682 KB -> 27c00019-78f0-812a-8112-b94d4ebdf259
-  video 27c00019-78f0-812a-8112-b94d4ebdf259 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
-  placement en-US ACTIVE
-  placement fr-FR ACTIVE
-== coralstack
-  version text fr-FR ok
-  version text en-US ok
-  app info fr-FR ok
-  app info en-US ok
-    ops 1 [(0, 898639)]
-    shot 01.jpg 877 KB
-    ops 1 [(0, 1135880)]
-    shot 02.jpg 1109 KB
-    ops 1 [(0, 1160446)]
-    shot 03.jpg 1133 KB
-    ops 1 [(0, 1160020)]
-    shot 04.jpg 1132 KB
-    ops 1 [(0, 1162954)]
-    shot 05.jpg 1135 KB
-  media fr-FR 5 screens, 1 previews
-    ops 1 [(0, 898639)]
-    shot 01.jpg 877 KB
-    ops 1 [(0, 1135880)]
-    shot 02.jpg 1109 KB
-    ops 1 [(0, 1160446)]
-    shot 03.jpg 1133 KB
-    ops 1 [(0, 1160020)]
-    shot 04.jpg 1132 KB
-    ops 1 [(0, 1162954)]
-    shot 05.jpg 1135 KB
-  media en-US 5 screens, 1 previews
-== previews coralstack
-  uploaded 1.mp4 16052 KB -> bfc00019-788b-8eda-811e-6d159470e3d0
-  video bfc00019-788b-8eda-811e-6d159470e3d0 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
-  placement en-US ACTIVE
-  placement fr-FR ACTIVE
-CHECK vanvoyage en-US desc=747 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17083373, 'fileName': '1.mp4', 'sourceFileChecksum': 'f306ae7cc8941f80924ac87c773811e7', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK vanvoyage fr-FR desc=810 kw=97 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17083373, 'fileName': '1.mp4', 'sourceFileChecksum': 'f306ae7cc8941f80924ac87c773811e7', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK coralstack en-US desc=791 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16437984, 'fileName': '1.mp4', 'sourceFileChecksum': 'dbca2ed6f852d2bebf058764132f6d25', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK coralstack fr-FR desc=866 kw=98 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16437984, 'fileName': '1.mp4', 'sourceFileChecksum': 'dbca2ed6f852d2bebf058764132f6d25', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-done; failed: []
+CLEAN lanternhold fr-FR 1.mp4
+CLEAN lanternhold fr-FR 2.mp4
+CLEAN lanternhold en-US 1.mp4
+CLEAN lanternhold en-US 2.mp4
+CLEAN crumblecrew fr-FR 1.mp4
+CLEAN crumblecrew en-US 1.mp4
+CLEAN circuitcaper en-US 1.mp4
+CLEAN circuitcaper en-US 2.mp4
+CLEAN circuitcaper fr-FR 1.mp4
+CLEAN circuitcaper fr-FR 2.mp4
