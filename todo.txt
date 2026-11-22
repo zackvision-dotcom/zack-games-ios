@@ -1,3 +1,6 @@
 # one bundle suffix per line ("check" = only report, "builds" = latest builds)
-check
-circuitcaper
+builds
+vanvoyage
+gullstreet
+kunaigaiden
+braise
