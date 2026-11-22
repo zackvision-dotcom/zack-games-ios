@@ -1,0 +1,28 @@
+name: App Store listing sync
+# Pushing this branch sends the listing texts, screenshots and previews of the games named in todo.txt
+# to App Store Connect with the official API. It never submits anything for review.
+on:
+  push:
+    branches: [store-media]
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install pyjwt cryptography requests
+      - name: Install App Store Connect API key
+        run: |
+          mkdir -p "$HOME/keys"
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}" | base64 --decode > "$HOME/keys/key.p8"
+          chmod 600 "$HOME/keys/key.p8"
+      - name: Sync
+        env:
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          ASC_KEY_PATH: /home/runner/keys/key.p8
+        run: |
+          GAMES=$(grep -v '^#' todo.txt | tr '\n' ' ')
+          echo "games: $GAMES"
+          test -n "$GAMES" && python asc_sync.py $GAMES
