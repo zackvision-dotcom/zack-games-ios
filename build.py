@@ -40,6 +40,8 @@ def braise():
     # the eight eras + Mode Deus (eras.js), inside the game's closure so it can wrap the engine's functions
     eras = io.open(os.path.join(src, 'eras.js'), encoding='utf-8').read()
     s = s.replace(boot, eras + chr(10) + boot, 1)
+    # AdMob (ads.js, iOS app only: does nothing without the native "ads" handler), also inside the closure
+    s = s.replace(boot, io.open(os.path.join(src, 'ads.js'), encoding='utf-8').read() + chr(10) + boot, 1)
     assert s.count('<script src="art.js"></script>') == 1
     s = s.replace('<script src="art.js"></script>', '<script src="art.js"></script><script src="eras-art.js"></script>')
     s = s.replace(boot, "window.BRAISE_TOUCH={autoAct,attackNearest,dropSlot,toggleCraft:()=>{openTab=openTab?null:'tools';renderRecipes();},"

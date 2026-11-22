@@ -35,9 +35,13 @@ targets:
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: KunaiGaiden/Assets.xcassets
       - path: KunaiGaiden/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: KunaiGaiden/Info.plist
       properties:
@@ -59,82 +63,10 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.action-games
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.kunaigaiden
-        PRODUCT_NAME: KunaiGaiden
-        TARGETED_DEVICE_FAMILY: "1"   # iPhone only (XcodeGen's iOS app preset would otherwise add iPad: "1,2")
-
-  Braise:
-    type: application
-    platform: iOS
-    sources:
-      - path: Shared
-      - path: Braise/Assets.xcassets
-      - path: Braise/Web
-        type: folder
-    info:
-      path: Braise/Info.plist
-      properties:
-        CFBundleDisplayName: Braise
-        CFBundleShortVersionString: $(MARKETING_VERSION)
-        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        LSRequiresIPhoneOS: true
-        ITSAppUsesNonExemptEncryption: false
-        UILaunchScreen: {}
-        UIRequiresFullScreen: true
-        UIStatusBarHidden: true
-        UIViewControllerBasedStatusBarAppearance: false
-        UISupportedInterfaceOrientations:
-          - UIInterfaceOrientationLandscapeLeft
-          - UIInterfaceOrientationLandscapeRight
-        UISupportedInterfaceOrientations~ipad:
-          - UIInterfaceOrientationLandscapeLeft
-          - UIInterfaceOrientationLandscapeRight
-        UIApplicationSceneManifest:
-          UIApplicationSupportsMultipleScenes: false
-        LSApplicationCategoryType: public.app-category.adventure-games
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.braise
-        PRODUCT_NAME: Braise
-        TARGETED_DEVICE_FAMILY: "1"   # iPhone only (XcodeGen's iOS app preset would otherwise add iPad: "1,2")
-
-  GullStreet:
-    type: application
-    platform: iOS
-    sources:
-      - path: Shared
-      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
-      - path: GullStreet/Assets.xcassets
-      - path: GullStreet/Web
-        type: folder
-    dependencies:
-      - package: GoogleMobileAds
-      - package: GoogleUserMessagingPlatform
-    info:
-      path: GullStreet/Info.plist
-      properties:
-        CFBundleDisplayName: Gull Street
-        CFBundleShortVersionString: $(MARKETING_VERSION)
-        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        LSRequiresIPhoneOS: true
-        ITSAppUsesNonExemptEncryption: false
-        UILaunchScreen: {}
-        UIRequiresFullScreen: true
-        UIStatusBarHidden: true
-        UIViewControllerBasedStatusBarAppearance: false
-        UISupportedInterfaceOrientations:
-          - UIInterfaceOrientationPortrait
-        UISupportedInterfaceOrientations~ipad:
-          - UIInterfaceOrientationPortrait
-        UIApplicationSceneManifest:
-          UIApplicationSupportsMultipleScenes: false
-        LSApplicationCategoryType: public.app-category.simulation-games
-        GADApplicationIdentifier: ca-app-pub-3447270747554208~3290754492
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~5725346142
         GADUseTestAds: $(ADS_TEST)
-        GADInterstitialUnit: ca-app-pub-3447270747554208/2907611114
-        GADRewardedUnit: ca-app-pub-3447270747554208/3564805407
+        GADInterstitialUnit: ca-app-pub-3447270747554208/3043342481
+        GADRewardedUnit: ca-app-pub-3447270747554208/1173399606
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: &skadnetworks   # Google's list for AdMob (developers.google.com/admob/ios/3p-skadnetworks)
           - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
@@ -187,6 +119,96 @@ targets:
           - SKAdNetworkIdentifier: 3rd42ekr43.skadnetwork
           - SKAdNetworkIdentifier: 97r2b46745.skadnetwork
           - SKAdNetworkIdentifier: 3qcr597p9d.skadnetwork
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.kunaigaiden
+        PRODUCT_NAME: KunaiGaiden
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone only (XcodeGen's iOS app preset would otherwise add iPad: "1,2")
+
+  Braise:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: Braise/Assets.xcassets
+      - path: Braise/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: Braise/Info.plist
+      properties:
+        CFBundleDisplayName: Braise
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.adventure-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~2826438800
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/9417179149
+        GADRewardedUnit: ca-app-pub-3447270747554208/2542321598
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.braise
+        PRODUCT_NAME: Braise
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone only (XcodeGen's iOS app preset would otherwise add iPad: "1,2")
+
+  GullStreet:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: GullStreet/Assets.xcassets
+      - path: GullStreet/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: GullStreet/Info.plist
+      properties:
+        CFBundleDisplayName: Gull Street
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.simulation-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~3290754492
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/2907611114
+        GADRewardedUnit: ca-app-pub-3447270747554208/3564805407
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.gullstreet
