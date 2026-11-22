@@ -1,2 +1,68 @@
-ADSRATING braise True lootBox False
-ADSRATING kunaigaiden True lootBox False
+SUBMIT gullstreet iap shells120 ERR POST /inAppPurchaseSubmissions -> 409 {
+  "errors" : [ {
+    "id" : "99393769-7b59-4c40-81c0-9632fa855433",
+    "status" : "409",
+    "code" : "STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID",
+    "title" : "This in-app purchase is not in a valid state.",
+    "detail" : "This in-app purchase canno
+SUBMIT gullstreet iap shells20 ERR POST /inAppPurchaseSubmissions -> 409 {
+  "errors" : [ {
+    "id" : "9421edd4-c93b-4849-a9a5-286f740272b7",
+    "status" : "409",
+    "code" : "STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID",
+    "title" : "This in-app purchase is not in a valid state.",
+    "detail" : "This in-app purchase canno
+SUBMIT gullstreet iap shells260 ERR POST /inAppPurchaseSubmissions -> 409 {
+  "errors" : [ {
+    "id" : "13cd1683-a8d0-43cc-9e90-72f926d25566",
+    "status" : "409",
+    "code" : "STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID",
+    "title" : "This in-app purchase is not in a valid state.",
+    "detail" : "This in-app purchase canno
+SUBMIT gullstreet iap shells600 ERR POST /inAppPurchaseSubmissions -> 409 {
+  "errors" : [ {
+    "id" : "b194b883-0f8b-480c-8268-08acbfd9efa7",
+    "status" : "409",
+    "code" : "STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID",
+    "title" : "This in-app purchase is not in a valid state.",
+    "detail" : "This in-app purchase canno
+SUBMIT gullstreet iap facades ERR POST /inAppPurchaseSubmissions -> 409 {
+  "errors" : [ {
+    "id" : "356641b6-34e4-4aae-97b7-af53cf8afb8e",
+    "status" : "409",
+    "code" : "STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID",
+    "title" : "This in-app purchase is not in a valid state.",
+    "detail" : "This in-app purchase canno
+SUBMIT gullstreet iap starter ERR POST /inAppPurchaseSubmissions -> 409 {
+  "errors" : [ {
+    "id" : "80ea953c-b2a8-450f-81b7-2c09474e194f",
+    "status" : "409",
+    "code" : "STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID",
+    "title" : "This in-app purchase is not in a valid state.",
+    "detail" : "This in-app purchase canno
+SUBMIT gullstreet iap noads ERR POST /inAppPurchaseSubmissions -> 409 {
+  "errors" : [ {
+    "id" : "7b33f794-6f2c-479a-b724-473396cce71f",
+    "status" : "409",
+    "code" : "STATE_ERROR.INVALID_REQUEST_ENTITY_STATE_INVALID",
+    "title" : "This in-app purchase is not in a valid state.",
+    "detail" : "This in-app purchase canno
+Traceback (most recent call last):
+  File "/home/runner/work/zack-games-ios/zack-games-ios/asc_sync.py", line 264, in <module>
+    call('POST', '/reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems', 'relationships': {'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': sub['id']}}, 'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': ver['id']}}}}})
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/zack-games-ios/zack-games-ios/asc_sync.py", line 40, in call
+    raise RuntimeError(f'{method} {path} -> {r.status_code} {r.text[:600]}')
+RuntimeError: POST /reviewSubmissionItems -> 409 {
+  "errors" : [ {
+    "id" : "e9b1a01b-ed8f-480d-a51e-5e19359a760d",
+    "status" : "409",
+    "code" : "STATE_ERROR.ENTITY_STATE_INVALID",
+    "title" : "appStoreVersions with id '1c96498b-aa40-463c-a698-36ce17d205fb' is not in valid state.",
+    "detail" : "This resource cannot be reviewed, please check associated errors to see why.",
+    "meta" : {
+      "associatedErrors" : {
+        "/v1/appInfos/9078a866-0aeb-479b-9f6b-88898c538d62" : [ {
+          "id" : "09ad5a12-7850-4f8b-82a1-d828386e0f06",
+          "status" : "409",
+          "code" : "STATE_ERROR.PPM.compliance.form.SECURITYASF39
