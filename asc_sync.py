@@ -58,7 +58,7 @@ def find_app(suffix):
 
 def edit_version(app_id):
     vs = call('GET', f'/apps/{app_id}/appStoreVersions?filter[platform]=IOS&limit=10')['data']
-    editable = [v for v in vs if v['attributes']['appStoreState'] in ('PREPARE_FOR_SUBMISSION', 'DEVELOPER_REJECTED', 'REJECTED', 'METADATA_REJECTED', 'INVALID_BINARY')]
+    editable = [v for v in vs if v['attributes']['appStoreState'] in ('PREPARE_FOR_SUBMISSION', 'READY_FOR_REVIEW', 'DEVELOPER_REJECTED', 'REJECTED', 'METADATA_REJECTED', 'INVALID_BINARY')]
     if not editable:
         raise RuntimeError('no editable version: ' + ', '.join(v['attributes']['appStoreState'] for v in vs))
     return editable[0]
