@@ -408,3 +408,35 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.pulsepost
         PRODUCT_NAME: PulsePost
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  DungeonDash:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: DungeonDash/Assets.xcassets
+      - path: DungeonDash/Web
+        type: folder
+    info:
+      path: DungeonDash/Info.plist
+      properties:
+        CFBundleDisplayName: Dungeon Dash
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.action-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.dungeondash
+        PRODUCT_NAME: DungeonDash
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
