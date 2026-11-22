@@ -234,7 +234,7 @@ if __name__ == '__main__':
             if g not in apps:
                 apps[g] = {i['attributes']['productId']: i['id'] for i in call('GET', f"/apps/{find_app(g)['id']}/inAppPurchasesV2?limit=50")['data']}
             iid = apps[g][pid]
-            for l in call('GET', f"/inAppPurchases/{iid}/inAppPurchaseLocalizations?limit=50", ok=(200,))['data']:
+            for l in call("GET", f"https://api.appstoreconnect.apple.com/v2/inAppPurchases/{iid}/inAppPurchaseLocalizations?limit=50")['data']:
                 d = locs.get(l['attributes']['locale'])
                 if d:
                     assert len(d) <= 55, d
