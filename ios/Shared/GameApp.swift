@@ -22,6 +22,8 @@ struct GameWebView: UIViewRepresentable {
         config.mediaTypesRequiringUserActionForPlayback = []
         config.websiteDataStore = .default()          // keeps the save (localStorage) between launches
         config.userContentController.addScriptMessageHandler(context.coordinator.store, contentWorld: .page, name: "store")
+        config.userContentController.add(context.coordinator.haptics, name: "haptic")   // navigator.vibrate → Taptic Engine
+        config.userContentController.addUserScript(NativeHaptics.script)
 
         let view = WKWebView(frame: .zero, configuration: config)
         context.coordinator.store.webView = view       // in-app purchases (NativeStore.swift)
@@ -49,6 +51,7 @@ struct GameWebView: UIViewRepresentable {
     /// (so "Recommencer" or "compte niveau max" did nothing when a save existed).
     final class Coordinator: NSObject, WKUIDelegate {
         let store = NativeStore()
+        let haptics = NativeHaptics()
 
         private func present(_ alert: UIAlertController, from webView: WKWebView) {
             var top = webView.window?.rootViewController
