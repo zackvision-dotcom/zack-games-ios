@@ -1,6 +1,3 @@
-# one bundle suffix per line ("check" = only report, "builds" = latest builds)
 builds
 vanvoyage
 gullstreet
-kunaigaiden
-braise
