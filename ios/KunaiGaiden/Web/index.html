@@ -3569,7 +3569,7 @@ window.KGAME = (() => {
   function newContract() { const L = S.lvl, kinds = ['hunt', 'hunt', 'herb', 'combo', 'roof', S.lvl >= 3 ? 'elite' : 'hunt', S.lvl >= 3 ? 'bandit' : 'herb'], k = kinds[(rnd() * kinds.length) | 0];
     const c = { k, p: 0, rw: { ryo: 35 + L * 14, xp: 50 + L * 28, gear: rnd() < .4 ? (k === 'elite' ? 2 : 1) : (k === 'elite' ? 1 : -1) } };
     if (k === 'hunt') { c.n = 5 + ((rnd() * 5) | 0); c.t = 'Chasse : ' + c.n + ' loups'; }
-    if (k === 'bandit') { c.n = 4 + ((rnd() * 4) | 0); c.t = 'Rang C : ' + c.n + ' bandits'; c.rw.ryo += 40; }
+    if (k === 'bandit') { c.n = 4 + ((rnd() * 4) | 0); c.t = 'Contrat ★★ : ' + c.n + ' bandits'; c.rw.ryo += 40; }
     if (k === 'herb') { c.n = 4 + ((rnd() * 5) | 0); c.t = 'Cueillette : ' + c.n + ' herbes médicinales'; }
     if (k === 'combo') { c.n = 8 + ((rnd() * 4) | 0) * 3; c.t = 'Entraînement : un combo de ' + c.n; }
     if (k === 'roof') { c.n = 3 + ((rnd() * 3) | 0); c.t = 'Course sur les toits : ' + c.n + ' toits différents'; }
@@ -3605,10 +3605,10 @@ window.KGAME = (() => {
   /* ================= missions ================= */
   const Q = {
     q1: { title: 'Bienvenue à Aozora', giver: 'guard', steps: [{ txt: 'Présente-toi à la secrétaire, devant la résidence du Gardien', done: () => S.qp.q1met }], reward: { xp: 60, ryo: 30 } },
-    q2: { title: 'Rang D : les loups de la forêt', giver: 'mei', steps: [{ txt: 'Repousse les loups au sud du village', n: 6, cnt: () => S.qp.wolves || 0 }], reward: { xp: 180, ryo: 120, items: { kunai: 10, pillHp: 1 } } },
+    q2: { title: '★ Les loups de la forêt', giver: 'mei', steps: [{ txt: 'Repousse les loups au sud du village', n: 6, cnt: () => S.qp.wolves || 0 }], reward: { xp: 180, ryo: 120, items: { kunai: 10, pillHp: 1 } } },
     q3: { title: 'Le toit du Gardien', giver: 'hayato', steps: [{ txt: 'Grimpe sur le toit de la résidence du Gardien (double saut !)', done: () => S.qp.roof }, { txt: 'Reviens voir Sensei Hayato', done: () => S.qp.q3back }], reward: { xp: 150, skill: 'fire' } },
     q4: { title: 'Livraison de ramen', giver: 'genzo', steps: [{ txt: 'Apporte le bol de ramen au médecin Ren, près du temple', done: () => S.qp.ramenGiven }], reward: { xp: 120, ryo: 60, items: { pillHp: 2, pillCk: 2 } } },
-    q5: { title: 'Rang C : le camp des bandits', giver: 'mei', need: () => S.q.q2 === 'done' && S.lvl >= 3, steps: [{ txt: 'Mets en fuite les bandits du nord-ouest', n: 5, cnt: () => S.qp.bandits || 0 }, { txt: 'Bats leur chef, Kurogane le déserteur', done: () => S.qp.boss }, { txt: 'Fais ton rapport à la secrétaire Mei', done: () => S.qp.q5back }], reward: { xp: 600, ryo: 400, rank: 'Chûnin' } } };
+    q5: { title: '★★ Le camp des bandits', giver: 'mei', need: () => S.q.q2 === 'done' && S.lvl >= 3, steps: [{ txt: 'Mets en fuite les bandits du nord-ouest', n: 5, cnt: () => S.qp.bandits || 0 }, { txt: 'Bats leur chef, Kurogane le déserteur', done: () => S.qp.boss }, { txt: 'Fais ton rapport à la secrétaire Mei', done: () => S.qp.q5back }], reward: { xp: 600, ryo: 400, rank: 'Chûnin' } } };
   const qStep = id => { const q = Q[id]; for (let i = 0; i < q.steps.length; i++) { const s = q.steps[i]; const ok = s.n ? s.cnt() >= s.n : s.done(); if (!ok) return i; } return q.steps.length; };
   function startQuest(id) { if (S.q[id]) return; S.q[id] = 'active'; sfx('quest'); toast('Nouvelle mission', Q[id].title); if (id === 'q4') S.inv.ramenBowl = 1; refresh(); }
   function finishQuest(id) { const q = Q[id], r = q.reward; S.q[id] = 'done'; sfx('quest'); let msg = [];
