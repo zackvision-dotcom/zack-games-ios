@@ -167,6 +167,16 @@ def check(suffix):
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('LOOTBOX'):
+        # games whose card packs are random and can be bought with a currency sold for money: declare it (age rating)
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            infos = call('GET', f"/apps/{app['id']}/appInfos?include=ageRatingDeclaration")['data']
+            info = next((i for i in infos if i['attributes'].get('appStoreState') not in ('READY_FOR_SALE', 'READY_FOR_DISTRIBUTION')), infos[0])
+            aid = info['relationships']['ageRatingDeclaration']['data']['id']
+            r = call('PATCH', f'/ageRatingDeclarations/{aid}', {'data': {'type': 'ageRatingDeclarations', 'id': aid, 'attributes': {'lootBox': True}}})
+            print('LOOTBOX', g, r['data']['attributes'].get('lootBox'))
+        sys.exit(0)
     if os.environ.get('BUILDS'):
         for g in sys.argv[1:]:
             app = find_app(g)
