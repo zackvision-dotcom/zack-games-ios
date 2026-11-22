@@ -225,6 +225,17 @@ if __name__ == '__main__':
             call('PATCH', f"/appStoreVersions/{ver['id']}", {'data': {'type': 'appStoreVersions', 'id': ver['id'], 'attributes': {'copyright': os.environ['COPYRIGHT']}}})
             print('COPYRIGHT', g, 'ok')
         sys.exit(0)
+    if os.environ.get('RMKW'):
+        word = os.environ['RMKW'].lower()
+        for g in sys.argv[1:]:
+            ver = edit_version(find_app(g)['id'])
+            for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
+                kws = [k for k in (l['attributes'].get('keywords') or '').split(',') if k]
+                new = [k for k in kws if k.strip().lower() not in (word, 'アニメ', '动漫', '動漫', '애니메이션', 'аниме')]
+                if new != kws:
+                    call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'keywords': ','.join(new)}}})
+                print('RMKW', g, l['attributes']['locale'], len(kws) - len(new), 'removed')
+        sys.exit(0)
     if os.environ.get('ADDKW'):
         # Zack's explicit choice (22/11, warned about guideline 2.3.7): add one keyword to every store language of an app
         word = os.environ['ADDKW']
