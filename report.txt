@@ -1,25 +1,4 @@
-RMKW kunaigaiden pl 1 removed
-RMKW kunaigaiden pt-BR 1 removed
-RMKW kunaigaiden ko 1 removed
-RMKW kunaigaiden it 1 removed
-RMKW kunaigaiden uk 1 removed
-RMKW kunaigaiden de-DE 1 removed
-RMKW kunaigaiden en-US 1 removed
-RMKW kunaigaiden zh-Hans 1 removed
-RMKW kunaigaiden zh-Hant 1 removed
-RMKW kunaigaiden es-MX 1 removed
-RMKW kunaigaiden es-ES 1 removed
-RMKW kunaigaiden fr-CA 1 removed
-RMKW kunaigaiden hi 1 removed
-RMKW kunaigaiden en-GB 1 removed
-RMKW kunaigaiden pt-PT 1 removed
-RMKW kunaigaiden nl-NL 1 removed
-RMKW kunaigaiden vi 1 removed
-RMKW kunaigaiden tr 1 removed
-RMKW kunaigaiden th 1 removed
-RMKW kunaigaiden id 1 removed
-RMKW kunaigaiden ms 1 removed
-RMKW kunaigaiden fr-FR 1 removed
-RMKW kunaigaiden ar-SA 1 removed
-RMKW kunaigaiden ja 1 removed
-RMKW kunaigaiden ru 1 removed
+SETKW kunaigaiden en-US ninja,shinobi,kunai,jutsu,village,rpg,action,combat,japan,samurai,sensei,clan
+SETKW kunaigaiden fr-CA ninja,shinobi,kunai,jutsu,village,rpg,action,combat,japon,samouraï,sensei,clan
+SETKW kunaigaiden en-GB ninja,shinobi,kunai,jutsu,village,rpg,action,combat,japan,samurai,sensei,clan
+SETKW kunaigaiden fr-FR ninja,shinobi,kunai,jutsu,village,rpg,action,combat,japon,samouraï,sensei,clan
