@@ -167,6 +167,12 @@ def check(suffix):
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('REFDATA'):
+        r = call('GET', '/appAssetLibraryRefData')
+        s = json.dumps(r)
+        print('REFDATA', len(s))
+        print(s[:12000])
+        sys.exit(0)
     if os.environ.get('LOOTBOX'):
         # games whose card packs are random and can be bought with a currency sold for money: declare it (age rating)
         for g in sys.argv[1:]:
