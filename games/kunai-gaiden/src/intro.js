@@ -232,7 +232,7 @@ window.KINTRO = (() => {
     // the duel: real combat, but it cannot be won
     chaseArrow = null; M.lock = true; letterbox(true); await sub('Kurogane', 'Un genin du jour ? Ils envoient vraiment n’importe qui.', 2600); letterbox(false);
     M.actors.splice(M.actors.indexOf(kuro), 1); const boss = GI.spawnBoss(kuro.x, kuro.y); GI.setNoDeath(true); GI.showHud(true); GI.heal(); M.lock = false; GI.toast('Le duel', 'Frappe Kurogane !');
-    GI.setObjective('Le duel', (window.KTOUCH && KTOUCH.enabled) ? 'Combats ! Boutons de frappe et de kunai' : 'Combats ! J : frappe · K : kunai'); const d0 = performance.now(); await until(() => performance.now() - d0 > 24000 || GI.hp() < .22);
+    GI.setObjective('Le duel', (window.KTOUCH && KTOUCH.enabled) ? 'Combats ! Boutons de taijutsu et de kunai' : 'Combats ! J : taijutsu · K : kunai'); const d0 = performance.now(); await until(() => performance.now() - d0 > 24000 || GI.hp() < .22);
     return { boss, masks }; }
 
   async function awakeningSequence(ctx) { log('awakeningSequence'); const M = KMAP, GI = KGAME.intro, boss = ctx.boss, cvMain = document.getElementById('c');

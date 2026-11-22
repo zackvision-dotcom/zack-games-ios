@@ -11,14 +11,14 @@ window.KGAME = (() => {
   /* ================= state ================= */
   const NEW = () => ({ v: 1, name: 'Kaze', look: { hair: '#2b2a3b', hairStyle: 'short', eyes: '#1c6fe0', skin: '#fde2cb', coat: '#2f90aa', coatLen: 1, headband: true, scarf: false, vest: false },
     lvl: 1, xp: 0, hp: 100, ck: 80, ryo: 50, inv: { kunai: 12, pillHp: 2, pillCk: 1, ramen: 0, ramenBowl: 0 }, skills: { fire: false, sphere: false, chidori: false, water: false, wind: false, clone: false, dash: false },
-    q: { q1: 'active' }, qp: {}, kills: { wolf: 0, bandit: 0, boss: 0 }, pos: null, sound: true, rank: 'Novice', done: false,
+    q: { q1: 'active' }, qp: {}, kills: { wolf: 0, bandit: 0, boss: 0 }, pos: null, sound: true, rank: 'Genin', done: false,
     eq: { weapon: { id: 'katana0', slot: 'weapon', w: 'katana', r: 0, lvl: 1, st: { atk: 3 }, name: 'Katana de genin' } }, gotKatana: true, bag: [], sp: 0, rk: { fist: 1, kunai: 1, fire: 1, sphere: 1, subst: 1, chidori: 1, water: 1, wind: 1, clone: 1, dash: 1 }, herbs: 0, scrolls: [], perm: { atk: 0, hp: 0 }, ach: {}, st: { maxCombo: 0, roofs: 0, water: 0, elites: 0, legend: 0, contracts: 0, herbs: 0 }, contracts: [], daily: { last: '', streak: 0 } });
   let S = NEW();
   const MAXL = 30;
   // the "max level" account: level 30, every technique learned and at rank 5, legendary gear, Aozora's missions done (the saga stays to be played)
   function MAXSAVE() { const m = NEW(), L = MAXL, base = { atk: 3, def: 4, hp: 14, ck: 10, crit: 1.5, spd: 2 }, MN = { head: 'ck', body: 'def', hands: 'atk', feet: 'spd', weapon: 'atk' };
     const leg = (slot, w, name) => { const st = {}; for (const k of [MN[slot], 'hp', 'def', 'crit']) if (!st[k]) st[k] = Math.round(base[k] * (1 + L * (k === MN[slot] ? .35 : .2)) * (k === MN[slot] ? (k === 'spd' ? 1.1 : 2.8) : .8)); return { id: Math.random().toString(36).slice(2, 9), slot, r: 3, lvl: L, st, w, name }; };
-    Object.assign(m, { lvl: L, xp: 0, sp: 0, ryo: 99999, rank: 'Maître du Ciel', done: true, inv: { kunai: 99, pillHp: 30, pillCk: 30, ramen: 10, ramenBowl: 0 },
+    Object.assign(m, { lvl: L, xp: 0, sp: 0, ryo: 99999, rank: 'Jōnin', done: true, inv: { kunai: 99, pillHp: 30, pillCk: 30, ramen: 10, ramenBowl: 0 },
       skills: { fire: true, sphere: true, chidori: true, water: true, wind: true, clone: true, dash: true }, rk: { fist: 5, kunai: 5, fire: 5, sphere: 5, subst: 5, chidori: 5, water: 5, wind: 5, clone: 5, dash: 5 },
       q: { q1: 'done', q2: 'done', q3: 'done', q4: 'done', q5: 'done' }, qp: { q1met: true, wolves: 6, roof: true, ramenGiven: true, bandits: 5, boss: true, q5back: true },
       kills: { wolf: 6, bandit: 5, boss: 1 }, scrolls: Array.from({ length: 12 }, (_, i) => 's' + i), perm: { atk: 24, hp: 120 },
@@ -284,7 +284,7 @@ window.KGAME = (() => {
     for (const href of ['https://fonts.googleapis.com/css2?family=Potta+One&family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap']) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l); }
     const st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
     const d = document.createElement('div'); d.id = 'kg'; d.innerHTML = `
-      <div id="k-hud" class="paper maki" hidden>${ROD()}<canvas id="k-por" width="132" height="132"></canvas><span class="lvseal" id="k-lvs">1</span><div><div class="nm"><span id="k-name">Kaze</span><small id="k-lvl">Novice</small></div>
+      <div id="k-hud" class="paper maki" hidden>${ROD()}<canvas id="k-por" width="132" height="132"></canvas><span class="lvseal" id="k-lvs">1</span><div><div class="nm"><span id="k-name">Kaze</span><small id="k-lvl">Genin</small></div>
         <div class="brow"><span class="kj" style="background:#c8281e">体</span><div class="kbar" id="k-hp"><i></i><b></b></div></div><div class="brow"><span class="kj" style="background:#1f6fd0">気</span><div class="kbar" id="k-ck"><i></i><b></b></div></div><div class="brow"><span class="kj" style="background:#c99a3a;width:20px;height:14px;font-size:9px">経</span><div class="kbar" id="k-xp"><i></i></div></div></div></div>
       <div id="k-weather" class="paper maki" hidden>${ROD('b')}<span id="k-wl">Ciel dégagé</span></div>
       <div id="k-top" hidden><div class="ryo paper maki">${ROD("r")}両 <span id="k-ryo">0</span></div>
@@ -317,19 +317,19 @@ window.KGAME = (() => {
 
   /* ================= skills, items ================= */
   const SK = {
-    fist: { key: 'j', icon: 'sFist', name: 'Corps à corps', ck: 0, cd: .45, act: 'attack' },
+    fist: { key: 'j', icon: 'sFist', name: 'Taijutsu', ck: 0, cd: .45, act: 'attack' },
     kunai: { key: 'k', icon: 'kunai', name: 'Lancer de kunai', ck: 0, cd: .5, act: 'throw', item: 'kunai' },
     fire: { key: 'l', icon: 'sFire', name: 'Boule de feu', ck: 22, cd: 2.6, act: 'seal', lock: () => !S.skills.fire, hint: 'Mission « Le toit du Gardien »' },
-    sphere: { key: 'u', icon: 'sSphere', name: 'Sphère de souffle', ck: 32, cd: 4.5, act: 'seal', lock: () => !S.skills.sphere, hint: 'Niveau 4' },
+    sphere: { key: 'u', icon: 'sSphere', name: 'Sphère de chakra', ck: 32, cd: 4.5, act: 'seal', lock: () => !S.skills.sphere, hint: 'Niveau 4' },
     subst: { key: 'i', icon: 'sSubst', name: 'Substitution', ck: 12, cd: 3.5, act: 'subst' },
     // learned by level (Kunai Gaiden)
     dash: { key: 'g', icon: 'sDash', name: 'Pas éclair', ck: 8, cd: 1.4, act: 'dash0', lock: () => !S.skills.dash, hint: 'Niveau 5' },
     water: { key: 'p', icon: 'sWater', name: 'Dragon d’eau', ck: 24, cd: 3, act: 'seal', lock: () => !S.skills.water, hint: 'Niveau 7' },
-    clone: { key: 'h', icon: 'sClone', name: 'Clones de brume', ck: 28, cd: 7, act: 'seal', lock: () => !S.skills.clone, hint: 'Niveau 9' },
+    clone: { key: 'h', icon: 'sClone', name: 'Multiclonage', ck: 28, cd: 7, act: 'seal', lock: () => !S.skills.clone, hint: 'Niveau 9' },
     chidori: { key: 'o', icon: 'sBolt', name: 'Lame-tonnerre', ck: 30, cd: 5, act: 'seal', lock: () => !S.skills.chidori, hint: 'Niveau 11' },
     wind: { key: 'y', icon: 'sWind', name: 'Lame de vent', ck: 18, cd: 2.4, act: 'seal', lock: () => !S.skills.wind, hint: 'Niveau 13' } };
-  const ITEMUSE = { pillHp: { key: '1', name: 'Pilule de soin', use: () => heal(60, 0) }, pillCk: { key: '2', name: 'Pilule de souffle', use: () => heal(0, 60) }, ramen: { key: '3', name: 'Bol de ramen', use: () => { S.regen = 8; toastMini('Ramen : régénération'); } } };
-  const PRICES = { kunai: [6, 'Kunai ×1'], pillHp: [30, 'Pilule de soin'], pillCk: [30, 'Pilule de souffle'], ramen: [18, 'Bol de ramen'] };
+  const ITEMUSE = { pillHp: { key: '1', name: 'Pilule de soin', use: () => heal(60, 0) }, pillCk: { key: '2', name: 'Pilule de chakra', use: () => heal(0, 60) }, ramen: { key: '3', name: 'Bol de ramen', use: () => { S.regen = 8; toastMini('Ramen : régénération'); } } };
+  const PRICES = { kunai: [6, 'Kunai ×1'], pillHp: [30, 'Pilule de soin'], pillCk: [30, 'Pilule de chakra'], ramen: [18, 'Bol de ramen'] };
   const cds = {};
   function heal(h, c) { S.hp = Math.min(maxHp(), S.hp + h); S.ck = Math.min(maxCk(), S.ck + c); if (h) addText(A.hero.x, A.hero.y, '+' + h, '#7dff8a'); if (c) addText(A.hero.x, A.hero.y, '+' + c, '#7ac8ff'); fx('aura', A.hero.x, A.hero.y, .6, .9); }
 
@@ -346,7 +346,7 @@ window.KGAME = (() => {
   const iconOf = it => it.slot === 'weapon' ? WT[it.w || 'kunai'].ic : SLOTS[it.slot][1];
   const SLOTN = { head: 'Tête', body: 'Corps', hands: 'Mains', feet: 'Pieds', weapon: 'Arme' };
   const SUFFIX = ['du Loup', 'de l’Aube', 'du Tonnerre', 'de l’Érable', 'du Renard', 'de l’Ombre', 'du Vent', 'de la Brume', 'du Dragon', 'de la Lune'];
-  const MAIN = { head: 'ck', body: 'def', hands: 'atk', feet: 'spd', weapon: 'atk' }, STN = { atk: 'Attaque', def: 'Défense', hp: 'Vie', ck: 'Souffle', crit: 'Critique %', spd: 'Vitesse %' };
+  const MAIN = { head: 'ck', body: 'def', hands: 'atk', feet: 'spd', weapon: 'atk' }, STN = { atk: 'Attaque', def: 'Défense', hp: 'Vie', ck: 'Chakra', crit: 'Critique %', spd: 'Vitesse %' };
   function genItem(lvl, minR) { let r = 0; const x = rnd(); r = x < .03 ? 3 : x < .14 ? 2 : x < .42 ? 1 : 0; r = Math.max(r, minR || 0); const slot = Object.keys(SLOTS)[(rnd() * 5) | 0], m = 1 + r * .6, st = {};
     const base = { atk: 3, def: 4, hp: 14, ck: 10, crit: 1.5, spd: 2 }; st[MAIN[slot]] = Math.round(base[MAIN[slot]] * (1 + lvl * .35) * m);
     const extra = Object.keys(base).filter(k => k !== MAIN[slot]); for (let i = 0; i < r; i++) { const k = extra[(rnd() * extra.length) | 0]; st[k] = (st[k] || 0) + Math.round(base[k] * (1 + lvl * .25) * (.6 + rnd() * .5)); }
@@ -363,7 +363,7 @@ window.KGAME = (() => {
   function newContract() { const L = S.lvl, kinds = ['hunt', 'hunt', 'herb', 'combo', 'roof', S.lvl >= 3 ? 'elite' : 'hunt', S.lvl >= 3 ? 'bandit' : 'herb'], k = kinds[(rnd() * kinds.length) | 0];
     const c = { k, p: 0, rw: { ryo: 35 + L * 14, xp: 50 + L * 28, gear: rnd() < .4 ? (k === 'elite' ? 2 : 1) : (k === 'elite' ? 1 : -1) } };
     if (k === 'hunt') { c.n = 5 + ((rnd() * 5) | 0); c.t = 'Chasse : ' + c.n + ' loups'; }
-    if (k === 'bandit') { c.n = 4 + ((rnd() * 4) | 0); c.t = 'Contrat : ' + c.n + ' bandits'; c.rw.ryo += 40; }
+    if (k === 'bandit') { c.n = 4 + ((rnd() * 4) | 0); c.t = 'Rang C : ' + c.n + ' bandits'; c.rw.ryo += 40; }
     if (k === 'herb') { c.n = 4 + ((rnd() * 5) | 0); c.t = 'Cueillette : ' + c.n + ' herbes médicinales'; }
     if (k === 'combo') { c.n = 8 + ((rnd() * 4) | 0) * 3; c.t = 'Entraînement : un combo de ' + c.n; }
     if (k === 'roof') { c.n = 3 + ((rnd() * 3) | 0); c.t = 'Course sur les toits : ' + c.n + ' toits différents'; }
@@ -380,7 +380,7 @@ window.KGAME = (() => {
     ['c40', 'Tempête de coups', 'Combo de 40', () => S.st.maxCombo >= 40, 300], ['roof', 'Chat des toits', 'Atterrir sur 25 toits', () => S.st.roofs >= 25, 120], ['water', 'Marche sur l’eau', 'Parcourir 200 m sur l’eau', () => S.st.water >= 200, 150],
     ['elite', 'Chasseur d’élites', 'Vaincre 10 Élites', () => S.st.elites >= 10, 300], ['legend', 'Légende vivante', 'Trouver un objet légendaire', () => S.st.legend >= 1, 400], ['herb', 'Herboriste', 'Cueillir 40 herbes', () => S.st.herbs >= 40, 120],
     ['scroll6', 'Archiviste', 'Trouver 6 rouleaux secrets', () => S.scrolls.length >= 6, 200], ['scroll', 'Gardien des secrets', 'Trouver les 12 rouleaux secrets', () => S.scrolls.length >= 12, 800], ['lvl10', 'Ninja aguerri', 'Atteindre le niveau 10', () => S.lvl >= 10, 400],
-    ['contr', 'Mercenaire du Ciel', 'Remplir 20 contrats', () => S.st.contracts >= 20, 300], ['chunin', 'Éclaireur', 'Terminer l’histoire', () => S.done, 500]];
+    ['contr', 'Mercenaire du Ciel', 'Remplir 20 contrats', () => S.st.contracts >= 20, 300], ['chunin', 'Chûnin', 'Terminer l’histoire', () => S.done, 500]];
   function checkAch() { for (const [id, n, d, test, r] of ACH) { if (S.ach[id] || !test()) continue; S.ach[id] = 1; S.ryo += r; setTimeout(() => { toast('Succès : ' + n, d + ' — ' + r + ' ryō'); sfx('lvl'); }, 900); } }
 
   /* ================= world entities ================= */
@@ -399,10 +399,10 @@ window.KGAME = (() => {
   /* ================= missions ================= */
   const Q = {
     q1: { title: 'Bienvenue à Aozora', giver: 'guard', steps: [{ txt: 'Présente-toi à la secrétaire, devant la résidence du Gardien', done: () => S.qp.q1met }], reward: { xp: 60, ryo: 30 } },
-    q2: { title: 'Les loups de la forêt', giver: 'mei', steps: [{ txt: 'Repousse les loups au sud du village', n: 6, cnt: () => S.qp.wolves || 0 }], reward: { xp: 180, ryo: 120, items: { kunai: 10, pillHp: 1 } } },
+    q2: { title: 'Rang D : les loups de la forêt', giver: 'mei', steps: [{ txt: 'Repousse les loups au sud du village', n: 6, cnt: () => S.qp.wolves || 0 }], reward: { xp: 180, ryo: 120, items: { kunai: 10, pillHp: 1 } } },
     q3: { title: 'Le toit du Gardien', giver: 'hayato', steps: [{ txt: 'Grimpe sur le toit de la résidence du Gardien (double saut !)', done: () => S.qp.roof }, { txt: 'Reviens voir Sensei Hayato', done: () => S.qp.q3back }], reward: { xp: 150, skill: 'fire' } },
     q4: { title: 'Livraison de ramen', giver: 'genzo', steps: [{ txt: 'Apporte le bol de ramen au médecin Ren, près du temple', done: () => S.qp.ramenGiven }], reward: { xp: 120, ryo: 60, items: { pillHp: 2, pillCk: 2 } } },
-    q5: { title: 'Le camp des bandits', giver: 'mei', need: () => S.q.q2 === 'done' && S.lvl >= 3, steps: [{ txt: 'Mets en fuite les bandits du nord-ouest', n: 5, cnt: () => S.qp.bandits || 0 }, { txt: 'Bats leur chef, Kurogane le déserteur', done: () => S.qp.boss }, { txt: 'Fais ton rapport à la secrétaire Mei', done: () => S.qp.q5back }], reward: { xp: 600, ryo: 400, rank: 'Éclaireur' } } };
+    q5: { title: 'Rang C : le camp des bandits', giver: 'mei', need: () => S.q.q2 === 'done' && S.lvl >= 3, steps: [{ txt: 'Mets en fuite les bandits du nord-ouest', n: 5, cnt: () => S.qp.bandits || 0 }, { txt: 'Bats leur chef, Kurogane le déserteur', done: () => S.qp.boss }, { txt: 'Fais ton rapport à la secrétaire Mei', done: () => S.qp.q5back }], reward: { xp: 600, ryo: 400, rank: 'Chûnin' } } };
   const qStep = id => { const q = Q[id]; for (let i = 0; i < q.steps.length; i++) { const s = q.steps[i]; const ok = s.n ? s.cnt() >= s.n : s.done(); if (!ok) return i; } return q.steps.length; };
   function startQuest(id) { if (S.q[id]) return; S.q[id] = 'active'; sfx('quest'); toast('Nouvelle mission', Q[id].title); if (id === 'q4') S.inv.ramenBowl = 1; refresh(); }
   function finishQuest(id) { const q = Q[id], r = q.reward; S.q[id] = 'done'; sfx('quest'); let msg = [];
@@ -413,7 +413,7 @@ window.KGAME = (() => {
     toast('Mission accomplie', q.title + ' — ' + msg.join(' · ')); if (r.xp) gainXp(r.xp); refresh(); save(); }
   function gainXp(n) { S.xp += n; addText(A.hero.x, A.hero.y, '+' + n + ' XP', '#ffe08a', 1.3);
     while (S.lvl < MAXL && S.xp >= xpNeed()) { S.xp -= xpNeed(); S.lvl++; S.sp++; S.hp = maxHp(); S.ck = maxCk(); checkAch(); sfx('lvl'); fx('leafSwirl', A.hero.x, A.hero.y, 1, 1.6);
-      let extra = ''; if (S.lvl >= 4 && !S.skills.sphere) { S.skills.sphere = true; extra = ' · Technique : Sphère de souffle (U)'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } toast('Niveau ' + S.lvl + ' !', 'Vie et souffle augmentés · +1 point de technique (T)' + extra); } refresh(); }
+      let extra = ''; if (S.lvl >= 4 && !S.skills.sphere) { S.skills.sphere = true; extra = ' · Technique : Sphère de chakra (U)'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } for (const [id, lv] of [['dash', 5], ['water', 7], ['clone', 9], ['chidori', 11], ['wind', 13]]) if (S.lvl >= lv && !S.skills[id]) { S.skills[id] = true; extra += ' · Technique : ' + SK[id].name + ' (' + SK[id].key.toUpperCase() + ')'; } toast('Niveau ' + S.lvl + ' !', 'Vie et chakra augmentés · +1 point de technique (T)' + extra); } refresh(); }
 
   /* ================= dialogues ================= */
   const DLG = {
@@ -425,7 +425,7 @@ window.KGAME = (() => {
         : ['Les loups sont au sud, de l’autre côté de la grande porte. Tu en as repoussé ' + (S.qp.wolves || 0) + ' sur 6.'];
       if (S.q.q2 === 'done' && !S.q.q5) return S.lvl >= 3 ? ['Tu progresses vite. Une mission de rang C, maintenant.', 'Des bandits ont installé un camp au nord-ouest, près des falaises. Leur chef est un ninja déserteur : Kurogane. Sois prudent.', { act: () => startQuest('q5') }]
         : ['Entraîne-toi encore un peu. Reviens quand tu auras atteint le niveau 3 (tu es niveau ' + S.lvl + ').'];
-      if (S.q.q5 === 'active') { const st = qStep('q5'); if (st >= 2) return ['Kurogane vaincu ?! Le conseil va en parler pendant des semaines.', { act: () => { S.qp.q5back = true; finishQuest('q5'); } }, 'Par décision du Gardien, tu es promu Éclaireur. Félicitations !', { act: () => showEnd() }];
+      if (S.q.q5 === 'active') { const st = qStep('q5'); if (st >= 2) return ['Kurogane vaincu ?! Le conseil va en parler pendant des semaines.', { act: () => { S.qp.q5back = true; finishQuest('q5'); } }, 'Par décision du Gardien, tu es promu Chûnin. Félicitations !', { act: () => showEnd() }];
         return ['Le camp des bandits est au nord-ouest. ' + (st === 0 ? 'Bandits repoussés : ' + (S.qp.bandits || 0) + '/5.' : 'Il reste leur chef, Kurogane.')]; }
       return ['Merci pour tout ce que tu fais pour le village, ' + S.rank + ' ' + S.name + '.'];
     },
@@ -433,7 +433,7 @@ window.KGAME = (() => {
       if (!S.q.q3 && S.q.q2 === 'done') return ['Alors c’est toi qui as chassé les loups ? Pas mal.', 'Un ninja doit savoir se déplacer partout, même sur les toits.', 'Grimpe tout en haut de la résidence du Gardien. Double saut, et accroche-toi aux rebords !', { act: () => startQuest('q3') }];
       if (!S.q.q3) return ['Je suis Hayato, instructeur à l’académie.', 'Termine d’abord ta première mission auprès de la secrétaire Mei.'];
       if (S.q.q3 === 'active') return S.qp.roof ? ['Je t’ai vu là-haut ! Tu as de bonnes jambes.', 'Je vais t’apprendre une technique de feu : la boule de feu. Touche L.', { act: () => { S.qp.q3back = true; finishQuest('q3'); } }] : ['Le toit de la résidence du Gardien, c’est tout en haut. Saute de toit en toit si c’est trop haut.'];
-      return ['Continue à t’entraîner. La boule de feu coûte du souffle : surveille ta jauge bleue.'];
+      return ['Continue à t’entraîner. La boule de feu coûte du chakra : surveille ta jauge bleue.'];
     },
     genzo: () => {
       if (!S.q.q4) return ['Bienvenue ! Le meilleur ramen du village.', 'Dis, tu pourrais me rendre un service ? Le médecin Ren, près du temple à l’est, n’a pas mangé depuis ce matin.', { act: () => startQuest('q4') }, 'Voilà le bol. Ne le renverse pas !'];
@@ -441,7 +441,7 @@ window.KGAME = (() => {
       return ['Reviens quand tu veux ! (Les bols de ramen se vendent chez la marchande Aiko.)'];
     },
     ren: () => {
-      if (S.q.q4 === 'active' && !S.qp.ramenGiven) return ['Un ramen de chez Genzo ? Tu me sauves la vie !', { act: () => { S.qp.ramenGiven = true; S.inv.ramenBowl = 0; finishQuest('q4'); } }, 'Prends ces pilules, elles soignent les blessures et rendent du souffle.'];
+      if (S.q.q4 === 'active' && !S.qp.ramenGiven) return ['Un ramen de chez Genzo ? Tu me sauves la vie !', { act: () => { S.qp.ramenGiven = true; S.inv.ramenBowl = 0; finishQuest('q4'); } }, 'Prends ces pilules, elles soignent les blessures et rendent du chakra.'];
       return ['Si tu es blessé, viens me voir.', { act: () => { S.hp = maxHp(); S.ck = maxCk(); fx('aura', A.hero.x, A.hero.y, .8, 1); }, txt: '*Ren te soigne entièrement.*' }];
     },
     aiko: () => ['Kunai, pilules, ramen… J’ai tout ce qu’il faut à un ninja !', { shop: true }],
@@ -462,9 +462,9 @@ window.KGAME = (() => {
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const RCOL = ['#A8A29A', '#4DA8FF', '#B26BFF', '#F0A020'];
   const WDESC = { kunai: 'se lance à distance', katana: 'rapide et précis', hache: 'coups lents, gros recul', marteau: 'très lent, frappe fort', fouet: 'longue portée, balaie large' };
-  const IDESC = { pillHp: 'Rend 60 points de vie.', pillCk: 'Rend 60 points de souffle.', ramen: 'Régénère ta vie pendant quelques secondes.', kunai: 'Munitions du lancer de kunai.', ramenBowl: 'Le bol à livrer au médecin Ren, près du temple.' };
+  const IDESC = { pillHp: 'Rend 60 points de vie.', pillCk: 'Rend 60 points de chakra.', ramen: 'Régénère ta vie pendant quelques secondes.', kunai: 'Munitions du lancer de kunai.', ramenBowl: 'Le bol à livrer au médecin Ren, près du temple.' };
   const JDESC = { fist: 'Coups de poing et de pied au corps à corps. Enchaîne-les pour faire monter le combo.', kunai: 'Lance un kunai sur ta cible. Chaque lancer consomme un kunai du sac.',
-    fire: 'Une boule de feu part droit devant toi et brûle le premier ennemi touché.', sphere: 'Une sphère de souffle explose devant toi et repousse violemment les ennemis proches.',
+    fire: 'Une boule de feu part droit devant toi et brûle le premier ennemi touché.', sphere: 'Une sphère de chakra explose devant toi et repousse violemment les ennemis proches.',
     subst: 'Tu disparais dans un nuage de fumée et laisses une bûche à ta place.', dash: 'Un pas éclair dans la direction de ton trait.',
     water: 'Un dragon d’eau fonce devant toi et traverse tous les ennemis sur sa route.', clone: 'Trois clones apparaissent et attaquent chacun l’ennemi le plus proche.',
     chidori: 'Tu fonces en ligne droite, la main chargée d’éclairs, et traverses les ennemis sur ta route.', wind: 'Une lame de vent tranche tous les ennemis devant toi.' };
@@ -486,7 +486,7 @@ window.KGAME = (() => {
     const SLP = { head: 'l t', body: 'l m', weapon: 'r t', hands: 'r m', feet: 'c b' };
     box.innerHTML = v2head('Sac', '忍具袋', `<span class="pill gold">${fmt(S.ryo)} 両</span>`) + `<div class="v2b bagb">
       <section class="card eqc"><div class="fig"><canvas id="k-fig" width="200" height="340"></canvas>${Object.keys(SLOTS).map(sl => { const it = S.eq[sl]; return `<button class="eqslot ${SLP[sl]}${bagSel === 'e:' + sl ? ' sel' : ''}${it ? '' : ' empty'}" data-sl="${sl}" style="--r:${it ? RCOL[it.r] : 'rgba(246,235,211,.16)'}" aria-label="${SLOTN[sl]}${it ? ' : ' + esc(it.name) : ', vide'}"><small>${SLOTN[sl]}</small></button>`; }).join('')}</div>
-        <div class="sts"><span>Vie <b>${fmt(maxHp())}</b></span><span>Souffle <b>${fmt(maxCk())}</b></span><span>Attaque <b>+${g.atk} %</b></span><span>Défense <b>${g.def}</b></span><span>Critique <b>${g.crit} %</b></span><span>Vitesse <b>${g.spd} %</b></span></div></section>
+        <div class="sts"><span>Vie <b>${fmt(maxHp())}</b></span><span>Chakra <b>${fmt(maxCk())}</b></span><span>Attaque <b>+${g.atk} %</b></span><span>Défense <b>${g.def}</b></span><span>Critique <b>${g.crit} %</b></span><span>Vitesse <b>${g.spd} %</b></span></div></section>
       <section class="inv"><div class="chips">${[['all', 'Tout'], ['gear', 'Équipement'], ['cons', 'Consommables']].map(([k, n]) => `<button data-f="${k}" class="${bagF === k ? 'on' : ''}">${n}</button>`).join('')}<span class="cnt">${S.bag.length} / 30</span></div>
         <div class="igrid">${vis.map(e => `<button class="bi${e.key === bagSel ? ' sel' : ''}" data-k="${e.key}" style="--r:${e.it ? RCOL[e.it.r] : 'rgba(246,235,211,.16)'}" aria-label="${esc(e.it ? e.it.name : labOf(e.k) + ', ' + S.inv[e.k])}">${e.it ? '' : `<span>${S.inv[e.k]}</span>`}</button>`).join('')}</div>${vis.length ? '' : '<p class="help">Rien ici pour l’instant.</p>'}
         <p class="help">${S.rank} · niveau ${S.lvl} · rouleaux secrets ${S.scrolls.length} / ${secrets.length} · herbes ${S.herbs}</p></section>
@@ -520,12 +520,12 @@ window.KGAME = (() => {
     if (!SK[jutSel]) jutSel = ids.find(id => KS && KS.GLYPH[id] && !(SK[id].lock && SK[id].lock())) || ids[0];
     const id = jutSel, k = SK[id], lk = !!(k.lock && k.lock()), r = S.rk[id] || 1, gl = KS && KS.GLYPH[id], seq = (KS && KS.SEQ[id]) || [];
     const glyph = i => KS && KS.GLYPH[i] ? `<span class="g">${KS.GLYPH[i]}</span>` : `<span class="g ic" data-ic="${SK[i].icon}"></span>`;
-    box.innerHTML = v2head('Rouleau des techniques', '巻物', `<span class="pill gold">${S.sp} point${S.sp > 1 ? 's' : ''} de technique</span>`) + `<div class="v2b jutb">
+    box.innerHTML = v2head('Rouleau des jutsus', '巻物', `<span class="pill gold">${S.sp} point${S.sp > 1 ? 's' : ''} de technique</span>`) + `<div class="v2b jutb">
       <div class="list">${ids.map(i => { const L = !!(SK[i].lock && SK[i].lock()), R = S.rk[i] || 1; return `<button class="j${i === id ? ' on' : ''}${L ? ' lk' : ''}" data-j="${i}">${L ? '<span class="g">🔒</span>' : glyph(i)}<span class="nm"><b>${esc(SK[i].name)}</b>${L ? `<small>${esc(SK[i].hint)}</small>` : `<span class="pips">${[1, 2, 3, 4, 5].map(n => `<i class="${n <= R ? 'on' : ''}"></i>`).join('')}</span>`}</span>${!L && SK[i].ck ? `<small class="ck">${SK[i].ck}</small>` : ''}</button>`; }).join('')}</div>
       <section class="card jdet"><div class="col">
         <div class="t"><h3>${esc(k.name)}</h3><span>${lk ? 'verrouillée' : 'rang ' + r + ' / 5'}</span></div>
         <p class="dsc">${JDESC[id] || ''}</p>
-        <div class="nums">${['fist', 'kunai', 'fire', 'sphere', 'chidori', 'water', 'wind', 'clone'].includes(id) ? `<span>Dégâts <b>${fmt(dmgOf(id))}</b></span>` : ''}${k.ck ? `<span>Souffle <b class="ck">${k.ck}</b></span>` : ''}<span>Recharge <b>${(k.cd * (1 - (r - 1) * .08)).toFixed(1).replace('.', ',')} s</b></span>${isTouch() ? '' : `<span>Touche <b>${k.key.toUpperCase()}</b></span>`}</div>
+        <div class="nums">${['fist', 'kunai', 'fire', 'sphere', 'chidori', 'water', 'wind', 'clone'].includes(id) ? `<span>Dégâts <b>${fmt(dmgOf(id))}</b></span>` : ''}${k.ck ? `<span>Chakra <b class="ck">${k.ck}</b></span>` : ''}<span>Recharge <b>${(k.cd * (1 - (r - 1) * .08)).toFixed(1).replace('.', ',')} s</b></span>${isTouch() ? '' : `<span>Touche <b>${k.key.toUpperCase()}</b></span>`}</div>
         ${lk ? `<div class="lock">🔒 S’apprend : ${esc(k.hint)}</div>` : ''}
         ${seq.length ? `<div class="lab">Signes</div><div class="seals">${seq.map(s => `<div class="sg"><canvas width="128" height="128" data-s="${s}"></canvas><b>${KS.SEALS[s].k}</b><span>${KS.SEALS[s].n}</span></div>`).join('')}</div>` : ''}
         <div class="acts">${!lk && r < 5 ? `<button class="b1" data-up ${S.sp ? '' : 'disabled'}>Améliorer · +20 % dégâts</button>` : !lk ? '<span class="sub">Rang maximal atteint</span>' : ''}</div></div>
@@ -608,8 +608,8 @@ window.KGAME = (() => {
     if (kind === 'map') { h += '<h2><span class="seal">地</span>Carte ' + (A.region ? '· ' + A.region.name : 'd’Aozora') + (window.KREG ? '<button class="kbtn" id="k-towrld" style="margin-left:auto;min-height:0;padding:5px 12px;font-size:13px">🗺 Carte du monde · voyager</button>' : '') + '</h2><div id="k-mapview"><canvas id="k-bigmap"></canvas><div class="mz"><button data-z="in" aria-label="Zoomer">+</button><button data-z="out" aria-label="Dézoomer">−</button><button data-z="fit" aria-label="Voir toute la carte">⤢</button><button data-z="me" aria-label="Centrer sur moi">◎</button><button data-z="clr" aria-label="Retirer la destination" class="clr">✕</button></div><div class="mtip">Touche la carte pour poser ta destination</div></div><p class="help">Le point rouge, c’est toi. Touche un endroit pour y poser ta destination : le chemin s’affiche en violet, sur la carte et au sol. Touche le repère pour le retirer. Glisse pour te déplacer, pince ou molette pour zoomer.</p>'; }
     if (kind === 'opts') { h += `<h2><span class="seal">巻</span>Menu</h2><div style="display:grid;gap:10px;max-width:340px"><button class="kbtn" data-o="resume">Reprendre</button><button class="kbtn alt" data-o="save">Sauvegarder</button>
         <button class="kbtn alt" data-o="sound">Son : ${S.sound ? 'activé' : 'coupé'}</button><button class="kbtn alt" data-o="quality">Qualité : ${({ high: 'haute', auto: 'auto', perf: 'performance' })[window.KMAP && KMAP.quality ? KMAP.quality() : 'high']}</button><button class="kbtn alt" data-o="look">Changer d’apparence</button><button class="kbtn alt" data-o="tuto">☝️ ${tt('replay')}</button><button class="kbtn alt" data-o="reset">Recommencer une partie</button></div>
-        <h2 style="margin-top:18px;font-size:18px">Commandes</h2><div class="help">Déplacement : ZQSD / WASD / flèches, ou maintenir le doigt · Tab ou clic : cibler un ennemi · T : techniques · Maj : course ninja · Espace : saut, double saut · E : parler · Dès le niveau 3, tu peux marcher sur l’eau (coûte un peu de souffle)<br>J : frappe · K : kunai · L : boule de feu · U : sphère de souffle · I : substitution · G : pas éclair · P : dragon d’eau · H : clones de brume · O : Lame-tonnerre · Y : lame de vent · 1 2 3 : objets<br>B : sac · M : missions · N : carte · Échap : menu · Molette : zoom<br>Sur téléphone : joystick avec le pouce gauche, pincer à deux doigts pour zoomer, bouton 地 pour cacher la carte. Avec un katana, une hache, un marteau ou un fouet (boutique d’Aiko), glisse le doigt sur les ennemis pour trancher, plusieurs d’un seul geste pour un bonus.</div>`; }
-    const TABS = [['bag', '袋', 'Sac'], ['jutsu', '術', 'Techniques'], ['quests', '任', 'Missions'], ['map', '地', 'Carte'], ['opts', '巻', 'Menu']];
+        <h2 style="margin-top:18px;font-size:18px">Commandes</h2><div class="help">Déplacement : ZQSD / WASD / flèches, ou maintenir le doigt · Tab ou clic : cibler un ennemi · T : techniques · Maj : course ninja · Espace : saut, double saut · E : parler · Dès le niveau 3, tu peux marcher sur l’eau (coûte un peu de chakra)<br>J : taijutsu · K : kunai · L : boule de feu · U : sphère de chakra · I : substitution · G : shunshin · P : dragon d’eau · H : multiclonage · O : Lame-tonnerre · Y : lame de vent · 1 2 3 : objets<br>B : sac · M : missions · N : carte · Échap : menu · Molette : zoom<br>Sur téléphone : joystick avec le pouce gauche, pincer à deux doigts pour zoomer, bouton 地 pour cacher la carte. Avec un katana, une hache, un marteau ou un fouet (boutique d’Aiko), glisse le doigt sur les ennemis pour trancher, plusieurs d’un seul geste pour un bonus.</div>`; }
+    const TABS = [['bag', '袋', 'Sac'], ['jutsu', '術', 'Jutsus'], ['quests', '任', 'Missions'], ['map', '地', 'Carte'], ['opts', '巻', 'Menu']];
     if (kind !== 'shop') h = h.replace('<div class="scr">', '<div class="ptabs">' + TABS.map(([k, kj, n]) => `<button data-t="${k}" class="${k === kind ? 'on' : ''}"><b>${kj}</b>${n}</button>`).join('') + '</div><div class="scr">');
     P.innerHTML = h + '</div>'; P.querySelector('.x').onclick = closePanel; P.querySelectorAll('.ptabs button').forEach(b => b.onclick = () => { if (b.dataset.t !== kind) openPanel(b.dataset.t); });
     if (V2[kind]) V2[kind](P);
@@ -731,7 +731,7 @@ window.KGAME = (() => {
     // mission tracker
     const act = Object.keys(Q).filter(id => S.q[id] === 'active').sort((a, b) => (b === S.trackQ) - (a === S.trackQ)), tr = $('#k-track'), box = tr.querySelector('.in'); let html;
     if (objective) html = '<h4>' + objective[0] + '</h4><p>' + objective[1] + '</p>';
-    else if (!act.length) { html = S.done ? '<h4>Éclaireur d’Aozora</h4><p>Toutes les missions sont accomplies. Explore et entraîne-toi librement !</p>' : '<h4>Missions</h4><p>Cherche les <b style="color:#b8322a">!</b> dorés au-dessus des villageois.</p>'; }
+    else if (!act.length) { html = S.done ? '<h4>Chûnin d’Aozora</h4><p>Toutes les missions sont accomplies. Explore et entraîne-toi librement !</p>' : '<h4>Missions</h4><p>Cherche les <b style="color:#b8322a">!</b> dorés au-dessus des villageois.</p>'; }
     else html = act.slice(0, 1).map(id => { const q = Q[id], st = qStep(id), s = q.steps[Math.min(st, q.steps.length - 1)]; return `<h4>${q.title}</h4><p>${st >= q.steps.length ? 'Retourne voir ' + (NPCS.find(n => n.id === q.giver) || {}).name : s.txt + (s.n ? ' — ' + Math.min(s.n, s.cnt()) + '/' + s.n : '')}</p>`; }).join('');
       if (!objective && S.contracts.length) html += S.contracts.slice(0, 2).map(c => `<p style="margin-top:6px"><b style="color:#2a6ac0">◆</b> ${c.t} — ${c.p}/${c.n}</p>`).join('');
     if (box.dataset.h !== html) { box.dataset.h = html; box.innerHTML = html; }
@@ -743,7 +743,7 @@ window.KGAME = (() => {
   const H = () => A.hero;
   const ACT = { attack: { d: .42, hit: .2 }, kick: { d: .5, hit: .28 }, throw: { d: .4, hit: .22 }, seal: { d: .5 }, dash: { d: .4 }, cast: { d: .45, hit: .15 }, hurt: { d: .35 }, subst: { d: .01 } };
   function useSkill(id, yawTo) { if (tu && tu.step === 'fist' && id === 'fist' && !tu.hit) tu.hit = 1; const k = SK[id], h = H(); if (!started || dlg || panel || h.dead) return; if (k.lock && k.lock()) { toastMini('🔒 ' + k.hint); return; } if ((cds[id] || 0) > 0) return; if (h.act && h.act !== 'hurt') return;
-    if (S.ck < k.ck) { toastMini('Pas assez de souffle'); return; } if (k.item && !(S.inv[k.item] > 0)) { toastMini('Plus de kunai'); return; }
+    if (S.ck < k.ck) { toastMini('Pas assez de chakra'); return; } if (k.item && !(S.inv[k.item] > 0)) { toastMini('Plus de kunai'); return; }
     S.ck -= k.ck; if (k.item) S.inv[k.item]--; cds[id] = k.cd * (1 - (S.rk[id] - 1) * .08); if (yawTo != null) h.yaw = yawTo; else faceTarget(); if (window.KSEAL && KSEAL.SEQ[id]) KSEAL.play(id, k.name);
     if (id === 'dash') { const r = h.yaw * Math.PI / 180; fx('leafSwirl', h.x, h.y, .5, .9); sfx('throw'); h.inv = .3; for (let d = 7; d > 0; d -= .5) { const nx = h.x + Math.sin(r) * d, ny = h.y + Math.cos(r) * d; if (!A.blocked(nx, ny)) { h.x = nx; h.y = ny; break; } } fx('leafSwirl', h.x, h.y, .5, .9); refresh(); return true; }
     if (id === 'subst') { const r = h.yaw * Math.PI / 180; fx('smoke', h.x, h.y, .6, 1.1); sfx('smoke'); h.inv = .7; for (let d = 5; d > 0; d -= .5) { const nx = h.x - Math.sin(r) * d, ny = h.y - Math.cos(r) * d; if (!A.blocked(nx, ny)) { h.x = nx; h.y = ny; break; } } fxs.push({ k: 'log', x: h.x + Math.sin(r) * 3, y: h.y + Math.cos(r) * 3, t: 0, d: 1.2 }); refresh(); return true; }
@@ -1021,7 +1021,7 @@ window.KGAME = (() => {
     else { const today = new Date().toDateString(); if (S.daily.last !== today) { const y = new Date(Date.now() - 864e5).toDateString(); S.daily.streak = S.daily.last === y ? S.daily.streak + 1 : 1; S.daily.last = today;
       const ry = 40 * Math.min(7, S.daily.streak) + S.lvl * 10; S.ryo += ry; setTimeout(() => { toast('Récompense du jour · série ' + S.daily.streak, ry + ' ryō' + (S.daily.streak % 3 === 0 ? ' + un équipement rare' : '')); if (S.daily.streak % 3 === 0) giveItem(genItem(S.lvl, 1)); refresh(); }, 900); } }
     fillContracts(); save(); tuArm(); }
-  function showEnd() { setTimeout(() => { openPanel('quests'); const P = $('#k-panel'); P.querySelector('.scr').insertAdjacentHTML('afterbegin', '<div style="text-align:center;margin-bottom:12px"><div style="font:900 54px serif;color:#b8322a">青空</div><h2 style="justify-content:center">Félicitations, Éclaireur ' + S.name + ' !</h2><p>Tu as terminé l’histoire de Kunai Gaiden. Le village est à toi : continue à explorer, à chasser et à t’entraîner.</p></div>'); }, 400); }
+  function showEnd() { setTimeout(() => { openPanel('quests'); const P = $('#k-panel'); P.querySelector('.scr').insertAdjacentHTML('afterbegin', '<div style="text-align:center;margin-bottom:12px"><div style="font:900 54px serif;color:#b8322a">青空</div><h2 style="justify-content:center">Félicitations, Chûnin ' + S.name + ' !</h2><p>Tu as terminé l’histoire de Kunai Gaiden. Le village est à toi : continue à explorer, à chasser et à t’entraîner.</p></div>'); }, 400); }
 
   let traveling = false;
   function travel(id) { if (!started) return; save(); S.region = id; S.pos = null; store.set('kunai-save', S); traveling = true; setTimeout(() => location.reload(), 120); }
@@ -1073,7 +1073,7 @@ window.KGAME = (() => {
     const sv = store.get('kunai-save'); if (sv && sv.v === 1) { S = Object.assign(NEW(), sv); S.inv = Object.assign(NEW().inv, sv.inv); S.skills = Object.assign(NEW().skills, sv.skills); S.rk = Object.assign(NEW().rk, sv.rk);
       // older saves: every ninja now starts with a katana (any other weapon goes to the bag)
       if (sv.tutoDone == null) S.tutoDone = true;   // saves from before the first-run tutorial
-      S.rank = ({ Genin: 'Novice', 'Chûnin': 'Éclaireur', Chunin: 'Éclaireur', 'Jōnin': 'Maître du Ciel', Jonin: 'Maître du Ciel' })[S.rank] || S.rank;   // saves from before the original rank names count it as seen
+      S.rank = ({ Novice: 'Genin', 'Éclaireur': 'Chûnin', 'Maître du Ciel': 'Jōnin' })[S.rank] || S.rank;   // test builds of 22/11 renamed the ranks: back to the originals
       if (!sv.gotKatana) { S.eq = Object.assign({}, sv.eq); if (S.eq.weapon && S.eq.weapon.w !== 'katana') S.bag.push(S.eq.weapon); if (!S.eq.weapon || S.eq.weapon.w !== 'katana') S.eq.weapon = { id: 'katana0', slot: 'weapon', w: 'katana', r: 0, lvl: 1, st: { atk: 3 }, name: 'Katana de genin' }; S.gotKatana = true; } }
     LOOKS.player = lookOf(S.look);
     document.querySelectorAll('#k-top [data-p]').forEach(b => tap(b, () => openPanel(b.dataset.p)));
@@ -1089,7 +1089,7 @@ window.KGAME = (() => {
   function onReady() { place(); $('#k-new').disabled = false; $('#k-max').disabled = false; $('#k-cont').disabled = false; $('#k-tload').textContent = (A.region ? A.region.name : 'Aozora') + ' est prêt.'; try { if (sessionStorage.getItem('nsr-new')) { sessionStorage.removeItem('nsr-new'); setTimeout(() => $('#k-new').click(), 300); } } catch (e) {} portrait($('#k-por'), LOOKS.player, null); }
   const blockInput = () => !started || !!dlg || !!panel || creatorOpen || (A && A.hero.dead > 0) || (A && A.hero.act && A.hero.act !== 'hurt' && A.hero.act !== 'throw');
   const canWaterWalk = () => started && S.lvl >= 3 && S.ck > 1, drainCk = n => { S.ck = Math.max(0, S.ck - n); }, inCombat = () => enemies.some(e => !e.dead && e.state === 'chase');
-  let waterHint = 0; const sinkHint = () => { if (performance.now() - waterHint > 6000) { waterHint = performance.now(); toastMini(S.lvl < 3 ? 'Marcher sur l’eau : niveau 3' : 'Plus assez de souffle'); } };
+  let waterHint = 0; const sinkHint = () => { if (performance.now() - waterHint > 6000) { waterHint = performance.now(); toastMini(S.lvl < 3 ? 'Marcher sur l’eau : niveau 3' : 'Plus assez de chakra'); } };
   const timeScale = dt => { if (hitstop > 0) { hitstop -= dt; return .06; } return 1; }, speedMul = () => 1 + gear().spd / 100;
   let prompt = null; const setPrompt = p => { prompt = p; };
   const say = (name, look, lines, onClose) => { openDlg({ name, look, id: '_' }, lines); if (dlg) dlg.onClose = onClose; };

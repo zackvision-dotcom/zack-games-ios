@@ -285,7 +285,7 @@
     const open = () => { const d = KGAME.dbg(); d.openPanel('bag'); };
     mb.addEventListener('click', e => { e.stopPropagation(); open(); });
     // the pouch: one button for the three consumables
-    const bar = $('#k-bar'), pb = document.createElement('button'); pb.id = 'k-pouch'; pb.setAttribute('aria-label', 'Sacoche : soins, souffle, ramen'); pb.innerHTML = svg('<path d="M4 7 h12 l-1 10 H5 Z"/><path d="M7 7 V5 a3 3 0 0 1 6 0 V7"/>') + '<i>0</i>'; bar.appendChild(pb);
+    const bar = $('#k-bar'), pb = document.createElement('button'); pb.id = 'k-pouch'; pb.setAttribute('aria-label', 'Sacoche : soins, chakra, ramen'); pb.innerHTML = svg('<path d="M4 7 h12 l-1 10 H5 Z"/><path d="M7 7 V5 a3 3 0 0 1 6 0 V7"/>') + '<i>0</i>'; bar.appendChild(pb);
     pb.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); document.body.classList.toggle('pouch'); });
     for (const id of ['pillHp', 'pillCk', 'ramen']) { const s = bar.querySelector(`.slot[title=${id}]`); if (s) s.addEventListener('pointerdown', () => setTimeout(() => document.body.classList.remove('pouch'), 120)); }
     // low-life vignette
