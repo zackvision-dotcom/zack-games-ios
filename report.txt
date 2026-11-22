@@ -1,2 +1,2 @@
-BUILD silkhop v1009 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:33
-BUILD silkhop v1007 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:06
+REVIEW gullstreet ok
+REVIEW silkhop ok
