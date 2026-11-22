@@ -24,6 +24,6 @@ for i, f in enumerate(vids, 1):
     subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', os.path.join(src, f),
                     '-vf', 'scale=886:1920:out_range=tv,format=yuv420p,fps=30', '-c:v', 'libx264', '-profile:v', 'high', '-level', '4.0',
                     '-b:v', '5M', '-maxrate', '8M', '-bufsize', '10M', '-color_range', 'tv', '-colorspace', 'bt709',
-                    '-color_primaries', 'bt709', '-color_trc', 'bt709', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2',
+                    '-color_primaries', 'bt709', '-color_trc', 'bt709', '-af', 'loudnorm=I=-16:TP=-1.5', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-ac', '2',
                     '-movflags', '+faststart', out], check=True)
     print('preview', f, '->', os.path.basename(out), os.path.getsize(out) // 1024, 'KB')

@@ -147,7 +147,7 @@ def sync(suffix, fiches):
             sid = media_set('shot', loc_id, 'APP_IPHONE_67')
             for p in shots[:10]:
                 put_file('shot', sid, p)
-        if previews:
+        if previews and os.environ.get('PREVIEWS'):
             pid = media_set('preview', loc_id, 'IPHONE_67')
             for p in previews[:3]:
                 put_file('preview', pid, p)

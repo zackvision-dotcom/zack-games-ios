@@ -1,3 +1,2 @@
 # one bundle suffix per line (a line "check" = only report)
-check
-crumblecrew
+circuitcaper
