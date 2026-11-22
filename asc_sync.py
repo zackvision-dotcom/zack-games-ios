@@ -216,6 +216,57 @@ def previews_v2(suffix):
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('REVIEW'):
+        # App Review contact: same as Kunai Gaiden (Zack's OK, 22/11); never submits anything
+        src = edit_version(find_app('kunaigaiden')['id'])
+        rd = call('GET', f"/appStoreVersions/{src['id']}/appStoreReviewDetail", ok=(200, 404)).get('data')
+        keys = ('contactFirstName', 'contactLastName', 'contactPhone', 'contactEmail')
+        contact = {k: rd['attributes'].get(k) for k in keys} if rd else None
+        if not contact or not all(contact.values()):
+            print('REVIEW no complete contact on Kunai Gaiden'); sys.exit(1)
+        for g in sys.argv[1:]:
+            ver = edit_version(find_app(g)['id'])
+            cur = call('GET', f"/appStoreVersions/{ver['id']}/appStoreReviewDetail", ok=(200, 404)).get('data')
+            attrs = dict(contact, demoAccountRequired=False,
+                         notes="Jeu sans compte. Les achats intégrés sont dans la Boutique (icône panier sur l'écran d'accueil). Restaurer les achats : Réglages. No account needed; in-app purchases are in the Shop (cart icon on the home screen), Restore purchases in Settings.")
+            if cur:
+                call('PATCH', f"/appStoreReviewDetails/{cur['id']}", {'data': {'type': 'appStoreReviewDetails', 'id': cur['id'], 'attributes': attrs}})
+            else:
+                call('POST', '/appStoreReviewDetails', {'data': {'type': 'appStoreReviewDetails', 'attributes': attrs,
+                     'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': ver['id']}}}}})
+            print('REVIEW', g, 'ok')
+        sys.exit(0)
+    if os.environ.get('IAPSTATE'):
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            for iap in call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']:
+                a = iap['attributes']
+                print('IAPSTATE', g, a['productId'].split('.')[-1], a['state'])
+        sys.exit(0)
+    if os.environ.get('IAPSHOT'):
+        # App Review screenshot of every in-app purchase: media/<suffix>/iap-review.jpg (the shop screen)
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            path = os.path.join(HERE, 'media', g, 'iap-review.jpg')
+            for iap in call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']:
+                pid = iap['attributes']['productId']
+                cur = call('GET', f"/inAppPurchases/{iap['id']}/appStoreReviewScreenshot", ok=(200, 404))
+                if cur.get('data'):
+                    st = (cur['data']['attributes'].get('assetDeliveryState') or {}).get('state')
+                    if st == 'COMPLETE':
+                        print('IAPSHOT', pid, 'already'); continue
+                    call('DELETE', f"/inAppPurchaseAppStoreReviewScreenshots/{cur['data']['id']}")
+                if not os.path.exists(path):
+                    print('IAPSHOT', pid, 'MISSING file'); continue
+                data = open(path, 'rb').read()
+                r = call('POST', '/inAppPurchaseAppStoreReviewScreenshots', {'data': {'type': 'inAppPurchaseAppStoreReviewScreenshots',
+                    'attributes': {'fileName': 'iap-review.jpg', 'fileSize': len(data)},
+                    'relationships': {'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}})['data']
+                upload(r['attributes']['uploadOperations'], data)
+                call('PATCH', f"/inAppPurchaseAppStoreReviewScreenshots/{r['id']}", {'data': {'type': 'inAppPurchaseAppStoreReviewScreenshots', 'id': r['id'],
+                    'attributes': {'uploaded': True, 'sourceFileChecksum': hashlib.md5(data).hexdigest()}}})
+                print('IAPSHOT', pid, 'uploaded', iap['attributes'].get('state'))
+        sys.exit(0)
     if os.environ.get('PREVIEWS2'):
         bad = []
         for g in sys.argv[1:]:
