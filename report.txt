@@ -1,25 +1,12 @@
-ADDKW kunaigaiden pl ninja,naruto,kunai,shinobi,jutsu,wioska,rpg,akcja,przygoda,walka,misja,samuraj,japonia,rysuj
-ADDKW kunaigaiden pt-BR ninja,naruto,kunai,shinobi,jutsu,vila,rpg,ação,aventura,combate,missão,samurai,japão,desenhar
-ADDKW kunaigaiden ko 닌자,naruto,쿠나이,시노비,인술,마을,RPG,액션,모험,전투,퀘스트,사무라이,일본,그리기
-ADDKW kunaigaiden uk ніндзя,naruto,кунай,шинобі,дзюцу,село,rpg,екшн,пригоди,бій,квест,самурай,японія
-ADDKW kunaigaiden de-DE ninja,naruto,kunai,shinobi,jutsu,dorf,rpg,action,abenteuer,kampf,quest,samurai,japan,zeichnen
-ADDKW kunaigaiden en-US ninja,naruto,kunai,shinobi,jutsu,village,rpg,action,adventure,combat,quest,samurai,japan,draw,spell
-ADDKW kunaigaiden zh-Hans 忍者,naruto,苦无,忍术,村庄,角色扮演,动作,冒险,战斗,任务,武士,日本,手绘
-ADDKW kunaigaiden zh-Hant 忍者,naruto,苦無,忍術,村莊,角色扮演,動作,冒險,戰鬥,任務,武士,日本,手繪
-ADDKW kunaigaiden es-MX ninja,naruto,kunai,shinobi,jutsu,aldea,rpg,acción,aventura,combate,misión,samurái,japón,dibujar
-ADDKW kunaigaiden es-ES ninja,naruto,kunai,shinobi,jutsu,aldea,rpg,acción,aventura,combate,misión,samurái,japón,dibujar
-ADDKW kunaigaiden fr-CA ninja,naruto,kunai,shinobi,jutsu,village,rpg,action,aventure,combat,quête,samouraï,japon,dessin
-ADDKW kunaigaiden hi निंजा,naruto,कुनाई,शिनोबी,गाँव,आरपीजी,एक्शन,एडवेंचर,लड़ाई,मिशन,समुराई,जापान
-ADDKW kunaigaiden en-GB ninja,naruto,kunai,shinobi,jutsu,village,rpg,action,adventure,combat,quest,samurai,japan,draw,spell
-ADDKW kunaigaiden pt-PT ninja,naruto,kunai,shinobi,jutsu,aldeia,rpg,ação,aventura,combate,missão,samurai,japão,desenhar
-ADDKW kunaigaiden nl-NL ninja,naruto,kunai,shinobi,jutsu,dorp,rpg,actie,avontuur,gevecht,missie,samurai,japan,tekenen
-ADDKW kunaigaiden vi ninja,naruto,kunai,shinobi,nhẫn thuật,làng,nhập vai,hành động,phiêu lưu,chiến đấu,nhiệm vụ,samurai
-ADDKW kunaigaiden tr ninja,naruto,kunai,shinobi,jutsu,köy,rpg,aksiyon,macera,savaş,görev,samuray,japonya,çizim
-ADDKW kunaigaiden th นินจา,naruto,คุไน,ชิโนบิ,หมู่บ้าน,อาร์พีจี,แอคชั่น,ผจญภัย,ต่อสู้,ภารกิจ,ซามูไร,ญี่ปุ่น
-ADDKW kunaigaiden id ninja,naruto,kunai,shinobi,jutsu,desa,rpg,aksi,petualangan,pertarungan,misi,samurai,jepang
-ADDKW kunaigaiden ms ninja,naruto,kunai,shinobi,jutsu,kampung,rpg,aksi,pengembaraan,pertarungan,misi,samurai,jepun
-ADDKW kunaigaiden fr-FR ninja,naruto,kunai,shinobi,jutsu,village,rpg,action,aventure,combat,quête,samouraï,japon,anime
-ADDKW kunaigaiden ar-SA نينجا,naruto,كوناي,شينوبي,قرية,تقمص,أكشن,مغامرة,قتال,مهمة,ساموراي,اليابان,رسم
-ADDKW kunaigaiden ja 忍者,naruto,クナイ,忍,忍術,村,RPG,アクション,冒険,バトル,クエスト,侍,和風,手描き
-ADDKW kunaigaiden ru ниндзя,naruto,кунай,синоби,дзюцу,деревня,rpg,экшен,приключения,бой,квест,самурай,япония
-ADDKW kunaigaiden it ninja,naruto,kunai,shinobi,jutsu,villaggio,rpg,azione,avventura,combattimento,missione,samurai
+COPYRIGHT silkhop ok
+COPYRIGHT lanternhold ok
+COPYRIGHT clockpawsquad ok
+COPYRIGHT pulsepost ok
+COPYRIGHT dungeondash ok
+COPYRIGHT gullstreet ok
+COPYRIGHT coralstack ok
+COPYRIGHT crumblecrew ok
+COPYRIGHT circuitcaper ok
+COPYRIGHT vanvoyage ok
+COPYRIGHT kunaigaiden ok
+COPYRIGHT braise ok
