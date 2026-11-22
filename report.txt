@@ -1,9 +1,14 @@
-== previews lanternhold
-  uploaded 1.mp4 14782 KB -> 80800019-7926-8c63-8112-e37968c460d2
-  uploaded 2.mp4 18386 KB -> fe800019-7926-8c63-811c-d6a07e3e8e86
-  video 80800019-7926-8c63-8112-e37968c460d2 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
-  video fe800019-7926-8c63-811c-d6a07e3e8e86 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
-  placement fr-FR ACTIVE
+== previews crumblecrew
+  uploaded 1.mp4 10486 KB -> 29c00019-78da-8381-8105-4ff916605fcd
+  video 29c00019-78da-8381-8105-4ff916605fcd PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
   placement fr-FR ACTIVE
   placement en-US ACTIVE
+== previews circuitcaper
+  uploaded 1.mp4 9256 KB -> 93800019-78da-8664-8115-74a89dc8e739
+  uploaded 2.mp4 5324 KB -> 98400019-78da-8664-811a-880b131cb6a3
+  video 93800019-78da-8664-8115-74a89dc8e739 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 98400019-78da-8664-811a-880b131cb6a3 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
   placement en-US ACTIVE
+  placement en-US ACTIVE
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
