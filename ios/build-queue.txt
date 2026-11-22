@@ -1,0 +1,9 @@
+# one game per line (project.yml target): pushing this file builds them and uploads them to TestFlight
+SilkHop
+LanternHold
+ClockpawSquad
+PulsePost
+DungeonDash
+CrumbleCrew
+CircuitCaper
+CoralStack

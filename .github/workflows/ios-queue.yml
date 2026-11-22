@@ -1,0 +1,32 @@
+name: iOS build queue
+# Pushing ios/build-queue.txt (one game per line, the target names of project.yml) builds and uploads each game to
+# App Store Connect / TestFlight, without the browser. Build number = 1000 + this workflow's run number, so it always
+# grows. (Manual runs of "iOS App Store upload" use their own lower run number: use this queue from now on.)
+on:
+  push:
+    branches: [main]
+    paths: [ios/build-queue.txt]
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.p.outputs.apps }}
+      bn: ${{ steps.p.outputs.bn }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        run: |
+          echo "apps=$(grep -v '^#' ios/build-queue.txt | grep -v '^ *$' | python3 -c 'import json,sys; print(json.dumps([l.strip() for l in sys.stdin]))')" >> "$GITHUB_OUTPUT"
+          echo "bn=$((1000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_OUTPUT"
+  build:
+    needs: plan
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        app: ${{ fromJSON(needs.plan.outputs.apps) }}
+    uses: ./.github/workflows/ios-app-store.yml
+    with:
+      app: ${{ matrix.app }}
+      build_number: ${{ needs.plan.outputs.bn }}
+    secrets: inherit

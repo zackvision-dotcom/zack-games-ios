@@ -4,6 +4,14 @@ name: iOS App Store upload
 # API key (automatic signing) and uploads it to App Store Connect. Secrets (repository settings):
 #   APPLE_TEAM_ID, APP_STORE_CONNECT_KEY_ID, APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_API_KEY_BASE64
 on:
+  # Called by ios-queue.yml (push of ios/build-queue.txt): same inputs, plus the build number to use.
+  workflow_call:
+    inputs:
+      app: { type: string, required: true }
+      marketing_version: { type: string, required: false, default: "1.0" }
+      upload_to_app_store: { type: boolean, required: false, default: true }
+      build_only: { type: boolean, required: false, default: false }
+      build_number: { type: string, required: false, default: "" }
   workflow_dispatch:
     inputs:
       app:
@@ -78,7 +86,7 @@ jobs:
             -destination "generic/platform=iOS" -archivePath "$ARCHIVE_PATH" \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
-            MARKETING_VERSION="${{ inputs.marketing_version }}" CURRENT_PROJECT_VERSION="${{ github.run_number }}"
+            MARKETING_VERSION="${{ inputs.marketing_version }}" CURRENT_PROJECT_VERSION="${{ inputs.build_number || github.run_number }}"
 
       - name: Export signed IPA
         if: ${{ !inputs.build_only }}
@@ -110,7 +118,7 @@ jobs:
         if: ${{ !inputs.build_only }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.app }}-iOS-${{ github.run_number }}
+          name: ${{ inputs.app }}-iOS-${{ inputs.build_number || github.run_number }}
           path: ${{ steps.ipa.outputs.path }}
           retention-days: 14
 
