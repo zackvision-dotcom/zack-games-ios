@@ -1,66 +1,69 @@
-== gullstreet
+== clockpawsquad
   version text fr-FR ok
   version text en-US ok
   app info fr-FR ok
   app info en-US ok
-    ops 1 [(0, 1070602)]
-    shot 01.jpg 1045 KB
-    ops 1 [(0, 1077781)]
-    shot 02.jpg 1052 KB
-    ops 1 [(0, 818245)]
-    shot 03.jpg 799 KB
-    ops 1 [(0, 1178374)]
-    shot 04.jpg 1150 KB
-    ops 1 [(0, 984890)]
-    shot 05.jpg 961 KB
+    ops 1 [(0, 570267)]
+    shot 01.jpg 556 KB
+    ops 1 [(0, 514325)]
+    shot 02.jpg 502 KB
+    ops 1 [(0, 482296)]
+    shot 03.jpg 470 KB
+    ops 1 [(0, 528214)]
+    shot 04.jpg 515 KB
+    ops 1 [(0, 510263)]
+    shot 05.jpg 498 KB
   media fr-FR 5 screens, 1 previews
-    ops 1 [(0, 1070602)]
-    shot 01.jpg 1045 KB
-    ops 1 [(0, 1077781)]
-    shot 02.jpg 1052 KB
-    ops 1 [(0, 818245)]
-    shot 03.jpg 799 KB
-    ops 1 [(0, 1178374)]
-    shot 04.jpg 1150 KB
-    ops 1 [(0, 984890)]
-    shot 05.jpg 961 KB
+    ops 1 [(0, 570267)]
+    shot 01.jpg 556 KB
+    ops 1 [(0, 514325)]
+    shot 02.jpg 502 KB
+    ops 1 [(0, 482296)]
+    shot 03.jpg 470 KB
+    ops 1 [(0, 528214)]
+    shot 04.jpg 515 KB
+    ops 1 [(0, 510263)]
+    shot 05.jpg 498 KB
   media en-US 5 screens, 1 previews
-== previews gullstreet
-  uploaded 1.mp4 15747 KB -> cb400019-783f-810d-8124-d26a272419ff
-  video cb400019-783f-810d-8124-d26a272419ff PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+== previews clockpawsquad
+  uploaded 1.mp4 18100 KB -> 3e400019-7926-8d68-8129-35731532edce
+  video 3e400019-7926-8d68-8129-35731532edce PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
   placement fr-FR ACTIVE
   placement en-US ACTIVE
-== silkhop
+== pulsepost
   version text fr-FR ok
   version text en-US ok
   app info fr-FR ok
   app info en-US ok
-    ops 1 [(0, 545644)]
-    shot 01.jpg 532 KB
-    ops 1 [(0, 590887)]
-    shot 02.jpg 577 KB
-    ops 1 [(0, 566074)]
-    shot 03.jpg 552 KB
-    ops 1 [(0, 435966)]
-    shot 04.jpg 425 KB
-    ops 1 [(0, 530737)]
-    shot 05.jpg 518 KB
-  media fr-FR 5 screens, 0 previews
-    ops 1 [(0, 545644)]
-    shot 01.jpg 532 KB
-    ops 1 [(0, 590887)]
-    shot 02.jpg 577 KB
-    ops 1 [(0, 566074)]
-    shot 03.jpg 552 KB
-    ops 1 [(0, 435966)]
-    shot 04.jpg 425 KB
-    ops 1 [(0, 530737)]
-    shot 05.jpg 518 KB
-  media en-US 5 screens, 0 previews
-== previews silkhop
-  no preview files
-CHECK gullstreet fr-FR desc=844 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16125231, 'fileName': '1.mp4', 'sourceFileChecksum': '99290d10cfea8b21721044912bba305c', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK gullstreet en-US desc=833 kw=89 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 16125231, 'fileName': '1.mp4', 'sourceFileChecksum': '99290d10cfea8b21721044912bba305c', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK silkhop fr-FR desc=564 kw=93 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
-CHECK silkhop en-US desc=538 kw=98 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
+    ops 1 [(0, 567903)]
+    shot 01.jpg 554 KB
+    ops 1 [(0, 575805)]
+    shot 02.jpg 562 KB
+    ops 1 [(0, 623869)]
+    shot 03.jpg 609 KB
+    ops 1 [(0, 535261)]
+    shot 04.jpg 522 KB
+    ops 1 [(0, 587592)]
+    shot 05.jpg 573 KB
+  media fr-FR 5 screens, 1 previews
+    ops 1 [(0, 567903)]
+    shot 01.jpg 554 KB
+    ops 1 [(0, 575805)]
+    shot 02.jpg 562 KB
+    ops 1 [(0, 623869)]
+    shot 03.jpg 609 KB
+    ops 1 [(0, 535261)]
+    shot 04.jpg 522 KB
+    ops 1 [(0, 587592)]
+    shot 05.jpg 573 KB
+  media en-US 5 screens, 1 previews
+== previews pulsepost
+  uploaded 1.mp4 18189 KB -> ef800019-7926-8d6b-811d-8a923b4ba14a
+  video ef800019-7926-8d6b-811d-8a923b4ba14a PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+CHECK clockpawsquad fr-FR desc=564 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18535196, 'fileName': '1.mp4', 'sourceFileChecksum': 'b1a08f0cf045a4acf1aa0bcdb35a3bf5', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK clockpawsquad en-US desc=529 kw=74 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18535196, 'fileName': '1.mp4', 'sourceFileChecksum': 'b1a08f0cf045a4acf1aa0bcdb35a3bf5', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK pulsepost fr-FR desc=462 kw=84 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18626421, 'fileName': '1.mp4', 'sourceFileChecksum': 'c3fe437b7d644659c78d895ae5ad692b', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK pulsepost en-US desc=461 kw=82 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18626421, 'fileName': '1.mp4', 'sourceFileChecksum': 'c3fe437b7d644659c78d895ae5ad692b', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
 done; failed: []
