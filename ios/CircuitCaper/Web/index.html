@@ -659,9 +659,14 @@ function musicTick() {
 const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
 
 // ---------- ads & store (test overlays on the web) ----------
+// iOS shell: AdMob through the `ads` message handler (ios/Ads/NativeAds.swift; test units unless the build sets ADS_TEST=0).
+// Its promises never reject; on the web there is no handler and the labelled test advert stands in.
+const NADS = () => window.webkit?.messageHandlers?.ads;
+const nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
 const Ads = {
-  async rewarded(kind) { track('ad_rewarded', { kind }); return testAd(); },
-  async interstitial() { if (S.owned.noads || S.levelsPlayed < 6) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); await testAd(); }
+  async init() { if (NADS()) await nads('init'); },   // first time: Google consent form (if required) → Apple ATT → SDK
+  async rewarded(kind) { track('ad_rewarded', { kind }); if (NADS()) return (await nads('rewarded')) === true; return testAd(); },
+  async interstitial() { if (S.owned.noads || S.levelsPlayed < 6) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); if (NADS()) { await nads('interstitial'); return; } await testAd(); }
 };
 function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart">🦝💰🦝</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 700); }); }
 const STORE = [{ id: 'noads', price: '3,99 €', once: true }, { id: 'starter', price: '1,99 €', once: true }, { id: 'costume', price: '1,99 €', once: true }, { id: 'loot', price: '0,99 €', coins: 1000 }];
@@ -1033,8 +1038,10 @@ function settingsModal() {
   modal.querySelector('[data-close]').onclick = closeModal;
 }
 function consentModal(fromSettings) {
+  if (NADS() && fromSettings) return nads('consentForm');   // iOS: "Ad choices" reopens Google's consent form
   openModal(`<h2>${t('consentTitle')}</h2><p>${t('consentText')}</p><div class="row2"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>`);
   modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); fromSettings ? settingsModal() : (closeModal(), begin()); });
+  if (NADS()) modal.querySelector('[data-c="1"]').onclick();   // iOS: no in-game box, the shell asks (Google form if required, then ATT)
 }
 function titleScreen() {
   G.mode = 'title'; const el = $('#title');
@@ -1042,7 +1049,7 @@ function titleScreen() {
   el.classList.add('on'); el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.fanfare(); el.classList.remove('on'); S.consent == null ? consentModal(false) : begin(); };
 }
 function begin() {
-  ensureLogin(); $('#game').classList.add('on'); renderHud();
+  Ads.init(); ensureLogin(); $('#game').classList.add('on'); renderHud();
   Store.init();
   const next = LV.find(L => !S.stars[L.id] && unlocked(L.id));
   if (!Object.keys(S.stars).length) { startLevel(LV[0]); if (S.tuto) { setTimeout(() => rico('r_hello'), 100); setTimeout(() => rico('r_plan'), 4200); } }

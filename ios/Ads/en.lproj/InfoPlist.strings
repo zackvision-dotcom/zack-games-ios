@@ -1,0 +1,2 @@
+/* App Tracking Transparency prompt (ios/Ads) */
+"NSUserTrackingUsageDescription" = "Your permission lets us show more relevant ads. The game stays fully playable without it.";

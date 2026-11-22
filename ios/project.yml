@@ -15,6 +15,17 @@ settings:
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     ENABLE_BITCODE: NO
     GENERATE_INFOPLIST_FILE: NO
+    # AdMob: 1 = Google's public TEST ad units (Debug, TestFlight, every CI build). Set to 0 ONLY for the App Store
+    # submission build (real units of admob-ids.json). A Debug build always uses the test units (NativeAds.swift).
+    ADS_TEST: "1"
+
+packages:
+  GoogleMobileAds:
+    url: https://github.com/googleads/swift-package-manager-google-mobile-ads.git
+    majorVersion: 13.13.0
+  GoogleUserMessagingPlatform:
+    url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git
+    majorVersion: 3.1.0
 
 targets:
   KunaiGaiden:
@@ -92,9 +103,13 @@ targets:
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: GullStreet/Assets.xcassets
       - path: GullStreet/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: GullStreet/Info.plist
       properties:
@@ -114,10 +129,67 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.simulation-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~3290754492
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/2907611114
+        GADRewardedUnit: ca-app-pub-3447270747554208/3564805407
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: &skadnetworks   # Google's list for AdMob (developers.google.com/admob/ios/3p-skadnetworks)
+          - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
+          - SKAdNetworkIdentifier: 4fzdc2evr5.skadnetwork
+          - SKAdNetworkIdentifier: 2fnua5tdw4.skadnetwork
+          - SKAdNetworkIdentifier: ydx93a7ass.skadnetwork
+          - SKAdNetworkIdentifier: p78axxw29g.skadnetwork
+          - SKAdNetworkIdentifier: v72qych5uu.skadnetwork
+          - SKAdNetworkIdentifier: ludvb6z3bs.skadnetwork
+          - SKAdNetworkIdentifier: cp8zw746q7.skadnetwork
+          - SKAdNetworkIdentifier: 3sh42y64q3.skadnetwork
+          - SKAdNetworkIdentifier: c6k4g5qg8m.skadnetwork
+          - SKAdNetworkIdentifier: s39g8k73mm.skadnetwork
+          - SKAdNetworkIdentifier: wg4vff78zm.skadnetwork
+          - SKAdNetworkIdentifier: 3qy4746246.skadnetwork
+          - SKAdNetworkIdentifier: f38h382jlk.skadnetwork
+          - SKAdNetworkIdentifier: hs6bdukanm.skadnetwork
+          - SKAdNetworkIdentifier: mlmmfzh3r3.skadnetwork
+          - SKAdNetworkIdentifier: v4nxqhlyqp.skadnetwork
+          - SKAdNetworkIdentifier: wzmmz9fp6w.skadnetwork
+          - SKAdNetworkIdentifier: su67r6k2v3.skadnetwork
+          - SKAdNetworkIdentifier: yclnxrl5pm.skadnetwork
+          - SKAdNetworkIdentifier: t38b2kh725.skadnetwork
+          - SKAdNetworkIdentifier: 7ug5zh24hu.skadnetwork
+          - SKAdNetworkIdentifier: gta9lk7p23.skadnetwork
+          - SKAdNetworkIdentifier: vutu7akeur.skadnetwork
+          - SKAdNetworkIdentifier: y5ghdn5j9k.skadnetwork
+          - SKAdNetworkIdentifier: v9wttpbfk9.skadnetwork
+          - SKAdNetworkIdentifier: n38lu8286q.skadnetwork
+          - SKAdNetworkIdentifier: 47vhws6wlr.skadnetwork
+          - SKAdNetworkIdentifier: kbd757ywx3.skadnetwork
+          - SKAdNetworkIdentifier: 9t245vhmpl.skadnetwork
+          - SKAdNetworkIdentifier: a2p9lx4jpn.skadnetwork
+          - SKAdNetworkIdentifier: 22mmun2rn5.skadnetwork
+          - SKAdNetworkIdentifier: 44jx6755aq.skadnetwork
+          - SKAdNetworkIdentifier: k674qkevps.skadnetwork
+          - SKAdNetworkIdentifier: 4468km3ulz.skadnetwork
+          - SKAdNetworkIdentifier: 2u9pt9hc89.skadnetwork
+          - SKAdNetworkIdentifier: 8s468mfl3y.skadnetwork
+          - SKAdNetworkIdentifier: klf5c3l5u5.skadnetwork
+          - SKAdNetworkIdentifier: ppxm28t8ap.skadnetwork
+          - SKAdNetworkIdentifier: kbmxgpxpgc.skadnetwork
+          - SKAdNetworkIdentifier: uw77j35x4d.skadnetwork
+          - SKAdNetworkIdentifier: 578prtvx9j.skadnetwork
+          - SKAdNetworkIdentifier: 4dzt52r2t5.skadnetwork
+          - SKAdNetworkIdentifier: tl55sbb4fm.skadnetwork
+          - SKAdNetworkIdentifier: c3frkrj4fj.skadnetwork
+          - SKAdNetworkIdentifier: e5fvkxwrpn.skadnetwork
+          - SKAdNetworkIdentifier: 8c4e2ghe7u.skadnetwork
+          - SKAdNetworkIdentifier: 3rd42ekr43.skadnetwork
+          - SKAdNetworkIdentifier: 97r2b46745.skadnetwork
+          - SKAdNetworkIdentifier: 3qcr597p9d.skadnetwork
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.gullstreet
         PRODUCT_NAME: GullStreet
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
 
   CoralStack:
@@ -125,9 +197,13 @@ targets:
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: CoralStack/Assets.xcassets
       - path: CoralStack/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: CoralStack/Info.plist
       properties:
@@ -147,19 +223,30 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.puzzle-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~1704928829
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/3799562943
+        GADRewardedUnit: ca-app-pub-3447270747554208/2251723737
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.coralstack
         PRODUCT_NAME: CoralStack
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   CrumbleCrew:
     type: application
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: CrumbleCrew/Assets.xcassets
       - path: CrumbleCrew/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: CrumbleCrew/Info.plist
       properties:
@@ -179,19 +266,30 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.casual-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~8078765486
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/8243698276
+        GADRewardedUnit: ca-app-pub-3447270747554208/2606946958
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.crumblecrew
         PRODUCT_NAME: CrumbleCrew
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   CircuitCaper:
     type: application
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: CircuitCaper/Assets.xcassets
       - path: CircuitCaper/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: CircuitCaper/Info.plist
       properties:
@@ -211,19 +309,30 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.puzzle-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~2444576681
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/7968366101
+        GADRewardedUnit: ca-app-pub-3447270747554208/4356424157
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.circuitcaper
         PRODUCT_NAME: CircuitCaper
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   VanVoyage:
     type: application
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: VanVoyage/Assets.xcassets
       - path: VanVoyage/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: VanVoyage/Info.plist
       properties:
@@ -243,10 +352,17 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.casual-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~9664591153
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/1293865283
+        GADRewardedUnit: ca-app-pub-3447270747554208/3855403268
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.vanvoyage
         PRODUCT_NAME: VanVoyage
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   SceneExpress:
     type: application
@@ -285,9 +401,13 @@ targets:
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: SilkHop/Assets.xcassets
       - path: SilkHop/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: SilkHop/Info.plist
       properties:
@@ -307,19 +427,30 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.action-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~5835745522
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/4182706322
+        GADRewardedUnit: ca-app-pub-3447270747554208/9473019463
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.silkhop
         PRODUCT_NAME: SilkHop
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   LanternHold:
     type: application
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: LanternHold/Assets.xcassets
       - path: LanternHold/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: LanternHold/Info.plist
       properties:
@@ -339,19 +470,30 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.strategy-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~3887192855
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/2634867119
+        GADRewardedUnit: ca-app-pub-3447270747554208/6617297977
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.lanternhold
         PRODUCT_NAME: LanternHold
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   ClockpawSquad:
     type: application
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: ClockpawSquad/Assets.xcassets
       - path: ClockpawSquad/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: ClockpawSquad/Info.plist
       properties:
@@ -371,19 +513,30 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.puzzle-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~5262311719
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/6382540436
+        GADRewardedUnit: ca-app-pub-3447270747554208/8487240852
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.clockpawsquad
         PRODUCT_NAME: ClockpawSquad
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   PulsePost:
     type: application
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: PulsePost/Assets.xcassets
       - path: PulsePost/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: PulsePost/Info.plist
       properties:
@@ -403,19 +556,30 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.music-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~1596071432
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/7122188294
+        GADRewardedUnit: ca-app-pub-3447270747554208/8564804468
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.pulsepost
         PRODUCT_NAME: PulsePost
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   DungeonDash:
     type: application
     platform: iOS
     sources:
       - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
       - path: DungeonDash/Assets.xcassets
       - path: DungeonDash/Web
         type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     info:
       path: DungeonDash/Info.plist
       properties:
@@ -435,8 +599,15 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.action-games
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~1183465909
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3447270747554208/1404499745
+        GADRewardedUnit: ca-app-pub-3447270747554208/4496024958
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.dungeondash
         PRODUCT_NAME: DungeonDash
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later

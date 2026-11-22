@@ -1144,14 +1144,16 @@ const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms)
 // the latency the judge removes from a touch: the measured one, or the phone's own output latency until calibrated (0 for the robot)
 const latS = () => BETA_ON ? 0 : S.lat != null ? S.lat / 1000 : CLK.outLat();
 
-// ---------- ads & purchases (test overlays on the web, AdMob once the native plugin is in) ----------
-const AdMob = () => window.Capacitor?.Plugins?.AdMob;
-const AD_IDS = { rewarded: 'ca-app-pub-3940256099942544/1712485313', inter: 'ca-app-pub-3940256099942544/4411468910' };
+// ---------- ads & purchases (AdMob + StoreKit through the iOS shell, test overlays on the web) ----------
+// iOS shell: AdMob through the `ads` message handler (ios/Ads/NativeAds.swift; test units unless the build sets ADS_TEST=0).
+// Its promises never reject; on the web there is no handler and the labelled test advert stands in.
+const NADS = () => window.webkit?.messageHandlers?.ads;
+const nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
 const Ads = {
-  async init() { const M = AdMob(); if (!M) return; try { await M.initialize({ initializeForTesting: true }); await M.requestTrackingAuthorization(); } catch (e) {} },
-  async rewarded(kind) { if (G.mode === 'song') return false; track('ad_rewarded', { kind }); const M = AdMob(); if (M) { try { await M.prepareRewardVideoAd({ adId: AD_IDS.rewarded, isTesting: true, npa: S.consent !== true }); await M.showRewardVideoAd(); return true; } catch (e) { return false; } } return testAd(); },
+  async init() { if (NADS()) await nads('init'); },   // first time: Google consent form (if required) → Apple ATT → SDK
+  async rewarded(kind) { if (G.mode === 'song') return false; track('ad_rewarded', { kind }); if (NADS()) return (await nads('rewarded')) === true; return testAd(); },
   // between two songs only (never during one), from the 3rd song played, at most every 3 minutes, never with "No ads"
-  async interstitial() { if (G.mode === 'song' || S.owned.noads || S.plays < E.ads.interFromPlay) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); track('ad_interstitial'); const M = AdMob(); if (M) { try { await M.prepareInterstitial({ adId: AD_IDS.inter, isTesting: true, npa: S.consent !== true }); await M.showInterstitial(); } catch (e) {} return; } await testAd(); },
+  async interstitial() { if (G.mode === 'song' || S.owned.noads || S.plays < E.ads.interFromPlay) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); track('ad_interstitial'); if (NADS()) { await nads('interstitial'); return; } await testAd(); },
 };
 function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart"><img src="${src('pip_3')}" alt=""></div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 1000); }); }
 // Real purchases go through Apple (StoreKit 2) via the iOS shell's `store` message handler (ios/Shared/NativeStore.swift);
@@ -1621,8 +1623,10 @@ function settingsModal() {
   modal.querySelector('[data-close]').onclick = () => { closeModal(); if (G.mode === 'home') renderHome(); };
 }
 function consentModal(fromSettings) {
+  if (NADS() && fromSettings) return nads('consentForm');   // iOS: "Ad choices" reopens Google's consent form
   openModal(`<div class="big-ico s"><img src="${src('tampon_0')}" alt=""></div><h2>${t('consentTitle')}</h2><p>${t('consentText')}</p><div class="row2"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>`);
   modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); fromSettings ? settingsModal() : (closeModal(), afterConsent()); });
+  if (NADS()) modal.querySelector('[data-c="1"]').onclick();   // iOS: no in-game box, the shell asks (Google form if required, then ATT)
 }
 
 // ---------- latency: tap on 8 beeps, keep the average offset ----------

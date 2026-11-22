@@ -1242,30 +1242,22 @@ function musicTick() {
 }
 const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
 
-// ---------- ads (AdMob through Capacitor when present, otherwise a labelled test advert) ----------
-const AdMob = () => window.Capacitor?.Plugins?.AdMob;
-const AD_IDS = { ios: { rewarded: 'ca-app-pub-3940256099942544/1712485313', inter: 'ca-app-pub-3940256099942544/4411468910' },
-  android: { rewarded: 'ca-app-pub-3940256099942544/5224354917', inter: 'ca-app-pub-3940256099942544/1033173712' } }; // Google's public TEST units
+// ---------- ads (AdMob through the iOS shell when present, otherwise a labelled test advert) ----------
+// iOS shell: AdMob through the `ads` message handler (ios/Ads/NativeAds.swift; test units unless the build sets ADS_TEST=0).
+// Its promises never reject; on the web there is no handler and the labelled test advert stands in.
+const NADS = () => window.webkit?.messageHandlers?.ads;
+const nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
 const Ads = {
-  async init() {
-    const A = AdMob(); if (!A) return;
-    try {
-      await A.initialize({ initializeForTesting: true });
-      if (window.Capacitor.getPlatform() === 'ios') await A.requestTrackingAuthorization();
-      const info = await A.requestConsentInfo(); if (info.isConsentFormAvailable && info.status === 'REQUIRED') await A.showConsentForm();
-    } catch (e) { track('ads_init_error', String(e)); }
-  },
-  ids() { return AD_IDS[window.Capacitor?.getPlatform?.() === 'android' ? 'android' : 'ios']; },
+  async init() { if (NADS()) await nads('init'); },   // first time: Google consent form (if required) → Apple ATT → SDK
   async rewarded(kind) {
-    track('ad_rewarded_start', { kind }); const A = AdMob();
-    if (A) { try { await A.prepareRewardVideoAd({ adId: this.ids().rewarded, isTesting: true, npa: S.consent !== true }); await A.showRewardVideoAd(); track('ad_rewarded_done', { kind }); return true; } catch (e) { return false; } }
+    track('ad_rewarded_start', { kind });
+    if (NADS()) { const ok = (await nads('rewarded')) === true; if (ok) track('ad_rewarded_done', { kind }); return ok; }   // true only if the reward was earned
     return testAdOverlay(true);
   },
   async interstitial() {
     if (S.owned.noads || S.day < ECO.ads.interstitialFromDay) return;
     const now = Date.now(); if (now - S.lastAdAt < ECO.ads.interstitialGapSec * 1000) return;
-    S.lastAdAt = now; track('ad_interstitial'); const A = AdMob();
-    if (A) { try { await A.prepareInterstitial({ adId: this.ids().inter, isTesting: true, npa: S.consent !== true }); await A.showInterstitial(); } catch (e) {} return; }
+    S.lastAdAt = now; track('ad_interstitial'); if (NADS()) { await nads('interstitial'); return; }
     await testAdOverlay(false);
   }
 };
@@ -1995,10 +1987,12 @@ function privacyModal() {
   modal.querySelector('[data-close]').onclick = settingsModal;
 }
 function consentModal(fromSettings) {
+  if (NADS() && fromSettings) return nads('consentForm');   // iOS: "Ad choices" reopens Google's consent form
   openModal(`<h2>${t('consentTitle')}</h2><p>${t('consentText')}</p>
     <div class="row"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>
     <a href="#" data-privacy>${t('privacy')}</a>`);
   modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); track('consent', { personalised: S.consent }); fromSettings ? settingsModal() : (closeModal(), afterConsent()); });
+  if (NADS()) modal.querySelector('[data-c="1"]').onclick();   // iOS: no in-game box, the shell asks (Google form if required, then ATT)
   modal.querySelector('[data-privacy]').onclick = e => { e.preventDefault(); openModal(`<div class="legal">${window.GS_PRIVACY || ''}</div><button class="b2 big" data-back>${t('close')}</button>`, 'wide'); modal.querySelector('[data-back]').onclick = () => consentModal(fromSettings); };
 }
 

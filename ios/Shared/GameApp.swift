@@ -24,9 +24,15 @@ struct GameWebView: UIViewRepresentable {
         config.userContentController.addScriptMessageHandler(context.coordinator.store, contentWorld: .page, name: "store")
         config.userContentController.add(context.coordinator.haptics, name: "haptic")   // navigator.vibrate → Taptic Engine
         config.userContentController.addUserScript(NativeHaptics.script)
+        #if ADS
+        config.userContentController.addScriptMessageHandler(context.coordinator.ads, contentWorld: .page, name: "ads")   // AdMob (ios/Ads/NativeAds.swift)
+        #endif
 
         let view = WKWebView(frame: .zero, configuration: config)
         context.coordinator.store.webView = view       // in-app purchases (NativeStore.swift)
+        #if ADS
+        context.coordinator.ads.webView = view
+        #endif
         view.uiDelegate = context.coordinator          // shows the game's alert() / confirm() as native dialogs
         view.isOpaque = false
         view.backgroundColor = .black
@@ -52,6 +58,9 @@ struct GameWebView: UIViewRepresentable {
     final class Coordinator: NSObject, WKUIDelegate {
         let store = NativeStore()
         let haptics = NativeHaptics()
+        #if ADS
+        let ads = NativeAds()                          // only the targets with ads (project.yml: -DADS)
+        #endif
 
         private func present(_ alert: UIAlertController, from webView: WKWebView) {
             var top = webView.window?.rootViewController
