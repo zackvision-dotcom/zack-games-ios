@@ -1,6 +1,23 @@
-CHECK lanternhold fr-FR desc=604 kw=91 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
-CHECK lanternhold en-US desc=560 kw=99 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
-CHECK circuitcaper en-US desc=669 kw=81 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
-CHECK circuitcaper fr-FR desc=696 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
-CHECK vanvoyage en-US desc=747 kw=87 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17083373, 'fileName': '1.mp4', 'sourceFileChecksum': 'f306ae7cc8941f80924ac87c773811e7', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK vanvoyage fr-FR desc=810 kw=97 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17083373, 'fileName': '1.mp4', 'sourceFileChecksum': 'f306ae7cc8941f80924ac87c773811e7', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb/Video221/v4/89/fb/c2/89fbc220-4daa-c0b0-5dba-4aa805650eee/rvop_b1e877a1_aa13f0fece8c4ba8ad3ccf4b44cc1c42_KEY_FRAME_OUTPUT_5005.png/{w}x{h}bb.{f}', 'width': 886, 'height': 1920}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+== previews lanternhold
+  uploaded 1.mp4 14782 KB -> 06c00019-7926-8c63-8129-7747d3c1c3b3
+  uploaded 2.mp4 18386 KB -> 7b400019-7926-8c63-8137-03a5f52b0781
+  video 06c00019-7926-8c63-8129-7747d3c1c3b3 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 7b400019-7926-8c63-8137-03a5f52b0781 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+== previews crumblecrew
+  uploaded 1.mp4 10486 KB -> 07400019-78da-8381-8103-71a75339ada3
+  video 07400019-78da-8381-8103-71a75339ada3 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+== previews circuitcaper
+  uploaded 1.mp4 9256 KB -> 68800019-78da-8664-8102-f60423c5f585
+  uploaded 2.mp4 5324 KB -> 7d400019-78da-8664-813f-d768cd708dca
+  video 68800019-78da-8664-8102-f60423c5f585 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 7d400019-78da-8664-813f-d768cd708dca PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
