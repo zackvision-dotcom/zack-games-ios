@@ -37,7 +37,7 @@ def call(method, path, body=None, ok=(200, 201, 204)):
             return r.json() if r.content else {}
         if r.status_code in (429, 500, 502, 503) and attempt < 3:
             time.sleep(5 * (attempt + 1)); continue
-        raise RuntimeError(f'{method} {path} -> {r.status_code} {r.text[:600]}')
+        raise RuntimeError(f'{method} {path} -> {r.status_code} {r.text[:2500]}')
 
 
 def upload(ops, data):
@@ -243,9 +243,20 @@ if __name__ == '__main__':
         sys.exit(0)
     if os.environ.get('SUBMIT'):
         # App Review submission, ONLY on Zack's written go in the Developer session ("Oui soumet", 22/11/2026 for Gull Street + Silk Hop)
+        import re as _re
         for g in sys.argv[1:]:
             app = find_app(g); ver = edit_version(app['id'])
-            # first in-app purchases go to review with this version
+            subs = call('GET', f"/reviewSubmissions?filter[app]={app['id']}&filter[platform]=IOS&limit=10")['data']
+            sub = next((x for x in subs if x['attributes'].get('state') == 'READY_FOR_REVIEW'), None)
+            if not sub:
+                sub = call('POST', '/reviewSubmissions', {'data': {'type': 'reviewSubmissions', 'attributes': {'platform': 'IOS'}, 'relationships': {'app': {'data': {'type': 'apps', 'id': app['id']}}}}})['data']
+            items = call('GET', f"/reviewSubmissions/{sub['id']}/items?limit=20")['data']
+            if not items:
+                try:
+                    call('POST', '/reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems', 'relationships': {'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': sub['id']}}, 'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': ver['id']}}}}})
+                    print('SUBMIT', g, 'version item added')
+                except Exception as e:
+                    msg = str(e); print('SUBMIT', g, 'ITEM ERR', ' | '.join(_re.findall(r'"(?:code|detail|title)" : "([^"]+)"', msg))[:2500]); continue
             for iap in call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']:
                 a = iap['attributes']
                 if a['state'] != 'READY_TO_SUBMIT':
@@ -254,19 +265,12 @@ if __name__ == '__main__':
                     call('POST', '/inAppPurchaseSubmissions', {'data': {'type': 'inAppPurchaseSubmissions', 'relationships': {'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}})
                     print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], 'queued')
                 except Exception as e:
-                    print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], 'ERR', str(e)[:300])
-            subs = call('GET', f"/reviewSubmissions?filter[app]={app['id']}&filter[platform]=IOS&limit=10")['data']
-            sub = next((x for x in subs if x['attributes'].get('state') == 'READY_FOR_REVIEW'), None)
-            if not sub:
-                sub = call('POST', '/reviewSubmissions', {'data': {'type': 'reviewSubmissions', 'attributes': {'platform': 'IOS'}, 'relationships': {'app': {'data': {'type': 'apps', 'id': app['id']}}}}})['data']
-            items = call('GET', f"/reviewSubmissions/{sub['id']}/items?limit=20")['data']
-            if not items:
-                call('POST', '/reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems', 'relationships': {'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': sub['id']}}, 'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': ver['id']}}}}})
+                    print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], 'ERR', ' | '.join(_re.findall(r'"(?:code|detail)" : "([^"]+)"', str(e)))[:600])
             try:
                 r = call('PATCH', f"/reviewSubmissions/{sub['id']}", {'data': {'type': 'reviewSubmissions', 'id': sub['id'], 'attributes': {'submitted': True}}})
                 print('SUBMIT', g, 'submission', r['data']['attributes'].get('state'))
             except Exception as e:
-                print('SUBMIT', g, 'ERR', str(e)[:800])
+                print('SUBMIT', g, 'SUBMIT ERR', ' | '.join(_re.findall(r'"(?:code|detail)" : "([^"]+)"', str(e)))[:2500])
             v = call('GET', f"/appStoreVersions/{ver['id']}")['data']['attributes']
             print('SUBMIT', g, 'version', v.get('versionString'), v.get('appStoreState'))
         sys.exit(0)
