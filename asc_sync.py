@@ -225,6 +225,30 @@ if __name__ == '__main__':
             call('PATCH', f"/appStoreVersions/{ver['id']}", {'data': {'type': 'appStoreVersions', 'id': ver['id'], 'attributes': {'copyright': os.environ['COPYRIGHT']}}})
             print('COPYRIGHT', g, 'ok')
         sys.exit(0)
+    if os.environ.get('IAPDESC'):
+        # iapdesc.json: {productId: {locale: description}}  (descriptions only, names and prices untouched)
+        data = json.load(open(os.path.join(HERE, 'iapdesc.json'), encoding='utf-8'))
+        apps = {}
+        for pid, locs in data.items():
+            g = pid.split('.')[2]
+            if g not in apps:
+                apps[g] = {i['attributes']['productId']: i['id'] for i in call('GET', f"/apps/{find_app(g)['id']}/inAppPurchasesV2?limit=50")['data']}
+            iid = apps[g][pid]
+            for l in call('GET', f"/inAppPurchases/{iid}/inAppPurchaseLocalizations?limit=50", ok=(200,))['data']:
+                d = locs.get(l['attributes']['locale'])
+                if d:
+                    assert len(d) <= 55, d
+                    call('PATCH', f"/inAppPurchaseLocalizations/{l['id']}", {'data': {'type': 'inAppPurchaseLocalizations', 'id': l['id'], 'attributes': {'description': d}}})
+                    print('IAPDESC', pid, l['attributes']['locale'], d)
+        sys.exit(0)
+    if os.environ.get('LOOTBOX_OFF'):
+        for g in sys.argv[1:]:
+            infos = call('GET', f"/apps/{find_app(g)['id']}/appInfos?include=ageRatingDeclaration")['data']
+            info = next((i for i in infos if i['attributes'].get('appStoreState') not in ('READY_FOR_SALE', 'READY_FOR_DISTRIBUTION')), infos[0])
+            aid = info['relationships']['ageRatingDeclaration']['data']['id']
+            r = call('PATCH', f'/ageRatingDeclarations/{aid}', {'data': {'type': 'ageRatingDeclarations', 'id': aid, 'attributes': {'lootBox': False}}})
+            print('LOOTBOX_OFF', g, r['data']['attributes'].get('lootBox'))
+        sys.exit(0)
     if os.environ.get('SETKW'):
         # setkw.json: {suffix: {locale: keywords}}; other locales untouched
         data = json.load(open(os.path.join(HERE, 'setkw.json'), encoding='utf-8'))
