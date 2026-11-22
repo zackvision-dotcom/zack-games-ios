@@ -312,3 +312,35 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.silkhop
         PRODUCT_NAME: SilkHop
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  LanternHold:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: LanternHold/Assets.xcassets
+      - path: LanternHold/Web
+        type: folder
+    info:
+      path: LanternHold/Info.plist
+      properties:
+        CFBundleDisplayName: Lantern Hold
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.strategy-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.lanternhold
+        PRODUCT_NAME: LanternHold
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later

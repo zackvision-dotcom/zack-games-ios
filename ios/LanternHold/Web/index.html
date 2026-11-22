@@ -1,0 +1,1822 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1F2A4A">
+<title>Lantern Hold</title>
+<style>
+:root{--night:#1F2A4A;--orange:#FFB347;--yellow:#FFE66D;--moss:#6A9C5A;--wood:#8B5A3C;--violet:#5B3F8C;--cream:#FFF6DC}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--night);font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--night);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#cv{position:fixed;inset:0;display:block;touch-action:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none;padding:0}
+img.ui{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+.b1,.b2,.b3{border-radius:16px;padding:11px 16px;font-weight:900;border:3px solid var(--night);transition:transform .08s;display:block;width:100%;margin-top:9px;font-size:17px}
+.b1{background:var(--orange);color:var(--night);box-shadow:0 4px 0 var(--night)}
+.b2{background:var(--cream);box-shadow:0 4px 0 var(--night)}.b3{background:#fff;color:var(--violet);box-shadow:0 4px 0 var(--night)}
+.bad{background:var(--yellow)}.bgreen{background:var(--moss);color:#fff;text-shadow:0 2px 0 rgba(31,42,74,.4)}
+.b1:active,.b2:active,.b3:active,.rb:active,.card-b:active,.bon:active{transform:translateY(3px)}.b1:disabled,.b2:disabled{opacity:.45}
+.big{font-size:21px;padding:14px}
+.row2{display:flex;gap:9px}.row2>*{flex:1}
+i.ff,i.ac,i.br{display:inline-block;width:1.15em;height:1.15em;background:center/contain no-repeat;vertical-align:-.2em}
+/* HUD */
+#hud{position:fixed;left:0;right:0;top:0;z-index:5;display:none;padding:calc(env(safe-area-inset-top) + 8px) 8px 6px;pointer-events:none;align-items:center;gap:6px}
+#hud.on{display:flex}#hud button{pointer-events:auto}
+.rb{width:42px;height:42px;flex:none;border-radius:50%;background:var(--cream);border:3px solid var(--night);box-shadow:0 3px 0 rgba(0,0,0,.35);font-size:18px;font-weight:900;position:relative;display:grid;place-items:center}
+.rb img.ui{width:32px;height:32px}
+.rb.dot::after{content:'';position:absolute;right:-3px;top:-3px;width:13px;height:13px;border-radius:50%;background:var(--orange);border:2px solid var(--night)}
+.chip{display:flex;align-items:center;gap:4px;background:var(--cream);border:3px solid var(--night);border-radius:999px;padding:3px 9px;box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:16px;white-space:nowrap}
+#phase{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+#phase b{color:var(--cream);font-size:14px;text-shadow:0 2px 0 var(--night);white-space:nowrap}
+#hpbar{height:13px;background:var(--night);border:3px solid var(--cream);border-radius:8px;overflow:hidden}#hpbar i{display:block;height:100%;background:var(--yellow);transition:width .2s}
+#hpbar.low i{background:var(--orange);animation:blink .5s infinite alternate}@keyframes blink{to{opacity:.4}}
+/* tray: build cards by day, spells by night */
+#tray{position:fixed;left:0;right:0;bottom:0;z-index:6;display:none;padding:6px 6px calc(env(safe-area-inset-bottom) + 8px);background:rgba(31,42,74,.92);border-top:3px solid var(--cream)}
+#tray.on{display:block}
+#cards{display:flex;gap:4px;justify-content:space-between}
+.card-b{flex:1;min-width:0;background:var(--cream);border:3px solid var(--night);border-radius:12px;padding:2px 0 1px;display:flex;flex-direction:column;align-items:center;box-shadow:0 3px 0 rgba(0,0,0,.4);touch-action:none}
+.card-b img{width:40px;height:38px;object-fit:contain;pointer-events:none}.card-b small{font-size:12px;font-weight:900;display:flex;align-items:center;gap:1px}
+.card-b.off{opacity:.45}.card-b.hint{animation:hint .7s infinite alternate}@keyframes hint{to{transform:translateY(-6px);box-shadow:0 0 0 4px var(--yellow)}}
+#trow{display:flex;gap:8px;align-items:center;margin-top:6px}
+#tinfo{flex:1;color:var(--cream);font-weight:800;font-size:13px;line-height:1.2;min-height:34px;display:flex;align-items:center}
+#gonight{width:auto;margin:0;padding:9px 16px;font-size:18px;background:var(--violet);color:var(--cream)}#gonight.hint{animation:hint .7s infinite alternate}
+#spells{display:flex;gap:10px;justify-content:center}
+.sp{position:relative;width:86px;height:78px;border-radius:18px;background:var(--cream);border:3px solid var(--night);box-shadow:0 4px 0 rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.sp img{width:46px;height:46px;object-fit:contain;pointer-events:none}.sp small{font-weight:900;font-size:12px;pointer-events:none}
+.sp .cdv{position:absolute;left:0;right:0;bottom:0;background:rgba(31,42,74,.6);pointer-events:none}
+.sp.arm{background:var(--yellow);box-shadow:0 0 0 4px var(--orange)}
+/* selected building */
+#sel{position:fixed;z-index:7;display:none;width:220px;background:var(--cream);border:3px solid var(--night);border-radius:16px;padding:8px 10px;box-shadow:5px 5px 0 rgba(0,0,0,.35);animation:pop .25s cubic-bezier(.3,1.6,.5,1)}
+#sel.on{display:block}#sel b{font-size:15px}#sel p{margin:2px 0 4px;font-size:12px;font-weight:700;line-height:1.25}
+#sel .b1{margin-top:4px;padding:7px 10px;font-size:15px}
+.hrow{display:flex;gap:4px;flex-wrap:wrap}.hb{flex:1 0 30%;background:#fff;border:3px solid var(--night);border-radius:10px;padding:2px;font-size:10px;font-weight:900;display:flex;flex-direction:column;align-items:center}
+.hb img{width:38px;height:38px;object-fit:contain}.hb.lock{opacity:.4}
+/* Gardienne Pomme */
+#pomme{position:fixed;left:8px;right:8px;z-index:8;display:flex;align-items:flex-end;gap:6px;pointer-events:none;opacity:0;transform:translateY(24px) scale(.92);transition:.25s;bottom:calc(env(safe-area-inset-bottom) + 150px)}
+#pomme.on{opacity:1;transform:none}
+#pomme .pf{width:80px;height:80px;flex:none;object-fit:contain;animation:pbob 1.6s ease-in-out infinite}@keyframes pbob{50%{transform:translateY(-4px) rotate(-2deg)}}
+#pomme .pt{background:var(--cream);border:3px solid var(--night);border-radius:16px 16px 16px 4px;padding:9px 12px;font-weight:800;font-size:15px;line-height:1.3;box-shadow:4px 4px 0 rgba(0,0,0,.35);max-width:290px;margin-bottom:22px}
+#pomme.home{bottom:calc(env(safe-area-inset-bottom) + 96px)}
+/* home (the village between runs) */
+#home{position:fixed;inset:0;z-index:4;display:none;flex-direction:column;background:var(--night) center/cover no-repeat}
+#home.on{display:flex}
+#hhead{padding:calc(env(safe-area-inset-top) + 8px) 10px 8px;display:flex;flex-direction:column;gap:6px;background:rgba(31,42,74,.85);border-bottom:3px solid var(--cream)}
+.mrow{display:flex;align-items:center;gap:8px}
+#plv{background:var(--yellow);font-weight:900;border-radius:10px;padding:3px 9px;font-size:13px;white-space:nowrap;border:3px solid var(--night)}
+#xpbar{flex:1;height:14px;background:var(--night);border:3px solid var(--cream);border-radius:8px;overflow:hidden}#xpbar i{display:block;height:100%;background:var(--moss);transition:width .4s}
+#hmid{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:8px 14px;gap:8px}
+#hmid .logo{width:min(62vw,300px);margin-top:2px}
+#hmid .lan{width:min(44vw,190px);height:min(44vw,190px);object-fit:contain;animation:pbob 2.2s ease-in-out infinite}
+#hmid .b1{max-width:340px}
+.hcard{display:flex;gap:10px;align-items:center;background:var(--cream);border:3px solid var(--night);border-radius:16px;padding:7px 9px;width:100%;max-width:360px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.hcard img{width:46px;height:46px;object-fit:contain}.hcard .tx{flex:1;min-width:0;font-weight:800;font-size:13px;line-height:1.25}.hcard .tx b{font-size:15px;display:block}
+.hcard .buy{min-width:84px}
+#hfoot{display:flex;justify-content:space-around;padding:8px 6px calc(env(safe-area-inset-bottom) + 10px);background:rgba(31,42,74,.9);border-top:3px solid var(--cream)}
+#hfoot .rb{width:52px;height:52px;border-radius:16px}#hfoot .rb img.ui{width:40px;height:40px}
+#hfoot small{display:block;text-align:center;font-weight:900;font-size:10.5px;margin-top:4px;color:var(--cream)}
+/* overlays */
+#modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(20,24,48,.6);padding:14px}#modal.on{display:flex}
+.card{background:var(--cream);border:4px solid var(--night);border-radius:22px;padding:14px;max-width:390px;width:100%;max-height:90vh;overflow:auto;box-shadow:7px 7px 0 rgba(0,0,0,.45);animation:pop .35s cubic-bezier(.3,1.6,.5,1);text-align:center}
+.card.wide{max-width:520px;text-align:left}@keyframes pop{from{transform:scale(.6);opacity:0}}
+.card h2{margin:2px 0 8px;font-size:23px;text-align:center}.card p{margin:6px 0 10px;line-height:1.35}
+.big-ico img{width:120px;height:120px;object-fit:contain}.big-ico.s img{width:86px;height:86px}
+.gain{font-size:28px;font-weight:900;color:var(--wood);margin:4px 0}.sub{font-size:13px;color:var(--wood);font-weight:800}
+.stat{display:flex;justify-content:space-between;font-weight:800;padding:3px 4px;border-bottom:2px dashed rgba(31,42,74,.15)}
+.bons{display:flex;flex-direction:column;gap:8px}
+.bon{display:flex;align-items:center;gap:10px;background:#fff;border:3px solid var(--night);border-radius:16px;padding:8px 10px;text-align:left;box-shadow:0 4px 0 rgba(0,0,0,.3);animation:pop .4s cubic-bezier(.3,1.6,.5,1) backwards}
+.bon img{width:48px;height:48px;object-fit:contain}.bon b{display:block;font-size:16px}.bon small{font-size:13px;font-weight:700}
+.login{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}.lg{background:#fff;border:3px solid var(--night);border-radius:10px;padding:4px 1px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.lg small{font-size:9px;font-weight:800}.lg b{font-size:11px}.lg i{width:20px;height:20px}.lg.got{opacity:.4}.lg.now{background:var(--orange)}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:800;border-bottom:2px solid rgba(31,42,74,.15)}.sw input{width:24px;height:24px;accent-color:var(--orange)}.sw select{font:inherit;font-weight:800;border:3px solid var(--night);border-radius:10px;background:#fff;padding:3px 6px}
+.ver{font-size:11px;opacity:.6;margin-top:8px;text-align:center}.legal{font-size:13px}
+.it{display:flex;align-items:center;gap:9px;background:#fff;border:3px solid var(--night);border-radius:16px;padding:7px 9px;margin-bottom:8px;text-align:left}
+.it .ico{width:50px;height:50px;flex:none;display:grid;place-items:center}.it .ico img{width:50px;height:50px;object-fit:contain}
+.it .tx{flex:1;min-width:0}.it .tx b{display:block;font-size:15px}.it .tx small{display:block;font-size:12px;line-height:1.25;opacity:.85}
+.dots{display:flex;gap:3px;margin-top:3px}.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--night);background:#fff}.dots i.on{background:var(--yellow)}.dots i.ws{background:var(--orange);animation:blink .6s infinite alternate}
+.buy{min-width:80px;background:var(--moss);color:#fff;border:3px solid var(--night);border-radius:12px;padding:6px 8px;box-shadow:0 3px 0 var(--night);font-weight:900;font-size:15px;white-space:nowrap;text-shadow:0 1px 0 rgba(31,42,74,.4)}
+.buy.ad{background:var(--yellow);color:var(--night);text-shadow:none}.buy.ac{background:var(--orange);color:var(--night);text-shadow:none}.buy.off{opacity:.45}.buy:active{transform:translateY(3px)}
+.own{font-weight:900;color:var(--moss);min-width:70px;text-align:center}
+.note{font-size:12px;text-align:center;margin:2px 0 10px;font-weight:700;opacity:.8}
+.pbar{height:12px;background:#fff;border:2px solid var(--night);border-radius:7px;overflow:hidden;margin:5px 0}.pbar i{display:block;height:100%;background:var(--orange)}
+.lans{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.ln{background:#fff;border:3px solid var(--night);border-radius:12px;padding:3px;display:flex;flex-direction:column;align-items:center;font-size:11px;font-weight:900;min-height:104px}
+.ln>img{width:62px;height:62px;object-fit:contain}.ln.lock .skin{opacity:.3;filter:grayscale(1)}.ln.on{background:var(--yellow)}.ln small{font-size:10px;line-height:1.1;text-align:center;font-weight:800}
+h3{margin:10px 0 6px;font-size:16px;text-align:left}
+.confirm{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(20,24,48,.6);padding:20px}
+#toasts{position:fixed;top:calc(env(safe-area-inset-top) + 64px);left:0;right:0;z-index:35;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.toast{background:var(--cream);border:3px solid var(--night);border-radius:14px;padding:7px 14px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.35);animation:pop .3s;transition:opacity .4s;max-width:90vw;text-align:center}.toast.out{opacity:0}
+.banner{position:fixed;left:0;right:0;top:30%;z-index:25;text-align:center;font-size:42px;font-weight:900;color:var(--yellow);-webkit-text-stroke:2.5px var(--night);text-shadow:4px 4px 0 var(--night);pointer-events:none;animation:ban 1.8s cubic-bezier(.2,1.4,.4,1) forwards}
+.banner.o{color:var(--orange)}.banner.v{color:var(--cream)}@keyframes ban{0%{transform:scale(2.4);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+.adov{position:fixed;inset:0;z-index:50;background:var(--night);display:flex;align-items:center;justify-content:center}.adbox{color:var(--cream);text-align:center}.adtag{opacity:.7;font-weight:800}.adart img{width:120px;margin:20px}.adcount{font-size:44px;font-weight:900}
+/* title */
+#title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 30px) 24px calc(env(safe-area-inset-bottom) + 40px);background:var(--night) center/cover no-repeat}
+#title.on{display:flex}#title .logo img{width:min(88vw,430px)}#title .tbg{width:min(76vw,44vh);border-radius:32px;border:4px solid var(--cream);box-shadow:6px 6px 0 rgba(0,0,0,.4);animation:pbob 2.4s ease-in-out infinite}
+#title p{font-weight:900;margin:4px 0;font-size:17px;color:var(--cream);text-align:center}#title .b1{max-width:320px}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="hud"></div><div id="tray"></div><div id="sel"></div>
+<div id="pomme"><img class="pf" alt=""><div class="pt"></div></div>
+<div id="home"><div id="hhead"></div><div id="hmid"></div><div id="hfoot"></div></div>
+<div id="modal"></div><div id="toasts"></div><div id="title"></div>
+<script>window.LH_VERSION="1.0";window.LH_SPR={"acorn": "assets/acorn.png", "b_berry": "assets/b_berry.png", "b_burrow": "assets/b_burrow.png", "b_forge": "assets/b_forge.png", "b_mill": "assets/b_mill.png", "b_tower": "assets/b_tower.png", "b_trap": "assets/b_trap.png", "b_wall": "assets/b_wall.png", "banner": "assets/banner.png", "bg_forest": "assets/bg_forest.png", "dawn_star": "assets/dawn_star.png", "e_big": "assets/e_big.png", "e_boss": "assets/e_boss.png", "e_fast": "assets/e_fast.png", "e_fly": "assets/e_fly.png", "e_pop": "assets/e_pop.png", "e_shade": "assets/e_shade.png", "fireflies": "assets/fireflies.png", "firefly": "assets/firefly.png", "h_apprentice": "assets/h_apprentice.png", "h_archer": "assets/h_archer.png", "h_healer": "assets/h_healer.png", "h_miller": "assets/h_miller.png", "h_scout": "assets/h_scout.png", "h_smith": "assets/h_smith.png", "lantern_1": "assets/lantern_1.png", "lantern_2": "assets/lantern_2.png", "lantern_3": "assets/lantern_3.png", "lantern_deco": "assets/lantern_deco.png", "logo": "assets/logo.png", "merchant_chest": "assets/merchant_chest.png", "pomme_0": "assets/pomme_0.png", "pomme_1": "assets/pomme_1.png", "pomme_2": "assets/pomme_2.png", "pomme_3": "assets/pomme_3.png", "rune": "assets/rune.png", "s_bolt": "assets/s_bolt.png", "s_puddle": "assets/s_puddle.png", "s_shield": "assets/s_shield.png", "sunrise": "assets/sunrise.png", "title_bg": "assets/title_bg.png", "ui_build": "assets/ui_build.png", "ui_gift": "assets/ui_gift.png", "ui_settings": "assets/ui_settings.png", "ui_shop": "assets/ui_shop.png"};window.LH_PRIVACY="<h4>Politique de confidentialité — Lantern Hold</h4>\n<p>Lantern Hold fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix publicitaires.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. Aucun achat ne donne d’objet tiré au hasard, et il n’y a aucun abonnement.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) peuvent être envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Lantern Hold convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Lantern Hold</h4>\n<p>Lantern Hold works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Ad choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. No purchase gives a random item, and there is no subscription.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) may be sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Lantern Hold suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script>
+<script>// Lantern Hold — the rules: the 6 × 9 grid around the great lantern, the buildings, the shadows and their paths, the waves,
+// the light spells, the dawn bonuses. Seeded and deterministic, and the whole run is plain JSON (saved in the middle of a night).
+// Shared by the game (game.js), the BETA robot (beta-game.js) and the balance bot (tools/bot.mjs, Node).
+// World units: a cell is 60 wide, x to the right, y DOWN (like the screen). The grid spans 0..360 × 0..540.
+(function (root) {
+  'use strict';
+  const CELL = 60, COLS = 6, ROWS = 9, LX = 180, LY = 240, DT = 1 / 30, DAY = 60;
+  const hyp = (a, b) => Math.sqrt(a * a + b * b);
+  const cc = c => c * CELL + CELL / 2;
+  const LANT = { '2,3': 1, '3,3': 1, '2,4': 1, '3,4': 1 };   // the great lantern sits on 2 × 2 cells (the stone ring of the painted clearing)
+  // the four paths of the forest map; they open one after the other (north first)
+  const LANES = {
+    N: { entry: [2, -1], cells: [[2, 0], [2, 1], [1, 1], [1, 2], [2, 2]] },
+    E: { entry: [6, 1], cells: [[5, 1], [5, 2], [4, 2], [4, 3]] },
+    W: { entry: [-1, 6], cells: [[0, 6], [0, 5], [1, 5], [1, 4]] },
+    S: { entry: [3, 9], cells: [[3, 8], [3, 7], [4, 7], [4, 6], [3, 6], [3, 5]] },
+  };
+  const PATH = {};
+  for (const k in LANES) { const L = LANES[k]; L.pts = [[cc(L.entry[0]), cc(L.entry[1])]].concat(L.cells.map(([c, r]) => [cc(c), cc(r)])).concat([[LX, LY]]); L.cells.forEach(([c, r], i) => { PATH[c + ',' + r] = { lane: k, i }; }); }
+  const lanesFor = n => n >= 5 ? ['N', 'E', 'W', 'S'] : n >= 3 ? ['N', 'E', 'W'] : n >= 2 ? ['N', 'E'] : ['N'];
+
+  // ---- the shadows (round, purple, two white eyes: cute, never scary) ----
+  const EN = {
+    shade: { hp: 22, sp: 24, dps: 4, ff: 1, r: 13 },
+    fast: { hp: 13, sp: 46, dps: 3, ff: 1, r: 11 },
+    big: { hp: 105, sp: 14, dps: 9, ff: 4, r: 21 },
+    fly: { hp: 18, sp: 28, dps: 4, ff: 2, r: 13, fly: 1 },
+    boss: { hp: 2600, sp: 7, dps: 26, ff: 50, r: 42, boss: 1 },
+  };
+  const hpMul = n => 1 + 0.55 * (n - 1) + Math.max(0, n - 3) * 0.35 + Math.max(0, n - 5) * 0.3;
+
+  // ---- buildings: level 1..3, each level changes the look ----
+  const BL = {
+    wall: { cost: 25, path: 1, hp: [90, 160, 260] },
+    tower: { cost: 45, dmg: [9, 15, 24], per: [1.0, 0.85, 0.7], range: [125, 135, 150] },
+    trap: { cost: 30, path: 1, dps: [7, 12, 18], slow: [0.55, 0.5, 0.4] },
+    forge: { cost: 60, boost: [0.25, 0.4, 0.6] },
+    mill: { cost: 40, ff: [4, 7, 11] },
+    berry: { cost: 35, yield: [14, 24, 36] },
+    burrow: { cost: 50, pow: [1, 1.3, 1.6] },
+  };
+  const KINDS = ['tower', 'wall', 'trap', 'forge', 'mill', 'berry', 'burrow'];
+  const upCost = (k, lvl) => Math.round(BL[k].cost * (lvl === 1 ? 1.2 : 2.2));   // from lvl to lvl + 1
+  // the hedgehog heroes (one per burrow), each with a talent
+  const HERO = {
+    archer: { cost: 60, dmg: 13, per: 0.8, range: 185 },   // shoots far, flyers too
+    smith: { cost: 60, repair: 5, boost: 0.12 },           // mends the palisades at night, +12 % to every tower
+    healer: { cost: 60, heal: 1.8 },                       // heals the lantern
+    scout: { cost: 60, ff: 0.15 },                         // fetches the fireflies by herself, +15 % fireflies
+    miller: { cost: 60, harvest: 0.5 },                    // +50 % harvests
+    apprentice: { cost: 60, cd: 0.75 },                    // spells recharge 25 % faster, the bolt jumps to a 2nd shadow
+  };
+  const HEROES = Object.keys(HERO);
+  // the 12 dawn bonuses (pick 1 of 3)
+  const BONUS = {
+    sharp: (m) => { m.tdmg += 0.2; },
+    quick: (m) => { m.trate += 0.15; },
+    thick: (m, R) => { m.whp += 0.4; for (const b of R.b) if (b.k === 'wall') b.hp = wallMax(R, b); },
+    spores: (m) => { m.trap += 0.5; },
+    bolt: (m) => { m.bolt += 0.4; },
+    puddle: (m) => { m.puddle += 0.4; },
+    shield: (m) => { m.shieldCd = Math.max(2, m.shieldCd - 0.8); },
+    harvest: (m, R) => { R.berries += 40; m.income += 15; },
+    lantern: (m, R) => { R.lan.max += 40; R.lan.hp = R.lan.max; },
+    fireflies: (m) => { m.ff += 0.25; },
+    range: (m) => { m.trange += 0.15; },
+    heroes: (m, R) => { m.hero += 0.3; R.freeHero = 1; },
+  };
+  const BONUSES = Object.keys(BONUS);
+  const SPELL = { bolt: { dmg: 32, cd: 2 }, puddle: { r: 50, t: 5, dps: 5, cd: 3.5 }, shield: { t: 2.5, cd: 4 } };
+  const LANXP = [0, 40, 120];   // fireflies fed to the lantern for levels 2 and 3
+
+  // ---- seeded random (the run carries its own seed: a resumed night goes on exactly) ----
+  function rng(R) { let a = R.rs = (R.rs + 0x6D2B79F5) | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+  const emit = (R, type, d) => { if (R.ev) R.ev.push(Object.assign({ type }, d)); };
+  const key = (c, r) => c + ',' + r;
+  const bAt = (R, c, r) => { const id = R.g[key(c, r)]; return id == null ? null : R.b.find(b => b.id === id); };
+  const bById = (R, id) => R.b.find(b => b.id === id);
+  const hasHero = (R, h) => R.b.some(b => b.hero === h);
+  const heroPow = (R, b) => BL.burrow.pow[b.lvl - 1] * R.mod.hero;
+  const wallMax = (R, b) => Math.round(BL.wall.hp[b.lvl - 1] * R.mod.whp);
+  const center = b => [cc(b.c), cc(b.r)];
+
+  function newRun(o) {
+    o = o || {}; const m = Object.assign({ hp: 0, berries: 0, sling: 0, bolt: 0, mill: 0, ff: 0 }, o.meta || {});
+    const R = {
+      v: 1, rs: (o.seed || 7) | 0, night: 1, phase: 'day', t: 0, dayT: o.tut ? -1 : DAY, berries: 120 + 20 * m.berries, ff: 0,
+      b: [], g: {}, e: [], drops: [], hops: [], pud: [], cd: { bolt: 0, puddle: 0, shield: 0 }, shield: 0, spawn: [], si: 0, wave: -1,
+      mod: { tdmg: 1 + 0.08 * m.sling, trate: 1, trange: 1, whp: 1, trap: 1, bolt: 1 + 0.15 * m.bolt, boltCd: SPELL.bolt.cd - 0.1 * m.bolt, puddle: 1, shieldCd: SPELL.shield.cd, ff: 1 + 0.1 * m.ff, hero: 1, income: 0, millAdd: m.mill },
+      bonus: [], choices: null, tut: !!o.tut, heroes: (o.heroes || ['archer', 'smith', 'healer']).slice(), freeHero: 0, revived: false, id: 1,
+      lan: { hp: 0, max: 120 + 15 * m.hp, lvl: 1, xp: 0 }, lanes: ['N'], stats: { kills: 0, ffLost: 0, spells: 0, built: 0, bossT: 0 }, ev: [],
+    };
+    R.lan.hp = R.lan.max;
+    addB(R, 'berry', 4, 5);                                   // the village starts with a berry bush
+    if (o.starter) { const b = addB(R, 'burrow', 1, 3); b.hero = 'archer'; }   // starter pack: the archer at once
+    if (o.token && BONUS[o.token]) { BONUS[o.token](R.mod, R); R.bonus.push(o.token); }
+    harvest(R);
+    return R;
+  }
+  function addB(R, k, c, r) { const b = { id: R.id++, k, c, r, lvl: 1, cd: 0 }; if (k === 'wall') b.hp = wallMax(R, b); R.b.push(b); R.g[key(c, r)] = b.id; return b; }
+  const isLant = (c, r) => !!LANT[key(c, r)];
+  const onPath = (c, r) => !!PATH[key(c, r)];
+  const cost = (R, k) => BL[k].cost;
+  function canPlace(R, k, c, r, free) {
+    if (R.phase !== 'day' || !BL[k] || c < 0 || r < 0 || c >= COLS || r >= ROWS || isLant(c, r) || R.g[key(c, r)] != null) return false;
+    if (!!BL[k].path !== onPath(c, r)) return false;
+    return free || R.berries >= cost(R, k);
+  }
+  function place(R, k, c, r) {
+    if (!canPlace(R, k, c, r)) return null;
+    R.berries -= cost(R, k); const b = addB(R, k, c, r); R.stats.built++; emit(R, 'place', { id: b.id, k, c, r }); return b;
+  }
+  function canUpgrade(R, b) { return !!b && R.phase === 'day' && b.lvl < 3 && R.berries >= upCost(b.k, b.lvl); }
+  function upgrade(R, id) {
+    const b = bById(R, id); if (!canUpgrade(R, b)) return false;
+    R.berries -= upCost(b.k, b.lvl); b.lvl++; if (b.k === 'wall') b.hp = wallMax(R, b); emit(R, 'upgrade', { id: b.id, k: b.k, lvl: b.lvl }); return true;
+  }
+  const heroCost = R => R.freeHero ? 0 : HERO.archer.cost;
+  function canRecruit(R, id, h) { const b = bById(R, id); return !!b && b.k === 'burrow' && !b.hero && R.phase === 'day' && R.heroes.includes(h) && !hasHero(R, h) && R.berries >= heroCost(R); }
+  function recruit(R, id, h) {
+    if (!canRecruit(R, id, h)) return false; const b = bById(R, id);
+    R.berries -= heroCost(R); R.freeHero = 0; b.hero = h; emit(R, 'hero', { id, h }); return true;
+  }
+
+  // ---- the day: harvests that hop around their building, to pick up ----
+  function harvest(R) {
+    R.hops = []; const mi = hasHero(R, 'miller') ? 1 + HERO.miller.harvest : 1;
+    for (const b of R.b) {
+      if (b.k !== 'berry' && b.k !== 'mill') continue;
+      const tot = Math.round((b.k === 'berry' ? BL.berry.yield[b.lvl - 1] : BL.mill.ff[b.lvl - 1] + R.mod.millAdd) * mi), n = b.k === 'berry' ? 3 : 2;
+      for (let i = 0; i < n; i++) { const [x, y] = center(b); R.hops.push({ id: R.id++, k: b.k === 'berry' ? 'berry' : 'ff', n: Math.round(tot / n), x: x + (rng(R) - 0.5) * 50, y: y + (rng(R) - 0.5) * 40, b: b.id }); }
+    }
+  }
+  function collectHop(R, id) {
+    const i = R.hops.findIndex(h => h.id === id); if (i < 0) return false; const h = R.hops[i]; R.hops.splice(i, 1);
+    if (h.k === 'berry') R.berries += h.n; else feed(R, h.n);
+    emit(R, 'hop', { k: h.k, n: h.n, x: h.x, y: h.y }); return true;
+  }
+  // fireflies: they count for the village (the meta currency) and feed the lantern, which grows
+  function feed(R, n) {
+    R.ff += n; R.lan.xp += n;
+    while (R.lan.lvl < 3 && R.lan.xp >= LANXP[R.lan.lvl]) { R.lan.lvl++; R.lan.max += 40; R.lan.hp = Math.min(R.lan.max, R.lan.hp + 40); emit(R, 'lanUp', { lvl: R.lan.lvl }); }
+  }
+
+  // ---- the night ----
+  function plan(R) {
+    const n = R.night, out = [];
+    if (R.tut && n === 1) { for (let i = 0; i < 5; i++) out.push({ t: 2 + i * 2.6, k: 'shade', lane: 'N', w: 0 }); return out; }
+    const lanes = R.lanes, waves = 3 + Math.floor(n / 2);
+    for (let w = 0; w < waves; w++) {
+      const t0 = 3 + w * 34, cnt = Math.round(5 + n * 2.8 + w * 2.2), l1 = lanes[(w + n) % lanes.length], l2 = lanes[(w * 3 + n + 1) % lanes.length];
+      for (let i = 0; i < cnt; i++) {
+        let k = 'shade'; const r = rng(R);
+        if (n >= 2 && r < 0.25) k = 'fast'; else if (n >= 3 && r < 0.37) k = 'big'; else if (n >= 4 && r < 0.5) k = 'fly';
+        out.push({ t: t0 + i * 0.75, k, lane: i % 2 && lanes.length > 1 ? l2 : l1, w });
+      }
+    }
+    if (n === 7) out.push({ t: 40, k: 'boss', lane: 'N', w: 99 });
+    return out.sort((a, b) => a.t - b.t);
+  }
+  function startNight(R) {
+    if (R.phase !== 'day') return false;
+    for (const h of R.hops.slice()) collectHop(R, h.id);     // what was not picked up is gathered at dusk
+    R.phase = 'night'; R.t = 0; R.lanes = lanesFor(R.night); R.spawn = plan(R); R.si = 0; R.wave = -1; R.e = []; R.drops = []; R.pud = [];
+    R.cd = { bolt: 0, puddle: 0, shield: 0 }; R.shield = 0;
+    emit(R, 'night', { n: R.night }); return true;
+  }
+  function spawn(R, s) {
+    const d = EN[s.k], L = LANES[s.lane], m = s.k === 'boss' ? 1 + (R.night - 7) * 0.3 : hpMul(R.night), p = L.pts[0];
+    const e = { id: R.id++, k: s.k, x: p[0] + (rng(R) - 0.5) * 16, y: p[1] + (rng(R) - 0.5) * 16, hp: Math.round(d.hp * m), max: Math.round(d.hp * m), sp: d.sp * (0.92 + rng(R) * 0.16), dps: d.dps, ff: d.ff, r: d.r, lane: s.lane, wi: 1, fly: d.fly || 0, boss: d.boss || 0, atk: null, slow: 1, spT: 5, ht: 0 };
+    R.e.push(e); if (e.boss) emit(R, 'boss', { id: e.id });
+    return e;
+  }
+  const cdMul = R => hasHero(R, 'apprentice') ? HERO.apprentice.cd : 1;
+  function towerDmg(R, b) {
+    let k = R.mod.tdmg * (hasHero(R, 'smith') ? 1 + HERO.smith.boost * R.mod.hero : 1), f = 0;
+    for (const o of R.b) if (o.k === 'forge' && Math.abs(o.c - b.c) <= 1 && Math.abs(o.r - b.r) <= 1) f = Math.max(f, BL.forge.boost[o.lvl - 1]);
+    return k * (1 + f);
+  }
+  const lanDist = e => hyp(LX - e.x, LY - e.y);
+  function step(R, dt) {
+    dt = dt || DT;
+    if (R.phase === 'day') { if (R.dayT > 0) { R.dayT -= dt; if (R.dayT <= 0) { R.dayT = 0; startNight(R); } } return; }
+    if (R.phase !== 'night') return;
+    R.t += dt; if (R.shield > 0) R.shield -= dt;
+    for (const k in R.cd) if (R.cd[k] > 0) R.cd[k] = Math.max(0, R.cd[k] - dt);
+    // spawns
+    while (R.si < R.spawn.length && R.spawn[R.si].t <= R.t) { const s = R.spawn[R.si++]; if (s.w !== R.wave && s.w !== 99) { R.wave = s.w; emit(R, 'wave', { lane: s.lane, w: s.w }); } spawn(R, s); }
+    // ground hazards: mushroom traps and sticky puddles
+    for (const p of R.pud) p.t -= dt; R.pud = R.pud.filter(p => p.t > 0);
+    for (const e of R.e) {
+      e.slow = 1; if (e.fly) continue;
+      const c = Math.floor(e.x / CELL), r = Math.floor(e.y / CELL), b = c >= 0 && r >= 0 && c < COLS && r < ROWS ? bAt(R, c, r) : null;
+      if (b && b.k === 'trap') { e.slow = BL.trap.slow[b.lvl - 1]; e.hp -= BL.trap.dps[b.lvl - 1] * R.mod.trap * dt; }
+      for (const p of R.pud) if (hyp(p.x - e.x, p.y - e.y) < p.r + e.r * 0.5) { e.slow = Math.min(e.slow, 0.4); e.hp -= SPELL.puddle.dps * R.mod.puddle * dt; }
+    }
+    // the shadows walk their path, chew the palisades, then the lantern
+    for (const e of R.e) {
+      e.ht -= dt;
+      if (e.boss) { e.spT -= dt; if (e.spT <= 0) { e.spT = 6; const m = spawn(R, { k: 'shade', lane: e.lane }); m.x = e.x + (rng(R) - 0.5) * 30; m.y = e.y + (rng(R) - 0.5) * 30; m.wi = e.wi; emit(R, 'split', { x: e.x, y: e.y }); } }
+      if (e.atk != null) {
+        if (e.atk === 'L') { if (R.shield <= 0) { R.lan.hp -= e.dps * dt; if (e.ht <= 0) { e.ht = 1; emit(R, 'lanHit', { x: e.x, y: e.y, boss: e.boss }); } } continue; }
+        const w = bById(R, e.atk); if (w && w.hp > 0) { w.hp -= e.dps * dt; if (e.ht <= 0) { e.ht = 0.8; emit(R, 'wallHit', { id: w.id, x: e.x, y: e.y }); } if (w.hp <= 0) { w.hp = 0; emit(R, 'wallBreak', { id: w.id }); } else continue; }
+        e.atk = null;
+      }
+      const L = LANES[e.lane], pts = e.fly ? [L.pts[0], [LX, LY]] : L.pts;
+      if (e.wi >= pts.length - 1 && lanDist(e) <= 56 + e.r * 0.4) { e.atk = 'L'; continue; }
+      if (!e.fly && e.wi >= 1 && e.wi <= L.cells.length) {
+        const [c, r] = L.cells[e.wi - 1], w = bAt(R, c, r);
+        if (w && w.k === 'wall' && w.hp > 0 && hyp(cc(c) - e.x, cc(r) - e.y) < CELL / 2 + e.r - 2) { e.atk = w.id; continue; }
+      }
+      let mv = e.sp * e.slow * dt;
+      while (mv > 0 && e.wi < pts.length) {
+        const t = pts[e.wi], dx = t[0] - e.x, dy = t[1] - e.y, d = hyp(dx, dy);
+        if (e.wi === pts.length - 1) { const stop = d - (56 + e.r * 0.4); if (stop <= 0) break; const s = Math.min(mv, stop); e.x += dx / d * s; e.y += dy / d * s; mv = 0; break; }
+        if (d <= mv) { e.x = t[0]; e.y = t[1]; mv -= d; e.wi++; } else { e.x += dx / d * mv; e.y += dy / d * mv; mv = 0; }
+      }
+    }
+    // the sling towers and the archer
+    const tr = R.mod.trate;
+    for (const b of R.b) {
+      let range, dmg, per, hero = false;
+      if (b.k === 'tower') { range = BL.tower.range[b.lvl - 1] * R.mod.trange; dmg = BL.tower.dmg[b.lvl - 1] * towerDmg(R, b); per = BL.tower.per[b.lvl - 1]; }
+      else if (b.k === 'burrow' && b.hero === 'archer') { const p = heroPow(R, b); range = HERO.archer.range * R.mod.trange; dmg = HERO.archer.dmg * p * R.mod.tdmg; per = HERO.archer.per; hero = true; }
+      else continue;
+      b.cd -= dt * tr; if (b.cd > 0) continue;
+      const [x, y] = center(b); let best = null, bd = 1e9;
+      for (const e of R.e) { if (e.hp <= 0) continue; const d = hyp(e.x - x, e.y - y); if (d > range + e.r) continue; const v = lanDist(e) - (e.boss ? 40 : 0); if (v < bd) { bd = v; best = e; } }
+      if (!best) { b.cd = 0; continue; }
+      best.hp -= dmg; b.cd = per; emit(R, 'shot', { id: b.id, x, y, tx: best.x, ty: best.y, hero });
+    }
+    // the lantern's own light burns what comes close; the healer and the smith at work
+    const ar = 70 + 25 * R.lan.lvl, ad = 2.5 * R.lan.lvl;
+    for (const e of R.e) if (lanDist(e) < ar + e.r) e.hp -= ad * dt;
+    for (const b of R.b) {
+      if (b.hero === 'healer') R.lan.hp = Math.min(R.lan.max, R.lan.hp + HERO.healer.heal * heroPow(R, b) * dt);
+      if (b.hero === 'smith') for (const w of R.b) if (w.k === 'wall' && w.hp > 0) w.hp = Math.min(wallMax(R, w), w.hp + HERO.smith.repair * heroPow(R, b) * dt);
+    }
+    // the fallen burst into light and leave fireflies
+    if (R.e.some(e => e.hp <= 0)) {
+      const ffm = R.mod.ff * (hasHero(R, 'scout') ? 1 + HERO.scout.ff : 1);
+      for (const e of R.e) if (e.hp <= 0) {
+        R.stats.kills++; emit(R, 'kill', { id: e.id, k: e.k, x: e.x, y: e.y, boss: e.boss });
+        const n = Math.max(1, Math.round(e.ff * ffm)), parts = e.boss ? 8 : 1;
+        for (let i = 0; i < parts; i++) R.drops.push({ id: R.id++, x: e.x + (parts > 1 ? (rng(R) - 0.5) * 80 : 0), y: e.y + (parts > 1 ? (rng(R) - 0.5) * 80 : 0), n: Math.round(n / parts) || 1, t: 0 });
+        if (e.boss) { R.stats.bossT = R.t; emit(R, 'bossDown', { x: e.x, y: e.y }); }
+      }
+      R.e = R.e.filter(e => e.hp > 0);
+    }
+    // fireflies on the ground: swipe them up; after 9 s they drift to the lantern on their own, at half value
+    const scout = hasHero(R, 'scout');
+    for (const d of R.drops) d.t += dt;
+    for (const d of R.drops.slice()) if ((scout && d.t > 1.5) || d.t > 9) { const full = scout; const n = full ? d.n : Math.ceil(d.n / 2); if (!full) R.stats.ffLost += d.n - n; R.drops.splice(R.drops.indexOf(d), 1); feed(R, n); emit(R, 'drift', { x: d.x, y: d.y, n }); }
+    if (R.lan.hp <= 0) { R.lan.hp = 0; R.phase = 'lost'; emit(R, 'lose'); return; }
+    if (R.si >= R.spawn.length && !R.e.length) dawn(R);
+  }
+  function collectDrop(R, id) {
+    const i = R.drops.findIndex(d => d.id === id); if (i < 0) return false; const d = R.drops[i]; R.drops.splice(i, 1);
+    feed(R, d.n); emit(R, 'collect', { n: d.n, x: d.x, y: d.y }); return true;
+  }
+  // ---- the dawn: palisades mended, 1 bonus out of 3 ----
+  function dawn(R) {
+    for (const d of R.drops.slice()) collectDrop(R, d.id);
+    const forge = R.b.some(b => b.k === 'forge');
+    for (const b of R.b) if (b.k === 'wall') b.hp = forge ? wallMax(R, b) : Math.min(wallMax(R, b), b.hp + wallMax(R, b) * 0.4);
+    R.pud = []; R.shield = 0;
+    if (R.night >= 7) { R.phase = 'won'; emit(R, 'win'); return; }
+    R.phase = 'dawn'; R.choices = drawBonuses(R, 3); emit(R, 'dawn', { n: R.night });
+  }
+  function drawBonuses(R, n, not) {
+    const pool = BONUSES.filter(b => !(not || []).includes(b)), out = [];
+    while (out.length < n && pool.length) out.push(pool.splice(Math.floor(rng(R) * pool.length), 1)[0]);
+    return out;
+  }
+  function moreChoice(R) { if (R.phase !== 'dawn' || !R.choices || R.choices.length >= 4) return false; const x = drawBonuses(R, 1, R.choices); if (!x.length) return false; R.choices.push(x[0]); return true; }
+  function pickBonus(R, id) {
+    if (R.phase !== 'dawn' || !R.choices || !R.choices.includes(id)) return false;
+    BONUS[id](R.mod, R); R.bonus.push(id); R.choices = null;
+    R.night++; R.phase = 'day'; R.dayT = DAY; R.t = 0; R.lanes = lanesFor(R.night);
+    R.berries += 50 + 12 * R.night + R.mod.income; R.lan.hp = Math.min(R.lan.max, R.lan.hp + R.lan.max * 0.3);
+    harvest(R); emit(R, 'day', { n: R.night }); return true;
+  }
+  // ---- the light spells (the player taps the shadows) ----
+  function nearestEnemy(R, x, y, maxD) { let best = null, bd = maxD; for (const e of R.e) { const d = hyp(e.x - x, e.y - y) - e.r; if (d < bd) { bd = d; best = e; } } return best; }
+  function cast(R, sp, x, y) {
+    if (R.phase !== 'night' || !SPELL[sp] || R.cd[sp] > 0) return false;
+    const m = cdMul(R);
+    if (sp === 'bolt') {
+      const e = nearestEnemy(R, x, y, 46); if (!e) return false;
+      const dmg = SPELL.bolt.dmg * R.mod.bolt; e.hp -= dmg;
+      for (const o of R.e) if (o !== e && hyp(o.x - e.x, o.y - e.y) < 40) o.hp -= dmg * 0.5;
+      let jump = null; if (hasHero(R, 'apprentice')) { jump = nearestEnemy(R, e.x, e.y, 120); if (jump === e) jump = null; else if (jump) jump.hp -= dmg * 0.6; }
+      R.cd.bolt = R.mod.boltCd * m; emit(R, 'bolt', { x: e.x, y: e.y, jx: jump && jump.x, jy: jump && jump.y });
+    } else if (sp === 'puddle') {
+      R.pud.push({ x, y, r: SPELL.puddle.r * (0.8 + 0.2 * R.mod.puddle), t: SPELL.puddle.t * (0.85 + 0.15 * R.mod.puddle), max: SPELL.puddle.t }); R.cd.puddle = SPELL.puddle.cd * m; emit(R, 'puddle', { x, y });
+    } else {
+      R.shield = SPELL.shield.t;
+      for (const e of R.e) { const d = lanDist(e); if (d < 100) { const k = 26 / (d || 1); e.x += (e.x - LX) * k; e.y += (e.y - LY) * k; e.hp -= 8; if (e.atk === 'L') e.atk = null; } }
+      R.cd.shield = R.mod.shieldCd * m; emit(R, 'shield', {});
+    }
+    R.stats.spells++; return true;
+  }
+  // second chance (rewarded ad, once per run): the lantern flares up again
+  function revive(R) {
+    if (R.phase !== 'lost' || R.revived) return false;
+    R.revived = true; R.phase = 'night'; R.lan.hp = Math.round(R.lan.max * 0.6); R.shield = 3;
+    for (const e of R.e) if (lanDist(e) < 140 && !e.boss) e.hp = 0; else if (e.boss) e.hp -= 200;
+    emit(R, 'revive'); return true;
+  }
+  const score = R => R.stats.kills * 10 + R.ff * 5 + (R.night - 1) * 300 + (R.phase === 'won' ? 2500 + Math.round(R.lan.hp) * 5 : 0);
+  // the state as saved (no event queue)
+  const pack = R => JSON.stringify(R, (k, v) => k === 'ev' ? undefined : v);
+  const unpack = s => { const R = JSON.parse(s); R.ev = []; return R; };
+
+  // ---------- a simple sensible player: the balance bot, the BETA robot and the tutorial hints use it ----------
+  function coverage(R, c, r, range) {
+    let v = 0; const x = cc(c), y = cc(r);
+    for (const ln of R.lanes) LANES[ln].cells.forEach(([pc, pr], i) => { if (hyp(cc(pc) - x, cc(pr) - y) <= range) v += 1 + i * 0.4; });
+    return v;
+  }
+  function bestCell(R, k) {
+    let best = null, bv = -1;
+    for (let c = 0; c < COLS; c++) for (let r = 0; r < ROWS; r++) {
+      if (!canPlace(R, k, c, r, true)) continue; let v;
+      if (k === 'tower') { v = coverage(R, c, r, BL.tower.range[0]); for (const o of R.b) if (o.k === 'forge' && Math.abs(o.c - c) <= 1 && Math.abs(o.r - r) <= 1) v += 3; }
+      else if (k === 'burrow') v = coverage(R, c, r, HERO.archer.range) * 0.5 + 1;
+      else if (k === 'forge') { v = 0; for (const o of R.b) if (o.k === 'tower' && Math.abs(o.c - c) <= 1 && Math.abs(o.r - r) <= 1) v += 10; }
+      else if (k === 'wall' || k === 'trap') { const p = PATH[key(c, r)]; if (!R.lanes.includes(p.lane)) continue; const n = LANES[p.lane].cells.length; v = k === 'wall' ? (p.i === n - 1 ? 10 : 0) + p.i : (p.i === n - 2 ? 10 : 0) + p.i; }
+      else v = -hyp(cc(c) - LX, cc(r) - LY) * (k === 'mill' || k === 'berry' ? -0.01 : 1) + (onPath(c, r) ? -99 : 0);
+      if (v > bv) { bv = v; best = [c, r]; }
+    }
+    return best;
+  }
+  const count = (R, k) => R.b.filter(b => b.k === k).length;
+  // what to do next with the berries in hand: { k, c, r } (build), { up: id }, { hero, id }, or null
+  function suggest(R) {
+    if (R.phase !== 'day') return null;
+    const opts = [];
+    const laneCover = ln => R.b.filter(b => b.k === 'tower' && LANES[ln].cells.some(([c, r]) => hyp(cc(c) - cc(b.c), cc(r) - cc(b.r)) <= BL.tower.range[b.lvl - 1])).length;
+    for (const ln of R.lanes) if (laneCover(ln) < 1) opts.push({ k: 'tower' });
+    for (const ln of R.lanes) { const cs = LANES[ln].cells, [c, r] = cs[cs.length - 1]; if (!bAt(R, c, r)) opts.push({ k: 'wall', c, r }); }
+    if (!count(R, 'mill')) opts.push({ k: 'mill' });
+    for (const ln of R.lanes) { const cs = LANES[ln].cells, [c, r] = cs[cs.length - 2]; if (!bAt(R, c, r)) opts.push({ k: 'trap', c, r }); }
+    for (const ln of R.lanes) if (laneCover(ln) < 2) opts.push({ k: 'tower' });
+    if (!count(R, 'forge') && count(R, 'tower') >= 2) opts.push({ k: 'forge' });
+    if (!count(R, 'burrow') && R.night >= 2) opts.push({ k: 'burrow' });
+    for (const b of R.b) if (b.k === 'burrow' && !b.hero) { const h = ['archer', 'healer', 'smith', 'apprentice', 'scout', 'miller'].find(h => R.heroes.includes(h) && !hasHero(R, h)); if (h) opts.push({ hero: h, id: b.id }); }
+    if (count(R, 'berry') < 2 && R.night <= 3) opts.push({ k: 'berry' });
+    const up = R.b.filter(b => (b.k === 'tower' || b.k === 'wall' || b.k === 'trap') && b.lvl < 3).sort((a, b) => a.lvl - b.lvl || (a.k === 'tower' ? -1 : 1));
+    for (const b of up.slice(0, 2)) opts.push({ up: b.id });
+    if (count(R, 'burrow') < 2 && R.night >= 4) opts.push({ k: 'burrow' });
+    if (count(R, 'tower') < 6) opts.push({ k: 'tower' });
+    for (const b of up) opts.push({ up: b.id });
+    for (const o of opts) {
+      if (o.up) { if (canUpgrade(R, bById(R, o.up))) return o; continue; }
+      if (o.hero) { if (canRecruit(R, o.id, o.hero)) return o; continue; }
+      if (R.berries < cost(R, o.k)) continue;
+      if (o.c == null) { const p = bestCell(R, o.k); if (!p) continue; o.c = p[0]; o.r = p[1]; }
+      if (canPlace(R, o.k, o.c, o.r)) return o;
+    }
+    return null;
+  }
+  function doSuggest(R, o) { return o.up ? upgrade(R, o.up) : o.hero ? recruit(R, o.id, o.hero) : !!place(R, o.k, o.c, o.r); }
+  // which spell where: the bolt on the shadow closest to the lantern, a puddle on a crowd, the shield when the lantern suffers
+  function spellPlan(R) {
+    if (R.phase !== 'night' || !R.e.length) return null;
+    if (!R.cd.shield && R.lan.hp < R.lan.max * 0.5 && R.e.some(e => e.atk === 'L')) return { sp: 'shield', x: LX, y: LY };
+    if (!R.cd.bolt) { let best = null, bv = 1e9; for (const e of R.e) { if (e.x < -20 || e.x > 380 || e.y < -20 || e.y > 560) continue; const v = lanDist(e) - (e.atk ? 60 : 0) - (e.fly ? 30 : 0); if (v < bv) { bv = v; best = e; } } if (best) return { sp: 'bolt', x: best.x, y: best.y, id: best.id }; }
+    if (!R.cd.puddle) { let best = null, bn = 2; for (const e of R.e) { if (e.fly || e.x < 0 || e.x > 360 || e.y < 0 || e.y > 540) continue; let n = 0; for (const o of R.e) if (!o.fly && hyp(o.x - e.x, o.y - e.y) < 50) n++; if (n > bn) { bn = n; best = e; } } if (best) return { sp: 'puddle', x: best.x, y: best.y }; }
+    return null;
+  }
+
+  const C = { CELL, COLS, ROWS, LX, LY, DT, DAY, LANES, PATH, EN, BL, KINDS, HERO, HEROES, BONUSES, SPELL, LANXP, upCost, heroCost, hyp, cc,
+    newRun, canPlace, place, canUpgrade, upgrade, canRecruit, recruit, collectHop, collectDrop, startNight, step, cast, pickBonus, moreChoice, revive, score, pack, unpack,
+    bAt, bById, hasHero, isLant, onPath, lanesFor, towerDmg, wallMax, plan, suggest, doSuggest, spellPlan, bestCell, rng };
+  root.LHC = C; if (typeof module !== 'undefined') module.exports = C;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Lantern Hold — the numbers of the village (between runs): permanent upgrades built on a real-time worksite, the offline mill,
+// the daily gift, XP, lanterns (cosmetic), the merchant's chest (fireflies ONLY), the shop and the ads.
+// No energy, no subscription, nothing random for real money: golden acorns (sold) only buy fixed-price lanterns or finish a worksite.
+(function (root) {
+  const E = {
+    // the 6 permanent upgrades (fireflies), 5 levels each; each level is built on the worksite (20 min to 6 h)
+    upgrades: ['hp', 'berries', 'sling', 'bolt', 'mill', 'ff'],
+    upIcon: { hp: 'lantern_1', berries: 'b_berry', sling: 'b_tower', bolt: 's_bolt', mill: 'b_mill', ff: 'firefly' },
+    maxUp: 5,
+    upCost: lv => [80, 160, 300, 500, 800][lv],          // fireflies to go from lv to lv + 1
+    upMin: lv => [20, 45, 90, 180, 360][lv],             // worksite minutes
+    finishAcorns: min => Math.max(5, Math.ceil(min / 10)),   // golden acorns to finish now: 1 per 10 min left, at least 5
+    millRate: lv => 20 + 10 * lv,                        // fireflies per hour while away (meta mill level)
+    millCapH: 8,
+    login: [30, 40, 60, 80, 100, 130, 200],              // fireflies, days 1..7 (day 7 also gives golden acorns)
+    loginAcorns: 10,
+    xpLevel: n => Math.round(150 * Math.pow(n, 1.3)),
+    xpNight: n => 30 + 10 * n, xpWin: 150,
+    levelGift: n => 40 + n * 10,
+    heroAt: { archer: 1, smith: 1, healer: 1, scout: 4, miller: 6, apprentice: 8 },   // player level that unlocks each hero
+    // cosmetic lanterns: free, fixed price in golden acorns, from the merchant's chest, or from a pack
+    lanterns: [
+      { id: 'classic', how: 'free' }, { id: 'moss', acorns: 30 }, { id: 'amber', acorns: 40 }, { id: 'violet', acorns: 50 }, { id: 'star', acorns: 60 },
+      { id: 'glow', how: 'chest' }, { id: 'mush', how: 'chest' }, { id: 'gift', how: 'starter' }, { id: 'fest', how: 'festival' }, { id: 'snow', how: 'pass' },
+    ],
+    // the merchant's chest: paid with fireflies only (earned by playing), the contents are shown before buying
+    chest: { cost: 150, table: [['ff', 0.5], ['token', 0.25], ['lantern', 0.25]], ff: [80, 250] },
+    store: [
+      { id: 'noads', price: '3,99 €', once: true },
+      { id: 'starter', price: '1,99 €', once: true },
+      { id: 'festival', price: '2,99 €', once: true },
+      { id: 'acorns', price: '1,99 €', once: false, n: 100 },
+      { id: 'pass_hiver_2026', price: '2,99 €', once: true },
+    ],
+    starterFF: 500,
+    ads: { interFromPlay: 3, gapSec: 180 },
+  };
+  root.LHE = E; if (typeof module !== 'undefined') module.exports = E;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Lantern Hold — UI texts. [fr, en]; other languages fall back to English for now.
+window.I18N = (() => {
+  const L = ['fr', 'en'];
+  const T = {
+    subtitle: ['Défends la grande lanterne jusqu’à l’aube', 'Guard the great lantern until dawn'],
+    play: ['Jouer', 'Play'], newRun: ['Nouvelle partie', 'New run'], resume: ['Reprendre · Nuit {n}', 'Resume · Night {n}'], resumeDay: ['Reprendre · Jour {n}', 'Resume · Day {n}'],
+    level: ['Niv.', 'Lv.'], night: ['Nuit {n}/7', 'Night {n}/7'], day: ['Jour {n}/7', 'Day {n}/7'], dayN: ['Jour', 'Day'],
+    goNight: ['Nuit ▶', 'Night ▶'], dayLeft: ['{s} s', '{s} s'],
+    berries: ['baies', 'berries'], fireflies: ['lucioles', 'fireflies'], acorns: ['glands d’or', 'golden acorns'],
+    // buildings
+    b_tower: ['Tour à frondes', 'Sling tower'], b_wall: ['Palissade', 'Palisade'], b_trap: ['Champignon-piège', 'Trap mushroom'], b_forge: ['Forge', 'Forge'],
+    b_mill: ['Moulin', 'Mill'], b_berry: ['Buisson de baies', 'Berry bush'], b_burrow: ['Terrier', 'Burrow'],
+    bs_tower: ['Tire sur les ombres à portée', 'Shoots the shadows in range'], bs_wall: ['Sur un chemin : les ombres doivent la ronger', 'On a path: the shadows must chew through it'],
+    bs_trap: ['Sur un chemin : ralentit et pique', 'On a path: slows and stings'], bs_forge: ['+ dégâts aux tours voisines, répare les palissades à l’aube', 'Boosts nearby towers, mends palisades at dawn'],
+    bs_mill: ['Des lucioles chaque jour', 'Fireflies every day'], bs_berry: ['Des baies chaque jour', 'Berries every day'], bs_burrow: ['Abrite un héros', 'Houses a hero'],
+    pathOnly: ['Sur un chemin seulement', 'On a path only'], offPath: ['Pas sur un chemin', 'Not on a path'], upgrade: ['Améliorer', 'Upgrade'], maxLvl: ['Niveau max', 'Max level'],
+    recruit: ['Recruter', 'Recruit'], free: ['Gratuit', 'Free'], lvl: ['Niv. {n}', 'Lv. {n}'], notEnough: ['Pas assez', 'Not enough'],
+    // heroes
+    h_archer: ['Archère', 'Archer'], h_smith: ['Forgeron', 'Smith'], h_healer: ['Guérisseuse', 'Healer'], h_scout: ['Éclaireuse', 'Scout'], h_miller: ['Meunier', 'Miller'], h_apprentice: ['Apprenti mage', 'Apprentice'],
+    hs_archer: ['Tire très loin, même les volants', 'Shoots far, flyers too'], hs_smith: ['Répare les palissades, +12 % aux tours', 'Mends palisades, +12 % to towers'],
+    hs_healer: ['Soigne la lanterne', 'Heals the lantern'], hs_scout: ['Ramasse les lucioles, +15 %', 'Picks up the fireflies, +15 %'],
+    hs_miller: ['Récoltes +50 %', 'Harvests +50 %'], hs_apprentice: ['Sorts plus rapides, l’éclair rebondit', 'Faster spells, the bolt jumps'],
+    heroLock: ['Niveau joueur {n}', 'Player level {n}'], heroes: ['Héros', 'Heroes'],
+    // spells
+    sp_bolt: ['Éclair', 'Bolt'], sp_puddle: ['Flaque', 'Puddle'], sp_shield: ['Bouclier', 'Shield'],
+    // bonuses
+    bo_sharp: ['Frondes affûtées', 'Sharp slings'], bos_sharp: ['Tours +20 % de dégâts', 'Towers +20 % damage'],
+    bo_quick: ['Tir rapide', 'Quick shots'], bos_quick: ['Tours +15 % de cadence', 'Towers fire 15 % faster'],
+    bo_thick: ['Pieux épais', 'Thick stakes'], bos_thick: ['Palissades +40 % de solidité', 'Palisades +40 % sturdier'],
+    bo_spores: ['Spores piquantes', 'Stinging spores'], bos_spores: ['Pièges +50 % de dégâts', 'Traps +50 % damage'],
+    bo_bolt: ['Grand éclair', 'Big bolt'], bos_bolt: ['Éclair +40 % de dégâts', 'Bolt +40 % damage'],
+    bo_puddle: ['Miel de lune', 'Moon honey'], bos_puddle: ['Flaque plus grande et plus longue', 'Bigger, longer puddle'],
+    bo_shield: ['Bouclier vif', 'Swift shield'], bos_shield: ['Bouclier rechargé plus vite', 'Shield recharges faster'],
+    bo_harvest: ['Bonne récolte', 'Good harvest'], bos_harvest: ['+40 baies, +15 chaque jour', '+40 berries, +15 each day'],
+    bo_lantern: ['Mèche neuve', 'New wick'], bos_lantern: ['Lanterne +40 PV, soin complet', 'Lantern +40 HP, full heal'],
+    bo_fireflies: ['Nuée de lucioles', 'Firefly swarm'], bos_fireflies: ['+25 % de lucioles', '+25 % fireflies'],
+    bo_range: ['Longue-vue', 'Spyglass'], bos_range: ['Tours +15 % de portée', 'Towers +15 % range'],
+    bo_heroes: ['Fête au terrier', 'Burrow party'], bos_heroes: ['Héros +30 %, prochain recrutement gratuit', 'Heroes +30 %, next recruit free'],
+    dawnTitle: ['L’aube ! Choisis un bonus', 'Dawn! Pick a bonus'], moreBonus: ['4e bonus', '4th bonus'],
+    // end of run
+    won: ['Le soleil se lève !', 'The sun rises!'], wonSub: ['La lanterne a tenu 7 nuits', 'The lantern held for 7 nights'],
+    lost: ['La lanterne s’éteint…', 'The lantern goes out…'], secondChance: ['Seconde chance', 'Second chance'], secondSub: ['La lanterne se rallume', 'The lantern flares up again'],
+    giveUp: ['Abandonner', 'Give up'], score: ['Score', 'Score'], nights: ['Nuits tenues', 'Nights held'], kills: ['Ombres dissipées', 'Shadows cleared'],
+    x2: ['×2 lucioles', '×2 fireflies'], home: ['Village', 'Village'], again: ['Rejouer', 'Play again'],
+    pause: ['Pause', 'Pause'], cont: ['Continuer', 'Continue'], quit: ['Retour au village', 'Back to the village'], quitSub: ['La partie est gardée, tu la reprendras', 'The run is kept, resume it later'],
+    resumeTitle: ['On reprend ?', 'Shall we go on?'], tapResume: ['Touche pour reprendre', 'Tap to resume'],
+    // meta
+    village: ['Le village', 'The village'], upgrades: ['Améliorations', 'Upgrades'], worksite: ['Chantier', 'Worksite'],
+    up_hp: ['Lanterne solide', 'Sturdy lantern'], ups_hp: ['+15 PV de lanterne par niveau', '+15 lantern HP per level'],
+    up_berries: ['Réserve de baies', 'Berry stash'], ups_berries: ['+20 baies au départ par niveau', '+20 starting berries per level'],
+    up_sling: ['Frondes de chêne', 'Oak slings'], ups_sling: ['Tours +8 % de dégâts par niveau', 'Towers +8 % damage per level'],
+    up_bolt: ['Éclair vif', 'Bright bolt'], ups_bolt: ['Éclair +15 %, recharge plus courte', 'Bolt +15 %, shorter recharge'],
+    up_mill: ['Grand moulin', 'Big mill'], ups_mill: ['Plus de lucioles, même quand tu n’es pas là', 'More fireflies, even while you are away'],
+    up_ff: ['Lucioles attirées', 'Firefly lure'], ups_ff: ['+10 % de lucioles par niveau', '+10 % fireflies per level'],
+    build: ['Construire', 'Build'], building: ['En chantier : {s}', 'Building: {s}'], ready: ['Prêt !', 'Ready!'], collect: ['Récupérer', 'Collect'],
+    finish: ['Finir', 'Finish'], finishAc: ['Finir · {n}', 'Finish · {n}'], busy: ['Le chantier est occupé', 'The worksite is busy'], wsIdle: ['Le chantier attend une amélioration', 'The worksite awaits an upgrade'],
+    mill: ['Moulin', 'Mill'], millTxt: ['{n} lucioles moulues pendant ton absence', '{n} fireflies milled while you were away'], millEmpty: ['Le moulin tourne… (8 h max)', 'The mill is turning… (8 h max)'],
+    merchant: ['Le marchand', 'The merchant'], chestTxt: ['Un coffre surprise, payé en lucioles uniquement : des lucioles, un bonus de départ ou une lanterne rare.', 'A surprise chest, paid with fireflies only: fireflies, a starting bonus or a rare lantern.'],
+    openChest: ['Ouvrir', 'Open'], gotFF: ['+{n} lucioles !', '+{n} fireflies!'], gotToken: ['Bonus de départ : {s}', 'Starting bonus: {s}'], gotLantern: ['Nouvelle lanterne : {s} !', 'New lantern: {s}!'],
+    tokenHas: ['Bonus de départ prêt : {s}', 'Starting bonus ready: {s}'],
+    lanterns: ['Lanternes', 'Lanterns'], use: ['Utiliser', 'Use'], used: ['Allumée', 'Lit'],
+    ln_classic: ['Classique', 'Classic'], ln_moss: ['Mousse', 'Moss'], ln_amber: ['Ambre', 'Amber'], ln_violet: ['Crépuscule', 'Dusk'], ln_star: ['Étoile', 'Star'],
+    ln_glow: ['Luciole', 'Glow'], ln_mush: ['Champignon', 'Mushroom'], ln_gift: ['Ruban', 'Ribbon'], ln_fest: ['Fête', 'Festival'], ln_snow: ['Neige', 'Snow'],
+    lh_chest: ['Coffre du marchand', 'Merchant chest'], lh_starter: ['Pack de démarrage', 'Starter pack'], lh_festival: ['Lanternes de fête', 'Festival lanterns'], lh_pass: ['Passe Hiver', 'Winter pass'],
+    login: ['Cadeau du jour', 'Daily gift'], dayK: ['J', 'D'], claim: ['Récupérer', 'Claim'], comeBack: ['Reviens demain !', 'Come back tomorrow!'],
+    levelUp: ['Niveau {n} !', 'Level {n}!'], newHero: ['Nouveau héros : {s} !', 'New hero: {s}!'],
+    shop: ['Boutique', 'Shop'], settings: ['Réglages', 'Settings'], gift: ['Cadeau', 'Gift'],
+    s_noads: ['Sans pub', 'No ads'], s_noadsSub: ['Plus aucune publicité entre les parties', 'No more ads between runs'],
+    s_starter: ['Pack de démarrage', 'Starter pack'], s_starterSub: ['L’archère dès le départ, la lanterne Ruban et 500 lucioles', 'The archer from the start, the Ribbon lantern and 500 fireflies'],
+    s_festival: ['Lanternes de fête', 'Festival lanterns'], s_festivalSub: ['Thème visuel complet : nuit de fête, guirlandes, musique', 'Full visual theme: festival night, garlands, music'],
+    s_acorns: ['100 glands d’or', '100 golden acorns'], s_acornsSub: ['Pour des lanternes à prix fixe ou finir un chantier', 'For fixed-price lanterns or finishing a worksite'],
+    s_pass: ['Passe Hiver', 'Winter pass'], s_passSub: ['Thème neige, lanterne Neige, cadeaux du jour ×2. Achat unique, sans abonnement', 'Snow theme, Snow lantern, daily gifts ×2. One-time purchase, no subscription'],
+    owned: ['Possédé', 'Owned'], restore: ['Restaurer les achats', 'Restore purchases'], restored: ['Achats restaurés', 'Purchases restored'],
+    webNote: ['Achats réels via l’App Store', 'Real purchases through the App Store'], testBuy: ['Achat de test (aucun paiement) :', 'Test purchase (nothing charged):'],
+    buyFail: ['L’achat n’a pas abouti', 'The purchase did not go through'], buyPending: ['Achat en attente de validation', 'Purchase pending approval'],
+    sound: ['Sons', 'Sounds'], music: ['Musique', 'Music'], vibration: ['Vibrations', 'Vibrations'], language: ['Langue', 'Language'], theme: ['Thème', 'Theme'],
+    th_forest: ['Forêt', 'Forest'], th_fest: ['Lanternes de fête', 'Festival lanterns'], th_winter: ['Hiver', 'Winter'],
+    adChoices: ['Choix publicitaires', 'Ad choices'], privacy: ['Confidentialité', 'Privacy'], reset: ['Effacer la partie', 'Erase progress'], resetSure: ['Tout effacer ? C’est définitif.', 'Erase everything? This cannot be undone.'],
+    close: ['Fermer', 'Close'], cancel: ['Annuler', 'Cancel'], ok: ['OK', 'OK'],
+    consentTitle: ['Les publicités', 'Ads'], consentText: ['Lantern Hold est gratuit grâce à la publicité. Acceptes-tu des pubs adaptées à tes goûts ? Tu peux changer d’avis dans les réglages.', 'Lantern Hold is free thanks to ads. Do you accept ads tailored to you? You can change your mind in the settings.'],
+    accept: ['J’accepte', 'I accept'], refuse: ['Non merci', 'No thanks'], testAd: ['Publicité de test', 'Test ad'],
+    wave: ['Vague {n}', 'Wave {n}'], bossCome: ['Le Grand Brouillard !', 'The Great Fog!'], lanUp: ['La lanterne grandit !', 'The lantern grows!'], dawnB: ['Aube {n}', 'Dawn {n}'], nightB: ['Nuit {n}', 'Night {n}'],
+    // Gardienne Pomme (20+ lines)
+    p_hello: ['Bonjour, petit hérisson ! Je suis Pomme, gardienne de la grande lanterne.', 'Hello, little hedgehog! I am Pomme, keeper of the great lantern.'],
+    p_tower: ['Glisse une tour à frondes près du chemin du nord.', 'Drag a sling tower next to the north path.'],
+    p_wall: ['Bien ! Maintenant une palissade sur le chemin, juste devant la lanterne.', 'Good! Now a palisade on the path, right in front of the lantern.'],
+    p_harvest: ['Le buisson a donné des baies. Touche-les pour les ramasser !', 'The bush gave berries. Tap them to pick them up!'],
+    p_night: ['Prêt ? Touche « Nuit » quand tu veux. Pas de presse le premier jour.', 'Ready? Tap “Night” whenever you like. No rush on day one.'],
+    p_tap: ['Les voilà ! Touche les ombres pour leur lancer un éclair !', 'Here they come! Tap the shadows to throw a bolt of light!'],
+    p_swipe: ['Des lucioles ! Glisse ton doigt dessus pour nourrir la lanterne.', 'Fireflies! Slide your finger over them to feed the lantern.'],
+    p_dawn: ['L’aube ! Tu as tenu ta première nuit. Choisis un cadeau du matin.', 'Dawn! You held your first night. Pick a morning gift.'],
+    p_day: ['Le jour, on construit. Six nuits encore, et le Grand Brouillard à la septième.', 'By day we build. Six more nights, and the Great Fog on the seventh.'],
+    p_north: ['Ils arrivent par le nord !', 'They come from the north!'], p_east: ['Attention, par l’est !', 'Watch out, from the east!'],
+    p_west: ['À l’ouest, à l’ouest !', 'West, from the west!'], p_south: ['Par le sud, maintenant !', 'From the south now!'],
+    p_fly: ['Des ombres volantes : les palissades ne les arrêtent pas !', 'Flying shadows: palisades won’t stop them!'],
+    p_big: ['Une grosse ombre… Une flaque collante la ralentira.', 'A big shadow… A sticky puddle will slow it down.'],
+    p_boss: ['Le Grand Brouillard ! Tiens bon, l’aube est proche !', 'The Great Fog! Hold on, dawn is near!'],
+    p_low: ['La lanterne faiblit ! Touche-la pour le bouclier !', 'The lantern is fading! Tap it for the shield!'],
+    p_lanUp: ['Regarde comme elle brille !', 'Look how bright she shines!'],
+    p_won: ['Le soleil ! Tu as sauvé le village !', 'The sun! You saved the village!'], p_lost: ['Pas grave. On rallume et on recommence, plus forts.', 'Never mind. We relight it and start again, stronger.'],
+    p_mill: ['Le moulin a tourné pendant ton absence.', 'The mill kept turning while you were away.'], p_hero: ['Un terrier ! Tu peux y recruter un héros.', 'A burrow! You can recruit a hero there.'],
+    p_ws: ['Le chantier est libre : investis tes lucioles !', 'The worksite is free: invest your fireflies!'], p_dance: ['Hop, hop, petite danse de la victoire !', 'Hop, hop, little victory dance!'],
+    p_dawnPick: ['Hmm, celui-là me plaît bien.', 'Hmm, I like that one.'],
+  };
+  let lang = 'fr'; const idx = () => Math.max(0, L.indexOf(lang));
+  const t = (k, v) => { const e = T[k]; let s = e ? (e[idx()] || e[1] || e[0]) : k; if (v) for (const n in v) s = s.split('{' + n + '}').join(v[n]); return s; };
+  const detect = () => { const l = (navigator.language || 'fr').slice(0, 2); return L.includes(l) ? l : 'en'; };
+  return { t, set: l => { lang = L.includes(l) ? l : 'en'; document.documentElement.lang = lang; }, get lang() { return lang; }, langs: L, names: { fr: 'Français', en: 'English' }, detect, pick: a => a[idx()] || a[1], has: k => !!T[k] };
+})();
+</script>
+<script>// Shared "juice": flying coins, confetti, pops, dust and hearts (DOM + CSS only, cheap on phones). From Crumble Crew, in the Lantern Hold palette.
+window.JUICE = (() => {
+  const css = `
+.jz{position:fixed;z-index:60;pointer-events:none;left:0;top:0;will-change:transform,opacity}
+.jz-coin{width:26px;height:26px;object-fit:contain;transition:transform .7s cubic-bezier(.55,-0.25,.4,1),opacity .7s}
+.jz-conf{width:8px;height:12px;border-radius:2px;animation:jzfall var(--d) cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes jzfall{0%{transform:translate(var(--x0),var(--y0)) rotate(0)}100%{transform:translate(var(--x1),var(--y1)) rotate(var(--r));opacity:0}}
+.jz-dust{width:10px;height:10px;border-radius:50%;background:rgba(255,246,220,.95);animation:jzdust .6s ease-out forwards}
+@keyframes jzdust{0%{transform:translate(var(--x0),var(--y0)) scale(.6);opacity:1}100%{transform:translate(var(--x1),var(--y1)) scale(1.8);opacity:0}}
+.jz-heart{font-size:20px;animation:jzheart 1.1s ease-out forwards}
+@keyframes jzheart{0%{transform:translate(var(--x0),var(--y0)) scale(.4);opacity:0}25%{opacity:1;transform:translate(var(--x0),calc(var(--y0) - 14px)) scale(1.2)}100%{transform:translate(var(--x0),calc(var(--y0) - 54px)) scale(1);opacity:0}}
+.jz-pop{animation:jzpop .45s cubic-bezier(.3,1.6,.5,1)}@keyframes jzpop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+.jz-bump{animation:jzbump .35s ease-out}@keyframes jzbump{40%{transform:scale(1.25)}}
+.jz-flash{position:fixed;inset:0;z-index:58;pointer-events:none;background:radial-gradient(circle at var(--fx) var(--fy),rgba(255,246,220,.8),rgba(255,246,220,0) 45%);animation:jzflash .7s ease-out forwards}@keyframes jzflash{to{opacity:0}}
+`;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+  const center = el => { if (!el) return [innerWidth / 2, innerHeight / 2]; const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  const mk = (cls, html = '') => { const d = document.createElement(html === 'img' ? 'img' : 'div'); d.className = 'jz ' + cls; if (html && html !== 'img') d.innerHTML = html; document.body.appendChild(d); return d; };
+  // coins (or any icon) flying from an element to a counter, which bumps on arrival
+  function fly(fromEl, toEl, src, n = 6, done) {
+    const [x0, y0] = center(fromEl), [x1, y1] = center(toEl);
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-coin', 'img'); c.src = src; const ox = (Math.random() - 0.5) * 50, oy = (Math.random() - 0.5) * 40;
+      c.style.transform = `translate(${x0 - 13 + ox}px,${y0 - 13 + oy}px) scale(.6)`;
+      setTimeout(() => { c.style.transform = `translate(${x1 - 13}px,${y1 - 13}px) scale(.9)`; c.style.opacity = '.4'; }, 30 + i * 55);
+      setTimeout(() => { c.remove(); if (i === n - 1) { bump(toEl); done && done(); } }, 780 + i * 55);
+    }
+  }
+  function bump(el) { if (!el) return; el.classList.remove('jz-bump'); void el.offsetWidth; el.classList.add('jz-bump'); }
+  function confetti(n = 70) {
+    const cols = ['#FFE66D', '#FFB347', '#FFF6DC', '#6A9C5A', '#FFE66D', '#5B3F8C'];   // confetti of light in the lantern palette
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-conf'); const x0 = innerWidth / 2 + (Math.random() - 0.5) * 80, y0 = innerHeight * 0.35;
+      c.style.background = cols[i % cols.length];
+      c.style.setProperty('--x0', x0 + 'px'); c.style.setProperty('--y0', y0 + 'px');
+      c.style.setProperty('--x1', x0 + (Math.random() - 0.5) * innerWidth * 1.1 + 'px'); c.style.setProperty('--y1', y0 + innerHeight * (0.4 + Math.random() * 0.5) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg'); c.style.setProperty('--d', (1.2 + Math.random() * 1.1) + 's');
+      setTimeout(() => c.remove(), 2600);
+    }
+  }
+  function dust(el, n = 10) {
+    const [x, y] = center(el);
+    for (let i = 0; i < n; i++) { const d = mk('jz-dust'), a = Math.random() * Math.PI * 2, r = 26 + Math.random() * 30;
+      d.style.setProperty('--x0', x - 5 + 'px'); d.style.setProperty('--y0', y + 10 + 'px'); d.style.setProperty('--x1', x - 5 + Math.cos(a) * r + 'px'); d.style.setProperty('--y1', y + 10 + Math.sin(a) * r * 0.5 + 'px'); setTimeout(() => d.remove(), 650); }
+  }
+  function heart(x, y, ch = '❤️') { const h = mk('jz-heart', ch); h.style.setProperty('--x0', x - 10 + 'px'); h.style.setProperty('--y0', y + 'px'); setTimeout(() => h.remove(), 1150); }
+  function pop(el) { if (!el) return; el.classList.remove('jz-pop'); void el.offsetWidth; el.classList.add('jz-pop'); }
+  function flash(el) { const [x, y] = center(el); const f = mk('jz-flash'); f.style.setProperty('--fx', x + 'px'); f.style.setProperty('--fy', y + 'px'); setTimeout(() => f.remove(), 750); }
+  return { fly, bump, confetti, dust, heart, pop, flash };
+})();
+</script>
+<script>// Lantern Hold — stand-in art, drawn at startup: flat shapes, thick even outline, the 6 colours of the art direction.
+// Each one is replaced by the painted PNG of the same name in src/sprites/ (window.LH_SPR). ART.get(name) -> canvas, ART.url(name) -> data URL.
+window.LHART = (() => {
+  const P = { night: '#1F2A4A', orange: '#FFB347', yellow: '#FFE66D', moss: '#6A9C5A', wood: '#8B5A3C', violet: '#5B3F8C', cream: '#FFF6DC' };
+  const TAU = Math.PI * 2, cache = {}, urls = {};
+  function make(w, h, fn) { const f = document.createElement('canvas'); f.width = w; f.height = h; const c = f.getContext('2d'); c.lineJoin = 'round'; c.lineCap = 'round'; fn(c, w, h); return f; }
+  const fs = (c, fill, lw = 6) => { if (fill) { c.fillStyle = fill; c.fill(); } if (lw) { c.lineWidth = lw; c.strokeStyle = P.night; c.stroke(); } };
+  const circle = (c, x, y, r, fill, lw) => { c.beginPath(); c.arc(x, y, r, 0, TAU); fs(c, fill, lw); };
+  const ell = (c, x, y, rx, ry, fill, lw) => { c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, TAU); fs(c, fill, lw); };
+  const rect = (c, x, y, w, h, fill, lw, r = 8) => { c.beginPath(); c.roundRect ? c.roundRect(x, y, w, h, r) : c.rect(x, y, w, h); fs(c, fill, lw); };
+  const poly = (c, pts, fill, lw) => { c.beginPath(); c.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) c.lineTo(pts[i], pts[i + 1]); c.closePath(); fs(c, fill, lw); };
+  const shadow = c => ell(c, 64, 116, 44, 8, 'rgba(91,63,140,.45)', 0);
+  const eyes = (c, x, y, s = 1, angry) => { for (const d of [-1, 1]) { ell(c, x + d * 12 * s, y, 8 * s, 10 * s, '#fff', 0); circle(c, x + d * 12 * s + 2, y + 2 * s, 4 * s, P.night, 0); } if (angry) { c.lineWidth = 4; c.strokeStyle = P.night; c.beginPath(); c.moveTo(x - 22 * s, y - 14 * s); c.lineTo(x - 6 * s, y - 8 * s); c.moveTo(x + 22 * s, y - 14 * s); c.lineTo(x + 6 * s, y - 8 * s); c.stroke(); } };
+  function blob(c, x, y, r, fill) { c.beginPath(); for (let i = 0; i <= 12; i++) { const a = i / 12 * TAU, rr = r * (1 + (i % 2 ? 0.08 : -0.04)); i ? c.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr) : c.moveTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } c.closePath(); fs(c, fill); }
+  function hog(c, acc, mood) {   // a round hedgehog: brown spikes, cream face, 2 dot eyes
+    shadow(c); poly(c, [20, 70, 30, 30, 50, 14, 78, 14, 98, 30, 108, 70, 98, 104, 30, 104], P.wood);
+    ell(c, 64, 70, 30, 30, P.cream); circle(c, 54, 64, 4, P.night, 0); circle(c, 74, 64, 4, P.night, 0); circle(c, 64, 76, 5, P.night, 0);
+    if (mood === 1 || mood === 3) { c.beginPath(); c.arc(64, 82, 8, 0.1 * Math.PI, 0.9 * Math.PI); c.lineWidth = 4; c.strokeStyle = P.night; c.stroke(); }
+    const A = { archer: () => { c.beginPath(); c.arc(100, 70, 28, -1.2, 1.2); c.lineWidth = 5; c.strokeStyle = P.wood; c.stroke(); }, smith: () => { rect(c, 96, 60, 20, 12, P.violet, 4, 3); rect(c, 103, 70, 6, 30, P.wood, 4, 2); },
+      healer: () => circle(c, 44, 30, 9, P.yellow, 4), scout: () => rect(c, 94, 56, 26, 10, P.orange, 4, 4), miller: () => ell(c, 64, 26, 34, 9, P.yellow, 5), apprentice: () => poly(c, [44, 30, 64, 0, 84, 30], P.violet, 5), lantern: () => { rect(c, 96, 80, 18, 22, P.orange, 4, 4); } };
+    (A[acc] || (() => {}))();
+  }
+  function lantern(lv, glow) {
+    return make(128, 128, c => { shadow(c); circle(c, 64, 56, 40 + lv * 4, 'rgba(255,230,109,.35)', 0); rect(c, 40, 100, 48, 14, '#9a8fa8', 5, 4);
+      rect(c, 58, 76, 12, 26, P.wood, 5, 3); rect(c, 40, 30, 48, 48, glow || P.yellow, 6, 10); poly(c, [34, 32, 64, 8, 94, 32], P.orange, 6); if (lv > 1) poly(c, [54, 12, 64, 0, 74, 12], P.moss, 4); if (lv > 2) { rect(c, 24, 40, 10, 30, P.violet, 4, 3); rect(c, 94, 40, 10, 30, P.violet, 4, 3); } });
+  }
+  const R = {
+    e_shade: () => make(128, 128, c => { shadow(c); blob(c, 64, 64, 40, P.violet); eyes(c, 64, 60); }),
+    e_fast: () => make(128, 128, c => { shadow(c); for (let i = 0; i < 3; i++) { c.lineWidth = 6; c.strokeStyle = P.violet; c.beginPath(); c.moveTo(8, 50 + i * 14); c.lineTo(36, 50 + i * 14); c.stroke(); } ell(c, 74, 64, 36, 28, P.violet); eyes(c, 80, 60, 0.8); }),
+    e_big: () => make(128, 128, c => { shadow(c); blob(c, 64, 62, 54, P.violet); eyes(c, 64, 54, 1.2); }),
+    e_fly: () => make(128, 128, c => { poly(c, [40, 60, 6, 36, 14, 74], P.violet); poly(c, [88, 60, 122, 36, 114, 74], P.violet); circle(c, 64, 62, 30, P.violet); eyes(c, 64, 58, 0.8); }),
+    e_boss: () => make(160, 128, c => { for (const [x, y, r] of [[40, 70, 34], [80, 56, 44], [122, 70, 32], [80, 86, 34]]) circle(c, x, y, r, P.violet); eyes(c, 80, 60, 1.4, true); }),
+    e_pop: () => make(128, 128, c => { for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; poly(c, [64 + Math.cos(a) * 20, 64 + Math.sin(a) * 20, 64 + Math.cos(a + 0.2) * 56, 64 + Math.sin(a + 0.2) * 56, 64 + Math.cos(a + 0.4) * 20, 64 + Math.sin(a + 0.4) * 20], i % 2 ? P.yellow : P.orange, 4); } circle(c, 64, 64, 18, P.violet); }),
+    b_wall: () => make(128, 128, c => { shadow(c); for (let i = 0; i < 5; i++) poly(c, [16 + i * 20, 108, 16 + i * 20, 40, 26 + i * 20, 26, 36 + i * 20, 40, 36 + i * 20, 108], P.wood, 5); rect(c, 10, 62, 108, 10, P.moss, 4, 3); }),
+    b_tower: () => make(128, 128, c => { shadow(c); poly(c, [30, 112, 44, 40, 84, 40, 98, 112], P.wood); rect(c, 34, 28, 60, 16, P.wood, 6, 4); c.lineWidth = 6; c.strokeStyle = P.night; c.beginPath(); c.moveTo(64, 28); c.lineTo(64, 8); c.moveTo(50, 8); c.quadraticCurveTo(64, 22, 78, 8); c.stroke(); poly(c, [56, 56, 72, 56, 72, 80, 64, 74, 56, 80], P.moss, 4); }),
+    b_trap: () => make(128, 128, c => { shadow(c); rect(c, 52, 64, 24, 44, P.cream, 6, 8); c.beginPath(); c.arc(64, 68, 46, Math.PI, 0); c.closePath(); fs(c, P.violet); circle(c, 44, 46, 7, P.yellow, 0); circle(c, 72, 36, 8, P.yellow, 0); circle(c, 92, 56, 6, P.yellow, 0); }),
+    b_forge: () => make(128, 128, c => { shadow(c); rect(c, 18, 44, 92, 66, '#9a8fa8', 6, 6); poly(c, [10, 48, 64, 14, 118, 48], P.orange); rect(c, 46, 70, 36, 40, P.night, 5, 14); poly(c, [54, 108, 64, 80, 74, 108], P.orange, 0); rect(c, 84, 8, 14, 26, P.wood, 5, 3); }),
+    b_mill: () => make(128, 128, c => { shadow(c); poly(c, [40, 112, 50, 50, 78, 50, 88, 112], P.cream); rect(c, 56, 86, 16, 26, P.wood, 5, 6); for (let i = 0; i < 4; i++) { c.save(); c.translate(64, 50); c.rotate(i * TAU / 4 + 0.4); rect(c, -6, -50, 12, 46, P.yellow, 4, 3); c.restore(); } circle(c, 64, 50, 7, P.wood, 4); }),
+    b_berry: () => make(128, 128, c => { shadow(c); for (const [x, y, r] of [[40, 74, 30], [86, 74, 30], [64, 52, 34]]) circle(c, x, y, r, P.moss); for (const [x, y] of [[44, 60], [70, 44], [86, 70], [58, 82], [32, 84]]) circle(c, x, y, 8, P.orange, 4); }),
+    b_burrow: () => make(128, 128, c => { shadow(c); ell(c, 64, 80, 54, 38, P.moss); ell(c, 64, 86, 22, 22, P.wood); circle(c, 64, 86, 4, P.yellow, 0); rect(c, 88, 40, 10, 22, '#9a8fa8', 4, 3); }),
+    firefly: () => make(96, 96, c => { circle(c, 48, 52, 30, 'rgba(255,230,109,.4)', 0); ell(c, 38, 34, 12, 8, P.cream, 4); ell(c, 58, 34, 12, 8, P.cream, 4); ell(c, 48, 52, 16, 18, P.yellow); circle(c, 44, 48, 3, P.night, 0); circle(c, 54, 48, 3, P.night, 0); }),
+    fireflies: () => make(128, 128, c => { shadow(c); poly(c, [30, 110, 24, 60, 46, 36, 82, 36, 104, 60, 98, 110], P.wood); rect(c, 44, 28, 40, 12, P.orange, 5, 4); for (const [x, y] of [[50, 70], [74, 62], [66, 90]]) circle(c, x, y, 8, P.yellow, 3); }),
+    merchant_chest: () => make(128, 128, c => { shadow(c); rect(c, 16, 56, 96, 54, P.wood, 6, 6); c.beginPath(); c.moveTo(16, 60); c.quadraticCurveTo(64, 10, 112, 60); c.closePath(); fs(c, P.wood); rect(c, 54, 56, 20, 24, P.yellow, 5, 4); }),
+    acorn: () => make(96, 96, c => { ell(c, 48, 58, 26, 30, P.yellow); c.beginPath(); c.arc(48, 40, 30, Math.PI, 0); c.closePath(); fs(c, P.wood); rect(c, 44, 4, 8, 14, P.wood, 4, 2); }),
+    banner: () => make(128, 128, c => { rect(c, 24, 10, 80, 10, P.wood, 5, 4); poly(c, [32, 20, 96, 20, 96, 100, 64, 84, 32, 100], P.moss); circle(c, 64, 52, 12, P.yellow, 4); }),
+    rune: () => make(128, 128, c => { shadow(c); poly(c, [30, 110, 26, 40, 60, 10, 98, 34, 100, 110], '#9a8fa8'); c.lineWidth = 6; c.strokeStyle = P.yellow; c.beginPath(); c.moveTo(52, 44); c.lineTo(74, 60); c.lineTo(52, 76); c.lineTo(74, 92); c.stroke(); }),
+    lantern_deco: () => lantern(1, P.orange),
+    s_bolt: () => make(96, 128, c => poly(c, [58, 6, 18, 70, 46, 70, 34, 122, 80, 50, 52, 50, 70, 6], P.yellow)),
+    s_puddle: () => make(128, 96, c => { c.beginPath(); c.ellipse(64, 54, 56, 26, 0, 0, TAU); fs(c, P.yellow); circle(c, 40, 46, 6, P.cream, 0); }),
+    s_shield: () => make(128, 128, c => { circle(c, 64, 64, 56, 'rgba(255,230,109,.5)'); poly(c, [64, 24, 96, 36, 92, 76, 64, 100, 36, 76, 32, 36], P.orange); }),
+    dawn_star: () => make(128, 128, c => { const p = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 22 : 52; p.push(64 + Math.cos(a) * r, 66 + Math.sin(a) * r); } poly(c, p, P.yellow); }),
+    sunrise: () => make(128, 128, c => { for (let i = 0; i < 9; i++) { const a = Math.PI + i * Math.PI / 8; poly(c, [64 + Math.cos(a - 0.1) * 46, 90 + Math.sin(a - 0.1) * 46, 64 + Math.cos(a) * 64, 90 + Math.sin(a) * 64, 64 + Math.cos(a + 0.1) * 46, 90 + Math.sin(a + 0.1) * 46], P.yellow, 3); } c.beginPath(); c.arc(64, 90, 40, Math.PI, 0); c.closePath(); fs(c, P.orange); rect(c, 6, 88, 116, 22, P.moss, 5, 8); }),
+    ui_gift: () => make(128, 128, c => { rect(c, 20, 50, 88, 64, P.yellow, 6, 6); rect(c, 14, 36, 100, 20, P.orange, 6, 4); rect(c, 56, 36, 16, 78, P.orange, 5, 2); }),
+    ui_settings: () => make(128, 128, c => { for (let i = 0; i < 8; i++) { c.save(); c.translate(64, 64); c.rotate(i * TAU / 8); rect(c, -10, -54, 20, 22, P.violet, 5, 3); c.restore(); } circle(c, 64, 64, 38, P.violet); circle(c, 64, 64, 14, P.night, 0); }),
+    ui_shop: () => make(128, 128, c => { c.beginPath(); c.arc(64, 54, 30, Math.PI, 0); c.lineWidth = 10; c.strokeStyle = P.wood; c.stroke(); poly(c, [16, 54, 112, 54, 100, 114, 28, 114], P.wood); rect(c, 12, 46, 104, 18, P.moss, 5, 6); }),
+    ui_build: () => make(128, 128, c => { c.save(); c.translate(64, 64); c.rotate(0.8); rect(c, -6, -50, 12, 100, P.wood, 5, 3); rect(c, -26, -56, 52, 22, P.violet, 5, 4); c.restore(); }),
+    bg_forest: () => make(540, 810, c => { c.fillStyle = P.night; c.fillRect(0, 0, 540, 810); c.fillStyle = P.moss; c.fillRect(30, 120, 480, 640); for (let x = 0; x < 6; x++) for (let y = 0; y < 9; y++) { c.fillStyle = (x + y) % 2 ? '#7aac69' : P.moss; c.fillRect(70 + x * 66.7, 160 + y * 62, 66.7, 62); } }),
+    title_bg: () => make(720, 720, c => { c.fillStyle = P.night; c.fillRect(0, 0, 720, 720); c.drawImage(lantern(3), 160, 140, 400, 400); }),
+    logo: () => make(900, 492, c => { c.textAlign = 'center'; c.font = '900 150px ui-rounded, system-ui, sans-serif'; for (const [t, y, col] of [['Lantern', 200, P.yellow], ['Hold', 380, P.orange]]) { c.lineWidth = 26; c.strokeStyle = P.night; c.strokeText(t, 450, y); c.fillStyle = col; c.fillText(t, 450, y); } }),
+    berry: () => make(64, 64, c => { circle(c, 24, 38, 14, P.orange, 4); circle(c, 42, 36, 14, P.orange, 4); poly(c, [32, 22, 44, 8, 50, 18], P.moss, 3); }),
+  };
+  for (let i = 0; i < 3; i++) R['lantern_' + (i + 1)] = () => lantern(i + 1);
+  for (let i = 0; i < 4; i++) R['pomme_' + i] = () => make(128, 128, c => hog(c, 'lantern', i));
+  for (const h of ['archer', 'smith', 'healer', 'scout', 'miller', 'apprentice']) R['h_' + h] = () => make(128, 128, c => hog(c, h, 1));
+  return { P, names: Object.keys(R), get(k) { if (!cache[k] && R[k]) cache[k] = R[k](); return cache[k]; }, url(k) { if (!urls[k]) { const c = this.get(k); urls[k] = c ? c.toDataURL() : ''; } return urls[k]; } };
+})();
+</script>
+<script>// Lantern Hold — a hedgehog village guards its great lantern: build by day on a 6 × 9 grid, hold the night against the shadows
+// by tapping them with light spells. Canvas for the clearing, DOM for the interface. The rules live in core.js (seeded, JSON state),
+// the village numbers in econ.js.
+(() => {
+'use strict';
+const C = window.LHC, E = window.LHE, I = window.I18N, t = I.t, SPR = window.LH_SPR || {}, ART = window.LHART;
+const TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), rnd = (a, b) => a + Math.random() * (b - a), hyp = Math.hypot;
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+const $ = s => document.querySelector(s);
+function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
+const PAL = ART.P;
+
+// ---------- save ----------
+const KEY = 'lanternhold.save.v1';
+function fresh() {
+  return { v: 1, lang: I.detect(), sound: true, music: true, vib: true, consent: null, tut: 0, ff: 0, acorns: 0, xp: 0, plv: 1,
+    up: { hp: 0, berries: 0, sling: 0, bolt: 0, mill: 0, ff: 0 }, ws: null, millAt: Date.now(), owned: {}, theme: '', lantern: 'classic', lanterns: { classic: 1 }, token: null,
+    run: null, login: { last: '', streak: 0, pending: false }, plays: 0, lastAdAt: 0, said: {}, totals: { runs: 0, wins: 0, kills: 0, nights: 0, best: 0 } };
+}
+let S;
+try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+S.totals = Object.assign(fresh().totals, S.totals); S.login = Object.assign(fresh().login, S.login); S.up = Object.assign(fresh().up, S.up);
+I.set(S.lang);
+function save() { try { if (G && G.R && G.mode === 'run' && G.R.phase !== 'won') S.run = C.pack(G.R); localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+const track = (ev, data) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
+
+// ---------- audio: synthesised stand-ins shaped like the foley to come (wood, slings, bubbly pops, chimes) ----------
+const AU = { ctx: null, master: null, music: null, noise: null, next: 0, step: 0 };
+function audioInit() {
+  if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+  try { AU.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+  AU.master = AU.ctx.createGain(); AU.master.gain.value = 0.55; AU.master.connect(AU.ctx.destination);
+  AU.music = AU.ctx.createGain(); AU.music.gain.value = 0.09; AU.music.connect(AU.master);
+  const len = AU.ctx.sampleRate * 0.6, b = AU.ctx.createBuffer(1, len, AU.ctx.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; AU.noise = b;
+}
+function tone(f, dur, type = 'sine', vol = 0.2, when = 0, dest, slide) {
+  if (!AU.ctx) return; const c = AU.ctx, o = c.createOscillator(), g = c.createGain(), t0 = c.currentTime + when;
+  o.type = type; o.frequency.setValueAtTime(f, t0); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t0 + dur);
+  g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + 0.005); g.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+  o.connect(g); g.connect(dest || AU.master); o.start(t0); o.stop(t0 + dur + 0.05);
+}
+function noise(dur, freq, q, vol, when = 0, type = 'bandpass') {
+  if (!AU.ctx) return; const c = AU.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(), t0 = c.currentTime + when;
+  s.buffer = AU.noise; f.type = type; f.frequency.value = freq; f.Q.value = q; g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+  s.connect(f); f.connect(g); g.connect(AU.master); s.start(t0, Math.random() * 0.3); s.stop(t0 + dur + 0.02);
+}
+const rate = {}; const ok = (k, ms) => { const n = performance.now(); if (n - (rate[k] || 0) < ms) return false; rate[k] = n; return true; };
+const SFX = {
+  place() { if (!S.sound) return; noise(0.12, 300, 1, 0.4, 0, 'lowpass'); tone(160, 0.15, 'triangle', 0.18, 0, null, 90); },
+  upgrade() { if (S.sound) [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.25, 'triangle', 0.1, i * 0.06)); },
+  sling() { if (S.sound && ok('sl', 70)) { noise(0.06, 2200, 3, 0.09); tone(520, 0.07, 'triangle', 0.04, 0, null, 300); } },
+  pop(k) { if (!S.sound || !ok('pop', 35)) return; const f = k === 'big' ? 260 : k === 'boss' ? 120 : rnd(520, 760); tone(f, 0.13, 'sine', 0.2, 0, null, f * 2.2); noise(0.08, 3000, 2, 0.08, 0.02); },
+  bolt() { if (!S.sound) return; noise(0.25, 4200, 0.8, 0.3, 0, 'highpass'); tone(1400, 0.2, 'sawtooth', 0.05, 0, null, 200); },
+  puddle() { if (S.sound) { tone(200, 0.3, 'sine', 0.25, 0, null, 90); tone(320, 0.2, 'sine', 0.12, 0.08, null, 140); } },
+  shield() { if (S.sound) [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.5, 'sine', 0.08, i * 0.04)); },
+  firefly(n = 0) { if (!S.sound || !ok('ff', 45)) return; const f = 1100 * Math.pow(2, (n % 12) / 12); tone(f, 0.1, 'sine', 0.07); tone(f * 1.5, 0.12, 'triangle', 0.04, 0.03); },
+  hop() { if (S.sound) { tone(500, 0.1, 'sine', 0.12, 0, null, 900); tone(800, 0.12, 'triangle', 0.06, 0.06); } },
+  hit() { if (S.sound && ok('hit', 180)) { noise(0.15, 220, 1, 0.3, 0, 'lowpass'); tone(110, 0.2, 'sine', 0.2); } },
+  chew() { if (S.sound && ok('chew', 250)) noise(0.08, 900, 2, 0.12); },
+  crack() { if (S.sound) { noise(0.3, 600, 0.8, 0.4); tone(140, 0.3, 'triangle', 0.15, 0, null, 60); } },
+  horn() { if (S.sound) { tone(196, 0.6, 'sawtooth', 0.05); tone(294, 0.6, 'triangle', 0.08, 0.1); } },
+  boss() { if (S.sound) { noise(1.4, 140, 0.5, 0.6, 0, 'lowpass'); tone(65, 1.2, 'sawtooth', 0.08, 0, null, 50); } },
+  lanUp() { if (S.sound) [392, 523, 659, 784, 1047].forEach((f, i) => tone(f, 0.4, 'triangle', 0.1, i * 0.07)); },
+  fanfare() { if (S.sound) [392, 523, 659, 784, 659, 784, 1047].forEach((f, i) => tone(f, i > 4 ? 0.7 : 0.28, 'triangle', 0.13, i * 0.12)); },
+  lose() { if (S.sound) { tone(392, 0.6, 'triangle', 0.15, 0, null, 120); noise(0.4, 300, 0.7, 0.2, 0.3, 'lowpass'); } },
+  pomme() { if (S.sound) for (let i = 0; i < 3; i++) tone(rnd(420, 620), 0.06, 'triangle', 0.05, i * 0.07); },
+  click() { if (S.sound) tone(720, 0.04, 'square', 0.04); },
+  chime() { if (S.sound) [784, 988, 1319].forEach((f, i) => tone(f, 0.4, 'triangle', 0.1, i * 0.07)); },
+  miss() { if (S.sound) tone(300, 0.1, 'triangle', 0.08, 0, null, 220); },
+  coins() { if (S.sound) for (let i = 0; i < 5; i++) tone(1200 + i * 120, 0.1, 'sine', 0.06, i * 0.05); },
+};
+const SCALES = { day: [262, 294, 330, 392, 440, 523, 587], night: [220, 247, 262, 294, 330, 349, 392], fest: [294, 330, 370, 440, 494, 587, 659] };
+function musicTick() {
+  if (!AU.ctx || !S.music || G.mode === 'title') return; const c = AU.ctx; if (AU.next < c.currentTime) AU.next = c.currentTime + 0.05;
+  const night = G.mode === 'run' && G.R && G.R.phase === 'night', sc = S.theme === 'fest' && !night ? SCALES.fest : night ? SCALES.night : SCALES.day, beat = night ? 0.2 : S.theme === 'fest' ? 0.2 : 0.26;
+  while (AU.next < c.currentTime + 0.4) { const s = AU.step++, pat = night ? [0, 2, 4, 2, 5, 4, 2, 1, 0, 2, 4, 6, 5, 4, 2, 1] : [0, 2, 4, 5, 4, 2, 3, 1, 0, 4, 6, 4, 3, 2, 1, 2], w = AU.next - c.currentTime;
+    if (!night || s % 2 === 0) tone(sc[pat[s % 16]] * 2, 0.3, 'triangle', 0.3, w, AU.music);
+    if (s % 4 === 0) tone(sc[[0, 3, 4, 2][(s >> 2) % 4]] / 2, 0.8, 'sine', 0.55, w, AU.music);
+    if (night && s % 8 === 4) noise(0.1, 200, 1, 0.05, w, 'lowpass');
+    AU.next += beat; }
+}
+const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
+
+// ---------- ads & purchases (test overlays on the web, AdMob once the native plugin is in) ----------
+const AdMob = () => window.Capacitor?.Plugins?.AdMob;
+const AD_IDS = { rewarded: 'ca-app-pub-3940256099942544/1712485313', inter: 'ca-app-pub-3940256099942544/4411468910' };
+const Ads = {
+  async init() { const A = AdMob(); if (!A) return; try { await A.initialize({ initializeForTesting: true }); await A.requestTrackingAuthorization(); } catch (e) {} },
+  async rewarded(kind) { track('ad_rewarded', { kind }); const A = AdMob(); if (A) { try { await A.prepareRewardVideoAd({ adId: AD_IDS.rewarded, isTesting: true, npa: S.consent !== true }); await A.showRewardVideoAd(); return true; } catch (e) { return false; } } return testAd(); },
+  // between two runs only, from the 3rd run, at most every 3 minutes, never with "No ads"
+  async interstitial() { if (S.owned.noads || S.plays < E.ads.interFromPlay) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); track('ad_interstitial'); const A = AdMob(); if (A) { try { await A.prepareInterstitial({ adId: AD_IDS.inter, isTesting: true, npa: S.consent !== true }); await A.showInterstitial(); } catch (e) {} return; } await testAd(); }
+};
+function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart"><img src="${src('pomme_1')}" alt=""></div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 1000); }); }
+// Real purchases go through Apple (StoreKit 2) via the iOS shell's `store` message handler (ios/Shared/NativeStore.swift);
+// on the web there is no handler and a test box stands in (nothing is charged).
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.lanternhold.' + id;
+const iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
+const Store = {
+  prices: {},
+  price(it) { return this.prices[it.id] || it.price; },
+  async init() {
+    if (!IAP || this.ready) return; this.ready = true;
+    window.nativeStoreUpdate = pid => this.deliver(pid, true);
+    try { for (const p of await iap('products', { ids: E.store.map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {}
+    try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid, true); } catch (e) {}
+    if (modal.querySelector('[data-shop]')) shopModal();
+  },
+  deliver(pid, loud) { const it = E.store.find(x => PID(x.id) === pid); if (!it || (it.once && S.owned[it.id])) return; grant(it, loud); },
+  own(pids) { for (const pid of pids || []) { const it = E.store.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) grant(it, false); } },
+  async buy(it) {
+    track('iap_start', { id: it.id });
+    if (!IAP) { const okk = await confirmBox(t('testBuy') + `<br><b>${storeName(it)} — ${it.price}</b>`); if (okk) grant(it); return okk; }
+    try { const r = await iap('buy', { id: PID(it.id) }); if (r.ok) { track('iap_done', { id: it.id }); grant(it); return true; }
+      if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); }
+    return false;
+  },
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return; } } toast(t('restored')); if (modal.querySelector('[data-shop]')) shopModal(); }
+};
+const SKEY = { noads: 's_noads', starter: 's_starter', festival: 's_festival', acorns: 's_acorns', pass_hiver_2026: 's_pass' };
+const storeName = it => t(SKEY[it.id]), storeSub = it => t(SKEY[it.id] + 'Sub');
+const storeIcon = it => ({ noads: src('ui_shop'), starter: src('h_archer'), festival: src('lantern_deco'), acorns: src('acorn'), pass_hiver_2026: src('banner') }[it.id]);
+function grant(it, loud = true) {
+  if (it.id === 'acorns') S.acorns += it.n;
+  else { S.owned[it.id] = true;
+    if (it.id === 'starter') { S.lanterns.gift = 1; S.ff += E.starterFF; }
+    if (it.id === 'festival') { S.lanterns.fest = 1; S.theme = 'fest'; }
+    if (it.id === 'pass_hiver_2026') { S.lanterns.snow = 1; S.theme = 'winter'; } }
+  save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } renderHomeHead();
+}
+
+// ---------- images: painted sprites (src/sprites, window.LH_SPR) when present, drawn stand-ins (art.js) otherwise ----------
+const IMG = {};
+for (const k in SPR) { const im = new Image(); im.onload = () => { IMG[k] = im; }; im.src = SPR[k]; }
+const img = k => IMG[k] || ART.get(k);
+const src = k => SPR[k] || ART.url(k);
+const UIIMG = (k, alt) => `<img class="ui" src="${src(k)}" alt="${alt || ''}">`;
+{ const st = document.createElement('style'); st.textContent = `i.ff{background-image:url(${src('firefly')})}i.ac{background-image:url(${src('acorn')})}i.br{background-image:url(${src('berry')})}`; document.head.appendChild(st); }
+// a lantern skin (cosmetic): the base sprite with its decoration, as an image for the interface
+const SKINF = { moss: 'hue-rotate(75deg) saturate(1.1)', violet: 'hue-rotate(235deg) saturate(1.2)', amber: 'saturate(1.6) brightness(1.05)', glow: 'brightness(1.25) saturate(1.3)', snow: 'saturate(.35) brightness(1.15)', mush: 'hue-rotate(250deg)' };
+const SKIN = { classic: '#FFE66D', moss: '#6A9C5A', amber: '#FFB347', violet: '#5B3F8C', star: '#FFE66D', glow: '#FFF6DC', mush: '#5B3F8C', gift: '#FFB347', fest: '#FFB347', snow: '#FFF6DC' };
+// the same skin for the interface, as layered images (a canvas holding file:// images cannot be exported in a WebView)
+function skinHtml(id, lvl = 1) {
+  const d = (k, l, tp, w, rot) => `<img src="${src(k)}" alt="" style="left:${l}%;top:${tp}%;width:${w}%;transform:translate(-50%,-50%) rotate(${rot || 0}rad)">`;
+  let x = '';
+  if (id === 'star') x = d('dawn_star', 50, 6, 30); if (id === 'mush') x = d('b_trap', 50, 8, 42);
+  if (id === 'gift' || id === 'fest') x = d('banner', 16, 58, 26, -0.15) + d(id === 'fest' ? 'lantern_deco' : 'banner', 84, 58, 26, 0.15);
+  if (id === 'snow') x = '<b class="snowcap"></b>';
+  return `<span class="skin">${id !== 'classic' ? `<i style="background:${SKIN[id]};opacity:${id === 'glow' ? 0.6 : 0.4};${id === 'glow' ? 'inset:-6%' : ''}"></i>` : ''}<img class="base" src="${src('lantern_' + lvl)}" alt="" style="filter:${SKINF[id] || 'none'}">${x}</span>`;
+}
+{ const st = document.createElement('style'); st.textContent = '.skin{position:relative;display:block;width:100%;height:100%}.skin>i{position:absolute;inset:4% 6% 18%;border-radius:50%}.skin img{position:absolute;object-fit:contain}.skin img.base{inset:0;width:100%;height:100%}.skin .snowcap{position:absolute;left:24%;right:24%;top:2%;height:12%;background:#fff;border:3px solid #1F2A4A;border-radius:50%}.ln .skin{width:62px;height:62px}.lanbox{width:min(44vw,190px);height:min(44vw,190px);animation:pbob 2.2s ease-in-out infinite}.skinS{display:inline-block;width:80px;height:80px}'; document.head.appendChild(st); }
+function drawSkin(x, id, cx0, cy0, w, lvl, time) {   // the lantern + its skin decoration, centred on (cx0, cy0), w pixels wide
+  const im = img('lantern_' + lvl), h = w * im.height / im.width, col = SKIN[id] || SKIN.classic;
+  if (id !== 'classic') { x.save(); x.globalAlpha = id === 'glow' ? 0.6 : 0.5; x.fillStyle = col; x.beginPath(); x.arc(cx0, cy0 - h * 0.12, w * (id === 'glow' ? 0.56 : 0.46) * (1 + Math.sin(time * 3) * 0.03), 0, TAU); x.fill(); x.restore(); }
+  if (SKINF[id] && 'filter' in x) x.filter = SKINF[id]; x.drawImage(im, cx0 - w / 2, cy0 - h / 2, w, h); if ('filter' in x) x.filter = 'none';
+  const top = cy0 - h / 2, d = (k, dx, dy, s, rot) => { const j = img(k), ww = w * s; x.save(); x.translate(cx0 + dx * w, top + dy * h); if (rot) x.rotate(rot); x.drawImage(j, -ww / 2, -ww * j.height / j.width / 2, ww, ww * j.height / j.width); x.restore(); };
+  if (id === 'star') d('dawn_star', 0, 0.02, 0.3);
+  if (id === 'mush') d('b_trap', 0, 0.02, 0.42);
+  if (id === 'gift' || id === 'fest') { d('banner', -0.38, 0.45, 0.26, -0.15); d(id === 'fest' ? 'lantern_deco' : 'banner', 0.38, 0.45, 0.26, 0.15); }
+  if (id === 'snow') { x.fillStyle = '#fff'; x.strokeStyle = PAL.night; x.lineWidth = Math.max(2, w * 0.02); x.beginPath(); x.ellipse(cx0, top + h * 0.1, w * 0.26, h * 0.07, 0, 0, TAU); x.fill(); x.stroke(); }
+  if (id === 'moss' || id === 'amber' || id === 'violet' || id === 'glow') { x.save(); x.globalCompositeOperation = 'source-atop'; x.restore(); }
+}
+
+// ---------- the clearing on screen: world (0..360 × 0..540, a cell = 60) mapped under the HUD, above the tray ----------
+const cv = $('#cv'), cx = cv.getContext('2d');
+let W = 0, H = 0, DPR = 1, SC = 1, OX = 0, OY = 0;
+const nc = document.createElement('canvas'), nx = nc.getContext('2d');   // the night layer (dark, with holes of light)
+function resize() {
+  DPR = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  nc.width = Math.ceil(W / 2); nc.height = Math.ceil(H / 2);
+  const top = ($('#hud').classList.contains('on') ? $('#hud').getBoundingClientRect().bottom : 60) + 4, bot = $('#tray').classList.contains('on') ? $('#tray').getBoundingClientRect().top : H - 140;
+  const avail = Math.max(200, bot - top); SC = Math.min(W / 430, avail / 590); OX = W / 2 - 180 * SC; OY = top + (avail - 540 * SC) / 2 + 12 * SC;
+}
+const toScreen = (x, y) => [OX + x * SC, OY + y * SC];
+const toWorld = (sx, sy) => [(sx - OX) / SC, (sy - OY) / SC];
+const toCell = (sx, sy) => { const [x, y] = toWorld(sx, sy); return [Math.floor(x / C.CELL), Math.floor(y / C.CELL)]; };
+const cellCenter = (c, r) => toScreen(C.cc(c), C.cc(r));
+// draws an image centred on (x, y) at w screen pixels wide (keeps its ratio); sy squashes it vertically
+function spr(k, x, y, w, rot, alpha, flip, sy = 1) { const im = img(k); if (!im) return; const h = w * im.height / im.width; cx.save(); cx.translate(x, y); if (rot) cx.rotate(rot); if (flip) cx.scale(-1, 1); if (sy !== 1) cx.scale(1 / Math.sqrt(sy), sy); if (alpha != null) cx.globalAlpha = alpha; cx.drawImage(im, -w / 2, -h / 2, w, h); cx.restore(); }
+
+// ---------- state ----------
+const G = { mode: 'title', R: null, drag: null, sel: null, parts: [], floats: [], shots: [], bolts: [], shake: 0, lanPulse: 0, time: 0, pop: {}, ptr: null, armed: null, paused: false,
+  tut: 0, dark: 0, sun: 0, dawnShown: false, ending: false, said: {}, hitFlash: 0, x2used: false, ffStart: 0 };
+const unlockedHeroes = () => C.HEROES.filter(h => S.plv >= E.heroAt[h]);
+
+function startRun(resume) {
+  closeModal(); hideSel(); G.parts = []; G.floats = []; G.shots = []; G.bolts = []; G.pop = {}; G.armed = null; G.ending = false; G.dawnShown = false; G.said = {}; G.x2used = false;
+  if (resume && S.run) { try { G.R = C.unpack(S.run); } catch (e) { G.R = null; } }
+  if (!G.R || !resume) {
+    G.R = C.newRun({ seed: (Date.now() % 1e9) | 0, tut: !S.tut, meta: S.up, starter: !!S.owned.starter, token: S.token, heroes: unlockedHeroes() });
+    if (S.token) { toast('✨ ' + t('tokenHas', { s: t('bo_' + S.token) })); S.token = null; }
+    S.plays++; S.totals.runs++; track('run_start', { n: S.plays });
+  }
+  G.mode = 'run'; G.tut = G.R.tut && !S.tut ? 1 : 0; G.dark = G.R.phase === 'night' ? 1 : 0;
+  $('#home').classList.remove('on'); $('#title').classList.remove('on'); $('#hud').classList.add('on'); $('#tray').classList.add('on'); pommeHide();
+  buildHud(); buildTray(); resize(); save();
+  if (G.tut) { say('p_hello', 1, 2600); setTimeout(() => { if (G.tut === 1) { say('p_tower', 2, 0, true); } }, 2700); }
+  else if (resume && G.R.phase === 'night') { G.paused = true; openModal(`<div class="big-ico s"><img src="${src('pomme_2')}" alt=""></div><h2>${t('resumeTitle')}</h2><button class="b1 big" data-go>${t('cont')}</button>`); modal.querySelector('[data-go]').onclick = () => { closeModal(); G.paused = false; audioInit(); }; }
+  else if (G.R.phase === 'dawn') showDawn();
+  else if (G.R.phase === 'lost') lostModal();
+  else if (G.R.night === 1) say('p_day', 0, 3200);
+}
+
+// ---------- touch ----------
+const HOLD_UP = 46;   // the dragged building floats above the finger, so the finger does not hide it
+function hitBuilding(sx, sy) { const [c, r] = toCell(sx, sy); return G.R ? C.bAt(G.R, c, r) : null; }
+function sweep(sx, sy) {   // the finger picks up fireflies and harvests it passes over
+  const R = G.R; if (!R) return; const [wx, wy] = toWorld(sx, sy), rr = 34;
+  for (const d of R.drops.slice()) if (hyp(d.x - wx, d.y - wy) < rr) C.collectDrop(R, d.id);
+  for (const h of R.hops.slice()) { const [hx, hy] = hopPos(h); if (hyp(hx - wx, hy - wy) < rr + 6) C.collectHop(R, h.id); }
+}
+cv.addEventListener('pointerdown', e => {
+  audioInit(); const R = G.R; if (G.mode !== 'run' || !R || G.paused) return;
+  G.ptr = { id: e.pointerId, x: e.clientX, y: e.clientY }; try { cv.setPointerCapture(e.pointerId); } catch (er) {}
+  const nh = R.hops.length + R.drops.length; sweep(e.clientX, e.clientY); if (R.hops.length + R.drops.length < nh) { events(); if (R.phase !== 'night') return; }
+  if (R.phase === 'day') { const b = hitBuilding(e.clientX, e.clientY); if (b) { selectB(b.id); SFX.click(); } else hideSel(); return; }
+  if (R.phase !== 'night') return;
+  const [wx, wy] = toWorld(e.clientX, e.clientY);
+  if (hyp(wx - C.LX, wy - (C.LY - 20)) < 52) { castSpell('shield', wx, wy); return; }
+  if (G.armed === 'puddle') { castSpell('puddle', wx, wy); G.armed = null; renderSpells(); return; }
+  if (!castSpell('bolt', wx, wy, true)) {
+    if (R.e.some(en => hyp(en.x - wx, en.y - wy) < 60) && castSpell('puddle', wx, wy, true)) return;
+    SFX.miss(); G.parts.push({ k: 'ring', x: wx, y: wy, t: 0, life: 0.3, col: PAL.cream, r: 16 });
+  }
+});
+function castSpell(sp, x, y, quiet) { const okk = C.cast(G.R, sp, x, y); if (!okk && !quiet) { SFX.miss(); buzz(5); } events(); renderSpells(); return okk; }
+addEventListener('pointermove', e => {
+  if (G.drag && e.pointerId === G.drag.id) { G.drag.x = e.clientX; G.drag.y = e.clientY; return; }
+  const p = G.ptr; if (!p || p.id !== e.pointerId || G.mode !== 'run') return; p.x = e.clientX; p.y = e.clientY; sweep(e.clientX, e.clientY); events();
+});
+function up(e) {
+  if (G.drag && (!e || e.pointerId === G.drag.id)) { dropBuilding(); return; }
+  const p = G.ptr; if (!p || (e && p.id !== e.pointerId)) return; G.ptr = null;
+}
+addEventListener('pointerup', up); addEventListener('pointercancel', up);
+function startDrag(k, e) {
+  audioInit(); const R = G.R; if (!R || R.phase !== 'day') return; hideSel();
+  if (R.berries < C.BL[k].cost) { SFX.miss(); toast(t('notEnough')); return; }
+  G.drag = { k, id: e.pointerId, x: e.clientX, y: e.clientY }; SFX.click(); buzz(6);
+}
+function dropBuilding() {
+  const d = G.drag; G.drag = null; const R = G.R; if (!R) return;
+  const [c, r] = toCell(d.x, d.y - HOLD_UP);
+  if (c < 0 || r < 0 || c >= C.COLS || r >= C.ROWS) return;
+  if (!C.canPlace(R, d.k, c, r)) { SFX.miss(); if (!C.isLant(c, r) && !C.bAt(R, c, r)) toast(C.BL[d.k].path ? t('pathOnly') : t('offPath')); return; }
+  C.place(R, d.k, c, r); events();
+}
+function selectB(id) {
+  const R = G.R, b = C.bById(R, id); if (!b) return hideSel(); G.sel = id; const el = $('#sel'), max = b.lvl >= 3, cost = C.upCost(b.k, b.lvl);
+  let h = `<b>${t('b_' + b.k)} · ${t('lvl', { n: b.lvl })}</b><p>${t('bs_' + b.k)}</p>`;
+  if (b.k === 'burrow') {
+    if (b.hero) h += `<div class="hrow"><div class="hb"><img src="${src('h_' + b.hero)}" alt="">${t('h_' + b.hero)}</div></div><p>${t('hs_' + b.hero)}</p>`;
+    else h += `<div class="hrow">${C.HEROES.map(k => { const lock = !R.heroes.includes(k), taken = C.hasHero(R, k); return `<button class="hb ${lock || taken ? 'lock' : ''}" data-hero="${k}"><img src="${src('h_' + k)}" alt="">${t('h_' + k)}<small>${lock ? t('heroLock', { n: E.heroAt[k] }) : taken ? '✓' : C.heroCost(R) ? `${C.heroCost(R)} <i class="br"></i>` : t('free')}</small></button>`; }).join('')}</div>`;
+  }
+  h += max ? `<p class="sub">${t('maxLvl')}</p>` : `<button class="b1" data-up ${R.berries >= cost ? '' : 'disabled'}>${t('upgrade')} · ${cost} <i class="br"></i></button>`;
+  el.innerHTML = h; el.classList.add('on');
+  const [sx, sy] = cellCenter(b.c, b.r), w = 220; el.style.left = clamp(sx - w / 2, 6, W - w - 6) + 'px'; const ph = el.offsetHeight; el.style.top = (sy - 40 * SC - ph > 70 ? sy - 40 * SC - ph : sy + 40 * SC) + 'px';
+  const u = el.querySelector('[data-up]'); if (u) u.onclick = () => { if (C.upgrade(R, id)) { events(); selectB(id); } };
+  el.querySelectorAll('[data-hero]').forEach(x => x.onclick = () => { if (C.recruit(R, id, x.dataset.hero)) { events(); selectB(id); } else { SFX.miss(); toast(R.heroes.includes(x.dataset.hero) ? t('notEnough') : x.querySelector('small').textContent); } });
+}
+function hideSel() { G.sel = null; $('#sel').classList.remove('on'); }
+
+// ---------- what the rules report, turned into juice ----------
+function events() {
+  const R = G.R; if (!R || !R.ev.length) return;
+  for (const ev of R.ev.splice(0)) {
+    switch (ev.type) {
+      case 'place': { SFX.place(); buzz(12); G.pop[ev.id] = 0.001; G.shake = Math.max(G.shake, 0.12); const [x, y] = [C.cc(ev.c), C.cc(ev.r)];
+        for (let i = 0; i < 12; i++) G.parts.push({ k: 'dot', x: x + rnd(-24, 24), y: y + 24, vx: rnd(-70, 70), vy: rnd(-90, -20), t: 0, life: 0.5, col: i % 2 ? PAL.cream : PAL.wood, r: 3, g: 1 });
+        if (G.tut === 1 && ev.k === 'tower') { G.tut = 2; SFX.chime(); JUICE.confetti(40); floatText(x, y - 40, 'Bravo !', PAL.yellow); addXp(10); say('p_wall', 2, 0, true); }
+        else if (G.tut === 2 && ev.k === 'wall') { G.tut = 3; say('p_harvest', 2, 0, true); if (!R.hops.length) { G.tut = 4; say('p_night', 1, 0, true); } }
+        if (ev.k === 'burrow' && !S.said.hero) { S.said.hero = 1; say('p_hero', 2, 3000); }
+        renderHud(); renderTray(); break; }
+      case 'upgrade': SFX.upgrade(); buzz(15); G.pop[ev.id] = 0.001; for (let i = 0; i < 14; i++) { const b = C.bById(R, ev.id), a = i / 14 * TAU; G.parts.push({ k: 'star', x: C.cc(b.c), y: C.cc(b.r), vx: Math.cos(a) * 120, vy: Math.sin(a) * 120, t: 0, life: 0.6, col: PAL.yellow, r: 5 }); } renderHud(); break;
+      case 'hero': SFX.fanfare(); G.pop[ev.id] = 0.001; toast('🦔 ' + t('h_' + ev.h)); renderHud(); break;
+      case 'hop': SFX.hop(); buzz(6); { const [sx, sy] = toScreen(ev.x, ev.y); flyTo(sx, sy, ev.k === 'berry' ? 'berry' : 'firefly', ev.k === 'berry' ? '#hbr' : '#hff', 3); floatText(ev.x, ev.y - 10, '+' + ev.n, ev.k === 'berry' ? PAL.orange : PAL.yellow); }
+        if (G.tut === 3 && !R.hops.length) { G.tut = 4; say('p_night', 1, 0, true); } renderHud(); break;
+      case 'night': SFX.horn(); banner(t('nightB', { n: ev.n }), 'v'); G.dawnShown = false; hideSel(); buildTray(); if (G.tut) { G.tut = 5; say('p_tap', 2, 0, true); } break;
+      case 'wave': { SFX.horn(); banner(t('wave', { n: ev.w + 1 }), 'v'); if (!G.tut) say({ N: 'p_north', E: 'p_east', W: 'p_west', S: 'p_south' }[ev.lane], 2, 2200);
+        setTimeout(() => { if (!G.R) return; if (!G.said.fly && G.R.e.some(e => e.fly)) { G.said.fly = 1; say('p_fly', 2, 2800); } else if (!G.said.big && G.R.e.some(e => e.k === 'big')) { G.said.big = 1; say('p_big', 0, 2800); } }, 2600); break; }
+      case 'shot': G.shots.push({ x: ev.x, y: ev.y - 20, tx: ev.tx, ty: ev.ty, t: 0, d: 0.16, hero: ev.hero }); SFX.sling(); break;
+      case 'kill': { SFX.pop(ev.k); buzz(ev.boss ? [40, 30, 80] : 4); G.parts.push({ k: 'pop', x: ev.x, y: ev.y, t: 0, life: 0.35, r: ev.boss ? 120 : ev.k === 'big' ? 60 : 40 });
+        const n = ev.boss ? 60 : ev.k === 'big' ? 20 : 10, cols = [PAL.yellow, PAL.orange, PAL.cream, PAL.yellow];
+        for (let i = 0; i < n; i++) { const a = rnd(0, TAU), v = rnd(60, ev.boss ? 320 : 180); G.parts.push({ k: 'conf', x: ev.x, y: ev.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60, t: 0, life: rnd(0.5, 0.9), col: cols[i % 4], r: rnd(3, 5), g: 1, rot: rnd(0, 6) }); }
+        if (G.tut === 5) { G.tut = 6; say('p_swipe', 1, 0, true); }
+        if (ev.boss) { G.shake = 1; JUICE.confetti(90); } break; }
+      case 'collect': SFX.firefly(R.ff); { const [sx, sy] = toScreen(ev.x, ev.y); flyTo(sx, sy, 'firefly', '#hff', 1); } G.lanPulse = 0.4; if (G.tut === 6) { G.tut = 7; pommeHide(); } renderHud(); break;
+      case 'drift': G.floats.push({ k: 'drift', x: ev.x, y: ev.y, t: 0, d: 0.8 }); renderHud(); break;
+      case 'lanUp': SFX.lanUp(); buzz([20, 30, 40]); G.lanPulse = 1.2; banner(t('lanUp'), 'o'); say('p_lanUp', 1, 2000); for (let i = 0; i < 30; i++) { const a = i / 30 * TAU; G.parts.push({ k: 'star', x: C.LX, y: C.LY - 30, vx: Math.cos(a) * 200, vy: Math.sin(a) * 200, t: 0, life: 0.8, col: PAL.yellow, r: 5 }); } renderHud(); break;
+      case 'lanHit': G.hitFlash = 0.25; SFX.hit(); buzz(ev.boss ? 30 : 10); G.shake = Math.max(G.shake, ev.boss ? 0.5 : 0.15);
+        if (R.lan.hp < R.lan.max * 0.35 && !G.said.low) { G.said.low = 1; say('p_low', 2, 2600); } renderHud(); break;
+      case 'wallHit': SFX.chew(); G.pop[ev.id] = 0.15; break;
+      case 'wallBreak': SFX.crack(); buzz(25); G.shake = Math.max(G.shake, 0.3); { const b = C.bById(R, ev.id); for (let i = 0; i < 16; i++) G.parts.push({ k: 'dot', x: C.cc(b.c), y: C.cc(b.r), vx: rnd(-150, 150), vy: rnd(-200, 0), t: 0, life: 0.6, col: PAL.wood, r: 4, g: 1 }); } break;
+      case 'bolt': SFX.bolt(); buzz(12); G.bolts.push({ x: ev.x, y: ev.y, jx: ev.jx, jy: ev.jy, t: 0, seed: Math.random() * 99 }); G.shake = Math.max(G.shake, 0.15); break;
+      case 'puddle': SFX.puddle(); buzz(10); break;
+      case 'shield': SFX.shield(); buzz([10, 20, 10]); G.parts.push({ k: 'ring', x: C.LX, y: C.LY - 20, t: 0, life: 0.5, col: PAL.yellow, r: 110 }); break;
+      case 'split': G.parts.push({ k: 'ring', x: ev.x, y: ev.y, t: 0, life: 0.4, col: PAL.violet, r: 40 }); break;
+      case 'boss': SFX.boss(); banner(t('bossCome'), 'v'); say('p_boss', 2, 3000); G.shake = 0.8; buzz([60, 40, 60]); break;
+      case 'bossDown': banner('✨', 'o'); SFX.fanfare(); break;
+      case 'dawn': onDawn(ev.n); break;
+      case 'day': hideSel(); buildTray(); renderHud(); if (G.tut) { S.tut = 1; G.tut = 0; save(); say('p_day', 0, 3800); } break;
+      case 'win': onWin(); break;
+      case 'lose': onLose(); break;
+      case 'revive': SFX.shield(); JUICE.flash(document.body); G.shake = 0.4; for (let i = 0; i < 40; i++) { const a = i / 40 * TAU; G.parts.push({ k: 'star', x: C.LX, y: C.LY - 20, vx: Math.cos(a) * 260, vy: Math.sin(a) * 260, t: 0, life: 0.7, col: PAL.yellow, r: 5 }); } break;
+    }
+  }
+}
+function floatText(x, y, s, col) { G.floats.push({ k: 'text', x, y, s, col, t: 0, d: 0.9 }); }
+function flyTo(sx, sy, key, sel, n = 1) { const el = $(sel); if (!el) return; const r = el.getBoundingClientRect(); for (let i = 0; i < n; i++) G.floats.push({ k: 'fly', key, x: sx + rnd(-8, 8), y: sy + rnd(-8, 8), tx: r.left + r.width / 2, ty: r.top + r.height / 2, t: -i * 0.06, d: 0.55, el }); }
+
+// ---------- dawn, victory, defeat ----------
+function onDawn(n) {
+  G.sun = 0.001; SFX.fanfare(); buzz([20, 40, 60]); banner(t('dawnB', { n }), 'o'); addXp(E.xpNight(n)); S.totals.nights++; if (!G.tut) say('p_dance', 3, 1600); save();
+  setTimeout(() => { if (G.R && G.R.phase === 'dawn') showDawn(); }, 1700);
+}
+function showDawn() {
+  const R = G.R; if (!R || R.phase !== 'dawn') return; G.dawnShown = true;
+  const card = id => `<button class="bon" data-bon="${id}"><img src="${src(bonusIcon(id))}" alt=""><span><b>${t('bo_' + id)}</b><small>${t('bos_' + id)}</small></span></button>`;
+  openModal(`<div class="big-ico s"><img src="${src('pomme_1')}" alt=""></div><h2>${t('dawnTitle')}</h2><div class="bons">${R.choices.map(card).join('')}</div>
+    ${R.choices.length < 4 ? `<button class="b1 bad adbtn" data-more>▶ ${t('moreBonus')}</button>` : ''}`);
+  modal.querySelectorAll('.bon').forEach((b, i) => b.style.animationDelay = i * 0.08 + 's');
+  if (G.tut) say('p_dawn', 1, 0, true);
+  modal.querySelectorAll('[data-bon]').forEach(b => b.onclick = () => { SFX.chime(); if (C.pickBonus(R, b.dataset.bon)) { closeModal(); events(); JUICE.confetti(30); if (!G.tut) say('p_dawnPick', 1, 1800); save(); } });
+  const m = modal.querySelector('[data-more]'); if (m) m.onclick = async () => { if (await Ads.rewarded('bonus') && C.moreChoice(R)) showDawn(); };
+}
+const bonusIcon = id => ({ sharp: 'b_tower', quick: 'b_tower', thick: 'b_wall', spores: 'b_trap', bolt: 's_bolt', puddle: 's_puddle', shield: 's_shield', harvest: 'b_berry', lantern: 'lantern_2', fireflies: 'fireflies', range: 'banner', heroes: 'b_burrow' }[id] || 'dawn_star');
+function onWin() {
+  const R = G.R; G.ending = true; G.sun = 0.001; SFX.fanfare(); setTimeout(SFX.fanfare, 900); buzz([30, 50, 80]); JUICE.confetti(120); banner(t('won'), 'o'); say('p_won', 3, 3000);
+  S.totals.wins++; addXp(E.xpNight(7) + E.xpWin); finishRun();
+  setTimeout(() => endModal(true), 2600);
+}
+function onLose() { SFX.lose(); buzz(60); G.shake = 0.6; say('p_lost', 0, 2600); setTimeout(lostModal, 1000); }
+function lostModal() {
+  const R = G.R; if (!R || R.phase !== 'lost') return;
+  if (R.revived) { G.ending = true; finishRun(); return endModal(false); }
+  openModal(`<div class="big-ico s"><img src="${src('pomme_0')}" alt=""></div><h2>${t('lost')}</h2><button class="b1 bad adbtn big" data-rev>▶ ${t('secondChance')}<br><small>${t('secondSub')}</small></button><button class="b2" data-give>${t('giveUp')}</button>`);
+  modal.querySelector('[data-rev]').onclick = async () => { if (await Ads.rewarded('revive')) { closeModal(); C.revive(R); events(); renderHud(); } };
+  modal.querySelector('[data-give]').onclick = () => { closeModal(); G.ending = true; finishRun(); endModal(false); };
+}
+function finishRun() {
+  const R = G.R; G.runFF = R.ff; S.ff += R.ff; S.totals.kills += R.stats.kills; const sc = C.score(R); G.newBest = sc > S.totals.best; S.totals.best = Math.max(S.totals.best, sc); S.run = null; save();
+  track('run_end', { won: R.phase === 'won', night: R.night, score: sc });
+}
+function endModal(won) {
+  const R = G.R, sc = C.score(R);
+  openModal(`<div class="big-ico"><img src="${src(won ? 'sunrise' : 'pomme_0')}" alt=""></div><h2>${won ? t('won') : t('lost')}</h2>${won ? `<p class="sub">${t('wonSub')}</p>` : ''}
+    <div class="stat"><span>${t('nights')}</span><b>${won ? 7 : R.night - 1}/7</b></div><div class="stat"><span>${t('kills')}</span><b>${R.stats.kills}</b></div>
+    <div class="stat"><span>${t('score')}</span><b data-sc>0</b></div><div class="gain"><i class="ff"></i> <span data-g>+${R.ff}</span></div>
+    ${R.ff > 0 ? `<button class="b1 bad adbtn" data-x2>▶ ${t('x2')}</button>` : ''}<div class="row2"><button class="b2" data-home>${t('home')}</button><button class="b1 bgreen" data-again>${t('again')}</button></div>`);
+  const el = modal.querySelector('[data-sc]'), t0 = performance.now(); (function roll() { const k = Math.min(1, (performance.now() - t0) / 1400); el.textContent = Math.round(sc * k * (2 - k)); if (k < 1 && el.isConnected) { if (Math.random() < 0.4) SFX.firefly(Math.floor(k * 12)); requestAnimationFrame(roll); } })();
+  const x2 = modal.querySelector('[data-x2]'); if (x2) x2.onclick = async () => { if (G.x2used) return; if (await Ads.rewarded('x2')) { G.x2used = true; S.ff += R.ff; save(); x2.remove(); modal.querySelector('[data-g]').textContent = '+' + R.ff * 2; SFX.coins(); JUICE.confetti(40); } };
+  modal.querySelector('[data-home]').onclick = async () => { closeModal(); await Ads.interstitial(); showHome(); };
+  modal.querySelector('[data-again]').onclick = async () => { closeModal(); await Ads.interstitial(); startRun(false); };
+}
+
+// ---------- meta: XP, worksite, mill, gift, chest, lanterns ----------
+function addXp(n) {
+  S.xp += n; let upn = 0; while (S.xp >= E.xpLevel(S.plv)) { S.xp -= E.xpLevel(S.plv); S.plv++; upn++; S.ff += E.levelGift(S.plv); const h = C.HEROES.find(k => E.heroAt[k] === S.plv); if (h) setTimeout(() => toast('🦔 ' + t('newHero', { s: t('h_' + h) })), 2600); }
+  if (upn) setTimeout(() => { banner(t('levelUp', { n: S.plv }), 'o'); SFX.chime(); }, 1900); save();
+}
+function ensureLogin() { if (S.login.last === today()) return; const y = new Date(Date.now() - 864e5), ys = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); S.login.streak = S.login.last === ys ? (S.login.streak % 7) + 1 : 1; S.login.last = today(); S.login.pending = true; save(); }
+const wsReady = () => !!(S.ws && Date.now() >= S.ws.end);
+const millPending = () => Math.floor(Math.min(E.millCapH * 3600e3, Math.max(0, Date.now() - S.millAt)) / 3600e3 * E.millRate(S.up.mill));
+const fmtTime = s => { s = Math.ceil(s); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return h ? `${h} h ${String(m).padStart(2, '0')}` : m ? `${m} min` : `${s} s`; };
+function giftModal() {
+  ensureLogin(); const k = S.login.streak, mul = S.owned.pass_hiver_2026 ? 2 : 1;
+  const row = E.login.map((g, i) => `<div class="lg ${i < k - (S.login.pending ? 1 : 0) ? 'got' : ''} ${i === k - 1 && S.login.pending ? 'now' : ''}"><small>${t('dayK')}${i + 1}</small><i class="ff"></i><b>${g * mul}</b>${i === 6 ? `<i class="ac"></i><b>${E.loginAcorns}</b>` : ''}</div>`).join('');
+  openModal(`<div class="big-ico s"><img src="${src('ui_gift')}" alt=""></div><h2>${t('login')}</h2><div class="login">${row}</div>${S.login.pending ? `<button class="b1 big" data-claim>${t('claim')}</button>` : `<p class="sub">${t('comeBack')}</p>`}<button class="b2" data-close>${t('close')}</button>`);
+  const b = modal.querySelector('[data-claim]'); if (b) b.onclick = () => { const v = E.login[k - 1] * mul; S.login.pending = false; S.ff += v; if (k === 7) S.acorns += E.loginAcorns; SFX.coins(); JUICE.confetti(60); save(); renderHome(); giftModal(); };
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function upgradesModal() {
+  const rows = E.upgrades.map(id => { const lv = S.up[id], inWs = S.ws && S.ws.id === id, max = lv >= E.maxUp, c = E.upCost(lv);
+    return `<div class="it"><div class="ico"><img src="${src(E.upIcon[id])}" alt=""></div><div class="tx"><b>${t('up_' + id)}</b><small>${t('ups_' + id)}</small><div class="dots">${[0, 1, 2, 3, 4].map(i => `<i class="${i < lv ? 'on' : inWs && i === lv ? 'ws' : ''}"></i>`).join('')}</div></div>
+      ${max ? `<span class="own">MAX</span>` : inWs ? `<span class="own">⏳</span>` : `<button class="buy ${S.ws || S.ff < c ? 'off' : ''}" data-upg="${id}">${c} <i class="ff"></i><br><small>${fmtTime(E.upMin(lv) * 60)}</small></button>`}</div>`; }).join('');
+  openModal(`<h2>${t('upgrades')}</h2><h3>${t('worksite')}</h3>${wsHtml()}<div style="height:6px"></div>${rows}
+    <h3>${t('heroes')}</h3><div class="hrow">${C.HEROES.map(k => `<div class="hb ${S.plv >= E.heroAt[k] ? '' : 'lock'}"><img src="${src('h_' + k)}" alt="">${t('h_' + k)}<small>${S.plv >= E.heroAt[k] ? t('hs_' + k) : t('heroLock', { n: E.heroAt[k] })}</small></div>`).join('')}</div>
+    <button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  bindWs(upgradesModal);
+  modal.querySelectorAll('[data-upg]').forEach(b => b.onclick = () => { const id = b.dataset.upg, lv = S.up[id], c = E.upCost(lv); if (S.ws) { SFX.miss(); return toast(t('busy')); } if (S.ff < c) { SFX.miss(); return toast(t('notEnough')); }
+    S.ff -= c; S.ws = { id, lv: lv + 1, end: Date.now() + E.upMin(lv) * 60000 }; SFX.place(); SFX.chime(); save(); renderHome(); upgradesModal(); });
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function wsHtml() {
+  if (!S.ws) return `<div class="hcard"><img src="${src('ui_build')}" alt=""><div class="tx">${t('wsIdle')}</div></div>`;
+  const left = Math.max(0, S.ws.end - Date.now()) / 1000, tot = E.upMin(S.ws.lv - 1) * 60, k = 1 - left / tot;
+  return `<div class="hcard"><img src="${src(E.upIcon[S.ws.id])}" alt=""><div class="tx"><b>${t('up_' + S.ws.id)} ${t('lvl', { n: S.ws.lv })}</b><div class="pbar"><i style="width:${k * 100}%"></i></div>${left > 0 ? t('building', { s: fmtTime(left) }) : t('ready')}
+    ${left > 0 ? `<div class="row2" style="margin-top:4px"><button class="buy ad adbtn" data-wad>▶ ${t('finish')}</button><button class="buy ac" data-wac>${t('finishAc', { n: E.finishAcorns(left / 60) })} <i class="ac"></i></button></div>` : `<button class="b1 bgreen" data-wcol>${t('collect')}</button>`}</div></div>`;
+}
+function bindWs(again) {
+  const a = modal.querySelector('[data-wad]'); if (a) a.onclick = async () => { if (await Ads.rewarded('worksite')) { S.ws.end = Date.now(); save(); again(); } };
+  const b = modal.querySelector('[data-wac]'); if (b) b.onclick = () => { const n = E.finishAcorns(Math.max(0, S.ws.end - Date.now()) / 60000); if (S.acorns < n) { SFX.miss(); return toast(t('notEnough')); } S.acorns -= n; S.ws.end = Date.now(); SFX.coins(); save(); renderHomeHead(); again(); };
+  const c = modal.querySelector('[data-wcol]'); if (c) c.onclick = () => { collectWs(); again(); };
+}
+function collectWs() { if (!wsReady()) return; S.up[S.ws.id] = S.ws.lv; toast('✨ ' + t('up_' + S.ws.id) + ' ' + t('lvl', { n: S.ws.lv })); S.ws = null; SFX.fanfare(); JUICE.confetti(60); addXp(25); save(); renderHome(); }
+function chestModal(result) {
+  openModal(`<div class="big-ico"><img src="${src('merchant_chest')}" alt="" class="${result ? 'jz-pop' : ''}"></div><h2>${t('merchant')}</h2>${result ? `<div class="gain">${result}</div>` : `<p>${t('chestTxt')}</p>`}
+    <button class="b1 big ${S.ff < E.chest.cost ? 'off' : ''}" data-open>${t('openChest')} · ${E.chest.cost} <i class="ff"></i></button><button class="b2" data-close>${t('close')}</button>`);
+  modal.querySelector('[data-open]').onclick = () => { if (S.ff < E.chest.cost) { SFX.miss(); return toast(t('notEnough')); } S.ff -= E.chest.cost; chestModal(openChest()); SFX.fanfare(); JUICE.confetti(70); buzz([20, 40]); renderHomeHead(); };
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function openChest() {
+  let r = Math.random(), kind = 'ff'; for (const [k, p] of E.chest.table) { if (r < p) { kind = k; break; } r -= p; }
+  const free = E.lanterns.filter(l => l.how === 'chest' && !S.lanterns[l.id]);
+  if (kind === 'lantern' && free.length) { const l = free[Math.floor(Math.random() * free.length)]; S.lanterns[l.id] = 1; save(); return `<span class="skinS">${skinHtml(l.id)}</span><br>${t('gotLantern', { s: t('ln_' + l.id) })}`; }
+  if (kind === 'token' && !S.token) { S.token = C.BONUSES[Math.floor(Math.random() * C.BONUSES.length)]; save(); return `<img src="${src('dawn_star')}" style="width:60px" alt=""><br>${t('gotToken', { s: t('bo_' + S.token) })}`; }
+  const n = Math.round(rnd(E.chest.ff[0], E.chest.ff[1]) / 10) * 10; S.ff += n; save(); return `<i class="ff"></i> ${t('gotFF', { n })}`;
+}
+function lanternsModal() {
+  const how = l => l.how === 'free' ? '' : l.how === 'chest' ? t('lh_chest') : l.how === 'starter' ? t('lh_starter') : l.how === 'festival' ? t('lh_festival') : l.how === 'pass' ? t('lh_pass') : `${l.acorns} <i class="ac"></i>`;
+  openModal(`<h2>${t('lanterns')}</h2><div class="lans">${E.lanterns.map(l => { const own = !!S.lanterns[l.id]; return `<button class="ln ${own ? '' : 'lock'} ${S.lantern === l.id ? 'on' : ''}" data-ln="${l.id}">${skinHtml(l.id)}${t('ln_' + l.id)}<small>${own ? (S.lantern === l.id ? t('used') : t('use')) : how(l)}</small></button>`; }).join('')}</div>
+    <div class="row2" style="justify-content:center;font-weight:900;margin-top:8px"><span><i class="ac"></i> ${S.acorns}</span></div><button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  modal.querySelectorAll('[data-ln]').forEach(b => b.onclick = async () => { const l = E.lanterns.find(x => x.id === b.dataset.ln); SFX.click();
+    if (S.lanterns[l.id]) { S.lantern = l.id; save(); SFX.chime(); return lanternsModal(); }
+    if (!l.acorns) return toast(b.querySelector('small').textContent);
+    if (S.acorns < l.acorns) { SFX.miss(); return toast(t('notEnough')); }
+    if (!await confirmBox(`<span class="skinS">${skinHtml(l.id)}</span><br><b>${t('ln_' + l.id)}</b> · ${l.acorns} <i class="ac"></i>`)) return;
+    S.acorns -= l.acorns; S.lanterns[l.id] = 1; S.lantern = l.id; SFX.fanfare(); JUICE.confetti(50); save(); renderHomeHead(); lanternsModal(); });
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function shopModal() {
+  openModal(`<h2 data-shop>${t('shop')}</h2><div class="note">${t('webNote')}</div>${E.store.map(it => `<div class="it"><div class="ico"><img src="${storeIcon(it)}" alt=""></div><div class="tx"><b>${storeName(it)}</b><small>${storeSub(it)}</small></div>${it.once && S.owned[it.id] ? `<span class="own">${t('owned')}</span>` : `<button class="buy price" data-buy="${it.id}">${Store.price(it)}</button>`}</div>`).join('')}
+    <button class="b2" data-restore>${t('restore')}</button><button class="b2 big" data-close>${t('close')}</button>`, 'wide');
+  modal.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { SFX.click(); if (await Store.buy(E.store.find(x => x.id === b.dataset.buy))) shopModal(); });
+  modal.querySelector('[data-restore]').onclick = () => Store.restore();
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); renderHome(); };
+}
+function settingsModal(back) {
+  const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
+  const themes = [['', t('th_forest')]].concat(S.owned.festival ? [['fest', t('th_fest')]] : []).concat(S.owned.pass_hiver_2026 ? [['winter', t('th_winter')]] : []);
+  openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}
+    <label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
+    ${themes.length > 1 ? `<label class="sw"><span>${t('theme')}</span><select data-theme>${themes.map(([k, n]) => `<option value="${k}" ${S.theme === k ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
+    <button class="b2" data-restore>${t('restore')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Lantern Hold ${window.LH_VERSION || ''}</div>`);
+  modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
+  modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); if (G.mode === 'home') buildHome(); else if (G.mode === 'run') { buildHud(); buildTray(); } settingsModal(back); };
+  const th = modal.querySelector('[data-theme]'); if (th) th.onchange = () => { S.theme = th.value; save(); };
+  modal.querySelector('[data-restore]').onclick = () => Store.restore();
+  modal.querySelector('[data-consent]').onclick = () => consentModal(true);
+  modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.LH_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = () => settingsModal(back); };
+  modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); S = null; location.reload(); } };
+  modal.querySelector('[data-close]').onclick = () => { closeModal(); if (back) back(); };
+}
+function consentModal(fromSettings) {
+  openModal(`<div class="big-ico s"><img src="${src('pomme_0')}" alt=""></div><h2>${t('consentTitle')}</h2><p>${t('consentText')}</p><div class="row2"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>`);
+  modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); fromSettings ? settingsModal() : (closeModal(), afterConsent()); });
+}
+function pauseModal() {
+  G.paused = true; SFX.click();
+  openModal(`<h2>${t('pause')}</h2><button class="b1 big" data-c>${t('cont')}</button><button class="b2" data-q>${t('quit')}<br><small>${t('quitSub')}</small></button><button class="b2" data-s>${t('settings')}</button>`);
+  modal.querySelector('[data-c]').onclick = () => { closeModal(); G.paused = false; };
+  modal.querySelector('[data-q]').onclick = () => { save(); closeModal(); G.paused = false; showHome(); };
+  modal.querySelector('[data-s]').onclick = () => settingsModal(pauseModal);
+}
+
+// ---------- overlays ----------
+const modal = $('#modal');
+function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); }
+function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
+function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row2"><button class="b2" data-v="0">${t('cancel')}</button><button class="b1" data-v="1">${t('ok')}</button></div></div>`); el.onclick = e => { const v = e.target.closest('[data-v]'); if (v) { el.remove(); res(v.dataset.v === '1'); } }; document.body.appendChild(el); }); }
+const TQ = []; let tBusy = false;
+function toast(s) { if (TQ.length > 4) TQ.shift(); TQ.push(s); if (!tBusy) nextToast(); }
+function nextToast() { const s = TQ.shift(); if (s == null) { tBusy = false; return; } tBusy = true; const box = $('#toasts'); box.innerHTML = ''; const el = div('toast', s); box.appendChild(el); setTimeout(() => el.classList.add('out'), 1700); setTimeout(() => { el.remove(); nextToast(); }, 2000); }
+function banner(s, cls = '') { const el = div('banner ' + cls, s); document.body.appendChild(el); setTimeout(() => el.remove(), 1800); }
+// Gardienne Pomme's bubble (pomme_0 calm, pomme_1 happy, pomme_2 pointing, pomme_3 dancing)
+let pommeTimer = 0;
+function say(key, m = 0, ms = 3200, sticky = false) {
+  const el = $('#pomme'); el.querySelector('.pf').src = src('pomme_' + m); el.querySelector('.pt').textContent = t(key);
+  el.classList.toggle('home', G.mode === 'home'); el.classList.remove('on'); void el.offsetWidth; el.classList.add('on'); SFX.pomme();
+  clearTimeout(pommeTimer); if (!sticky) pommeTimer = setTimeout(pommeHide, ms || 3200); G.pommeKey = key;
+}
+function pommeHide() { $('#pomme').classList.remove('on'); G.pommeKey = ''; }
+
+// ---------- run screens: HUD, tray ----------
+function buildHud() {
+  $('#hud').innerHTML = `<button class="rb" id="pausebtn" aria-label="${t('pause')}">❚❚</button><div id="phase"><b id="phtxt"></b><div id="hpbar"><i></i></div></div>
+    <div class="chip" id="hbr"><i class="br"></i><b>0</b></div><div class="chip" id="hff"><i class="ff"></i><b>0</b></div>`;
+  $('#pausebtn').onclick = pauseModal; renderHud();
+}
+function renderHud() {
+  const R = G.R; if (!R || G.mode !== 'run') return;
+  const ph = R.phase === 'night' || R.phase === 'lost' ? t('night', { n: R.night }) : R.phase === 'won' ? '☀' : t('day', { n: R.night }) + (R.phase === 'day' && R.dayT > 0 ? ' · ' + Math.ceil(R.dayT) + ' s' : '');
+  const pt = $('#phtxt'); if (pt && pt.textContent !== ph) pt.textContent = ph;
+  const k = clamp(R.lan.hp / R.lan.max, 0, 1), bar = $('#hpbar'); if (bar) { bar.firstChild.style.width = k * 100 + '%'; bar.classList.toggle('low', k < 0.35 && R.phase === 'night'); }
+  const b = $('#hbr b'); if (b && +b.textContent !== R.berries) b.textContent = R.berries;
+  const f = $('#hff b'); if (f && +f.textContent !== R.ff) f.textContent = R.ff;
+}
+function buildTray() {
+  const R = G.R, tr = $('#tray'); if (!R) return;
+  if (R.phase === 'night' || R.phase === 'lost') {
+    tr.innerHTML = `<div id="spells">${['bolt', 'puddle', 'shield'].map(k => `<button class="sp" data-sp="${k}"><img src="${src('s_' + k)}" alt=""><small>${t('sp_' + k)}</small><div class="cdv"></div></button>`).join('')}</div>`;
+    tr.querySelectorAll('[data-sp]').forEach(b => b.onpointerdown = e => { e.preventDefault(); audioInit(); const k = b.dataset.sp; SFX.click();
+      if (k === 'shield') castSpell('shield', C.LX, C.LY); else if (k === 'puddle') { G.armed = G.armed === 'puddle' ? null : 'puddle'; } else G.armed = null; renderSpells(); });
+    renderSpells();
+  } else {
+    tr.innerHTML = `<div id="cards">${C.KINDS.map(k => `<div class="card-b" data-k="${k}"><img src="${src('b_' + k)}" alt=""><small>${C.BL[k].cost}<i class="br"></i></small></div>`).join('')}</div>
+      <div id="trow"><div id="tinfo"></div><button class="b1" id="gonight">${t('goNight')}</button></div>`;
+    tr.querySelectorAll('[data-k]').forEach(c => c.onpointerdown = e => { e.preventDefault(); startDrag(c.dataset.k, e); });
+    $('#gonight').onclick = () => { audioInit(); if (G.R.phase === 'day' && (!G.tut || G.tut >= 3)) { C.startNight(G.R); events(); } else if (G.tut) { SFX.miss(); } };
+    renderTray();
+  }
+  resize();
+}
+function renderTray() {
+  const R = G.R; if (!R || R.phase !== 'day') return;
+  document.querySelectorAll('#cards [data-k]').forEach(c => { const k = c.dataset.k; c.classList.toggle('off', R.berries < C.BL[k].cost); c.classList.toggle('hint', (G.tut === 1 && k === 'tower') || (G.tut === 2 && k === 'wall')); });
+  const gn = $('#gonight'); if (gn) gn.classList.toggle('hint', G.tut === 4);
+  const info = $('#tinfo'); if (info) { const s = G.drag ? `${t('b_' + G.drag.k)} — ${t('bs_' + G.drag.k)}` : `${t('dayN')} ${R.night} · ${R.b.length} 🏠`; if (info.textContent !== s) info.textContent = s; }
+}
+function renderSpells() {
+  const R = G.R; if (!R) return; const cdMax = { bolt: R.mod.boltCd, puddle: C.SPELL.puddle.cd, shield: R.mod.shieldCd };
+  document.querySelectorAll('#spells [data-sp]').forEach(b => { const k = b.dataset.sp, v = R.cd[k] / (cdMax[k] * (C.hasHero(R, 'apprentice') ? 0.75 : 1)); b.querySelector('.cdv').style.height = clamp(v, 0, 1) * 100 + '%'; b.classList.toggle('arm', G.armed === k); });
+}
+
+// ---------- the village (home) ----------
+function buildHome() {
+  $('#hfoot').innerHTML = [['gift', 'ui_gift', 'gift'], ['up', 'ui_build', 'upgrades'], ['chest', 'merchant_chest', 'merchant'], ['lan', 'lantern_1', 'lanterns'], ['shop', 'ui_shop', 'shop'], ['set', 'ui_settings', 'settings']]
+    .map(([id, k, l]) => `<div><button class="rb" id="h_${id}">${UIIMG(k)}</button><small>${t(l)}</small></div>`).join('');
+  $('#h_gift').onclick = () => { SFX.click(); giftModal(); }; $('#h_up').onclick = () => { SFX.click(); upgradesModal(); };
+  $('#h_chest').onclick = () => { SFX.click(); chestModal(); }; $('#h_lan').onclick = () => { SFX.click(); lanternsModal(); };
+  $('#h_shop').onclick = () => { SFX.click(); shopModal(); }; $('#h_set').onclick = () => { SFX.click(); settingsModal(); };
+  renderHome();
+}
+function renderHomeHead() {
+  if (!$('#home').classList.contains('on')) return;
+  $('#hhead').innerHTML = `<div class="mrow"><span id="plv">${t('level')} ${S.plv}</span><div id="xpbar"><i style="width:${clamp(S.xp / E.xpLevel(S.plv), 0, 1) * 100}%"></i></div></div>
+    <div class="mrow"><div class="chip" style="flex:1"><i class="ff"></i> <b id="mff">${S.ff}</b></div><div class="chip" style="flex:1"><i class="ac"></i> <b>${S.acorns}</b></div></div>`;
+  $('#h_gift').classList.toggle('dot', !!S.login.pending); $('#h_up').classList.toggle('dot', wsReady() || (!S.ws && E.upgrades.some(id => S.up[id] < E.maxUp && S.ff >= E.upCost(S.up[id]))));
+  $('#h_chest').classList.toggle('dot', S.ff >= E.chest.cost * 2);
+}
+function renderHome() {
+  if (!$('#home').classList.contains('on')) return; renderHomeHead();
+  let run = null; try { run = S.run ? JSON.parse(S.run) : null; } catch (e) {}
+  const mp = millPending();
+  $('#hmid').innerHTML = `<img class="logo" src="${src('logo')}" alt="Lantern Hold"><span class="lanbox">${skinHtml(S.lantern, 3)}</span>
+    ${run ? `<button class="b1 big" data-resume>${run.phase === 'night' || run.phase === 'lost' ? t('resume', { n: run.night }) : t('resumeDay', { n: run.night })}</button><button class="b2" data-new>${t('newRun')}</button>` : `<button class="b1 big" data-new>${t('play')}</button>`}
+    <div class="hcard"><img src="${src('b_mill')}" alt=""><div class="tx"><b>${t('mill')}</b>${mp > 0 ? t('millTxt', { n: mp }) : t('millEmpty')}</div>${mp > 0 ? `<button class="buy" data-mill>${t('collect')}</button>` : ''}</div>
+    ${wsHtml()}`;
+  const r = $('#hmid [data-resume]'); if (r) r.onclick = () => { audioInit(); startRun(true); };
+  $('#hmid [data-new]').onclick = async () => { audioInit(); if (run && !await confirmBox(t('newRun') + ' ?')) return; S.run = null; startRun(false); };
+  const m = $('#hmid [data-mill]'); if (m) m.onclick = e => { const n = millPending(); S.ff += n; S.millAt = Date.now(); SFX.coins(); JUICE.fly(e.target, $('#mff'), src('firefly'), 8); save(); setTimeout(renderHome, 800); };
+  bindWsHome();
+}
+function bindWsHome() {
+  const a = $('#hmid [data-wad]'); if (a) a.onclick = async () => { if (await Ads.rewarded('worksite')) { S.ws.end = Date.now(); save(); renderHome(); } };
+  const b = $('#hmid [data-wac]'); if (b) b.onclick = () => { const n = E.finishAcorns(Math.max(0, S.ws.end - Date.now()) / 60000); if (S.acorns < n) { SFX.miss(); return toast(t('notEnough')); } S.acorns -= n; S.ws.end = Date.now(); save(); renderHome(); };
+  const c = $('#hmid [data-wcol]'); if (c) c.onclick = () => collectWs();
+}
+function showHome() {
+  G.mode = 'home'; G.R = null; hideSel(); $('#hud').classList.remove('on'); $('#tray').classList.remove('on'); $('#title').classList.remove('on'); pommeHide();
+  $('#home').style.backgroundImage = `linear-gradient(rgba(31,42,74,.55),rgba(31,42,74,.55)),url(${src('bg_forest')})`; $('#home').classList.add('on');
+  ensureLogin(); buildHome(); save();
+  if (S.login.pending && S.tut) setTimeout(giftModal, 450);
+  else if (millPending() >= 20 && !G.said.mill) { G.said.mill = 1; say('p_mill', 1); }
+  else if (!S.ws && E.upgrades.some(id => S.up[id] < E.maxUp && S.ff >= E.upCost(S.up[id]))) say('p_ws', 2);
+}
+function titleScreen() {
+  G.mode = 'title'; const el = $('#title');
+  el.style.backgroundImage = `linear-gradient(rgba(31,42,74,.5),rgba(31,42,74,.5)),url(${src('bg_forest')})`;
+  el.innerHTML = `<div class="logo"><img src="${src('logo')}" alt="Lantern Hold"><p>${t('subtitle')}</p></div><img class="tbg" src="${src('title_bg')}" alt=""><button class="b1 big" data-play>${S.tut ? t('cont') : t('play')}</button>`;
+  el.classList.add('on');
+  el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null ? consentModal(false) : afterConsent(); };
+}
+function afterConsent() { Ads.init(); Store.init(); if (!S.tut) startRun(!!S.run); else showHome(); }
+
+// ---------- drawing the clearing ----------
+const hopPos = h => [h.x, h.y - Math.abs(Math.sin(G.time * 5 + h.id)) * 20];
+function drawBg() {
+  cx.fillStyle = PAL.night; cx.fillRect(0, 0, W, H);
+  const im = img('bg_forest'), ix = 400 / 360, iy = 558 / 540;   // the painted grid spans x 70..470 and y 160..718 of the 540 × 810 picture
+  const k = im.width / 540; cx.drawImage(im, OX - 70 / ix * SC, OY - 160 / iy * SC, 540 / ix * SC, 810 / iy * SC);
+  void k;
+  const R = G.R; if (!R) return;
+  // the shadows' paths: earth on the cells of the open paths, faint on the ones still closed
+  for (const ln in C.LANES) { const open = R.lanes.includes(ln); cx.globalAlpha = open ? 0.62 : 0.22;
+    for (const [c, r] of C.LANES[ln].cells) { const [x, y] = toScreen(c * 60 + 5, r * 60 + 5); cx.fillStyle = PAL.wood; cx.beginPath(); cx.roundRect ? cx.roundRect(x, y, 50 * SC, 50 * SC, 12 * SC) : cx.rect(x, y, 50 * SC, 50 * SC); cx.fill(); }
+    cx.globalAlpha = 1;
+    if (open) { const L = C.LANES[ln], p = L.pts; cx.save(); cx.setLineDash([6 * SC, 10 * SC]); cx.lineDashOffset = -G.time * 20 * SC; cx.beginPath(); for (let i = 0; i < p.length - 1; i++) { const [x, y] = toScreen(p[i][0], p[i][1]); i ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.lineWidth = 3 * SC; cx.strokeStyle = 'rgba(255,246,220,.45)'; cx.stroke(); cx.restore(); } }
+}
+function drawDragTargets() {
+  const R = G.R, d = G.drag; if (!d && !(G.tut === 1 || G.tut === 2)) return;
+  const k = d ? d.k : G.tut === 1 ? 'tower' : 'wall';
+  if (d) for (let c = 0; c < C.COLS; c++) for (let r = 0; r < C.ROWS; r++) { if (!C.canPlace(R, k, c, r, true)) continue; const [x, y] = toScreen(c * 60 + 3, r * 60 + 3); cx.fillStyle = 'rgba(255,230,109,.18)'; cx.fillRect(x, y, 54 * SC, 54 * SC); }
+  // the tutorial target (pulsing) and a ghost finger that shows the gesture
+  if (G.tut === 1 || G.tut === 2) {
+    const cell = G.tut === 1 ? C.bestCell(R, 'tower') : [2, 2]; if (!cell) return; const [x, y] = cellCenter(cell[0], cell[1]), p = (G.time * 1.5) % 1;
+    cx.beginPath(); cx.arc(x, y, (24 + p * 16) * SC, 0, TAU); cx.lineWidth = 5 * (1 - p) + 1; cx.strokeStyle = PAL.yellow; cx.stroke();
+    if (!d) { const card = document.querySelector(`#cards [data-k="${k}"]`); if (card) { const r = card.getBoundingClientRect(), q = (G.time * 0.6) % 1, e = q < 0.7 ? q / 0.7 : 1, sx = r.left + r.width / 2, sy = r.top + 10, fx = sx + (x - sx) * e * e * (3 - 2 * e), fy = sy + (y - sy) * e * e * (3 - 2 * e);
+      cx.globalAlpha = 0.85 * (q < 0.85 ? 1 : (1 - q) / 0.15); spr('b_' + k, fx, fy - 26, 44 * SC); cx.beginPath(); cx.arc(fx, fy + 14, 14, 0, TAU); cx.fillStyle = 'rgba(255,255,255,.85)'; cx.fill(); cx.lineWidth = 3; cx.strokeStyle = PAL.night; cx.stroke(); cx.globalAlpha = 1; } }
+  }
+}
+function drawBuilding(b) {
+  const R = G.R, [x, y] = cellCenter(b.c, b.r), pk = G.pop[b.id] || 0, sq = pk > 0 ? Math.sin(Math.min(1, pk / 0.35) * Math.PI) * 0.22 : 0, lv = b.lvl, w = (62 + (lv - 1) * 5) * SC;
+  if (b.k === 'wall' && b.hp <= 0) { spr('b_wall', x, y + 8 * SC, w * 0.9, 0.2, 0.45, false, 0.6); return; }
+  const breathe = b.k === 'mill' ? Math.sin(G.time * 2 + b.id) * 0.015 : 0;
+  spr('b_' + b.k, x, y - 6 * SC - sq * 10 * SC, w * (1 + sq * 0.5), breathe, 1, b.c > 2 && b.k !== 'mill', 1 - sq * 0.5);
+  if (lv > 1) for (let i = 0; i < lv - 1; i++) spr('dawn_star', x + (18 - i * 13) * SC, y + 22 * SC, 15 * SC);
+  if (b.hero) { const hb = Math.abs(Math.sin(G.time * 3 + b.id)) * 4 * SC; spr('h_' + b.hero, x + 16 * SC, y - 14 * SC - hb, 38 * SC); }
+  if (b.k === 'wall' && R.phase === 'night' && b.hp < C.wallMax(R, b)) bar(x, y + 28 * SC, 40 * SC, b.hp / C.wallMax(R, b), PAL.orange);
+  if (G.sel === b.id) { cx.beginPath(); cx.arc(x, y, 34 * SC, 0, TAU); cx.lineWidth = 3; cx.strokeStyle = PAL.yellow; cx.setLineDash([6, 5]); cx.stroke(); cx.setLineDash([]);
+    if (b.k === 'tower') { cx.beginPath(); cx.arc(x, y, C.BL.tower.range[b.lvl - 1] * R.mod.trange * SC, 0, TAU); cx.fillStyle = 'rgba(255,230,109,.08)'; cx.fill(); cx.strokeStyle = 'rgba(255,230,109,.5)'; cx.stroke(); } }
+}
+function bar(x, y, w, k, col) { cx.fillStyle = PAL.night; cx.fillRect(x - w / 2 - 2, y - 3, w + 4, 7); cx.fillStyle = col; cx.fillRect(x - w / 2, y - 1, w * clamp(k, 0, 1), 3); }
+function drawLantern() {
+  const R = G.R, [x, y] = toScreen(C.LX, C.LY + 52), lv = R.lan.lvl, base = (104 + lv * 14) * SC, pulse = 1 + Math.sin(G.time * 2.2) * 0.02 + G.lanPulse * 0.12, hit = G.hitFlash > 0 ? Math.sin(G.hitFlash * 60) * 0.04 : 0;
+  const im = img('lantern_' + lv), w = base * pulse, h = w * im.height / im.width;
+  cx.save(); cx.translate(x, y); cx.scale(1 + hit, 1 - hit); drawSkin(cx, S.lantern, 0, -h / 2, w, lv, G.time); cx.restore();
+  if (R.shield > 0) { cx.save(); cx.globalAlpha = 0.45 + Math.sin(G.time * 20) * 0.1; spr('s_shield', x, y - h * 0.45, base * 1.5); cx.restore(); }
+}
+function drawEnemy(e) {
+  const [x, y] = toScreen(e.x, e.y), sz = e.r * (e.boss ? 3.6 : 3.1) * SC, ph = G.time * (e.fly ? 9 : 7) + e.id, bob = Math.sin(ph), sq = e.atk ? Math.abs(Math.sin(G.time * 10 + e.id)) * 0.18 : bob * 0.08;
+  const L = C.LANES[e.lane], tgt = e.fly ? [C.LX, C.LY] : L.pts[Math.min(e.wi, L.pts.length - 1)], flip = tgt[0] < e.x;
+  const lift = e.fly ? (16 + bob * 5) * SC : Math.abs(bob) * 3 * SC;
+  if (e.fly) { cx.fillStyle = 'rgba(31,42,74,.35)'; cx.beginPath(); cx.ellipse(x, y + 6 * SC, sz * 0.3, sz * 0.1, 0, 0, TAU); cx.fill(); }
+  spr('e_' + e.k, x, y - lift - sz * 0.25, sz * (1 + sq * 0.6), e.fly ? bob * 0.08 : 0, e.boss ? 0.95 : 1, flip, 1 - sq);
+  if (e.hp < e.max) bar(x, y - sz * 0.75 - lift, Math.max(22, e.r * 2) * SC, e.hp / e.max, e.boss ? PAL.orange : PAL.yellow);
+}
+function drawNight() {
+  const R = G.R; if (G.dark <= 0.01) return;
+  const k = 0.5, w = nc.width, h = nc.height, s = 0.5, theme = S.theme;
+  nx.globalCompositeOperation = 'source-over'; nx.clearRect(0, 0, w, h);
+  nx.fillStyle = theme === 'fest' ? `rgba(60,30,90,${0.5 * G.dark})` : theme === 'winter' ? `rgba(30,50,90,${0.5 * G.dark})` : `rgba(14,18,44,${0.55 * G.dark})`; nx.fillRect(0, 0, w, h);
+  nx.globalCompositeOperation = 'destination-out';
+  const hole = (wx, wy, r, a = 1) => { const [x, y] = toScreen(wx, wy), rr = r * SC * s, g = nx.createRadialGradient(x * s, y * s, 0, x * s, y * s, rr); g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(0.6, `rgba(0,0,0,${a * 0.7})`); g.addColorStop(1, 'rgba(0,0,0,0)'); nx.fillStyle = g; nx.beginPath(); nx.arc(x * s, y * s, rr, 0, TAU); nx.fill(); };
+  hole(C.LX, C.LY - 20, (150 + R.lan.lvl * 40) * (1 + Math.sin(G.time * 2) * 0.03 + G.lanPulse * 0.1) * (R.shield > 0 ? 1.2 : 1));
+  for (const b of R.b) if (b.k === 'tower' || b.k === 'forge' || b.hero) hole(C.cc(b.c), C.cc(b.r), 70, 0.6);
+  for (const d of R.drops) hole(d.x, d.y, 34, 0.7);
+  for (const p of R.pud) hole(p.x, p.y, p.r * 1.3, 0.5);
+  for (const b of G.bolts) hole(b.x, b.y, 120 * (1 - b.t / 0.3), 0.9);
+  nx.globalCompositeOperation = 'source-over'; void k;
+  cx.drawImage(nc, 0, 0, W, H);
+}
+function draw() {
+  cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if (G.mode !== 'run' || !G.R) { cx.fillStyle = PAL.night; cx.fillRect(0, 0, W, H); return; }
+  const R = G.R, sh = G.shake > 0 ? G.shake * 8 : 0; cx.save(); if (sh) cx.translate(rnd(-sh, sh), rnd(-sh, sh));
+  drawBg(); drawDragTargets();
+  // sticky puddles under everything
+  for (const p of R.pud) { const [x, y] = toScreen(p.x, p.y), a = clamp(p.t / 0.6, 0, 1); spr('s_puddle', x, y, p.r * 2.3 * SC * (1 + Math.sin(G.time * 4) * 0.03), 0, 0.85 * a); }
+  // depth order: buildings, the lantern, shadows, sorted by their feet
+  const items = [];
+  for (const b of R.b) items.push([C.cc(b.r) + 20, 0, b]); items.push([C.LY + 50, 1, null]); for (const e of R.e) items.push([e.y + (e.fly ? 60 : 0), 2, e]);
+  items.sort((a, b) => a[0] - b[0]);
+  for (const [, k, o] of items) k === 0 ? drawBuilding(o) : k === 1 ? drawLantern() : drawEnemy(o);
+  // harvests that hop, fireflies on the ground
+  for (const h of R.hops) { const [hx, hy] = hopPos(h), [x, y] = toScreen(hx, hy); cx.fillStyle = 'rgba(31,42,74,.3)'; const [, gy] = toScreen(0, h.y + 8); cx.beginPath(); cx.ellipse(x, gy, 12 * SC, 4 * SC, 0, 0, TAU); cx.fill(); const sq = Math.abs(Math.sin(G.time * 5 + h.id)), pr = 22 + Math.sin(G.time * 6 + h.id) * 3; cx.beginPath(); cx.arc(x, y, pr * SC, 0, TAU); cx.fillStyle = 'rgba(255,246,220,.85)'; cx.fill(); cx.lineWidth = 3; cx.strokeStyle = h.k === 'berry' ? PAL.orange : PAL.yellow; cx.stroke(); spr(h.k === 'berry' ? 'berry' : 'firefly', x, y, 36 * SC, 0, 1, false, 1 + (sq < 0.15 ? -0.2 : 0.05)); }
+  for (const d of R.drops) { const [x, y] = toScreen(d.x + Math.sin(G.time * 3 + d.id) * 4, d.y + Math.cos(G.time * 4 + d.id) * 3), fade = d.t > 7 ? 0.5 + 0.5 * Math.sin(G.time * 20) : 1; spr('firefly', x, y, (24 + Math.min(10, d.n * 2)) * SC, Math.sin(G.time * 8 + d.id) * 0.2, fade); }
+  // sling stones, bolts
+  for (const s of G.shots) { const k = clamp(s.t / s.d, 0, 1), [x0, y0] = toScreen(s.x, s.y), [x1, y1] = toScreen(s.tx, s.ty), x = x0 + (x1 - x0) * k, y = y0 + (y1 - y0) * k - Math.sin(k * Math.PI) * 18 * SC;
+    cx.beginPath(); cx.arc(x, y, (s.hero ? 3 : 4) * SC + 1, 0, TAU); cx.fillStyle = s.hero ? PAL.yellow : PAL.cream; cx.fill(); cx.lineWidth = 2; cx.strokeStyle = PAL.night; cx.stroke(); }
+  for (const b of G.bolts) { const a = 1 - b.t / 0.3, [x, y] = toScreen(b.x, b.y); cx.save(); cx.globalAlpha = a;
+    const zig = (x0, y0, x1, y1) => { cx.beginPath(); cx.moveTo(x0, y0); for (let i = 1; i < 7; i++) { const f = i / 7; cx.lineTo(x0 + (x1 - x0) * f + Math.sin(b.seed + i * 7) * 12, y0 + (y1 - y0) * f); } cx.lineTo(x1, y1); cx.lineWidth = 9; cx.strokeStyle = PAL.night; cx.stroke(); cx.lineWidth = 5; cx.strokeStyle = PAL.yellow; cx.stroke(); };
+    zig(x + 10, y - 260 * SC, x, y); if (b.jx != null) { const [jx, jy] = toScreen(b.jx, b.jy); zig(x, y, jx, jy); }
+    spr('s_bolt', x, y - 16 * SC, 50 * SC * (1 + (1 - a) * 0.5)); cx.restore(); }
+  // particles
+  for (const p of G.parts) { if (p.t < 0) continue; const [x, y] = toScreen(p.x, p.y), k = p.t / p.life;
+    if (p.k === 'ring') { cx.beginPath(); cx.arc(x, y, (6 + k * p.r) * SC, 0, TAU); cx.lineWidth = 6 * (1 - k) * SC + 1; cx.strokeStyle = p.col; cx.globalAlpha = 1 - k; cx.stroke(); cx.globalAlpha = 1; continue; }
+    if (p.k === 'pop') { spr('e_pop', x, y, p.r * SC * (0.6 + k * 0.8), k, 1 - k); continue; }
+    if (p.k === 'conf') { cx.save(); cx.translate(x, y); cx.rotate(p.rot + p.t * 10); cx.globalAlpha = clamp(1.4 - k * 1.4, 0, 1); cx.fillStyle = p.col; cx.fillRect(-p.r * SC, -p.r * 0.6 * SC, p.r * 2 * SC, p.r * 1.2 * SC); cx.restore(); continue; }
+    if (p.k === 'star') { cx.globalAlpha = 1 - k; spr('dawn_star', x, y, p.r * 3 * SC, p.t * 6); cx.globalAlpha = 1; continue; }
+    cx.globalAlpha = clamp(1.4 - k * 1.4, 0, 1); cx.fillStyle = p.col; cx.beginPath(); cx.arc(x, y, p.r * SC, 0, TAU); cx.fill(); cx.globalAlpha = 1; }
+  drawNight();
+  // over the night: the dragged building, the festival garlands, snow, the sunrise
+  if (S.theme === 'fest') for (let i = 0; i < 7; i++) { const x = (i + 0.5) * W / 7, y = OY - 8 * SC + Math.sin(i * 1.3) * 6 + Math.sin(G.time * 1.5 + i) * 3; spr('lantern_deco', x, y, 30 * SC, Math.sin(G.time * 2 + i) * 0.12, 0.95); }
+  if (S.theme === 'winter') { cx.fillStyle = '#fff'; for (let i = 0; i < 46; i++) { const x = (i * 53.1 + Math.sin(G.time + i) * 20) % W, y = ((i * 97.7 + G.time * (30 + i % 5 * 10)) % H + H) % H; cx.globalAlpha = 0.8; cx.beginPath(); cx.arc(x, y, 1.5 + i % 3, 0, TAU); cx.fill(); } cx.globalAlpha = 1; }
+  if (G.drag) { const d = G.drag, [c, r] = toCell(d.x, d.y - HOLD_UP), okk = C.canPlace(R, d.k, c, r); if (c >= 0 && r >= 0 && c < C.COLS && r < C.ROWS) { const [x, y] = toScreen(c * 60 + 2, r * 60 + 2); cx.lineWidth = 4; cx.strokeStyle = okk ? PAL.yellow : PAL.orange; cx.strokeRect(x, y, 56 * SC, 56 * SC); }
+    spr('b_' + d.k, d.x, d.y - HOLD_UP, 64 * SC * (1 + Math.sin(G.time * 12) * 0.03), Math.sin(G.time * 6) * 0.06, okk ? 1 : 0.6); }
+  if (G.sun > 0) { const k = clamp(G.sun / 1.6, 0, 1), e = 1 - Math.pow(1 - k, 3), a = G.sun < 2.4 ? 1 : clamp(1 - (G.sun - 2.4) / 0.8, 0, 1); cx.globalAlpha = a * 0.35; cx.fillStyle = PAL.yellow; cx.fillRect(0, 0, W, H); cx.globalAlpha = a; spr('sunrise', W / 2, H * 0.7 - e * H * 0.36, Math.min(W * 0.55, 240), Math.sin(G.time) * 0.03); cx.globalAlpha = 1; }
+  cx.restore();
+  // floats: flying icons (screen) and "+n" texts (world)
+  for (const f of G.floats) { if (f.t < 0) continue; const k = clamp(f.t / f.d, 0, 1);
+    if (f.k === 'fly') { const e = k * k * (3 - 2 * k), x = f.x + (f.tx - f.x) * e, y = f.y + (f.ty - f.y) * e - Math.sin(k * Math.PI) * 40; spr(f.key, x, y, 24); continue; }
+    if (f.k === 'drift') { const [x0, y0] = toScreen(f.x, f.y), [x1, y1] = toScreen(C.LX, C.LY - 30); spr('firefly', x0 + (x1 - x0) * k, y0 + (y1 - y0) * k, 18, 0, 0.6); continue; }
+    const [x, y] = toScreen(f.x, f.y - k * 40); cx.globalAlpha = clamp(1.5 - k * 1.5, 0, 1); cx.font = `900 ${20}px ui-rounded, system-ui`; cx.textAlign = 'center'; cx.lineWidth = 5; cx.strokeStyle = PAL.night; cx.strokeText(f.s, x, y); cx.fillStyle = f.col; cx.fillText(f.s, x, y); cx.globalAlpha = 1; }
+  // the tutorial ring on the first shadow to tap
+  if (G.tut === 5 && R.e.length) { const e = R.e[0], [x, y] = toScreen(e.x, e.y), p = (G.time * 1.6) % 1; cx.beginPath(); cx.arc(x, y - 10, (22 + p * 20) * SC, 0, TAU); cx.lineWidth = 5 * (1 - p) + 1; cx.strokeStyle = PAL.yellow; cx.stroke(); }
+}
+
+// ---------- the loop: fixed 1/30 s rule steps ----------
+let last = performance.now(), saveT = 0, acc = 0;
+function frame(now) {
+  const rdt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now; G.time += rdt;
+  const R = G.R;
+  if (G.mode === 'run' && R && !G.paused && !modal.classList.contains('on')) {
+    if (R.phase === 'night' || (R.phase === 'day' && R.dayT > 0 && !G.drag)) { acc += rdt; let n = 0; while (acc >= C.DT && n < 6) { C.step(R, C.DT); events(); acc -= C.DT; n++; } if (n >= 6) acc = 0; }
+  }
+  if (R) {
+    const target = R.phase === 'night' || R.phase === 'lost' ? 1 : 0; G.dark += (target - G.dark) * Math.min(1, rdt * 1.5);
+    if (G.sun > 0) { G.sun += rdt; if (G.sun > 3.2) G.sun = 0; }
+    if (R.phase === 'day' && $('#spells')) buildTray(); if (R.phase === 'night' && $('#cards')) buildTray();
+    if (R.phase === 'night') renderSpells(); else renderTray();
+    for (const k in G.pop) { G.pop[k] += rdt; if (G.pop[k] > 0.35) delete G.pop[k]; }
+    for (const s of G.shots) s.t += rdt; G.shots = G.shots.filter(s => s.t < s.d);
+    for (const b of G.bolts) b.t += rdt; G.bolts = G.bolts.filter(b => b.t < 0.3);
+  }
+  if (G.shake > 0) G.shake = Math.max(0, G.shake - rdt * 2.2); if (G.lanPulse > 0) G.lanPulse = Math.max(0, G.lanPulse - rdt * 1.5); if (G.hitFlash > 0) G.hitFlash -= rdt;
+  for (const p of G.parts) { p.t += rdt; if (p.t < 0) continue; p.x += (p.vx || 0) * rdt; p.y += (p.vy || 0) * rdt; if (p.g) p.vy += 500 * rdt; }
+  G.parts = G.parts.filter(p => p.t < p.life); if (G.parts.length > 400) G.parts.splice(0, G.parts.length - 400);
+  for (const f of G.floats) { f.t += rdt; if (f.k === 'fly' && f.t >= f.d && !f.done) { f.done = true; JUICE.bump(f.el); } }
+  G.floats = G.floats.filter(f => f.t < f.d);
+  musicTick(); draw(); renderHud();
+  if ((saveT += rdt) > 4) { saveT = 0; if (G.mode === 'run') save(); if (G.mode === 'home' && Math.random() < 0.25) renderHome(); }
+  requestAnimationFrame(frame);
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) { save(); if (G.mode === 'run' && G.R && G.R.phase === 'night' && !modal.classList.contains('on')) { G.paused = true; G.ptr = null; openModal(`<h2>${t('pause')}</h2><button class="b1 big" data-go>${t('cont')}</button>`); modal.querySelector('[data-go]').onclick = () => { closeModal(); G.paused = false; }; } } });
+addEventListener('pagehide', save);
+addEventListener('resize', resize);
+window.LH = { HOLD: HOLD_UP, hopPos, S: () => S, G, C, E, R: () => G.R, toScreen, toWorld, cellCenter, startRun, showHome, SFX, save, src, events, view: () => ({ SC, OX, OY, W, H }), selectB };
+resize(); titleScreen(); requestAnimationFrame(frame);
+})();
+</script>
+<script>// Lantern Hold scenes for the BETA IA simulated player (shared core: beta.js, spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Every action is a real gesture: a building is dragged from its card in the tray onto the grid (A.drag), an upgrade is a tap on
+// the building then on "Upgrade", harvests and shadows are tapped where they are on screen, fireflies are swiped (A.drag across).
+// The choices come from the same simple player as the balance bot (C.suggest by day, C.spellPlan by night).
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const H = window.LH, C = H.C, S = () => H.S(), G = H.G, R = () => H.R();
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}.adbtn{display:none!important}#h_shop{visibility:hidden!important}.price{visibility:hidden!important}'; document.head.appendChild(st); }
+  const visible = sel => { const e = document.querySelector(sel); return e && e.offsetParent ? e : null; };
+  const PREF = ['sharp', 'lantern', 'quick', 'bolt', 'thick', 'range', 'spores', 'harvest', 'heroes', 'shield', 'puddle', 'fireflies'];
+  async function clean(A) {   // close what a player would close: popups, gift, consent
+    for (let i = 0; i < 4; i++) {
+      const b = visible('#modal [data-c="0"]') || visible('#modal [data-claim]') || visible('#modal [data-close]') || visible('#modal [data-go]');
+      if (!b) return; await A.wait(A.jitter(400, 800)); await A.tapEl(b, b.dataset.c ? 'consentement' : 'fermer'); await A.wait(400);
+    }
+  }
+  async function start(A) {
+    if (A.opts.ui === 'propre' && S().consent == null) S().consent = false;   // clean takes: no consent window on camera (refused = no personalised ads)
+    if (A.opts.ui === 'propre') S().owned.noads = true;                       // clean takes: no interstitials
+    if (G.mode !== 'title') return;
+    await A.wait(1000); await A.tapEl('#title [data-play]', 'jouer'); await A.wait(800);
+    if (visible('#modal [data-c]')) { await A.think(); await A.tapEl(A.opts.ui === 'propre' ? '#modal [data-c="0"]' : '#modal [data-c="1"]', 'consentement'); await A.wait(700); }
+  }
+  // ---- by day ----
+  async function build(A, o) {
+    const r = R(); if (!r || r.phase !== 'day') return false;
+    if (o.k) {
+      const card = document.querySelector(`#cards [data-k="${o.k}"]`); if (!card) return false; const b = card.getBoundingClientRect(), [x, y] = H.cellCenter(o.c, o.r);
+      await A.drag(b.left + b.width / 2, b.top + b.height / 2, x + A.jitter(-3, 3), y + H.HOLD + A.jitter(-3, 3), 'poser ' + o.k, A.jitter(550, 800));
+    } else {
+      const b = C.bById(r, o.up || o.id); const [x, y] = H.cellCenter(b.c, b.r);
+      await A.tap(x, y, (o.hero ? 'terrier' : 'bâtiment ') + b.k); await A.wait(A.jitter(350, 600));
+      const btn = visible(o.hero ? `#sel [data-hero="${o.hero}"]` : '#sel [data-up]'); if (btn) await A.tapEl(btn, o.hero ? 'recruter ' + o.hero : 'améliorer');
+    }
+    await A.wait(250); return true;
+  }
+  async function pickHops(A) {
+    const r = R(); if (!r) return; for (const h of r.hops.slice(0, 6)) { if (!A.running() || !r.hops.includes(h)) continue; const [hx, hy] = H.hopPos(h), [x, y] = H.toScreen(hx, hy); await A.tap(x, y, 'récolte'); await A.wait(A.jitter(180, 380)); }
+  }
+  async function day(A, maxBuild = 8) {
+    await pickHops(A);
+    for (let i = 0; i < maxBuild && A.running(); i++) { const r = R(); if (!r || r.phase !== 'day') return; const o = C.suggest(r); if (!o) break; await A.think(); await build(A, o); }
+    const r = R(); if (r && r.phase === 'day' && A.running()) { await A.think(); await A.tapEl('#gonight', 'nuit'); }
+  }
+  // ---- by night: tap the shadows (bolt), a puddle on a crowd, the lantern for the shield, swipe the fireflies ----
+  async function night(A, maxSec = 400) {
+    const t0 = performance.now(); let lastSwipe = 0;
+    while (A.running() && (performance.now() - t0) / 1000 < maxSec) {
+      const r = R(); if (!r) return 'gone';
+      if (r.phase === 'dawn') return 'dawn'; if (r.phase === 'won') return 'won'; if (r.phase === 'lost') return 'lost'; if (r.phase !== 'night' || G.paused) { await A.wait(200); continue; }
+      const drops = r.drops.filter(d => d.t > 0.6);
+      if (drops.length >= 3 && performance.now() - lastSwipe > 2500) {   // a swipe through the fireflies on the ground
+        lastSwipe = performance.now(); drops.sort((a, b) => a.x - b.x); const a = H.toScreen(drops[0].x, drops[0].y), b = H.toScreen(drops[drops.length - 1].x, drops[drops.length - 1].y);
+        await A.drag(a[0] - 10, a[1], b[0] + 10, b[1] + A.jitter(-6, 6), 'ramasser lucioles', A.jitter(300, 450)); await A.wait(A.jitter(150, 300)); continue;
+      }
+      const p = C.spellPlan(r);
+      if (!p) { await A.wait(150); continue; }
+      if (p.sp === 'shield') { const [x, y] = H.toScreen(C.LX, C.LY - 20); await A.tap(x, y, 'bouclier'); }
+      else if (p.sp === 'puddle') { await A.tapEl('#spells [data-sp="puddle"]', 'flaque'); await A.wait(A.jitter(120, 220)); const [x, y] = H.toScreen(p.x, p.y); await A.tap(x, y, 'flaque collante'); }
+      else { const e = r.e.find(o => o.id === p.id) || p, [x, y] = H.toScreen(e.x, e.y - 8); await A.tap(x, y, 'éclair'); }
+      await A.wait(A.opts.style === 'rapide' ? A.jitter(150, 300) : A.jitter(350, 650));
+    }
+    return 'time';
+  }
+  async function dawnPick(A) {
+    for (let i = 0; i < 40 && !visible('#modal [data-bon]'); i++) await A.wait(100);
+    await A.wait(A.jitter(900, 1400)); const r = R(); if (!r || !r.choices) return;
+    const c = r.choices.slice().sort((a, b) => PREF.indexOf(a) - PREF.indexOf(b))[0]; await A.think(); await A.tapEl(`#modal [data-bon="${c}"]`, 'bonus ' + c); await A.wait(800);
+  }
+  // ---- moments worth cutting on ----
+  function watch(A) {
+    const r0 = R(); let ph = r0 ? r0.phase : '', lv = 0, kills = r0 ? r0.stats.kills - r0.stats.kills % 10 : 0, boss = !!(r0 && r0.e.some(e => e.boss)), plv = S().plv, built = r0 ? r0.stats.built : 0;
+    const iv = setInterval(() => { if (!A.running()) return clearInterval(iv); const r = R(); if (!r) return;
+      if (r.phase !== ph) { if (r.phase === 'night') A.mark('la nuit tombe ' + r.night); if (r.phase === 'dawn') A.mark('aube ' + r.night); if (r.phase === 'won') A.mark('lever du soleil victorieux'); if (r.phase === 'lost') A.mark('lanterne éteinte'); ph = r.phase; }
+      if (lv && r.lan.lvl > lv) A.mark('la lanterne grandit ' + r.lan.lvl); lv = r.lan.lvl;
+      if (!r0 && kills === 0 && r.stats.kills > 10) kills = r.stats.kills - r.stats.kills % 10; if (r.stats.kills >= kills + 10) { kills = r.stats.kills - r.stats.kills % 10; A.mark(kills + ' ombres dissipées'); }
+      if (r.stats.built > built) { A.mark('construction'); built = r.stats.built; }
+      const b = r.e.some(e => e.boss); if (b && !boss) A.mark('le Grand Brouillard'); if (!b && boss) A.mark('Grand Brouillard vaincu'); boss = b;
+      if (S().plv !== plv) { plv = S().plv; A.mark('niveau joueur ' + plv); } }, 100);
+  }
+  // ---- off camera: a village that has played (saves) and a run fast-forwarded with the same simple player ----
+  function makeSave(kind) {
+    const s = S(); s.tut = 1; s.consent = s.consent == null ? false : s.consent; s.login = { last: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(), streak: 3, pending: false };
+    const lv = kind === 'avance' ? 3 : 1; for (const k in s.up) s.up[k] = lv; s.ff = kind === 'avance' ? 2400 : 520; s.acorns = kind === 'avance' ? 40 : 0; s.plv = kind === 'avance' ? 9 : 4; s.xp = 80;
+    if (kind === 'avance') { s.lanterns = { classic: 1, moss: 1, star: 1, glow: 1 }; s.lantern = 'star'; }
+    s.run = null; H.save();
+  }
+  function simTo(stop) {   // plays the current run off camera until stop(r) is true
+    const r = R(); let castT = 0, n = 0;
+    while (!stop(r) && n++ < 200000) {
+      if (r.phase === 'day') { for (const h of r.hops.slice()) C.collectHop(r, h.id); let o, k = 0; while ((o = C.suggest(r)) && k++ < 40) C.doSuggest(r, o); C.startNight(r); }
+      else if (r.phase === 'night') { C.step(r, C.DT); castT -= C.DT; if (castT <= 0) { const p = C.spellPlan(r); if (p && C.cast(r, p.sp, p.x, p.y)) castT = 0.45; } for (const d of r.drops.slice()) if (d.t > 1) C.collectDrop(r, d.id); }
+      else if (r.phase === 'dawn') C.pickBonus(r, r.choices.slice().sort((a, b) => PREF.indexOf(a) - PREF.indexOf(b))[0]);
+      else break;
+    }
+    r.ev.length = 0; G.parts.length = 0; G.shots.length = 0; G.bolts.length = 0;
+  }
+
+  BETA.game({
+    sfx: H.SFX,
+    logo: () => H.src('logo'),
+    endText: () => document.documentElement.lang === 'en' ? 'Play free' : 'Joue gratuitement',
+    progress: () => { const r = R(); return r ? [r.night, r.phase, r.stats.kills, r.b.length, r.hops.length] : [G.mode]; },
+    async prepare(save, A) {
+      if (A.opts.scene === 'onboarding') return;            // onboarding starts from the title screen of a new game
+      makeSave(save === 'neuf' ? 'milieu' : save);
+      await start(A); await A.wait(500); await clean(A);
+      H.startRun(false); await A.wait(300); await clean(A);
+      const sc = A.opts.scene;
+      if (sc === 'boucle' || sc === 'idle') { simTo(r => r.night >= 3 && r.phase === 'day'); R().berries += 60; R().dayT = C.DAY; }
+      if (sc === 'moment') {   // the last shadows of the 7th night (the Great Fog weakened, or gone): a few taps, then the victorious sunrise
+        simTo(r => r.phase === 'won' || r.phase === 'lost' || (r.night === 7 && r.phase === 'night' && r.si >= r.spawn.length && (r.e.some(e => e.boss && e.hp < e.max * 0.3) || r.e.length <= 4)));
+        if (R().phase === 'lost') { R().phase = 'night'; R().lan.hp = R().lan.max; }
+      }
+      H.events(); R().ev.length = 0; G.dark = R().phase === 'night' ? 1 : 0; G.sun = 0;
+      document.getElementById('pomme').classList.remove('on'); await A.wait(400);
+    },
+    scenes: {
+      // title -> consent -> Pomme's tutorial: drag a tower, a palisade, pick the harvest, night, tap the shadows, swipe the fireflies, dawn
+      async onboarding(A) { watch(A); await start(A); await A.wait(2600);
+        for (let i = 0; i < 2 && A.running(); i++) { const r = R(); if (!r) break; const k = G.tut === 1 ? 'tower' : 'wall', c = k === 'tower' ? C.bestCell(r, 'tower') : [2, 2]; await A.think(); await build(A, { k, c: c[0], r: c[1] }); await A.wait(900); }
+        await A.wait(600); await pickHops(A); await A.wait(800); await A.think(); await A.tapEl('#gonight', 'nuit');
+        const res = await night(A, 60); if (res === 'dawn') await dawnPick(A); await A.wait(1500); },
+      // the core: a stretch of day (drags onto the grid, a harvest), then the night with taps on the shadows
+      async boucle(A) { watch(A); await day(A, 4); const res = await night(A, 200); if (res === 'dawn') await dawnPick(A); },
+      // time-lapse: night after night at triple speed, the village filling the grid (each dawn marked)
+      async progression(A) { watch(A); A.speed(3);
+        for (let n = 0; n < 7 && A.running(); n++) { await day(A, 10); const res = await night(A, 400); if (res === 'dawn') await dawnPick(A); else break; } },
+      // the wow moment: the last shadows of the 7th night (the Great Fog), then the sun rising with its fanfare
+      async moment(A) { watch(A); const res = await night(A, 30); if (res === 'won') await A.wait(3500); },
+      // plays on until stopped (long tests): whole runs one after the other
+      async idle(A) { watch(A);
+        while (A.running()) { const r = R(); if (!r) { H.startRun(false); await A.wait(500); continue; }
+          if (r.phase === 'day') await day(A, 10); else if (r.phase === 'night') { const res = await night(A, 400); if (res === 'dawn') await dawnPick(A); }
+          else if (r.phase === 'dawn') await dawnPick(A); else { await A.wait(3000); await clean(A); const b = visible('#modal [data-again]') || visible('#modal [data-give]'); if (b) await A.tapEl(b, 'rejouer'); else H.startRun(false); await A.wait(1000); } } },
+    },
+  });
+})();
+</script>
+
+</body>
+</html>
