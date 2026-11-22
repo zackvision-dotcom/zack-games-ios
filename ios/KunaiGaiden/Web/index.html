@@ -5789,7 +5789,7 @@ schedule();
     const sx = innerWidth * A.jitter(.14, .2), sy = innerHeight * A.jitter(.62, .7); await A.drag(sx, sy, sx + dx / l * 60, sy + dy / l * 60, 'courir', ms || 700);
   }
   // the pack stays in the frame: an enemy that drifted away comes back in front of the hero (south, the camera side)
-  function regroup(r) { const h = H(); let k = 0; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d > r) { const a = (k++ / 4 - .5) * 1.8, rr = 3 + Math.random() * 1.5, x = h.x + Math.sin(a) * rr, y = h.y + Math.cos(a) * rr * .75 + .6; if (E.free(x, y, .8)) { e.x = x; e.y = y; } e.home = [h.x, h.y]; e.state = 'chase'; e.show = 3; } } }
+  function regroup(r) { const h = H(); let k = 0; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d > r) { for (let t = 0; t < 8; t++) { const a = ((k + t * .37) / 4 - .5) * 1.8, rr = 2.8 + Math.random() * 1.2, x = h.x + Math.sin(a) * rr, y = h.y + Math.cos(a) * rr * .75 + .6; if (E.free(x, y, .8)) { e.x = x; e.y = y; break; } } k++; e.home = [h.x, h.y]; e.state = 'chase'; e.show = 3; } } }
   const nearest = () => { const h = H(); let b = null, bd = 1e9; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d < bd) { bd = d; b = e; } } return [b, bd]; };
 
   // ---- the pack at the gate of Aozora: wolves from the southern woods and bandits, all around the hero ----
@@ -5844,15 +5844,18 @@ schedule();
     scenes: {
       // the core: the pack rushes in, katana swipes through it, techniques drawn in the pad (V, Z, O), the pack thins out
       async boucle(A) { watch(A); const plan = ['fire', null, null, 'chidori', null, 'sphere', null, null, 'fire', null, 'wind', null];
-        await A.wait(600); let i = 0;
+        await A.wait(600); let i = 0, far = 0;
         while (A.running()) {
           const [e, d] = nearest();
           if (!e) { wave(4, 3, 5, ['wolf', 'bandit', 'wolf']); await A.wait(600); continue; }
-          if (d > 5) { regroup(5); await A.wait(250); continue; }
+          if (D().S.hp < 60) K.intro.heal();
+          if (d > 5) { regroup(5); await A.wait(250); if (nearest()[1] > 5 && ++far > 4) {   // stuck out of reach (behind a wall or the gate): gone, a fresh pack comes in
+              for (const o of pack()) if (Math.hypot(o.x - H().x, o.y - H().y) > 5) o.dead = 1e9; wave(4, 3, 4.5, ['wolf', 'bandit', 'wolf']); far = 0; } continue; }
+          far = 0;
           if (pack().length < 3) wave(3, 3.5, 5, ['bandit', 'wolf', 'bandit']);
           const id = plan[i++ % plan.length];
           if (id && d < 5.5) { const ok = await sign(A, id); if (ok) { A.mark(NAME[id]); await A.wait(A.jitter(500, 800)); continue; } }
-          if (!(await slash(A))) await A.wait(200); await A.wait(A.jitter(160, 320));
+          if (!(await slash(A))) { regroup(3.9); await A.wait(150); } await A.wait(A.jitter(160, 320));
           if (D().S.hp < 60) K.intro.heal();
           for (const e of pack()) { e.home = [H().x + (e.home[0] - H().x) * .5, H().y + (e.home[1] - H().y) * .5]; if (e.state === 'home') e.state = 'chase'; }
         } },
