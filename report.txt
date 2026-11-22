@@ -1,2 +1,2 @@
-REVIEW gullstreet ok
-REVIEW silkhop ok
+ATTACH gullstreet gameplay-gullstreet.mp4 7025 KB {'errors': [], 'warnings': None, 'state': 'UPLOAD_COMPLETE'}
+ATTACH silkhop gameplay-silkhop.mp4 8578 KB {'errors': [], 'warnings': None, 'state': 'UPLOAD_COMPLETE'}
