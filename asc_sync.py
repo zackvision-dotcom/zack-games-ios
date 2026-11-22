@@ -165,8 +165,65 @@ def check(suffix):
         print(f"CHECK {suffix} {a['locale']} desc={len(a.get('description') or '')} kw={len(a.get('keywords') or '')} screens={st} previews={pv}")
 
 
+GROUP = 'IPHONE_DYNAMIC_ISLAND_LARGE_PROFILE'   # iPhone 6.9"/6.7" (Dynamic Island, large)
+
+
+def previews_v2(suffix):
+    """App previews with the asset library API (the old appPreviews flow ends in ASSET_FAILED)."""
+    print('== previews', suffix)
+    base = os.path.join(HERE, 'media', suffix, 'previews')
+    files = sorted(os.path.join(base, f) for f in os.listdir(base))[:3] if os.path.isdir(base) else []
+    if not files:
+        print('  no preview files'); return
+    app = find_app(suffix)
+    lib = call('GET', f"/apps/{app['id']}/assetLibrary")['data']['id']
+    vids = []
+    for n, path in enumerate(files, 1):
+        data = open(path, 'rb').read()
+        r = call('POST', '/appAssetLibraryVideos', {'data': {'type': 'appAssetLibraryVideos', 'attributes': {
+            'fileName': os.path.basename(path), 'fileSize': len(data), 'category': 'APP_SCREENSHOTS_AND_PREVIEWS',
+            'previewFrameTimeCode': '00:00:05:00', 'referenceName': f'{suffix} preview {n} {int(time.time())}'},
+            'relationships': {'assetLibrary': {'data': {'type': 'appAssetLibraries', 'id': lib}}}}})['data']
+        upload(r['attributes']['uploadOperations'], data)
+        call('PATCH', f"/appAssetLibraryVideos/{r['id']}", {'data': {'type': 'appAssetLibraryVideos', 'id': r['id'], 'attributes': {'uploaded': True}}})
+        print('  uploaded', os.path.basename(path), len(data) // 1024, 'KB ->', r['id'])
+        vids.append(r['id'])
+    ok = []
+    for vid in vids:
+        for _ in range(60):
+            a = call('GET', f'/appAssetLibraryVideos/{vid}')['data']['attributes']
+            if a['state'] not in ('AWAITING_UPLOAD', 'UPLOAD_COMPLETE'):
+                break
+            time.sleep(10)
+        print('  video', vid, a['state'], json.dumps(a.get('stateDetails'))[:400], 'spec', a.get('specId'))
+        if a['state'] == 'PREPARE_FOR_SUBMISSION':
+            ok.append(vid)
+    if not ok:
+        return
+    ver = edit_version(app['id'])
+    for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
+        for old in call('GET', f"/appStoreVersionLocalizations/{l['id']}/placements?limit=50").get('data', []):
+            at = old['attributes']
+            if at.get('placementType') == 'APP_PREVIEW' and at.get('placementGroup') == GROUP:
+                call('DELETE', f"/appAssetLibraryPlacements/{old['id']}")
+        for vid in ok:
+            p = call('POST', '/appAssetLibraryPlacements', {'data': {'type': 'appAssetLibraryPlacements',
+                'attributes': {'placementType': 'APP_PREVIEW', 'placementGroup': GROUP},
+                'relationships': {'video': {'data': {'type': 'appAssetLibraryVideos', 'id': vid}},
+                                  'appStoreVersionLocalization': {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id']}}}}})['data']
+            print('  placement', l['attributes']['locale'], p['attributes'].get('state'))
+
+
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('PREVIEWS2'):
+        bad = []
+        for g in sys.argv[1:]:
+            try:
+                previews_v2(g)
+            except Exception as e:
+                print('  FAILED', g, e); bad.append(g)
+        sys.exit(1 if bad else 0)
     if os.environ.get('REFDATA'):
         r = call('GET', '/appAssetLibraryRefData')
         s = json.dumps(r)
