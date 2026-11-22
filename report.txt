@@ -1,2 +1,7 @@
-SUBMIT gullstreet version item added
-SUBMIT gullstreet draft only, items: [dict_keys([]), dict_keys([])]
+Traceback (most recent call last):
+  File "/home/runner/work/zack-games-ios/zack-games-ios/asc_sync.py", line 260, in <module>
+    app = find_app(g); ver = edit_version(app['id'])
+                             ~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/runner/work/zack-games-ios/zack-games-ios/asc_sync.py", line 63, in edit_version
+    raise RuntimeError('no editable version: ' + ', '.join(v['attributes']['appStoreState'] for v in vs))
+RuntimeError: no editable version: READY_FOR_REVIEW
