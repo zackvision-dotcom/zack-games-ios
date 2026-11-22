@@ -271,7 +271,7 @@ if __name__ == '__main__':
                     print('SUBMIT', g, 'version item added')
                 except Exception as e:
                     msg = str(e); print('SUBMIT', g, 'ITEM ERR', ' | '.join(_re.findall(r'"(?:code|detail|title)" : "([^"]+)"', msg))[:2500]); continue
-            for iap in ([] if os.environ.get('DRAFT_ONLY') else call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']):
+            for iap in ([] if os.environ.get('DRAFT_ONLY') and not os.environ.get('WITH_IAP') else call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']):
                 a = iap['attributes']
                 if a['state'] != 'READY_TO_SUBMIT':
                     print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], a['state'], 'skipped'); continue
