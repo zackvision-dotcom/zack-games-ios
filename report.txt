@@ -1,69 +1,35 @@
-== clockpawsquad
+== dungeondash
   version text fr-FR ok
   version text en-US ok
   app info fr-FR ok
   app info en-US ok
-    ops 1 [(0, 570267)]
-    shot 01.jpg 556 KB
-    ops 1 [(0, 514325)]
-    shot 02.jpg 502 KB
-    ops 1 [(0, 482296)]
-    shot 03.jpg 470 KB
-    ops 1 [(0, 528214)]
-    shot 04.jpg 515 KB
-    ops 1 [(0, 510263)]
-    shot 05.jpg 498 KB
+    ops 1 [(0, 381060)]
+    shot 01.jpg 372 KB
+    ops 1 [(0, 269834)]
+    shot 02.jpg 263 KB
+    ops 1 [(0, 372519)]
+    shot 03.jpg 363 KB
+    ops 1 [(0, 376472)]
+    shot 04.jpg 367 KB
+    ops 1 [(0, 368600)]
+    shot 05.jpg 359 KB
   media fr-FR 5 screens, 1 previews
-    ops 1 [(0, 570267)]
-    shot 01.jpg 556 KB
-    ops 1 [(0, 514325)]
-    shot 02.jpg 502 KB
-    ops 1 [(0, 482296)]
-    shot 03.jpg 470 KB
-    ops 1 [(0, 528214)]
-    shot 04.jpg 515 KB
-    ops 1 [(0, 510263)]
-    shot 05.jpg 498 KB
+    ops 1 [(0, 381060)]
+    shot 01.jpg 372 KB
+    ops 1 [(0, 269834)]
+    shot 02.jpg 263 KB
+    ops 1 [(0, 372519)]
+    shot 03.jpg 363 KB
+    ops 1 [(0, 376472)]
+    shot 04.jpg 367 KB
+    ops 1 [(0, 368600)]
+    shot 05.jpg 359 KB
   media en-US 5 screens, 1 previews
-== previews clockpawsquad
-  uploaded 1.mp4 18100 KB -> 3e400019-7926-8d68-8129-35731532edce
-  video 3e400019-7926-8d68-8129-35731532edce PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+== previews dungeondash
+  uploaded 1.mp4 17180 KB -> 74400019-7926-8d4c-8135-8c54460ee51e
+  video 74400019-7926-8d4c-8135-8c54460ee51e PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
   placement fr-FR ACTIVE
   placement en-US ACTIVE
-== pulsepost
-  version text fr-FR ok
-  version text en-US ok
-  app info fr-FR ok
-  app info en-US ok
-    ops 1 [(0, 567903)]
-    shot 01.jpg 554 KB
-    ops 1 [(0, 575805)]
-    shot 02.jpg 562 KB
-    ops 1 [(0, 623869)]
-    shot 03.jpg 609 KB
-    ops 1 [(0, 535261)]
-    shot 04.jpg 522 KB
-    ops 1 [(0, 587592)]
-    shot 05.jpg 573 KB
-  media fr-FR 5 screens, 1 previews
-    ops 1 [(0, 567903)]
-    shot 01.jpg 554 KB
-    ops 1 [(0, 575805)]
-    shot 02.jpg 562 KB
-    ops 1 [(0, 623869)]
-    shot 03.jpg 609 KB
-    ops 1 [(0, 535261)]
-    shot 04.jpg 522 KB
-    ops 1 [(0, 587592)]
-    shot 05.jpg 573 KB
-  media en-US 5 screens, 1 previews
-== previews pulsepost
-  uploaded 1.mp4 18189 KB -> ef800019-7926-8d6b-811d-8a923b4ba14a
-  video ef800019-7926-8d6b-811d-8a923b4ba14a PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
-  placement fr-FR ACTIVE
-  placement en-US ACTIVE
-CHECK clockpawsquad fr-FR desc=564 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18535196, 'fileName': '1.mp4', 'sourceFileChecksum': 'b1a08f0cf045a4acf1aa0bcdb35a3bf5', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK clockpawsquad en-US desc=529 kw=74 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18535196, 'fileName': '1.mp4', 'sourceFileChecksum': 'b1a08f0cf045a4acf1aa0bcdb35a3bf5', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK pulsepost fr-FR desc=462 kw=84 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18626421, 'fileName': '1.mp4', 'sourceFileChecksum': 'c3fe437b7d644659c78d895ae5ad692b', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK pulsepost en-US desc=461 kw=82 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 18626421, 'fileName': '1.mp4', 'sourceFileChecksum': 'c3fe437b7d644659c78d895ae5ad692b', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK dungeondash fr-FR desc=616 kw=92 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17593140, 'fileName': '1.mp4', 'sourceFileChecksum': 'f19706ab1281f136a02c520d7ebc2be8', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK dungeondash en-US desc=554 kw=91 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17593140, 'fileName': '1.mp4', 'sourceFileChecksum': 'f19706ab1281f136a02c520d7ebc2be8', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
 done; failed: []
