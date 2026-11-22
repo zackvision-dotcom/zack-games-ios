@@ -1,11 +1,2 @@
 # one bundle suffix per line: the games synced by the next push
 lanternhold
-silkhop
-clockpawsquad
-pulsepost
-dungeondash
-gullstreet
-coralstack
-crumblecrew
-circuitcaper
-vanvoyage

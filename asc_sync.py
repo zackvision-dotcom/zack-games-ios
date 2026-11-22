@@ -152,6 +152,17 @@ def sync(suffix, fiches):
         print('  media', loc, len(shots), 'screens,', len(previews), 'previews')
 
 
+def check(suffix):
+    app = find_app(suffix); ver = edit_version(app['id'])
+    for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
+        sets = call('GET', f"/appStoreVersionLocalizations/{l['id']}/appScreenshotSets?include=appScreenshots&limit=50")
+        prev = call('GET', f"/appStoreVersionLocalizations/{l['id']}/appPreviewSets?include=appPreviews&limit=50")
+        st = [s['attributes'].get('assetDeliveryState', {}).get('state') for s in sets.get('included', [])]
+        pv = [s['attributes'].get('assetDeliveryState', {}).get('state') for s in prev.get('included', [])]
+        a = l['attributes']
+        print(f"CHECK {suffix} {a['locale']} desc={len(a.get('description') or '')} kw={len(a.get('keywords') or '')} screens={st} previews={pv}")
+
+
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
     games = sys.argv[1:] or sorted(d for d in os.listdir(os.path.join(HERE, 'media')) if os.path.isdir(os.path.join(HERE, 'media', d)))
@@ -161,5 +172,10 @@ if __name__ == '__main__':
             sync(g, fiches)
         except Exception as e:
             print('  FAILED', g, e); failed.append(g)
+    for g in games:
+        try:
+            check(g)
+        except Exception as e:
+            print('  check failed', g, e)
     print('done; failed:', failed)
     sys.exit(1 if failed else 0)
