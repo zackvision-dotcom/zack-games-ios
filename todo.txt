@@ -1,2 +1,2 @@
-rmkw naruto
+setkw
 kunaigaiden
