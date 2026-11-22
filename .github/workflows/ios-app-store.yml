@@ -12,6 +12,7 @@ on:
       upload_to_app_store: { type: boolean, required: false, default: true }
       build_only: { type: boolean, required: false, default: false }
       build_number: { type: string, required: false, default: "" }
+      ads_test: { type: string, required: false, default: "1" }
   workflow_dispatch:
     inputs:
       app:
@@ -34,6 +35,12 @@ on:
         required: true
         type: boolean
         default: false
+      ads_test:
+        description: "AdMob units: 1 = Google TEST units (dev, TestFlight), 0 = REAL units (App Store release build only)"
+        required: true
+        type: choice
+        options: ["1", "0"]
+        default: "1"
 
 jobs:
   build:
@@ -47,6 +54,8 @@ jobs:
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      # AdMob (games with ads): 1 = Google's public TEST units (default), 0 = the game's REAL units (release build).
+      ADS_TEST: ${{ inputs.ads_test == '0' && '0' || '1' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -86,7 +95,9 @@ jobs:
             -destination "generic/platform=iOS" -archivePath "$ARCHIVE_PATH" \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
-            MARKETING_VERSION="${{ inputs.marketing_version }}" CURRENT_PROJECT_VERSION="${{ inputs.build_number || github.run_number }}"
+            MARKETING_VERSION="${{ inputs.marketing_version }}" CURRENT_PROJECT_VERSION="${{ inputs.build_number || github.run_number }}" \
+            ADS_TEST="$ADS_TEST"
+          if [ "$ADS_TEST" = "0" ]; then echo "::warning::AdMob: REAL ad units in this build (release only, never test it with real ads)"; else echo "AdMob: Google TEST ad units"; fi
 
       - name: Export signed IPA
         if: ${{ !inputs.build_only }}

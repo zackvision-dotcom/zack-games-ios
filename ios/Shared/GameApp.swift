@@ -68,6 +68,16 @@ struct GameWebView: UIViewRepresentable {
             top?.present(alert, animated: true)
         }
 
+        /// Links with target="_blank" (privacy policy, Google's ad policy, mailto:) open in Safari / Mail,
+        /// never inside the game's web view.
+        func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
+                     for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+            if let url = navigationAction.request.url, ["https", "http", "mailto"].contains(url.scheme?.lowercased() ?? "") {
+                UIApplication.shared.open(url)
+            }
+            return nil
+        }
+
         func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String,
                      initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
             let a = UIAlertController(title: nil, message: message, preferredStyle: .alert)

@@ -15,8 +15,10 @@ settings:
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     ENABLE_BITCODE: NO
     GENERATE_INFOPLIST_FILE: NO
-    # AdMob: 1 = Google's public TEST ad units (Debug, TestFlight, every CI build). Set to 0 ONLY for the App Store
-    # submission build (real units of admob-ids.json). A Debug build always uses the test units (NativeAds.swift).
+    # AdMob, ONE switch: 1 = Google's public TEST ad units (development, TestFlight, CI checks). 0 = the game's REAL
+    # units (GADInterstitialUnit / GADRewardedUnit below, from games-kit/admob-ids.json) = the App Store release build.
+    # The CI sets it per build: workflow input ads_test, or "Game ADS_TEST=0" in ios/build-queue.txt. Leave 1 here.
+    # A Debug build always uses the test units (ios/Ads/NativeAds.swift). Never tap real ads yourself (account ban).
     ADS_TEST: "1"
 
 packages:
