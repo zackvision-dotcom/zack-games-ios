@@ -264,8 +264,8 @@ if __name__ == '__main__':
             sub = next((x for x in subs if x['attributes'].get('state') == 'READY_FOR_REVIEW'), None)
             if not sub:
                 sub = call('POST', '/reviewSubmissions', {'data': {'type': 'reviewSubmissions', 'attributes': {'platform': 'IOS'}, 'relationships': {'app': {'data': {'type': 'apps', 'id': app['id']}}}}})['data']
-            items = call('GET', f"/reviewSubmissions/{sub['id']}/items?limit=20")['data']
-            if not items:
+            items = call('GET', f"/reviewSubmissions/{sub['id']}/items?limit=20&include=appStoreVersion")['data']
+            if not any(((it.get('relationships') or {}).get('appStoreVersion') or {}).get('data') for it in items):
                 try:
                     call('POST', '/reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems', 'relationships': {'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': sub['id']}}, 'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': ver['id']}}}}})
                     print('SUBMIT', g, 'version item added')
