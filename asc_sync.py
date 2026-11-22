@@ -226,9 +226,16 @@ if __name__ == '__main__':
         sys.exit(1 if bad else 0)
     if os.environ.get('REFDATA'):
         r = call('GET', '/appAssetLibraryRefData')
-        s = json.dumps(r)
-        print('REFDATA', len(s))
-        print(s[:12000])
+        def walk(o, path=''):
+            if isinstance(o, dict):
+                if 'frameRates' in o or 'dimensions' in o:
+                    print('SPEC', path, json.dumps(o)[:600])
+                for k, v in o.items():
+                    walk(v, path + '.' + k)
+            elif isinstance(o, list):
+                for i, v in enumerate(o):
+                    walk(v, path + f'[{i}]')
+        walk(r)
         sys.exit(0)
     if os.environ.get('LOOTBOX'):
         # games whose card packs are random and can be bought with a currency sold for money: declare it (age rating)
