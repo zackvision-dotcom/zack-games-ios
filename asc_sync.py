@@ -14,7 +14,7 @@ import jwt, requests
 API = 'https://api.appstoreconnect.apple.com/v1'
 HERE = os.path.dirname(os.path.abspath(__file__))
 SUPPORT = 'https://zackvision-dotcom.github.io/zack-games-ios/support.html'
-PRIVACY = 'https://zackvision-dotcom.github.io/zack-games-ios/privacy.html'
+PRIVACY = 'https://zackvision.fr/jeux/confidentialite/'
 LOCALES = ['fr-FR', 'en-US']
 _tok = [None, 0]
 
@@ -98,6 +98,9 @@ def app_info(app, fiche):
             call('POST', '/appInfoLocalizations', {'data': {'type': 'appInfoLocalizations', 'attributes': dict(attrs, locale=loc, name=name),
                  'relationships': {'appInfo': {'data': {'type': 'appInfos', 'id': info['id']}}}}})
         print('  app info', loc, 'ok')
+    for loc, l in locs.items():   # every other store language gets the same privacy URL
+        if loc not in LOCALES:
+            call('PATCH', f"/appInfoLocalizations/{l['id']}", {'data': {'type': 'appInfoLocalizations', 'id': l['id'], 'attributes': {'privacyPolicyUrl': PRIVACY}}})
 
 
 def media_set(kind, loc_id, display):

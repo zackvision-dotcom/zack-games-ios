@@ -1,4 +1,4 @@
-iapstate
+textonly
 silkhop
 lanternhold
 clockpawsquad
@@ -9,3 +9,5 @@ coralstack
 crumblecrew
 circuitcaper
 vanvoyage
+kunaigaiden
+braise
