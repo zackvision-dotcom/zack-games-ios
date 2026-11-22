@@ -241,6 +241,35 @@ if __name__ == '__main__':
                     call('PATCH', f"/inAppPurchaseLocalizations/{l['id']}", {'data': {'type': 'inAppPurchaseLocalizations', 'id': l['id'], 'attributes': {'description': d}}})
                     print('IAPDESC', pid, l['attributes']['locale'], d)
         sys.exit(0)
+    if os.environ.get('SUBMIT'):
+        # App Review submission, ONLY on Zack's written go in the Developer session ("Oui soumet", 22/11/2026 for Gull Street + Silk Hop)
+        for g in sys.argv[1:]:
+            app = find_app(g); ver = edit_version(app['id'])
+            # first in-app purchases go to review with this version
+            for iap in call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']:
+                a = iap['attributes']
+                if a['state'] != 'READY_TO_SUBMIT':
+                    print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], a['state'], 'skipped'); continue
+                try:
+                    call('POST', '/inAppPurchaseSubmissions', {'data': {'type': 'inAppPurchaseSubmissions', 'relationships': {'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}})
+                    print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], 'queued')
+                except Exception as e:
+                    print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], 'ERR', str(e)[:300])
+            subs = call('GET', f"/reviewSubmissions?filter[app]={app['id']}&filter[platform]=IOS&limit=10")['data']
+            sub = next((x for x in subs if x['attributes'].get('state') == 'READY_FOR_REVIEW'), None)
+            if not sub:
+                sub = call('POST', '/reviewSubmissions', {'data': {'type': 'reviewSubmissions', 'attributes': {'platform': 'IOS'}, 'relationships': {'app': {'data': {'type': 'apps', 'id': app['id']}}}}})['data']
+            items = call('GET', f"/reviewSubmissions/{sub['id']}/items?limit=20")['data']
+            if not items:
+                call('POST', '/reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems', 'relationships': {'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': sub['id']}}, 'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': ver['id']}}}}})
+            try:
+                r = call('PATCH', f"/reviewSubmissions/{sub['id']}", {'data': {'type': 'reviewSubmissions', 'id': sub['id'], 'attributes': {'submitted': True}}})
+                print('SUBMIT', g, 'submission', r['data']['attributes'].get('state'))
+            except Exception as e:
+                print('SUBMIT', g, 'ERR', str(e)[:800])
+            v = call('GET', f"/appStoreVersions/{ver['id']}")['data']['attributes']
+            print('SUBMIT', g, 'version', v.get('versionString'), v.get('appStoreState'))
+        sys.exit(0)
     if os.environ.get('ADSRATING'):
         # age rating: the app shows ads (AdMob), never submits
         for g in sys.argv[1:]:
