@@ -103,6 +103,14 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
 #title .hero{position:relative;width:180px;height:300px}#title .hero .th{position:absolute;left:89px;top:-40vh;width:3px;height:calc(40vh + 150px);background:var(--ink);transform-origin:50% 0;animation:sway 2.6s ease-in-out infinite}
 #title .hero .th img{position:absolute;left:-74px;bottom:-130px;width:150px;height:150px;object-fit:contain}@keyframes sway{50%{transform:rotate(7deg)}0%,100%{transform:rotate(-7deg)}}
 #title .b1{max-width:320px}
+.go{font-size:25px;padding:16px;margin-top:12px;animation:gob 1.1s ease-in-out infinite alternate}@keyframes gob{to{transform:scale(1.04)}}
+.rec{display:inline-block;margin:2px 0 4px;padding:4px 14px;border-radius:999px;border:3px solid var(--ink);background:var(--coral);color:#fff;font-weight:900;font-size:17px;text-shadow:0 2px 0 rgba(43,34,56,.35);transform:scale(0);transition:transform .45s cubic-bezier(.3,1.8,.5,1)}.rec.on{transform:scale(1);animation:recw 1.4s .5s ease-in-out infinite}@keyframes recw{50%{transform:scale(1.07) rotate(-2deg)}}
+.goal{display:flex;gap:10px;align-items:center;background:#fff;border:3px solid var(--ink);border-radius:16px;padding:6px 10px;margin-top:10px;text-align:left}.goal img{width:48px;height:44px;object-fit:contain;filter:grayscale(1);opacity:.55}.goal>div{flex:1;min-width:0}.goal small{display:block;font-size:12px;font-weight:800;color:var(--branch)}.goal b{font-size:15px}.goal .pbar i{background:var(--leaf)}
+.why{font-weight:900;font-size:17px;color:var(--coral)}
+.far small{font-size:13px;font-weight:800;color:var(--branch)}.trk{position:relative;margin:6px 26px 14px 8px}.trk .pbar{height:14px}.trk .pbar i{background:var(--coral)}.trk img{position:absolute;top:-12px;width:34px;height:34px;object-fit:contain;transform:translateX(-50%)}.trk img.fl{left:auto;right:-26px;transform:none;top:-14px;width:30px;height:38px}
+.daily{display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left;background:var(--coral);color:#fff;border:3px solid var(--ink);border-radius:14px;padding:5px 10px;box-shadow:0 3px 0 var(--ink);font:inherit;animation:pulse 1s infinite alternate}.daily b{font-size:14px;text-shadow:0 1px 0 rgba(43,34,56,.4)}.daily small{grid-column:1;font-size:12px;font-weight:800}.daily small i{width:16px;height:16px;vertical-align:-3px}.daily .fire{grid-column:2;grid-row:1/3;font-weight:900;font-size:18px;background:var(--cream);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:2px 9px}.daily.done{background:var(--leaf);animation:none}
+.dchip{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 60px);text-align:center;font-weight:900;font-size:13px;background:rgba(255,244,214,.92);border:2px solid var(--ink);border-radius:999px;padding:3px 8px}#timer.late{background:var(--coral);color:#fff}
+.dres{margin:6px 0;padding:6px 10px;border:3px solid var(--ink);border-radius:14px;background:#fff;font-weight:800;font-size:14px}.dres.ok{background:var(--leaf);color:#fff;text-shadow:0 1px 0 rgba(43,34,56,.4)}.dres.ok span{display:block;font-size:17px}.dres i.gn{width:18px;height:18px;vertical-align:-3px}.dres .b1{font-size:15px;padding:8px}
 </style>
 </head>
 <body>
@@ -197,6 +205,32 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
   if (opts.seed) seedRandom(opts.seed);
   installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  let offCtx = null;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 32000;
+    offCtx = new OfflineAudioContext(1, Math.ceil(AUDIO_LEN * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    Object.defineProperty(offCtx, 'currentTime', { get: () => videoNow() / 1000 });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the whole soundtrack and returns the part from `from` (s) lasting `dur` (s), as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.max(0, Math.floor(from * r)), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
   addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
   addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
   // FPS (real frames per real second)
@@ -475,6 +509,8 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
     s.camB = Math.min(s.camB, s.y - K.camUp); emit(s, 'revive');
   }
   const stars = s => s.dw.reduce((a, b) => a + b, 0);
+  // Papi's safety net: on the first levels (not the challenge) the first fall of a run is caught for free (C.revive), no ad
+  const netLevel = L => !L.challenge && L.id <= 3;
 
   // ---------- planning (the level bot and the BETA robot) ----------
   // value of a state in flight: the highest anchor she could grab soon (and the flower), plus what she collected on the way
@@ -552,14 +588,14 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   }
   function finish(L, acts, cfg) { const r = replay(L, acts, cfg); return { ok: r.ok, acts, t: r.s.t, dew: stars(r.s), gnats: r.s.gnats, maxN: r.s.maxN, swings: acts.filter(a => a.a != null).length }; }
 
-  const C = { K, init, clone, step, attach, release, web, pick, nearestAnchor, revive, mult, dropY, catPhase, canAttach, stars, options, flightValue, solve, replay };
+  const C = { K, init, clone, step, attach, release, web, pick, nearestAnchor, revive, mult, dropY, catPhase, canAttach, stars, netLevel, options, flightValue, solve, replay };
   root.SHC = C; if (typeof module !== 'undefined') module.exports = C;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
 <script>// Silk Hop — garden 1 (the veg patch): 12 levels + the timed challenge. Generated by tools/gen-levels.mjs, then frozen as data.
 // y goes up from the grass (0). anchors: [x, y, leaf|twig|peg]; gnats and dew: [x, y]; flower: the finish;
 // drops: rain lanes {x, y0 top, y1 bottom, p period s, o offset s}; cats: {x, y, r blow radius, sl asleep s, aw awake s, o offset s};
-// webs: trampoline threads allowed; par (challenge): target time in seconds, set from the bot's run.
+// webs: trampoline threads allowed; fun pass (22/11/2026): 2 rain lanes removed in levels 10 and 12 (human-like bot: 44 % and 19 % -> ~65-70 %); sawtooth: level 9 hard (+1 fast rain lane), level 11 a breather (4 rain lanes and 1 cat removed); par (challenge): target time in seconds, set from the bot's run.
 (function (root) {
   const LEVELS = [
   {id:1,name:['Premier fil','First thread'],start:[200,14],anchors:[[266,175,'leaf'],[266,334,'leaf'],[136,492,'leaf']],gnats:[[266,218],[201,376]],dew:[[266,314],[201,393],[201,393]],flower:[250,642],top:772,webs:0,drops:[],cats:[],tut:1},
@@ -570,10 +606,10 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   {id:6,name:['Le chat endormi','The sleeping cat'],start:[200,14],anchors:[[300,165,'twig'],[117,348,'twig'],[105,518,'twig'],[296,680,'leaf'],[92,670,'leaf'],[107,866,'peg'],[284,866,'peg'],[105,1049,'leaf'],[139,1239,'peg'],[298,1239,'peg'],[104,1420,'peg'],[282,1420,'peg'],[125,1595,'peg'],[304,1595,'peg'],[82,1776,'twig'],[337,1744,'twig'],[315,1940,'leaf'],[120,2104,'twig'],[313,2282,'twig'],[57,2301,'twig'],[107,2442,'leaf'],[261,2477,'twig'],[318,2626,'leaf'],[139,2649,'twig'],[326,2792,'leaf'],[83,2954,'twig'],[326,2927,'twig']],gnats:[[239,195],[178,270],[113,382],[109,443],[201,584],[292,696],[288,770],[224,893],[165,965],[122,1104],[127,1260],[116,1331],[204,1495],[230,1610],[156,1705],[160,1810],[237,1867],[250,1962],[185,2022],[184,2128],[249,2191],[244,2319],[176,2377],[177,2462],[248,2540],[322,2687],[205,2860]],dew:[[64,1158],[269,2044],[358,2711]],flower:[250,3104],top:3234,webs:1,drops:[{x:162,y0:3066,y1:2506,p:1.79,o:1.65},{x:170,y0:2749,y1:2189,p:1.9,o:0.07}],cats:[{x:348,y:1550,r:100,sl:2.9,aw:1.4,o:0.4}]},
   {id:7,name:['Haricots grimpants','Runner beans'],start:[200,14],anchors:[[98,165,'twig'],[295,337,'leaf'],[119,337,'leaf'],[66,526,'leaf'],[331,697,'twig'],[125,863,'peg'],[302,863,'peg'],[330,1029,'leaf'],[293,1202,'leaf'],[53,1178,'leaf'],[94,1373,'leaf'],[337,1333,'twig'],[293,1552,'twig'],[92,1738,'leaf'],[281,1930,'twig'],[107,1906,'twig'],[112,2102,'twig'],[322,2068,'leaf'],[283,2283,'twig'],[128,2273,'twig'],[321,2472,'leaf'],[86,2646,'leaf'],[344,2619,'twig'],[309,2813,'twig'],[323,2982,'leaf'],[101,3160,'leaf'],[337,3185,'leaf'],[113,3325,'peg'],[278,3325,'peg']],gnats:[[164,199],[229,235],[181,395],[199,563],[321,732],[312,797],[316,935],[312,1093],[194,1271],[160,1388],[227,1455],[226,1597],[159,1649],[187,1809],[225,1959],[168,2009],[169,2132],[226,2189],[302,2351],[204,2510],[198,2717],[314,2827],[318,2896],[249,3021],[175,3081],[160,3192],[219,3254]],dew:[[343,1129],[134,2216],[244,3083]],flower:[150,3475],top:3605,webs:1,drops:[{x:256,y0:2534,y1:1974,p:2.58,o:1.67},{x:204,y0:1285,y1:725,p:2.33,o:0.95},{x:254,y0:1743,y1:1183,p:1.93,o:1.48},{x:275,y0:3091,y1:2531,p:1.96,o:0.87}],cats:[{x:348,y:1700,r:100,sl:2.6,aw:1.3,o:1.8}]},
   {id:8,name:['La serre ouverte','The open greenhouse'],start:[200,14],anchors:[[317,165,'twig'],[136,341,'peg'],[283,341,'peg'],[131,531,'peg'],[292,531,'peg'],[117,714,'peg'],[297,714,'peg'],[129,881,'peg'],[298,881,'peg'],[297,1068,'leaf'],[50,1033,'leaf'],[95,1259,'leaf'],[316,1298,'leaf'],[286,1445,'twig'],[89,1640,'twig'],[126,1814,'peg'],[275,1814,'peg'],[84,1984,'twig'],[333,2178,'twig'],[96,2362,'peg'],[294,2362,'peg'],[297,2548,'twig'],[89,2730,'twig'],[65,2921,'leaf'],[135,3092,'peg'],[271,3092,'peg'],[87,3285,'twig'],[335,3313,'leaf'],[122,3460,'peg'],[299,3460,'peg']],gnats:[[257,191],[196,267],[188,362],[240,421],[234,551],[175,637],[177,743],[238,781],[298,911],[297,983],[230,1107],[162,1147],[191,1336],[220,1461],[155,1559],[182,1710],[211,1825],[148,1886],[209,2034],[254,2202],[175,2260],[163,2402],[230,2452],[193,2628],[81,2761],[73,2823],[134,2948],[202,2991],[210,3133],[148,3183],[158,3308],[228,3379]],dew:[[153,1165],[279,2298],[130,3189]],flower:[150,3610],top:3740,webs:2,drops:[{x:168,y0:1953,y1:1393,p:2.35,o:1.18},{x:134,y0:2482,y1:1922,p:1.93,o:0.58},{x:240,y0:1183,y1:623,p:2.32,o:0.99},{x:159,y0:2806,y1:2246,p:2.56,o:0.4},{x:277,y0:1143,y1:583,p:1.93,o:1.45}],cats:[{x:348,y:1800,r:100,sl:3.1,aw:1.3,o:0.7}]},
-  {id:9,name:['Deux chats','Two cats'],start:[200,14],anchors:[[315,165,'leaf'],[104,350,'peg'],[295,350,'peg'],[88,541,'leaf'],[301,727,'leaf'],[115,907,'twig'],[337,1078,'twig'],[96,1051,'leaf'],[110,1257,'leaf'],[294,1434,'leaf'],[104,1612,'leaf'],[302,1809,'twig'],[56,1779,'twig'],[109,1997,'twig'],[303,2188,'twig'],[134,2381,'peg'],[279,2381,'peg'],[332,2553,'leaf'],[110,2729,'peg'],[283,2729,'peg'],[304,2904,'twig'],[61,2940,'twig'],[97,3095,'twig'],[303,3280,'leaf'],[87,3240,'twig'],[81,3456,'leaf'],[297,3428,'twig'],[305,3647,'twig']],gnats:[[245,186],[174,267],[96,420],[159,584],[230,642],[239,745],[177,820],[189,949],[263,982],[261,1114],[186,1179],[171,1305],[233,1360],[199,1480],[170,1661],[236,1729],[238,1826],[173,1901],[206,2073],[219,2247],[200,2418],[266,2446],[221,2591],[207,2804],[235,2955],[166,2984],[166,3145],[234,3170],[192,3335],[156,3474],[230,3570]],dew:[[245,1368],[295,2497],[138,3388]],flower:[150,3797],top:3927,webs:2,drops:[{x:240,y0:1245,y1:685,p:1.72,o:1.76},{x:241,y0:2737,y1:2177,p:1.72,o:1.44},{x:273,y0:3475,y1:2915,p:1.75,o:1.93},{x:215,y0:1802,y1:1242,p:1.76,o:0.63}],cats:[{x:348,y:1267,r:100,sl:2.9,aw:1.5,o:1.5},{x:348,y:2533,r:100,sl:2.9,aw:1.3,o:0.3}]},
-  {id:10,name:['Orage de mai','May storm'],start:[200,14],anchors:[[75,165,'twig'],[294,356,'twig'],[104,550,'twig'],[298,512,'leaf'],[292,742,'leaf'],[69,914,'twig'],[118,1103,'peg'],[260,1103,'peg'],[138,1292,'peg'],[279,1292,'peg'],[302,1467,'twig'],[58,1664,'twig'],[324,1845,'leaf'],[299,2029,'twig'],[130,2218,'peg'],[266,2218,'peg'],[324,2410,'leaf'],[336,2601,'leaf'],[82,2790,'leaf'],[309,2826,'twig'],[345,2976,'leaf'],[105,2987,'leaf'],[323,3149,'leaf'],[81,3332,'leaf'],[299,3350,'leaf'],[305,3520,'twig'],[63,3692,'twig'],[307,3869,'twig']],gnats:[[185,225],[199,416],[198,607],[181,802],[133,940],[196,995],[219,1141],[179,1208],[220,1368],[221,1506],[139,1570],[147,1682],[235,1751],[316,1882],[307,1946],[243,2055],[186,2121],[195,2261],[259,2321],[328,2447],[332,2500],[251,2633],[167,2710],[214,2850],[334,3037],[242,3163],[162,3226],[193,3416],[184,3562],[185,3734]],dew:[[271,1397],[358,2524],[119,3623]],flower:[150,4019],top:4149,webs:2,drops:[{x:227,y0:1160,y1:600,p:2.24,o:0.1},{x:162,y0:2331,y1:1771,p:2.06,o:1.79},{x:189,y0:3826,y1:3266,p:2.21,o:1.02},{x:220,y0:1003,y1:443,p:2.54,o:1.27},{x:206,y0:1925,y1:1365,p:1.84,o:0.52},{x:277,y0:2001,y1:1441,p:2,o:0.39},{x:167,y0:2144,y1:1584,p:2.18,o:0.6}],cats:[{x:348,y:2000,r:100,sl:2.5,aw:1.5,o:1.3}]},
-  {id:11,name:['Le grand saule','The big willow'],start:[200,14],anchors:[[311,165,'leaf'],[64,344,'leaf'],[306,535,'twig'],[53,739,'twig'],[91,938,'leaf'],[124,1130,'peg'],[305,1130,'peg'],[89,1307,'twig'],[81,1498,'leaf'],[335,1675,'twig'],[113,1670,'leaf'],[105,1874,'twig'],[296,2050,'twig'],[108,2232,'leaf'],[346,2412,'twig'],[139,2442,'leaf'],[310,2596,'twig'],[51,2778,'leaf'],[338,2792,'twig'],[114,2958,'peg'],[287,2958,'peg'],[60,3139,'leaf'],[275,3168,'twig'],[336,3318,'twig'],[101,3496,'leaf'],[312,3685,'leaf'],[136,3709,'twig'],[105,3877,'leaf'],[105,4063,'peg'],[278,4063,'peg'],[108,4246,'peg'],[295,4246,'peg']],gnats:[[229,192],[146,258],[185,408],[222,588],[137,629],[66,769],[78,834],[198,1020],[233,1172],[161,1199],[86,1355],[84,1409],[166,1540],[250,1577],[220,1735],[169,1893],[232,1948],[202,2128],[227,2278],[334,2460],[322,2502],[181,2652],[130,2817],[208,2861],[211,2983],[136,3037],[198,3198],[258,3357],[179,3413],[171,3512],[242,3599],[209,3741],[192,3928],[284,4082],[289,4170]],dew:[[42,1407],[126,2688],[134,3990]],flower:[150,4396],top:4526,webs:2,drops:[{x:125,y0:2337,y1:1777,p:2.18,o:1.85},{x:235,y0:2136,y1:1576,p:1.71,o:0.31},{x:161,y0:2736,y1:2176,p:2.02,o:0.64},{x:130,y0:2268,y1:1708,p:2.48,o:1.1},{x:268,y0:4089,y1:3529,p:2.3,o:1.09},{x:158,y0:1594,y1:1034,p:2.5,o:0.07}],cats:[{x:52,y:1433,r:100,sl:2.9,aw:1.3,o:0.7},{x:52,y:2867,r:100,sl:2.6,aw:1.3,o:0.3}]},
-  {id:12,name:['Le toit du potager','Top of the garden'],start:[200,14],anchors:[[77,165,'twig'],[348,356,'twig'],[320,547,'leaf'],[105,739,'peg'],[294,739,'peg'],[310,936,'twig'],[73,1133,'twig'],[317,1321,'twig'],[101,1526,'peg'],[262,1526,'peg'],[99,1732,'twig'],[311,1923,'leaf'],[53,2111,'leaf'],[109,2309,'peg'],[271,2309,'peg'],[336,2489,'twig'],[111,2488,'leaf'],[67,2690,'leaf'],[318,2884,'twig'],[108,2903,'twig'],[89,3085,'leaf'],[68,3274,'leaf'],[115,3480,'peg'],[269,3480,'peg'],[105,3686,'leaf'],[288,3719,'twig'],[335,3894,'twig'],[76,4079,'leaf'],[307,4276,'leaf'],[77,4236,'leaf'],[301,4472,'leaf'],[139,4492,'leaf']],gnats:[[213,214],[334,423],[248,575],[177,649],[208,789],[231,970],[152,1019],[195,1216],[299,1379],[280,1422],[181,1611],[170,1766],[240,1832],[225,1940],[139,2001],[162,2172],[304,2362],[202,2544],[151,2726],[234,2777],[204,2956],[79,3144],[135,3325],[202,3378],[187,3546],[220,3753],[249,3908],[162,3969],[192,4143],[304,4339]],dew:[[347,1425],[124,2817],[152,4195]],flower:[150,4622],top:4752,webs:2,drops:[{x:273,y0:1809,y1:1249,p:2.2,o:1.01},{x:160,y0:1363,y1:803,p:1.87,o:0.1},{x:186,y0:2121,y1:1561,p:2.3,o:0.05},{x:140,y0:4337,y1:3777,p:2,o:0.95},{x:175,y0:1004,y1:444,p:2.08,o:1.36},{x:241,y0:1383,y1:823,p:2.06,o:1.49},{x:122,y0:3906,y1:3346,p:2.56,o:0.85},{x:270,y0:4356,y1:3796,p:2.29,o:0.63}],cats:[{x:348,y:1150,r:100,sl:2.6,aw:1.4,o:1},{x:348,y:2300,r:100,sl:2.5,aw:1.3,o:1.5},{x:348,y:3450,r:100,sl:2.9,aw:1.4,o:0.4}]},
+  {id:9,name:['Deux chats','Two cats'],start:[200,14],anchors:[[315,165,'leaf'],[104,350,'peg'],[295,350,'peg'],[88,541,'leaf'],[301,727,'leaf'],[115,907,'twig'],[337,1078,'twig'],[96,1051,'leaf'],[110,1257,'leaf'],[294,1434,'leaf'],[104,1612,'leaf'],[302,1809,'twig'],[56,1779,'twig'],[109,1997,'twig'],[303,2188,'twig'],[134,2381,'peg'],[279,2381,'peg'],[332,2553,'leaf'],[110,2729,'peg'],[283,2729,'peg'],[304,2904,'twig'],[61,2940,'twig'],[97,3095,'twig'],[303,3280,'leaf'],[87,3240,'twig'],[81,3456,'leaf'],[297,3428,'twig'],[305,3647,'twig']],gnats:[[245,186],[174,267],[96,420],[159,584],[230,642],[239,745],[177,820],[189,949],[263,982],[261,1114],[186,1179],[171,1305],[233,1360],[199,1480],[170,1661],[236,1729],[238,1826],[173,1901],[206,2073],[219,2247],[200,2418],[266,2446],[221,2591],[207,2804],[235,2955],[166,2984],[166,3145],[234,3170],[192,3335],[156,3474],[230,3570]],dew:[[245,1368],[295,2497],[138,3388]],flower:[150,3797],top:3927,webs:2,drops:[{x:160,y0:2300,y1:1740,p:1.9,o:0.9},{x:240,y0:1245,y1:685,p:1.72,o:1.76},{x:241,y0:2737,y1:2177,p:1.72,o:1.44},{x:273,y0:3475,y1:2915,p:1.75,o:1.93},{x:215,y0:1802,y1:1242,p:1.76,o:0.63}],cats:[{x:348,y:1267,r:100,sl:2.9,aw:1.5,o:1.5},{x:348,y:2533,r:100,sl:2.9,aw:1.3,o:0.3}]},
+  {id:10,name:['Orage de mai','May storm'],start:[200,14],anchors:[[75,165,'twig'],[294,356,'twig'],[104,550,'twig'],[298,512,'leaf'],[292,742,'leaf'],[69,914,'twig'],[118,1103,'peg'],[260,1103,'peg'],[138,1292,'peg'],[279,1292,'peg'],[302,1467,'twig'],[58,1664,'twig'],[324,1845,'leaf'],[299,2029,'twig'],[130,2218,'peg'],[266,2218,'peg'],[324,2410,'leaf'],[336,2601,'leaf'],[82,2790,'leaf'],[309,2826,'twig'],[345,2976,'leaf'],[105,2987,'leaf'],[323,3149,'leaf'],[81,3332,'leaf'],[299,3350,'leaf'],[305,3520,'twig'],[63,3692,'twig'],[307,3869,'twig']],gnats:[[185,225],[199,416],[198,607],[181,802],[133,940],[196,995],[219,1141],[179,1208],[220,1368],[221,1506],[139,1570],[147,1682],[235,1751],[316,1882],[307,1946],[243,2055],[186,2121],[195,2261],[259,2321],[328,2447],[332,2500],[251,2633],[167,2710],[214,2850],[334,3037],[242,3163],[162,3226],[193,3416],[184,3562],[185,3734]],dew:[[271,1397],[358,2524],[119,3623]],flower:[150,4019],top:4149,webs:2,drops:[{x:227,y0:1160,y1:600,p:2.24,o:0.1},{x:162,y0:2331,y1:1771,p:2.06,o:1.79},{x:189,y0:3826,y1:3266,p:2.21,o:1.02},{x:220,y0:1003,y1:443,p:2.54,o:1.27},{x:277,y0:2001,y1:1441,p:2,o:0.39}],cats:[{x:348,y:2000,r:100,sl:2.5,aw:1.5,o:1.3}]},
+  {id:11,name:['Le grand saule','The big willow'],start:[200,14],anchors:[[311,165,'leaf'],[64,344,'leaf'],[306,535,'twig'],[53,739,'twig'],[91,938,'leaf'],[124,1130,'peg'],[305,1130,'peg'],[89,1307,'twig'],[81,1498,'leaf'],[335,1675,'twig'],[113,1670,'leaf'],[105,1874,'twig'],[296,2050,'twig'],[108,2232,'leaf'],[346,2412,'twig'],[139,2442,'leaf'],[310,2596,'twig'],[51,2778,'leaf'],[338,2792,'twig'],[114,2958,'peg'],[287,2958,'peg'],[60,3139,'leaf'],[275,3168,'twig'],[336,3318,'twig'],[101,3496,'leaf'],[312,3685,'leaf'],[136,3709,'twig'],[105,3877,'leaf'],[105,4063,'peg'],[278,4063,'peg'],[108,4246,'peg'],[295,4246,'peg']],gnats:[[229,192],[146,258],[185,408],[222,588],[137,629],[66,769],[78,834],[198,1020],[233,1172],[161,1199],[86,1355],[84,1409],[166,1540],[250,1577],[220,1735],[169,1893],[232,1948],[202,2128],[227,2278],[334,2460],[322,2502],[181,2652],[130,2817],[208,2861],[211,2983],[136,3037],[198,3198],[258,3357],[179,3413],[171,3512],[242,3599],[209,3741],[192,3928],[284,4082],[289,4170]],dew:[[42,1407],[126,2688],[134,3990]],flower:[150,4396],top:4526,webs:2,drops:[{x:268,y0:4089,y1:3529,p:2.3,o:1.09},{x:158,y0:1594,y1:1034,p:2.5,o:0.07}],cats:[{x:52,y:1433,r:100,sl:2.9,aw:1.3,o:0.7}]},
+  {id:12,name:['Le toit du potager','Top of the garden'],start:[200,14],anchors:[[77,165,'twig'],[348,356,'twig'],[320,547,'leaf'],[105,739,'peg'],[294,739,'peg'],[310,936,'twig'],[73,1133,'twig'],[317,1321,'twig'],[101,1526,'peg'],[262,1526,'peg'],[99,1732,'twig'],[311,1923,'leaf'],[53,2111,'leaf'],[109,2309,'peg'],[271,2309,'peg'],[336,2489,'twig'],[111,2488,'leaf'],[67,2690,'leaf'],[318,2884,'twig'],[108,2903,'twig'],[89,3085,'leaf'],[68,3274,'leaf'],[115,3480,'peg'],[269,3480,'peg'],[105,3686,'leaf'],[288,3719,'twig'],[335,3894,'twig'],[76,4079,'leaf'],[307,4276,'leaf'],[77,4236,'leaf'],[301,4472,'leaf'],[139,4492,'leaf']],gnats:[[213,214],[334,423],[248,575],[177,649],[208,789],[231,970],[152,1019],[195,1216],[299,1379],[280,1422],[181,1611],[170,1766],[240,1832],[225,1940],[139,2001],[162,2172],[304,2362],[202,2544],[151,2726],[234,2777],[204,2956],[79,3144],[135,3325],[202,3378],[187,3546],[220,3753],[249,3908],[162,3969],[192,4143],[304,4339]],dew:[[347,1425],[124,2817],[152,4195]],flower:[150,4622],top:4752,webs:2,drops:[{x:273,y0:1809,y1:1249,p:2.2,o:1.01},{x:160,y0:1363,y1:803,p:1.87,o:0.1},{x:186,y0:2121,y1:1561,p:2.3,o:0.05},{x:140,y0:4337,y1:3777,p:2,o:0.95},{x:122,y0:3906,y1:3346,p:2.56,o:0.85},{x:270,y0:4356,y1:3796,p:2.29,o:0.63}],cats:[{x:348,y:1150,r:100,sl:2.6,aw:1.4,o:1},{x:348,y:2300,r:100,sl:2.5,aw:1.3,o:1.5},{x:348,y:3450,r:100,sl:2.9,aw:1.4,o:0.4}]},
   {id:13,name:['Défi : la course','Challenge: the race'],start:[200,14],anchors:[[98,165,'peg'],[271,165,'peg'],[130,356,'peg'],[263,356,'peg'],[79,540,'twig'],[306,522,'twig'],[103,707,'peg'],[293,707,'peg'],[73,873,'twig'],[63,1056,'leaf'],[130,1223,'peg'],[281,1223,'peg'],[113,1397,'peg'],[278,1397,'peg'],[73,1590,'leaf'],[324,1773,'twig'],[78,1946,'twig'],[283,2125,'twig'],[117,2293,'leaf'],[301,2304,'leaf'],[314,2487,'leaf'],[134,2656,'peg'],[292,2656,'peg'],[290,2835,'twig'],[140,2871,'twig'],[116,3024,'peg'],[290,3024,'peg'],[136,3208,'peg'],[262,3208,'peg'],[129,3373,'peg'],[273,3373,'peg'],[81,3568,'twig']],gnats:[[181,216],[202,405],[140,444],[150,582],[222,633],[220,745],[146,806],[68,938],[136,1098],[208,1141],[280,1234],[279,1296],[210,1446],[141,1490],[157,1629],[240,1662],[242,1783],[160,1845],[146,1986],[215,2050],[228,2152],[172,2223],[183,2338],[248,2379],[254,2528],[194,2568],[186,2668],[238,2759],[232,2860],[174,2924],[189,3077],[196,3277],[113,3390],[97,3454]],dew:[[320,1332],[277,2409],[136,3299]],flower:[250,3718],top:3848,webs:1,drops:[{x:127,y0:2259,y1:1699,p:2.3,o:0.98},{x:179,y0:2463,y1:1903,p:2.34,o:1.7},{x:127,y0:1319,y1:759,p:1.9,o:0.89},{x:191,y0:3194,y1:2634,p:2.43,o:0.26}],cats:[{x:52,y:1800,r:100,sl:2.5,aw:1.3,o:0.9}],challenge:1,par:40},
   ];
   root.SHLEVELS = LEVELS; if (typeof module !== 'undefined') module.exports = LEVELS;
@@ -613,6 +649,10 @@ window.SHE = {
     { id: 'pearls', price: '1,99 €', once: false, n: 120 },
     { id: 'pass_hiver_2026', price: '2,99 €', once: true },
   ],
+  // daily challenge: one finished level a day with a constraint picked from the date (all 3 drops, a time limit, a x3 combo).
+  // Free, earned by playing only: gnats + a bonus for each day in a row (capped at 7 days). Time limits: the level bot's time x2.2 + 5 s.
+  daily: { gnats: 60, streakGnats: 15, streakMax: 7, comboN: 6, comboFrom: 7,
+    times: { 2: 20, 3: 26, 4: 36, 5: 39, 6: 41, 7: 43, 8: 44, 9: 47, 10: 46, 11: 48, 12: 56 } },
   starterGnats: 300,
   ads: { interFromPlay: 3, gapSec: 180 },
 };
@@ -686,6 +726,22 @@ window.I18N = (() => {
     p_challenge: ['Le défi ! Pas de pause, que de la vitesse !', 'The challenge! No breaks, only speed!'],
     p_gnats: ['Les moucherons, c’est notre monnaie. Plus tu enchaînes, plus ils comptent !', 'Gnats are our money. The longer your chain, the more they count!'],
     p_bounce: ['Boing ! Ta toile tient bon.', 'Boing! Your web holds up.'],
+    // fun pass (22/11/2026)
+    p_net: ['Hop ! Je te rattrape. Rattrape un fil !', 'Gotcha! I caught you. Grab a thread!'],
+    nice1: ['Joli !', 'Nice!'], nice2: ['Super !', 'Great!'], nice3: ['Génial !', 'Awesome!'],
+    firstWin: ['Première fleur !', 'First flower!'], again: ['Rejouer', 'Play again'],
+    newDew: ['Plus de gouttes qu’avant !', 'More drops than before!'], dewLeft: ['encore {n} 💧 à trouver', '{n} more 💧 to find'],
+    why_fall: ['Lâche le fil quand Mina monte !', 'Let go while Mina is going up!'],
+    why_rain: ['Attends que la goutte passe !', 'Wait for the drop to pass!'],
+    why_cat: ['Passe quand le chat dort !', 'Go past while the cat sleeps!'],
+    far: ['Tu étais à {n} % de la fleur !', 'You were {n}% of the way to the flower!'],
+    kept: ['Tu gardes {n} moucherons', 'You keep {n} gnats'],
+    g_level: ['Encore {n} niveaux pour :', '{n} more levels for:'], g_level1: ['Encore 1 niveau pour :', '1 more level for:'], g_dew: ['Encore {n} gouttes pour :', '{n} more drops for:'],
+    dq_title: ['Défi du jour', 'Daily challenge'], dq_dew: ['Ramène les 3 gouttes', 'Bring back all 3 drops'], dq_time: ['Fleur en moins de {s} s', 'Flower in under {s} s'],
+    dq_combo: ['Fais un combo ×3', 'Reach a ×3 combo'], dq_ok: ['Défi du jour réussi !', 'Daily challenge done!'], dq_miss: ['Défi du jour raté :', 'Daily challenge missed:'],
+    dq_retry: ['Retenter le défi', 'Try the challenge again'], dq_done: ['Fait ! Reviens demain', 'Done! Come back tomorrow'], dq_streak: ['{n} jours d’affilée', '{n} days in a row'], dq_streak1: ['1er jour de série', 'Day 1 of your streak'],
+    p_daily: ['Le défi du jour ! Réussis-le pour garder ta série 🔥', 'The daily challenge! Beat it to keep your streak 🔥'],
+    g_combo: ['10 fils d’affilée en l’air pour :', '10 threads in a row, mid-air, for:'], g_gnats: ['Encore {n} moucherons pour :', '{n} more gnats for:'],
   };
   let lang = 'fr'; const idx = () => Math.max(0, L.indexOf(lang));
   const t = (k, v) => { const e = T[k]; let s = e ? (e[idx()] || e[1] || e[0]) : k; if (v) for (const n in v) s = s.split('{' + n + '}').join(v[n]); return s; };
@@ -740,8 +796,9 @@ window.JUICE = (() => {
   }
   function heart(x, y, ch = '❤️') { const h = mk('jz-heart', ch); h.style.setProperty('--x0', x - 10 + 'px'); h.style.setProperty('--y0', y + 'px'); setTimeout(() => h.remove(), 1150); }
   function pop(el) { if (!el) return; el.classList.remove('jz-pop'); void el.offsetWidth; el.classList.add('jz-pop'); }
+  function flashAt(x, y) { const f = mk('jz-flash'); f.style.setProperty('--fx', x + 'px'); f.style.setProperty('--fy', y + 'px'); setTimeout(() => f.remove(), 750); }   // same flash at a screen point (canvas hits)
   function flash(el) { const [x, y] = center(el); const f = mk('jz-flash'); f.style.setProperty('--fx', x + 'px'); f.style.setProperty('--fy', y + 'px'); setTimeout(() => f.remove(), 750); }
-  return { fly, bump, confetti, dust, heart, pop, flash };
+  return { fly, bump, confetti, dust, heart, pop, flash, flashAt };
 })();
 </script>
 <script>// Silk Hop — stand-in art, drawn at startup: flat colours, a thick even ink outline, one hard shadow down-right,
@@ -932,7 +989,7 @@ function fresh() {
 }
 let S;
 try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
-S.totals = Object.assign(fresh().totals, S.totals); S.login = Object.assign(fresh().login, S.login);
+S.totals = Object.assign(fresh().totals, S.totals); S.login = Object.assign(fresh().login, S.login); S.daily = Object.assign({ day: '', lv: 0, kind: '', ok: false, streak: 0, last: '' }, S.daily);
 I.set(S.lang);
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 const track = (ev, data) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
@@ -978,6 +1035,12 @@ const SFX = {
   chime() { if (S.sound) [784, 988, 1319].forEach((f, i) => tone(f, 0.4, 'triangle', 0.1, i * 0.07)); },
   pop() { if (S.sound) tone(420, 0.12, 'sine', 0.2, 0, null, 900); },
   miss() { if (S.sound) tone(300, 0.1, 'triangle', 0.08, 0, null, 220); },
+  // fun pass: a clean high release whooshes up a semitone more on each one in a row; dew stars on the end card climb too
+  nice(k) { if (!S.sound) return; const f = 660 * Math.pow(2, Math.min(12, k) / 12); noise(0.18, 2400, 1.2, 0.12); tone(f, 0.16, 'triangle', 0.1, 0, null, f * 1.5); tone(f * 1.5, 0.2, 'sine', 0.07, 0.06); },
+  star(i) { if (S.sound) { const f = [1047, 1319, 1568][i] || 1568; tone(f, 0.35, 'triangle', 0.13); tone(f * 2, 0.2, 'sine', 0.05, 0.03); } },
+  tick(k) { if (S.sound) tone(1200 + k * 400, 0.03, 'square', 0.035); },
+  record() { if (S.sound) [523, 659, 784, 1047, 1319, 1568, 2093].forEach((f, i) => { tone(f, i === 6 ? 0.8 : 0.18, 'square', 0.06, i * 0.07); tone(f / 2, 0.25, 'triangle', 0.08, i * 0.07); }); },
+  net() { if (S.sound) { tone(500, 0.25, 'sine', 0.15, 0, null, 1100); tone(1300, 0.18, 'triangle', 0.08, 0.2); } },
 };
 const SCALE = [262, 294, 330, 392, 440, 523, 587];
 function musicTick() {
@@ -1057,18 +1120,19 @@ function spr(k, x, y, w, rot, alpha, flip) { const im = img(k); if (!im) return;
 
 // ---------- state of the current run ----------
 const G = { phase: 'title', L: null, s: null, acc: 0, slow: 1, slowT: 0, slowK: 1, shake: 0, camOff: 0, parts: [], floats: [], trail: [], sq: 0, lean: 0, shot: null, ptr: null, webDrag: null,
-  comboShow: 0, comboM: 1, over: false, revived: false, x2: false, time: 0, tut: 0, flowerK: 0, webWob: 0, papiT: 0, x2used: false, mood: '', moodT: 0 };
+  comboShow: 0, comboM: 1, hold: 0, nice: 0, maxY: 0, banked: 0, netUsed: false, haz: null, over: false, revived: false, x2: false, time: 0, tut: 0, flowerK: 0, webWob: 0, papiT: 0, x2used: false, mood: '', moodT: 0 };
 const lvlOf = id => LV.find(l => l.id === id);
 const isDone = id => !!(S.lvl[id] && S.lvl[id].done);
 const unlocked = id => id === 1 || (id === 13 ? isDone(12) : isDone(id - 1));
 
-function startLevel(id) {
-  const L = lvlOf(id); if (!L) return; closeModal();
+function startLevel(id, daily) {
+  const L = lvlOf(id); if (!L) return; closeModal(); { const d = daily && dailyToday(); G.daily = d && d.L === L ? d : null; }
   G.L = L; G.s = C.init(L, { elastic: S.elastic && S.thread === 'elastic' }); G.acc = 0; G.parts = []; G.floats = []; G.trail = []; G.over = false; G.revived = false; G.x2used = false;
-  G.flowerK = 0; G.slow = 1; G.slowT = 0; G.comboShow = 0; G.ptr = null; G.shot = null; G.tut = L.tut && !S.tut ? 1 : 0; G.said = {}; G.gnShow = 0;
+  G.flowerK = 0; G.slow = 1; G.slowT = 0; G.comboShow = 0; G.hold = 0; G.nice = 0; G.maxY = 0; G.banked = 0; G.netUsed = false; G.haz = null; G.ptr = null; G.shot = null; G.tut = L.tut && !S.tut ? 1 : 0; G.said = {}; G.gnShow = 0;
   G.phase = 'play'; $('#map').classList.remove('on'); $('#title').classList.remove('on'); buildHud(); $('#hud').classList.add('on'); papiHide();
   S.plays++; save(); track('level_start', { id });
   if (G.tut) { say('p_hello', 0, 2600, true); setTimeout(() => G.tut === 1 && say('p_tap', 1, 0, true), 2700); }
+  else if (G.daily) say('p_daily', 2, 3000);
   else if (L.challenge) say('p_challenge', 2);
   else if (L.id === 2) say('p_dew', 1); else if (L.webs && !S.said.web) { S.said.web = 1; say('p_web', 1, 4500); }
   else if (L.drops.length && !S.said.rain) { S.said.rain = 1; say('p_rain', 1); } else if (L.cats.length && !S.said.cat) { S.said.cat = 1; say('p_cat', 1); }
@@ -1107,23 +1171,28 @@ function events() {
         if (G.tut === 1) { G.tut = 2; say('p_swing', 1, 0, true); } else if (G.tut === 3) { G.tut = 4; say('p_flower', 2, 2200); }
         break; }
       case 'release': SFX.release(); for (let i = 0; i < 5; i++) G.parts.push({ k: 'dot', x: ev.x, y: ev.y, vx: rnd(-60, 60), vy: rnd(-60, 30), t: 0, life: 0.35, col: PAL.cream, r: 3 });
+        if (s.vy > NICE_VY && !G.over) {   // a clean, high release: praise it (and louder each time in a row)
+          G.nice++; SFX.nice(G.nice); buzz(10); floatText(ev.x, ev.y + 34, t(G.nice >= 3 ? 'nice3' : G.nice === 2 ? 'nice2' : 'nice1'), G.nice >= 3 ? PAL.coral : PAL.leaf);
+          G.parts.push({ k: 'ring', x: ev.x, y: ev.y, t: 0, life: 0.4, col: PAL.cream, r: 40 }); for (let i = 0; i < 8; i++) G.parts.push({ k: 'dot', x: ev.x, y: ev.y, vx: s.vx * 0.2 + rnd(-90, 90), vy: -rnd(40, 160), t: 0, life: 0.45, col: i % 2 ? PAL.cream : PAL.leaf, r: 3 }); }
+        else G.nice = 0;
         if (G.tut === 2) { G.tut = 3; say('p_again', 1, 0, true); } break;
-      case 'combo': { const m = ev.a; G.comboM = m; G.comboShow = 1.3; SFX.combo(m); buzz(m === 5 ? [20, 30, 20, 30, 60] : 20);
+      case 'combo': { const m = ev.a; G.comboM = m; G.comboShow = 1.3; SFX.combo(m); buzz(m === 5 ? [20, 30, 20, 30, 60] : 20); hitstop(m === 5 ? 80 : m === 3 ? 60 : 45);
+        if (m >= 3) { const [fx, fy] = toScreen(s.x, s.y); JUICE.flashAt(fx, fy); G.shake = Math.max(G.shake, 0.25); }
         if (m === 5) { slowmo(0.35, 0.9); S.totals.combo5++; checkHats(); if (!G.said.c5) { G.said.c5 = 1; say('p_combo5', 2, 2200); } G.shake = Math.max(G.shake, 0.5); }
         else if (m === 3 && !G.said.wow) { G.said.wow = 1; say('p_wow', 2, 1800); }
         break; }
       case 'gnat': { SFX.gnat(s.n); const [sx, sy] = toScreen(ev.x, ev.y); flyTo(sx, sy, 'gnat', '#gn', ev.b > 1 ? 2 : 1); floatText(ev.x, ev.y + 20, '+' + ev.b, ev.b > 1 ? PAL.coral : PAL.ink);
         for (let i = 0; i < 6; i++) G.parts.push({ k: 'dot', x: ev.x, y: ev.y, vx: rnd(-90, 90), vy: rnd(-40, 120), t: 0, life: 0.4, col: PAL.ink, r: 2 }); break; }
-      case 'dew': { SFX.dew(); SFX.squeak('happy'); buzz(15); G.shake = Math.max(G.shake, 0.18); mood('happy', 0.9);
+      case 'dew': { SFX.dew(); SFX.squeak('happy'); buzz(15); G.shake = Math.max(G.shake, 0.18); mood('happy', 0.9); hitstop(50); { const [fx, fy] = toScreen(ev.x, ev.y); JUICE.flashAt(fx, fy); }
         const cols = [PAL.coral, PAL.cream, PAL.dew, PAL.leaf]; for (let k = 0; k < 4; k++) G.parts.push({ k: 'ring', x: ev.x, y: ev.y, t: -k * 0.06, life: 0.55, col: cols[k], r: 60 });
         for (let i = 0; i < 18; i++) { const a = i / 18 * TAU; G.parts.push({ k: 'dot', x: ev.x, y: ev.y, vx: Math.cos(a) * 220, vy: Math.sin(a) * 220, t: 0, life: 0.6, col: cols[i % 4], r: 4, g: 1 }); }
         const d = document.querySelectorAll('#dews i')[ev.a]; if (d) d.classList.add('on');
         if (C.stars(s) === 3 && !G.said.d3) { G.said.d3 = 1; say('p_3dew', 2, 1800); } break; }
       case 'win': win(); break;
-      case 'dead': lose(); break;
-      case 'drop': SFX.drop(); buzz(25); G.shake = Math.max(G.shake, 0.3); mood('scared', 0.7); for (let i = 0; i < 14; i++) G.parts.push({ k: 'dot', x: ev.x, y: ev.y + 10, vx: rnd(-160, 160), vy: rnd(0, 200), t: 0, life: 0.5, col: PAL.dew, r: 4, g: 1 });
+      case 'dead': if (C.netLevel(L) && !G.netUsed) net(); else lose(); break;
+      case 'drop': SFX.drop(); buzz(25); hitstop(40); G.haz = { k: 'rain', t: s.t }; G.shake = Math.max(G.shake, 0.3); mood('scared', 0.7); for (let i = 0; i < 14; i++) G.parts.push({ k: 'dot', x: ev.x, y: ev.y + 10, vx: rnd(-160, 160), vy: rnd(0, 200), t: 0, life: 0.5, col: PAL.dew, r: 4, g: 1 });
         if (!G.said.drop) { G.said.drop = 1; say('p_rain', 3, 2200); } break;
-      case 'blow': { SFX.blow(); SFX.squeak('scared'); buzz([30, 20, 30]); G.shake = Math.max(G.shake, 0.45); mood('scared', 1); const c = L.cats[ev.a];
+      case 'blow': { SFX.blow(); SFX.squeak('scared'); buzz([30, 20, 30]); hitstop(40); G.haz = { k: 'cat', t: s.t }; G.shake = Math.max(G.shake, 0.45); mood('scared', 1); const c = L.cats[ev.a];
         for (let i = 0; i < 22; i++) { const a = Math.atan2(ev.y - c.y, ev.x - c.x) + rnd(-0.5, 0.5), v = rnd(200, 520); G.parts.push({ k: 'wind', x: c.x + Math.cos(a) * 30, y: c.y + Math.sin(a) * 30, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, life: 0.55, col: PAL.cream, r: rnd(8, 18) }); }
         if (!G.said.blow) { G.said.blow = 1; say('p_blown', 3, 2200); } break; }
       case 'bounce': SFX.bounce(); buzz(12); G.webWob = 1; G.sq = 0.35; if (!S.said.bounce) { S.said.bounce = 1; say('p_bounce', 2, 1600); } break;
@@ -1135,47 +1204,105 @@ function events() {
   }
 }
 function slowmo(k, sec) { G.slowK = k; G.slowT = sec; }
+const NICE_VY = 880;   // u/s upwards at release: the top half of the level bot's own releases
+function hitstop(ms) { G.hold = Math.max(G.hold, ms / 1000); }   // the world freezes for a beat on the big hits
 function mood(m, sec) { G.mood = m; G.moodT = sec; }
 function floatText(x, y, s, col) { G.floats.push({ k: 'text', x, y, s, col, t: 0, d: 0.9 }); }
 function flyTo(sx, sy, key, sel, n = 1) { const el = $(sel); if (!el) return; const r = el.getBoundingClientRect(); for (let i = 0; i < n; i++) G.floats.push({ k: 'fly', key, x: sx + rnd(-8, 8), y: sy + rnd(-8, 8), tx: r.left + r.width / 2, ty: r.top + r.height / 2, t: -i * 0.06, d: 0.55, el }); }
 
 // ---------- the end of a run ----------
 function win() {
-  const s = G.s, L = G.L; G.over = true; G.ptr = null; slowmo(0.25, 1.1); G.flowerK = 0.001; mood('happy', 9);
-  SFX.win(); SFX.squeak('happy'); buzz([20, 40, 60]); JUICE.confetti(90); G.shake = 0.3;
+  const s = G.s, L = G.L; G.over = true; G.ptr = null; slowmo(0.25, 1.1); G.flowerK = 0.001; mood('happy', 9); hitstop(80);
+  SFX.win(); SFX.squeak('happy'); buzz([20, 40, 60]); JUICE.confetti(90); G.shake = 0.3; { const [fx, fy] = toScreen(L.flower[0], L.flower[1]); JUICE.flashAt(fx, fy); }
   for (let i = 0; i < 40; i++) { const a = rnd(0, TAU), v = rnd(80, 320); G.parts.push({ k: 'dot', x: L.flower[0], y: L.flower[1], vx: Math.cos(a) * v, vy: Math.sin(a) * v + 120, t: 0, life: rnd(0.8, 1.5), col: [PAL.cream, PAL.coral, PAL.leaf][i % 3], r: rnd(3, 6), g: 1 }); }
   const stars = C.stars(s), prev = S.lvl[L.id] || {}, first = !prev.done;
   S.lvl[L.id] = { done: 1, stars: Math.max(prev.stars || 0, stars), best: prev.best ? Math.min(prev.best, s.t) : s.t };
-  S.gnats += s.gnats; S.totals.gnats += s.gnats; S.totals.wins++; S.totals.dew += Math.max(0, stars - (prev.stars || 0)); S.totals.bestCombo = Math.max(S.totals.bestCombo, s.maxN);
+  const rec = !L.challenge && prev.done && ((prev.best && s.t < prev.best - 0.05) || stars > (prev.stars || 0));   // beat your own time or dew count here
+  // gnats already banked by a fall (then a revive) are not counted twice
+  const gain = s.gnats - G.banked; G.banked = s.gnats; S.gnats += gain; S.totals.gnats += gain; S.totals.wins++; S.totals.dew += Math.max(0, stars - (prev.stars || 0)); S.totals.bestCombo = Math.max(S.totals.bestCombo, s.maxN);
   let newBest = false; if (L.challenge) { if (!S.chBest || s.t < S.chBest) { S.chBest = s.t; newBest = true; } if (s.t <= L.par) S.chWin = true; }
+  if (L.tut && !S.tut) setTimeout(() => { banner(t('firstWin'), 'c'); JUICE.confetti(60); }, 500);
   if (L.tut) S.tut = 1; if (L.id === E.elasticAt && !S.elastic) { S.elastic = true; setTimeout(() => toast('🧵 ' + t('elasticOn')), 2600); }
+  let dres = null; if (G.daily && !S.daily.ok) { const d = G.daily, ok = d.kind === 'dew3' ? stars === 3 : d.kind === 'time' ? s.t <= d.limit : s.maxN >= E.daily.comboN;
+    dres = { ok }; if (ok) { const n = dailyStreak(true); S.daily.ok = true; S.daily.streak = n; S.daily.last = today(); dres.gn = dailyReward(n); dres.n = n; S.gnats += dres.gn; track('daily_win', { id: L.id, kind: d.kind, streak: n }); } }
   addXp(E.xpWin(stars, first)); checkHats(); save(); track('level_win', { id: L.id, t: s.t, stars });
   say(stars === 3 ? 'p_3dew' : 'p_win', 2, 2000);
-  setTimeout(() => { if (G.s === s && G.phase === 'play') winModal(stars, s.gnats, s.t, newBest); }, 1500);   // not if the player already left
+  setTimeout(() => { if (G.s === s && G.phase === 'play') winModal(stars, s.gnats, s.t, newBest, rec, prev, dres); }, 1500);   // not if the player already left
 }
-function lose() { G.over = true; G.ptr = null; S.totals.falls++; SFX.lose(); SFX.squeak('scared'); buzz(45); mood('scared', 9); G.shake = 0.35; save(); say(S.totals.falls % 2 ? 'p_fall' : 'p_fall2', 3, 2200); { const s0 = G.s; setTimeout(() => { if (G.s === s0) deadModal(); }, 800); } track('level_fail', { id: G.L.id }); }
+// Papi's safety net (levels 1-3, once a run, see C.netLevel): the fall is caught, Mina floats back under her last thread, no ad
+function net() { const s = G.s, L = G.L; G.netUsed = true; G.ptr = null; S.totals.falls++; SFX.net(); SFX.squeak('scared'); buzz(20); mood('scared', 0.8); say('p_net', 0, 2600);
+  setTimeout(() => { if (G.s !== s || !s.dead) return; C.revive(L, s); G.mood = ''; G.trail.length = 0; events(); SFX.pop(); mood('happy', 0.8); }, 700); }
+// a fall keeps the gnats caught on the way
+function lose() { G.over = true; G.ptr = null; S.totals.falls++; { const s = G.s, g = s.gnats - G.banked; if (g > 0) { G.banked = s.gnats; S.gnats += g; S.totals.gnats += g; } } SFX.lose(); SFX.squeak('scared'); buzz(45); mood('scared', 9); G.shake = 0.35; save(); say(S.totals.falls % 2 ? 'p_fall' : 'p_fall2', 3, 2200); { const s0 = G.s; setTimeout(() => { if (G.s === s0) deadModal(); }, 800); } track('level_fail', { id: G.L.id }); }
 
-function winModal(stars, gn, time, newBest) {
-  const L = G.L, nxt = L.id < 13 && unlocked(L.id + 1) ? L.id + 1 : 0;
+// ---------- the daily challenge: today's level and constraint come from the date (frozen for the day once picked) ----------
+const yesterday = () => { const y = new Date(Date.now() - 864e5); return y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); };
+function dailyToday() {
+  const D = S.daily, d = today();
+  if (D.day !== d) { const pool = LV.filter(l => !l.challenge && l.id >= 2 && unlocked(l.id)); if (!S.tut || !pool.length) return null;
+    let h = 2166136261; for (const c of d) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0; h = Math.imul(h ^ (h >>> 15), 2246822519) >>> 0;
+    const L = pool[h % pool.length], kinds = ['dew3', 'time'].concat(L.id >= E.daily.comboFrom ? ['combo'] : []);
+    Object.assign(D, { day: d, lv: L.id, kind: kinds[(h >>> 10) % kinds.length], ok: false }); save(); }
+  const L = lvlOf(D.lv); return L ? { L, kind: D.kind, limit: E.daily.times[D.lv] || 60 } : null;
+}
+const dailyText = d => d.kind === 'dew3' ? t('dq_dew') : d.kind === 'time' ? t('dq_time', { s: d.limit }) : t('dq_combo');
+function dailyStreak(next) { const D = S.daily, alive = D.last === today() || D.last === yesterday(); return next ? (D.last === yesterday() ? D.streak + 1 : D.last === today() ? D.streak : 1) : alive ? D.streak : 0; }
+const dailyReward = n => E.daily.gnats + E.daily.streakGnats * (Math.min(n, E.daily.streakMax) - 1);
+function dailyCard() { const d = dailyToday(); if (!d) return ''; const n = dailyStreak(false), done = S.daily.ok;
+  return `<button class="daily ${done ? 'done' : ''}" data-daily><b>🌼 ${t('dq_title')} · ${t('lvl', { n: d.L.id })}</b><small>${done ? t('dq_done') : dailyText(d) + ' · <i class="gn"></i> +' + dailyReward(dailyStreak(true))}</small><span class="fire">🔥 ${n}</span></button>`; }
+// the next thing almost in reach (a hat), for the end cards: picture greyed, what is missing, a bar
+function nextGoal() {
+  const done = LV.filter(l => !l.challenge && isDone(l.id)).length; let best = null;
+  for (const h of E.hats) { if (S.hats[h.id]) continue; let k = 0, txt = '';
+    if (h.how === 'level') { k = Math.min(done, h.n) / h.n; txt = h.n - done > 1 ? t('g_level', { n: h.n - done }) : t('g_level1'); }
+    else if (h.how === 'dew') { k = totalDew() / h.n; txt = t('g_dew', { n: Math.max(1, h.n - totalDew()) }); }
+    else if (h.how === 'combo') { k = Math.min(9, S.totals.bestCombo) / 10; txt = t('g_combo'); }
+    else if (h.how === 'buy') { k = S.gnats / h.gnats; txt = t('g_gnats', { n: Math.max(1, h.gnats - S.gnats) }); }
+    else if (h.how === 'challenge') { k = isDone(12) ? 0.5 : 0; txt = t('hw_challenge'); }
+    if (k < 1 && k > 0 && (!best || k > best.k)) best = { h, k, txt }; }
+  return best;
+}
+function goalHtml() { const g = nextGoal(); if (!g) return '';
+  return `<div class="goal"><img src="${src('hat_' + g.h.id)}" alt=""><div><small>${g.txt}</small><b>${t('h_' + g.h.id)}</b><div class="pbar"><i style="width:${Math.round(g.k * 100)}%"></i></div></div></div>`; }
+// numbers count up, they do not just appear
+function countUp(el, to, ms = 700, pre = '+') { if (!el) return; const t0 = performance.now(); let lastV = -1;
+  (function f() { const k = Math.min(1, (performance.now() - t0) / ms), v = Math.round(to * (1 - Math.pow(1 - k, 3))); if (v !== lastV) { lastV = v; el.textContent = pre + v; if (v && v % 2 === 0) SFX.tick(k); } if (k < 1 && el.isConnected) requestAnimationFrame(f); else JUICE.bump(el); })(); }
+function celebrate(el) { setTimeout(() => { SFX.record(); buzz([20, 30, 20, 30, 80]); JUICE.confetti(80); if (el) { el.classList.add('on'); JUICE.flash(el); } }, 1300); }
+function winModal(stars, gn, time, newBest, rec, prev, dres) {
+  const L = G.L, nxt = L.id < 13 && unlocked(L.id + 1) ? L.id + 1 : 0, best = (S.lvl[L.id] || {}).best;
+  const recTxt = L.challenge ? (newBest ? t('newBest') : '') : rec ? (stars > (prev.stars || 0) ? t('newDew') : t('newBest')) : '';
   openModal(`<div class="big-ico"><img src="${src('flower_open')}" alt=""><img src="${src('mina_wave')}" style="width:92px;height:92px;margin-left:-30px" alt=""></div><h2>${t('win')}</h2>
     <div class="stars">${[0, 1, 2].map(i => `<i class="dw" data-st="${i}"></i>`).join('')}</div>
-    ${L.challenge ? `<div class="sub">${t('time')} ${time.toFixed(1)} s · ${newBest ? t('newBest') : t('best', { s: S.chBest.toFixed(1) + ' s' })} · ${t('par', { s: L.par + ' s' })}</div>` : ''}
-    <div class="gain"><i class="gn"></i> <span data-g>+${gn}</span></div>
-    ${gn > 0 ? `<button class="b1 bad adbtn" data-x2>▶ ${t('x2')}</button>` : ''}
-    <div class="row2"><button class="b2" data-map>${t('map')}</button>${nxt ? `<button class="b1 bgreen" data-next>${t('next')}</button>` : `<button class="b1 bgreen" data-retry>${t('retry')}</button>`}</div>`);
-  modal.querySelectorAll('[data-st]').forEach((el, i) => setTimeout(() => { if (i < stars) { el.classList.add('on'); SFX.dew(); buzz(10); } }, 300 + i * 320));
-  const x2 = modal.querySelector('[data-x2]'); if (x2) x2.onclick = async () => { if (G.x2used) return; if (await Ads.rewarded('x2')) { G.x2used = true; S.gnats += gn; S.totals.gnats += gn; save(); x2.remove(); modal.querySelector('[data-g]').textContent = '+' + gn * 2; SFX.chime(); JUICE.confetti(40); } };
+    ${recTxt ? `<div class="rec" data-rec>★ ${recTxt} ★</div>` : ''}
+    ${L.challenge ? `<div class="sub">${t('time')} ${time.toFixed(1)} s · ${t('best', { s: S.chBest.toFixed(1) + ' s' })} · ${t('par', { s: L.par + ' s' })}</div>`
+      : `<div class="sub">${t('time')} ${time.toFixed(1)} s${prev.done && best ? ' · ' + t('best', { s: best.toFixed(1) + ' s' }) : ''}${stars < 3 ? ' · ' + t('dewLeft', { n: 3 - stars }) : ''}</div>`}
+    <div class="gain"><i class="gn"></i> <span data-g>+0</span></div>
+    ${dres ? (dres.ok ? `<div class="dres ok" data-dres>🌼 ${t('dq_ok')} <span><i class="gn"></i> +${dres.gn} · 🔥 ${dres.n > 1 ? t('dq_streak', { n: dres.n }) : t('dq_streak1')}</span></div>`
+      : `<div class="dres"><b>${t('dq_miss')}</b> ${dailyText(G.daily)}<button class="b1 bgreen" data-dretry>${t('dq_retry')}</button></div>`) : ''}
+    ${nxt ? `<button class="b1 big bgreen go" data-next>${t('next')}</button>` : `<button class="b1 big bgreen go" data-retry>${t('again')}</button>`}
+    ${goalHtml()}
+    <div class="row2"><button class="b2" data-map>${t('map')}</button>${gn > 0 ? `<button class="b1 bad adbtn" data-x2>▶ ${t('x2')}</button>` : ''}</div>`);
+  modal.querySelectorAll('[data-st]').forEach((el, i) => setTimeout(() => { if (i < stars) { el.classList.add('on'); SFX.star(i); buzz(10 + i * 5); if (i === 2) JUICE.flash(el); } }, 300 + i * 320));
+  setTimeout(() => countUp(modal.querySelector('[data-g]'), gn), 350 + stars * 320);
+  if (recTxt) celebrate(modal.querySelector('[data-rec]')); else if (dres && dres.ok) celebrate(modal.querySelector('[data-dres]'));
+  const dr = modal.querySelector('[data-dretry]'); if (dr) dr.onclick = () => { closeModal(); startLevel(L.id, true); };
+  const x2 = modal.querySelector('[data-x2]'); if (x2) x2.onclick = async () => { if (G.x2used) return; if (await Ads.rewarded('x2')) { G.x2used = true; S.gnats += gn; S.totals.gnats += gn; save(); x2.remove(); countUp(modal.querySelector('[data-g]'), gn * 2, 600); SFX.chime(); JUICE.confetti(40); } };
   modal.querySelector('[data-map]').onclick = async () => { closeModal(); await Ads.interstitial(); showMap(); };
   const n = modal.querySelector('[data-next]'); if (n) n.onclick = async () => { closeModal(); await Ads.interstitial(); startLevel(nxt); };
   const r = modal.querySelector('[data-retry]'); if (r) r.onclick = async () => { closeModal(); await Ads.interstitial(); startLevel(L.id); };
 }
 function deadModal() {
-  if (G.phase !== 'play') return; const L = G.L;
+  if (G.phase !== 'play') return; const L = G.L, s = G.s, pct = clamp(Math.round(G.maxY / L.flower[1] * 100), 1, 99), kept = s.gnats;
+  const why = G.haz && s.t - G.haz.t < 2.5 ? (G.haz.k === 'cat' ? 'why_cat' : 'why_rain') : 'why_fall';   // the fall, explained in one line
   openModal(`<div class="big-ico s"><img src="${src('mina_scared')}" alt=""></div><h2>${t('lost')}</h2>
-    ${G.revived ? '' : `<button class="b1 bad adbtn" data-revive>▶ ${t('revive')}<br><small>${t('reviveSub')}</small></button>`}
-    <div class="row2"><button class="b2" data-map>${t('map')}</button><button class="b1" data-retry>${t('retry')}</button></div>`);
+    <p class="why">${t(why)}</p>
+    <div class="far"><small>${t('far', { n: pct })}</small><div class="trk"><div class="pbar"><i style="width:${pct}%"></i></div><img src="${src('mina')}" style="left:${pct}%" alt=""><img class="fl" src="${src('flower_closed')}" alt=""></div></div>
+    ${kept > 0 ? `<div class="sub"><i class="gn"></i> ${t('kept', { n: kept })}</div>` : ''}
+    <button class="b1 big go" data-retry>${t('retry')}</button>
+    ${goalHtml()}
+    <div class="row2"><button class="b2" data-map>${t('map')}</button>${G.revived ? '' : `<button class="b1 bad adbtn" data-revive>▶ ${t('revive')}<br><small>${t('reviveSub')}</small></button>`}</div>`);
   const rv = modal.querySelector('[data-revive]'); if (rv) rv.onclick = async () => { if (await Ads.rewarded('revive')) { closeModal(); G.revived = true; G.over = false; C.revive(L, G.s); G.mood = ''; events(); say('p_again', 1, 1800); } };
-  modal.querySelector('[data-retry]').onclick = async () => { closeModal(); await Ads.interstitial(); startLevel(L.id); };
+  modal.querySelector('[data-retry]').onclick = async () => { closeModal(); await Ads.interstitial(); startLevel(L.id, !!G.daily); };
   modal.querySelector('[data-map]').onclick = async () => { closeModal(); await Ads.interstitial(); showMap(); };
 }
 
@@ -1278,10 +1405,11 @@ function buildHud() {
   const L = G.L;
   $('#hud').innerHTML = `<button class="rb" id="back" aria-label="${t('map')}">❮</button><div id="lname">${L.challenge ? '⏱ ' : ''}${I.pick(L.name)}</div>
     <div class="chip" id="timer"><b>0.0</b></div><div id="dews">${L.dew.map(() => '<i class="dw"></i>').join('')}</div><div class="chip"><i class="gn"></i><b id="gn">0</b></div>`;
-  $('#timer').classList.toggle('on', !!L.challenge);
+  $('#timer').classList.toggle('on', !!L.challenge || !!(G.daily && G.daily.kind === 'time'));
+  if (G.daily) $('#hud').insertAdjacentHTML('beforeend', `<div class="dchip">🌼 ${dailyText(G.daily)}</div>`);
   $('#back').onclick = () => { SFX.click(); G.over = true; showMap(); };
 }
-function renderHud() { if (G.phase !== 'play' || !G.s) return; const g = $('#gn'); if (g && +g.textContent !== G.gnShow) g.textContent = G.gnShow; if (G.L.challenge) { const b = $('#timer b'); if (b) b.textContent = G.s.t.toFixed(1); } }
+function renderHud() { if (G.phase !== 'play' || !G.s) return; const g = $('#gn'); if (g && +g.textContent !== G.gnShow) g.textContent = G.gnShow; if (G.daily && G.daily.kind === 'time') { const b = $('#timer b'); if (b) { b.textContent = G.s.t.toFixed(0) + ' / ' + G.daily.limit + ' s'; b.parentNode.classList.toggle('late', G.s.t > G.daily.limit); } } else if (G.L.challenge) { const b = $('#timer b'); if (b) b.textContent = G.s.t.toFixed(1); } }
 function buildMap() {
   $('#mfoot').innerHTML = [['gift', 'ui_gift', 'login'], ['nest', 'ui_nest', 'nest'], ['shop', 'ui_shop', 'shop'], ['set', 'ui_settings', 'settings']]
     .map(([id, k, l]) => `<div><button class="rb" id="m_${id}">${UIIMG(k)}</button><small>${t(l)}</small></div>`).join('');
@@ -1292,7 +1420,8 @@ function buildMap() {
 function renderMapHead() {
   if (!$('#map').classList.contains('on')) return;
   $('#mhead').innerHTML = `<div class="mrow"><span id="plv">${t('level')} ${S.plv}</span><div id="xpbar"><i style="width:${clamp(S.xp / E.xpLevel(S.plv), 0, 1) * 100}%"></i></div></div>
-    <div class="mrow"><div class="chip" style="flex:1"><i class="gn"></i> <b id="mgn">${S.gnats}</b></div><div class="chip" style="flex:1"><i class="pl"></i> <b>${S.pearls}</b></div><div class="chip"><i class="dw"></i> <b>${totalDew()}/36</b></div></div>`;
+    ${dailyCard()}<div class="mrow"><div class="chip" style="flex:1"><i class="gn"></i> <b id="mgn">${S.gnats}</b></div><div class="chip" style="flex:1"><i class="pl"></i> <b>${S.pearls}</b></div><div class="chip"><i class="dw"></i> <b>${totalDew()}/36</b></div></div>`;
+  const db = $('#mhead [data-daily]'); if (db) db.onclick = () => { audioInit(); SFX.click(); const d = dailyToday(); if (d && !S.daily.ok) startLevel(d.L.id, true); else toast(t('dq_done')); };
   $('#m_gift').classList.toggle('dot', !!S.login.pending); $('#m_nest').classList.toggle('dot', cocoonReady() || (!S.cocoon && S.gnats >= 40));
 }
 function renderMap() {
@@ -1423,9 +1552,11 @@ function frame(now) {
     else if (!G.over && !s.win) { const f = L.flower, d = hyp(f[0] - s.x, f[1] - s.y); if (d < 170 && (f[0] - s.x) * s.vx + (f[1] - s.y) * s.vy > 0) target = 0.4;   // the final jump, in slow motion
       if (G.tut >= 2 && !s.rope && s.vy < 200 && !s.ground) target = Math.min(target, 0.55); }                                                                      // the tutorial gives time to catch the next one
     G.slow += (target - G.slow) * Math.min(1, rdt * 9);
-    if (!G.over || s.win) { G.acc += rdt * G.slow; let n = 0; while (G.acc >= K.dt && n < 14) { C.step(L, s); events(); G.acc -= K.dt; n++; if (n % 2 === 0) { G.trail.push([s.x, s.y]); if (G.trail.length > 16) G.trail.shift(); } } if (n >= 14) G.acc = 0; }
+    if (G.hold > 0) G.hold -= rdt;   // hit-stop: the world holds its breath, the effects keep moving
+    else if (!G.over || s.win) { G.acc += rdt * G.slow; let n = 0; while (G.acc >= K.dt && n < 14) { C.step(L, s); events(); G.acc -= K.dt; n++; if (n % 2 === 0) { G.trail.push([s.x, s.y]); if (G.trail.length > 16) G.trail.shift(); } } if (n >= 14) G.acc = 0; }
     if (G.shot) { G.shot.t += rdt; if (G.shot.t > 0.3) G.shot = null; }
     if (G.flowerK) G.flowerK += rdt;
+    if (s.y > G.maxY) G.maxY = s.y;
     if (s.rope && G.ptr == null && !G.over) { C.release(L, s); events(); }   // safety: no finger, no thread
   }
   if (G.shake > 0) G.shake = Math.max(0, G.shake - rdt * 2.2); if (G.sq > 0) G.sq = Math.max(0, G.sq - rdt * 3); if (G.webWob > 0) G.webWob = Math.max(0, G.webWob - rdt * 2.5);
@@ -1497,7 +1628,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       if (G.phase !== 'play') return 'map';
       const s = H.s(); if (!s) return 'map';
       if (s.win || (G.over && !s.dead)) { await A.wait(1700); return 'win'; }
-      if (s.dead) { await A.wait(1200); return 'dead'; }
+      if (s.dead) { await A.wait(1200); if (!s.dead) { A.mark('Papi rattrape Mina'); continue; } return 'dead'; }   // levels 1-3: Papi's safety net catches the first fall
       await swing(A); await A.wait(16);
     }
     return 'time';

@@ -79,6 +79,9 @@ i.ti,i.pl{display:inline-block;width:1.15em;height:1.15em;background:center/cont
 .grade{font-size:64px;font-weight:900;line-height:1;color:var(--blue);-webkit-text-stroke:2px var(--ink);margin:2px 0;display:inline-block;animation:clack .6s cubic-bezier(.3,1.8,.5,1) both}
 .grade.S{color:var(--yellow);animation:gold 1.6s cubic-bezier(.2,1,.3,1) both;text-shadow:0 0 0 var(--yellow)}
 @keyframes gold{0%{transform:scale(3);opacity:0}40%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+.almost{font-weight:900;font-size:15px;color:var(--red);margin:2px 0 6px;animation:clack .5s 1.9s cubic-bezier(.3,1.8,.5,1) both}
+.record{display:inline-block;font-weight:900;font-size:19px;background:var(--red);color:var(--cream);border:3px solid var(--ink);border-radius:12px;padding:3px 12px;margin:2px 0 6px;transform:rotate(-4deg);animation:clack .5s 2.1s cubic-bezier(.3,1.8,.5,1) both}
+.b1.again{font-size:25px;padding:17px 14px;animation:jzpop .45s 2.3s cubic-bezier(.3,1.6,.5,1) both}
 .goldwash{position:fixed;inset:0;z-index:29;pointer-events:none;background:rgba(255,201,60,.45);animation:gw 1.6s ease-out forwards}@keyframes gw{to{opacity:0}}
 .login{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}.lg{background:#fff;border:3px solid var(--ink);border-radius:10px;padding:4px 1px;display:flex;flex-direction:column;align-items:center;gap:2px}
 .lg small{font-size:9px;font-weight:800}.lg b{font-size:11px}.lg i{width:20px;height:20px}.lg.got{opacity:.4}.lg.now{background:var(--yellow)}
@@ -215,6 +218,32 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
   if (opts.seed) seedRandom(opts.seed);
   installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  let offCtx = null;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 32000;
+    offCtx = new OfflineAudioContext(1, Math.ceil(AUDIO_LEN * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    Object.defineProperty(offCtx, 'currentTime', { get: () => videoNow() / 1000 });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the whole soundtrack and returns the part from `from` (s) lasting `dur` (s), as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.max(0, Math.floor(from * r)), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
   addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
   addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
   // FPS (real frames per real second)
@@ -387,8 +416,9 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   // ---- the songs. mus = what the synthesiser plays (all original, composed by the generator in audio.js from these settings) ----
   // tempo: [[from beat, bpm], ...]; sections: [[phrase, repeats], ...]; feat: the habitant introduced; rule: the i18n key of the rule
   const SONGS = [
+    // the first song is the tutorial: short (about 21 s, a one-bar count-in), won in the first 30 seconds of play
     { id: 'm1', hood: 'market', feat: 0, rule: 'r_p3', tempo: [[0, 92]], tut: 1,
-      sections: [['count', 2], ['R1', 8], ['R2', 8], ['rest', 1], ['R1', 4], ['R2', 6], ['rest', 2]],
+      sections: [['count', 1], ['R1', 4], ['R2', 3]],
       mus: { root: 60, scale: 'maj', prog: [0, 3, 4, 0], drums: 'pop', bass: 'root', lead: 'triangle', seed: 11, pad: 'organ' } },
     { id: 'm2', hood: 'market', feat: 1, rule: 'r_p7', tempo: [[0, 100]],
       sections: [['count', 2], ['R1', 4], ['B1', 3], ['B2', 6], ['rest', 1], ['B2', 4], ['rest', 2]],
@@ -460,6 +490,8 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
       }
     }
     notes.sort((a, b) => a.t - b.t); notes.forEach((n, i) => n.i = i);
+    // a letter in a fast run (a neighbour closer than 200 ms): drawn with its own approach ring colour
+    notes.forEach((n, i) => { n.dense = (i > 0 && n.t - notes[i - 1].t < 0.2) || (i + 1 < notes.length && notes[i + 1].t - n.t < 0.2); });
     bars = beat / 4;
     const end = timeOf(song, beat);
     return (song._tab = { id: song.id, meter: 4, bpm: song.tempo[0][1], tempo: song.tempo, beats: beat, bars, dur: end, pats, notes,
@@ -474,10 +506,15 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
 
   // ---- the judge: a tap time (seconds, song clock, latency already removed) against the table ----
   const grade = err => { const a = Math.abs(err); return a <= WIN.perfect ? 'P' : a <= WIN.good ? 'B' : 'M'; };
-  // the letter a tap belongs to: the nearest letter not yet judged within reach (null = a tap in the void)
+  // the letter a tap belongs to (null = a tap in the void). Letters are caught IN ORDER: the oldest letter not yet judged
+  // whose BIEN window (±90 ms) holds the tap takes it. Only when none does, the nearest letter within reach takes it.
+  // (Nearest-first was unfair on sixteenths, 125 ms apart: a tap 80 ms late on the 1st castanet stroke was judged PARFAIT
+  // on the 2nd one, then the 1st one was RATÉ and the stroke the player aimed at slid one letter on.)
   function pick(notes, done, t, from = 0) {
     let best = null, bd = 1e9;
-    for (let i = from; i < notes.length; i++) { const n = notes[i]; if (n.t - t > WIN.reach) break; if (done[i]) continue; const d = Math.abs(n.t - t); if (d <= WIN.reach && d < bd) { bd = d; best = n; } }
+    for (let i = from; i < notes.length; i++) { const n = notes[i]; if (n.t - t > WIN.reach) break; if (done[i]) continue; const d = Math.abs(n.t - t);
+      if (d <= WIN.good) return n;
+      if (d <= WIN.reach && d < bd) { bd = d; best = n; } }
     return best;
   }
   // accuracy, stamps (1..3 star stamps), letter grade C..S from the results ['P'|'B'|'M', ...]
@@ -489,10 +526,17 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
     let combo = 0, best = 0; for (const r of res) { combo = r === 'M' ? 0 : combo + 1; best = Math.max(best, combo); }
     return { n: res.length, P, B, M, acc, stars, letter, best };
   }
+  // the next letter up and how far it is: { g: 'A', pts: 3 } (accuracy points missing) or { g: 'S', noMiss: true } (only the RATÉ stand in the way)
+  function nextGrade(sc) {
+    if (sc.letter === 'S') return null;
+    const need = sc.letter === 'A' ? 0.95 : sc.letter === 'B' ? 0.88 : 0.75, g = sc.letter === 'A' ? 'S' : sc.letter === 'B' ? 'A' : 'B';
+    if (g === 'S' && sc.acc >= need) return { g, noMiss: true };
+    return { g, pts: Math.max(1, Math.ceil((need - sc.acc) * 100 - 1e-9)) };
+  }
   const mult = combo => Math.min(4, 1 + Math.floor(combo / 10));
   const points = (r, combo) => (r === 'P' ? 300 : r === 'B' ? 100 : 0) * mult(combo);
 
-  const R = { WIN, MIN_GAP, HAB, PAT, PH, SONGS, tempoOf, timeOf, beatOf, bpmAt, table, grade, pick, score, mult, points, song: id => SONGS.find(s => s.id === id) };
+  const R = { WIN, MIN_GAP, HAB, PAT, PH, SONGS, tempoOf, timeOf, beatOf, bpmAt, table, grade, pick, score, nextGrade, mult, points, song: id => SONGS.find(s => s.id === id) };
   root.PPR = R; if (typeof module !== 'undefined') module.exports = R;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
@@ -557,6 +601,8 @@ window.I18N = (() => {
     done: ['Tournée finie !', 'Round complete!'], grade: ['Note', 'Grade'], accuracy: ['Précision', 'Accuracy'], bestCombo: ['Meilleur combo', 'Best combo'],
     next: ['Morceau suivant', 'Next song'], again: ['Rejouer', 'Play again'], home: ['Le quartier', 'The district'], x2: ['×2 timbres', '×2 stamps'],
     newStamp: ['Nouveau timbre dans l’album !', 'New stamp in the album!'], score: ['Score', 'Score'], unlocked: ['Débloqué : {s}', 'Unlocked: {s}'],
+    record: ['Nouveau record !', 'New record!'], almost: ['Encore {n} % de précision pour la note {g} !', '{n} % more accuracy for grade {g}!'],
+    almostS: ['Sans aucun RATÉ, c’était la note S !', 'With no MISS at all, that was grade S!'], tierUp: ['COMBO ×{n} !', 'COMBO ×{n}!'],
     bossDone: ['Le marché est en fête !', 'The market is celebrating!'],
     // meta
     album: ['Album', 'Album'], albumSub: ['{n}/{m} timbres collés', '{n}/{m} stamps glued'], tri: ['Tri', 'Sorting'], triTitle: ['Bureau de tri', 'Sorting office'],
@@ -957,9 +1003,11 @@ window.PPAUDIO = (() => {
     const A = motif(), B = motif(), A2 = A.map(([s, d, l, st], i) => [s, i > A.length - 4 ? d + 2 : d, l, st]);
     return { phrases: [A, A2, B, A], r };
   }
-  const MUS = { song: null, S0: 0, step: 0, parts: null, bars: [] };
+  // MUS.tier: the combo level (0..3) set by the game. Each level adds a layer to the band (shaker, then the lead an octave up,
+  // then a chord arpeggio); a RATÉ drops them all, so the player hears the combo they are holding.
+  const MUS = { song: null, S0: 0, step: 0, parts: null, bars: [], tier: 0 };
   function start(song, tab, S0, fromBeat = 0) {
-    CLK.live = true; MUS.song = song; MUS.tab = tab; MUS.S0 = S0; MUS.step = Math.max(0, Math.floor(fromBeat * 4)); MUS.parts = compose(song.mus);
+    CLK.live = true; MUS.song = song; MUS.tab = tab; MUS.S0 = S0; MUS.tier = 0; MUS.step = Math.max(0, Math.floor(fromBeat * 4)); MUS.parts = compose(song.mus);
     MUS.bars = []; for (const [name, reps] of song.sections) { const len = window.PPR.PH[name].len; for (let i = 0; i < reps * len / 4; i++) MUS.bars.push(name); }
     // light cues: one per lit cell, rising along the window sill
     MUS.cues = []; for (const p of tab.pats) p.cells.forEach((b, k) => MUS.cues.push([b, p.w, k])); MUS.cues.sort((a, b) => a[0] - b[0]); MUS.ci = 0;
@@ -979,6 +1027,10 @@ window.PPAUDIO = (() => {
       const brk = kind === 'rest', pat = DRUMS[mus.drums], at = (str) => str && str[st] === 'x';
       if (at(pat.k) && !(brk && st)) DR.kick(w, d, brk ? 0.7 : 1);
       if (!brk) { if (at(pat.s)) DR.snare(w, d); if (at(pat.c)) DR.clap(w, d); if (at(pat.h)) DR.hat(w, d, st % 4 ? 0.7 : 1); if (at(pat.o)) DR.ohat(w, d); if (at(pat.r)) DR.rim(w, d); }
+      // combo level 1+: a shaker on every sixteenth, a tambourine on the off-beats
+      if (!brk && MUS.tier >= 1) { hiss(w, 0.03, 6500, 1.5, st % 2 ? 0.05 : 0.08, d, 'bandpass'); if (st % 8 === 4) hiss(w, 0.12, 9000, 2, 0.1, d, 'highpass'); }
+      // combo level 3: the chord in quick arpeggio, high and soft
+      if (!brk && MUS.tier >= 3 && st % 2 === 0) osc('triangle', hz(cTone([0, 2, 4, 7][(st / 2) % 4]) + 12), w, 0.09, 0.035, d);
       // bass
       const root = cTone(0) - 24, fifth = cTone(4) - 24, bl = 60 / R.bpmAt(song, beat) / 4;
       const bass = (m, len, v = 0.32) => osc(mus.drums === 'electro' || mus.drums === 'house' ? 'sawtooth' : 'triangle', hz(m), w, bl * len, v, d, { lp: 700, lpTo: 300 });
@@ -996,7 +1048,8 @@ window.PPAUDIO = (() => {
       // melody: the 8-bar form A A' B A, in the song's lead voice (silent during the breaks)
       if (!brk) { const ph = MUS.parts.phrases[Math.floor(bar / 2) % 4], rel = (bar % 2) * 16 + st;
         for (const [ms, deg, len, strong] of ph) if (ms === rel) { const dd = chordDeg + deg, m = mus.root + 12 + sc[((dd % 7) + 7) % 7] + 12 * Math.floor(dd / 7);
-          const type = mus.lead === 'reed' ? 'sawtooth' : mus.lead === 'saw' ? 'sawtooth' : mus.lead; osc(type, hz(m), w, bl * len * 0.95, strong ? 0.11 : 0.085, d, { lp: type === 'sawtooth' ? 2400 : 3800, a: 0.01 }); } }
+          const type = mus.lead === 'reed' ? 'sawtooth' : mus.lead === 'saw' ? 'sawtooth' : mus.lead; osc(type, hz(m), w, bl * len * 0.95, strong ? 0.11 : 0.085, d, { lp: type === 'sawtooth' ? 2400 : 3800, a: 0.01 });
+          if (MUS.tier >= 2) osc('sine', hz(m + 12), w, bl * len * 0.9, 0.05, d, { a: 0.01 }); } }   // combo level 2+: the lead doubled an octave up
     }
     // the habitants' cues: one sound per lit cell (to the effects bus: it is part of the game, kept when the music is off)
     while (MUS.ci < MUS.cues.length) { const [b, wnd, k] = MUS.cues[MUS.ci], t = MUS.S0 + R.timeOf(song, b); if (t > until) break; MUS.ci++; const w = CLK.toCtx(t); if (w < AU.ctx.currentTime - 0.05) continue; CUE[R.HAB[wnd].inst](w, AU.sfx, k); }
@@ -1009,16 +1062,23 @@ window.PPAUDIO = (() => {
   const rate = {}, ok = (k, ms) => { const n = performance.now(); if (n - (rate[k] || 0) < ms) return false; rate[k] = n; return true; };
   const live = () => !!(AU.ctx && AU.soundOn);
   const SFX = {
-    tchak() { if (!live()) return; const w = now(); hiss(w, 0.06, 2600, 1.2, 0.5, AU.sfx); osc('triangle', 520, w, 0.08, 0.3, AU.sfx, { slide: 300 }); },   // the letter lands in the bag
-    perfect() { if (!live()) return; const w = now(); hiss(w, 0.05, 3200, 1, 0.45, AU.sfx); osc('square', 1046, w, 0.09, 0.08, AU.sfx, { lp: 4000 }); osc('sine', 1568, w + 0.03, 0.12, 0.1, AU.sfx); },
-    good() { if (!live()) return; const w = now(); hiss(w, 0.05, 1800, 1, 0.35, AU.sfx); osc('triangle', 660, w, 0.08, 0.15, AU.sfx); },
+    tchak(at) { if (!live()) return; const w = Math.max(now(), at || 0); hiss(w, 0.06, 2600, 1.2, 0.5, AU.sfx); osc('triangle', 520, w, 0.08, 0.3, AU.sfx, { slide: 300 }); },   // the letter lands in the bag
+    // a caught letter: `at` = the letter's own time on the audio clock (an early tap sounds ON the beat, a late one at once),
+    // `semi` = semitones up (the game raises it by one per letter of the combo)
+    perfect(at, semi = 0) { if (!live()) return; const w = Math.max(now(), at || 0), k = Math.pow(2, semi / 12); hiss(w, 0.05, 3200, 1, 0.45, AU.sfx); osc('square', 1046 * k, w, 0.09, 0.08, AU.sfx, { lp: 4000 }); osc('sine', 1568 * k, w + 0.03, 0.12, 0.1, AU.sfx); },
+    good(at, semi = 0) { if (!live()) return; const w = Math.max(now(), at || 0), k = Math.pow(2, semi / 12); hiss(w, 0.05, 1800, 1, 0.35, AU.sfx); osc('triangle', 660 * k, w, 0.08, 0.15, AU.sfx); },
+    // a combo level reached: a short rising sweep and a crash, on `at` (the next beat)
+    tierUp(at, lvl = 1) { if (!live()) return; const w = Math.max(now(), at || 0); osc('sawtooth', 300 * lvl, w - 0.18 > now() ? w - 0.18 : w, 0.18, 0.05, AU.sfx, { slide: 1200 * lvl, lp: 3000 }); hiss(w, 0.6, 6000, 0.6, 0.3, AU.sfx, 'highpass'); osc('triangle', 784 * Math.pow(2, (lvl - 1) * 4 / 12), w, 0.3, 0.12, AU.sfx); },
     miss() { if (!live() || !ok('miss', 60)) return; const w = now(); osc('triangle', 300, w, 0.22, 0.25, AU.sfx, { slide: 140 }); hiss(w, 0.1, 400, 1, 0.25, AU.sfx, 'lowpass'); },
     tap() { if (!live() || !ok('tap', 40)) return; hiss(now(), 0.03, 1200, 1, 0.12, AU.sfx); },
     stamp() { if (!live() || !ok('stamp', 80)) return; const w = now(); hiss(w, 0.12, 220, 0.7, 0.8, AU.sfx, 'lowpass'); osc('sine', 85, w, 0.22, 0.6, AU.sfx); },
     click() { if (live()) osc('square', 1400, now(), 0.03, 0.05, AU.sfx); },
     chime() { if (!live()) return; [784, 988, 1319].forEach((f, i) => osc('triangle', f, now() + i * 0.07, 0.4, 0.12, AU.sfx)); },
     coins() { if (!live()) return; for (let i = 0; i < 5; i++) osc('sine', 1200 + i * 120, now() + i * 0.05, 0.1, 0.08, AU.sfx); },
-    fanfare() { if (!live()) return; [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => osc('triangle', f, now() + i * 0.11, i > 4 ? 0.7 : 0.25, 0.14, AU.sfx)); },
+    // the fanfare: given `at` and `step` (a beat time on the audio clock, an eighth note of the song), every note sits on the song's grid
+    fanfare(at, step) { if (!live()) return; const w = Math.max(now(), at || 0), d = step || 0.11; [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => osc('triangle', f, w + i * d, i > 4 ? Math.max(0.7, d * 3) : Math.max(0.25, d * 0.9), 0.14, AU.sfx)); },
+    // the end of an ordinary song: "ta-da!" on the last downbeat (two eighths, the last one held)
+    cadence(at, step) { if (!live()) return; const w = Math.max(now(), at || 0), d = step || 0.15; [[784, 0, 0.9], [1047, 1, 2.6]].forEach(([f, i, l]) => { osc('triangle', f, w + i * d, d * l, 0.13, AU.sfx); osc('sine', f / 2, w + i * d, d * l, 0.08, AU.sfx); }); },
     lose() { if (!live()) return; osc('triangle', 392, now(), 0.5, 0.15, AU.sfx, { slide: 150 }); osc('triangle', 196, now() + 0.2, 0.5, 0.1, AU.sfx, { slide: 90 }); },
     firework() { if (!live() || !ok('fw', 90)) return; const w = now(); osc('sine', 300, w, 0.3, 0.12, AU.sfx, { slide: 1400 }); hiss(w + 0.3, 0.5, 2000, 0.5, 0.4, AU.sfx); for (let i = 0; i < 6; i++) hiss(w + 0.35 + i * 0.05, 0.04, 5000, 2, 0.15, AU.sfx); },
     whoosh() { if (live() && ok('wh', 90)) hiss(now(), 0.2, 600, 1, 0.12, AU.sfx, 'bandpass', { to: 3000 }); },
@@ -1141,7 +1201,7 @@ function cover(k) { const im = img(k); if (!im) return; const s = Math.max(W / i
 // ---------- state ----------
 const G = { mode: 'title', song: null, tab: null, S0: 0, res: [], errs: [], from: 0, combo: 0, best: 0, score: 0, bag: 1, train: false, tut: false,
   paused: false, ended: false, failed: false, lights: 0, lastBeat: -99, fx: [], parts: [], floats: [], shake: 0, time: 0, pipT: 0, pipPose: 0, habBump: [0, 0, 0, 0, 0, 0],
-  downs: [], resumed: 0, firstHit: false, endAt: 0, fw: 0, cpUsed: false };
+  downs: [], resumed: 0, firstHit: false, endAt: 0, fw: 0, cpUsed: false, rings: [], tier: 0, hitstop: 0, cad: false, jf: null };
 const songT = () => CLK.now() - G.S0;                    // the song clock (seconds from beat 0)
 const visT = () => CLK.now() - CLK.outLat() - G.S0;      // what is heard now (the drawing follows the ear)
 const songs = hood => R.SONGS.filter(s => s.hood === hood);
@@ -1152,7 +1212,8 @@ async function startSong(id, o = {}) {
   closeModal(); A.init(); const song = R.song(id); if (!song) return showHome();
   G.song = song; G.tab = R.table(song); G.res = new Array(G.tab.notes.length).fill(null); G.errs = []; G.from = 0; G.combo = 0; G.best = 0; G.score = 0; G.bag = 1;
   G.tut = !!song.tut && !S.tut; G.train = !!(o.train ?? S.train) && !G.tut; G.paused = false; G.ended = false; G.failed = false; G.lights = 0; G.lastBeat = -99; G.fx = []; G.parts = []; G.floats = [];
-  G.firstHit = false; G.cpUsed = false; G.fw = 0; G.downs = []; G.saidCombo = 0;
+  G.firstHit = false; G.cpUsed = false; G.fw = 0; G.downs = []; G.saidCombo = 0; G.rings = []; G.tier = 0; G.hitstop = 0; G.cad = false; G.jf = null;
+  G.twoAt = (G.tab.pats.find(p => p.p === 'p2') || { b0: -1 }).b0;   // the tutorial: the beat where Lola switches to "1, 2!"
   G.mode = 'song'; $('#home').classList.remove('on'); $('#title').classList.remove('on'); buildHud(); $('#hud').classList.add('on'); resize();
   S.plays++; save(); track('song_start', { id });
   // Madame Tampon introduces the habitant (the tutorial waits a little longer before the count-in)
@@ -1165,7 +1226,7 @@ async function startSong(id, o = {}) {
   CLK.pick(); const lead = G.tut ? 2.6 : 1.4, from = o.from || 0;
   if (from > 0) { if (!o.skip) { for (const n of G.tab.notes) if (n.beat < from) G.res[n.i] = 'P'; recount(); } G.from = G.tab.notes.findIndex(n => n.beat >= from); if (G.from < 0) G.from = G.tab.notes.length; }
   G.S0 = CLK.now() + lead - R.timeOf(song, from);
-  A.start(song, G.tab, G.S0, from);
+  A.start(song, G.tab, G.S0, from); syncTier();
   if (G.tut) setTimeout(() => { if (G.mode === 'song' && G.tut) say('mt_count', 1, 0, 'top'); }, 2300);
 }
 // back to an earlier beat (pause, rewarded resume): what follows is played again, with a count-in of one bar
@@ -1174,7 +1235,7 @@ function resumeAt(beat) {
   G.from = G.tab.notes.findIndex(n => n.beat >= beat); if (G.from < 0) G.from = G.tab.notes.length;
   CLK.pick(); const lead = 4 * 60 / R.bpmAt(song, beat), t0 = CLK.now() + 0.6; G.S0 = t0 + lead - R.timeOf(song, beat);
   for (let i = 0; i < 4; i++) A.beep(t0 + i * lead / 4, i === 0);
-  A.start(song, G.tab, G.S0, beat); G.paused = false; G.failed = false; G.ended = false; G.lastBeat = -99; G.lights = 0;
+  A.start(song, G.tab, G.S0, beat); G.paused = false; G.failed = false; G.ended = false; G.lastBeat = -99; G.lights = 0; G.cad = false; G.fw = 0; syncTier();
 }
 function recount() {
   let combo = 0, best = 0, score = 0;
@@ -1195,25 +1256,47 @@ function judge(n, r, err) {
   const prev = G.combo; recount();
   const [wx, wy] = winXY(n.w);
   if (r === 'M') {
-    G.bag = Math.max(0, G.bag - (G.tut || G.train ? 0 : E.bag.miss)); SFX.miss(); buzz(40); G.shake = 0.5; G.pipPose = 2; G.pipT = 0.45;
+    G.bag = Math.max(0, G.bag - (G.tut || G.train ? 0 : E.bag.miss)); SFX.miss(); buzz(40); G.shake = 0.5; G.pipPose = 2; G.pipT = 0.45; G.jf = null;
+    if (G.tier > 0) { G.tier = 0; A.MUS.tier = 0; }   // the combo is broken: the band drops its extra layers
     stamp('stamp_oops', PIP.x + rnd(-30, 30), PIP.y - PIP.s * 0.9, 0.55, t('oops'), PAL.blue);
     if (prev >= 10 || (G.tut && !G.firstHit)) say(G.tut ? 'mt_timing' : 'mt_oops', 2, 2200, 'top');
     if (!G.tut && !G.train && G.bag <= 0) fail();
   } else {
     G.bag = Math.min(1, G.bag + (r === 'P' ? E.bag.perfect : E.bag.good)); S.letters++;
-    r === 'P' ? SFX.perfect() : SFX.good(); SFX.tchak(); buzz(r === 'P' ? 18 : 10); G.pipPose = 1; G.pipT = 0.2; G.habBump[n.w] = 1;
+    // the sound sits on the letter's own beat (an early tap waits for it), one semitone higher per letter of the combo
+    const at = CLK.toCtx(G.S0 + n.t), semi = (Math.max(1, G.combo) - 1) % 12;
+    r === 'P' ? SFX.perfect(at, semi) : SFX.good(at, semi); SFX.tchak(at);
+    buzz(r === 'P' ? 14 : 8); if (r === 'P') G.shake = Math.max(G.shake, 0.22);   // PARFAIT: a light tick in the hand and a light shake
+    G.pipPose = 1; G.pipT = 0.2; G.habBump[n.w] = 1;
+    const [tx, ty] = catchXY(); G.rings.push({ x: tx, y: ty, t: 0, d: r === 'P' ? 0.42 : 0.32, col: r === 'P' ? PAL.yellow : PAL.cream, w: r === 'P' ? 7 : 4, s: PIP.s * 0.16 });
     burst(PIP.x + PIP.s * 0.25, PIP.y - PIP.s * 0.1, r === 'P' ? 8 : 4, [PAL.yellow, PAL.cream, PAL.red]);
-    const big = !G.firstHit || (G.combo > 0 && G.combo % 10 === 0);
-    if (big) { stamp('stamp_perfect', W / 2, FA.y + FA.h * 0.45, 1.25, r === 'P' ? t('perfect') : t('good'), PAL.red); SFX.stamp(); }
-    else floatText(PIP.x + rnd(-40, 40), PIP.y - PIP.s * 0.85, r === 'P' ? t('perfect') : t('good'), r === 'P' ? PAL.yellow : PAL.cream, r === 'P' ? 22 : 18);
+    const tier = Math.min(3, Math.floor(G.combo / 10)), up = tier > G.tier, big = !G.firstHit || up || (G.combo > 0 && G.combo % 10 === 0);
+    if (up) tierUp(tier);
+    if (big) { stamp('stamp_perfect', W / 2, FA.y + FA.h * 0.45, 1.25, up ? t('tierUp', { n: tier + 1 }) : r === 'P' ? t('perfect') : t('good'), PAL.red); SFX.stamp(); G.jf = null; }
+    else judgeText(r, n);
     if (!G.firstHit) { G.firstHit = true; if (G.tut) say('mt_first', 3, 2600, 'top'); track('first_catch', { t: +(performance.now() / 1000).toFixed(1) }); }
     if (G.combo >= 20 && G.saidCombo < 1) { G.saidCombo = 1; say('mt_combo', 0, 2200, 'top'); }
     if (G.combo === 50) unlockStamp('ms_combo50');
   }
   if (S.letters >= 300) unlockStamp('ms_300');
 }
+// the judgement word over Pip: letters of a fast run share one word that counts them (PARFAIT ×2, ×3) instead of piling up
+function judgeText(r, n) {
+  const word = r === 'P' ? t('perfect') : t('good'), col = r === 'P' ? PAL.yellow : PAL.cream, f = G.jf;
+  if (f && G.floats.includes(f) && f.t < 0.3 && f.r === r && n.t - f.nt < 0.3) { f.k++; f.s = word + ' ×' + f.k; f.t = 0; f.nt = n.t; f.size = Math.min(30, f.size + 3); return; }
+  floatText(PIP.x + rnd(-40, 40), PIP.y - PIP.s * 0.85, word, col, r === 'P' ? 22 : 18);
+  G.jf = Object.assign(G.floats[G.floats.length - 1], { r, k: 1, nt: n.t });
+}
+// combo levels (×2, ×3, ×4 at 10, 20, 30 letters): the band adds a layer, the street dresses up, a crash on the next beat
+function syncTier() { G.tier = Math.min(3, Math.floor(G.combo / 10)); A.MUS.tier = G.tier; }
+function tierUp(tier) {
+  G.tier = tier; A.MUS.tier = tier;
+  const nb = Math.ceil(R.beatOf(G.song, songT()) + 0.05); SFX.tierUp(CLK.toCtx(G.S0 + R.timeOf(G.song, nb)), tier);
+  G.hitstop = 0.06; G.shake = Math.max(G.shake, 0.45); buzz(45); JUICE.flash(); burst(W / 2, FA.y + FA.h * 0.45, 22, [PAL.yellow, PAL.red, PAL.green, PAL.cream], 1.3);
+}
+const catchXY = () => [PIP.x + PIP.s * 0.22, PIP.y - PIP.s * 0.05];   // where the letters land: Pip's bag
 function fail() {
-  G.failed = true; A.stop(); SFX.lose(); G.pipPose = 2; G.pipT = 9; track('song_fail', { id: G.song.id });
+  G.failed = true; A.stop(); SFX.lose(); G.tier = 0; G.pipPose = 2; G.pipT = 9; track('song_fail', { id: G.song.id });
   const cp = G.tab.checkpoints.filter(b => b <= R.beatOf(G.song, songT())).pop() || 0;
   setTimeout(() => {
     if (G.mode !== 'song') return; say('mt_fail', 2, 3000, 'top');
@@ -1246,13 +1329,17 @@ function songFrame() {
     const target = Math.min(8, Math.floor(G.combo / 3)); if (G.lights < target) G.lights++; else if (G.lights > target) G.lights--;   // one house per beat
     if (kind === 'count' && b >= 0) floatText(W / 2, FA.y + FA.h * 0.12, String(b % 4 + 1), PAL.cream, 54, 0.5);
     if (G.tut) tutCount(vb);
-    if (G.tut && b === 40) say('mt_two', 1, 3000, 'top');
+    if (G.tut && b === G.twoAt) say('mt_two', 1, 3000, 'top');
+    // the boss end: fireworks on the beats after the last downbeat
+    if (G.song.boss && b >= G.tab.beats && b < G.tab.beats + 7) { if (b === G.tab.beats) G.fw = 3.5; firework(); }
   }
+  // the end of the song, scheduled half a second ahead ON the last downbeat (with the band's final hit): fanfare for the boss, "ta-da" otherwise
+  if (!G.cad && st > G.tab.dur - 0.5) { G.cad = true; const at = CLK.toCtx(G.S0 + G.tab.dur), step = 30 / R.bpmAt(G.song, G.tab.beats); G.song.boss ? SFX.fanfare(at, step) : SFX.cadence(at, step); }
   if (!G.ended && st > G.tab.dur + (G.song.boss ? 0.2 : 0.8)) endSong();
 }
 // the tutorial: Madame Tampon counts on her wing along Lola's light for the first letters
 function tutCount(vb) {
-  if (G.res.filter(Boolean).length > 6 || vb > 40) { if ($('#mt .pt .cnt')) mtHide(); return; }
+  if (G.res.filter(Boolean).length > 6 || vb > G.tab.beats) { if ($('#mt .pt .cnt')) mtHide(); return; }
   const p = G.tab.pats.find(p => p.w === 0 && vb >= p.b0 - 0.01 && vb < p.b0 + p.dur - 0.5); if (!p) return;
   const k = Math.floor(vb - p.b0 + 0.01), nums = p.cells.length + 1; if (k >= nums) return;
   const s = Array.from({ length: nums }, (_, i) => i < k ? `${i + 1}` : i === k ? `<b class="cnt">${i + 1}${i === nums - 1 ? ' !' : '…'}</b>` : '·').join('  ');
@@ -1260,9 +1347,10 @@ function tutCount(vb) {
 }
 function endSong() {
   G.ended = true; const sc = R.score(G.res.map(r => r || 'M')), song = G.song, prev = S.best[song.id], first = !prev || !prev.stars;
+  if (G.tut && !sc.stars) sc.stars = 1;   // the tutorial cannot be lost: it always ends on a first stamp (and opens the next song)
   track('song_end', { id: song.id, acc: +sc.acc.toFixed(3), letter: sc.letter });
-  if (song.boss) { G.fw = 3.5; SFX.fanfare(); }
   if (G.tut) S.tut = 1;
+  const rec = !G.train && !!prev && prev.score > 0 && G.score > prev.score;   // a new record on a song already played
   let timbres = 0, xp = 0; const news = [];
   if (G.train) xp = 5;
   else { timbres = sc.stars ? E.timbres(sc.stars, first) : 4; xp = E.xp(sc.stars);
@@ -1270,22 +1358,24 @@ function endSong() {
     if (sc.stars > 0 && E.album.includes('st_' + song.id) && unlockStamp('st_' + song.id, true)) news.push('st_' + song.id);
     if (sc.letter === 'S' && unlockStamp('ms_s', true)) news.push('ms_s'); }
   S.timbres += timbres; save();
-  setTimeout(() => { A.stop(); results(sc, timbres, xp, news); }, song.boss ? 3600 : 900);
+  setTimeout(() => { A.stop(); results(sc, timbres, xp, news, rec); }, song.boss ? 3600 : 900);
 }
 const better = (a, b) => { const o = ['C', 'B', 'A', 'S']; return !b || o.indexOf(a) > o.indexOf(b) ? a : b; };
-function results(sc, timbres, xp, news) {
+function results(sc, timbres, xp, news, rec) {
   if (G.mode !== 'song') return; G.mode = 'results'; const song = G.song, list = R.SONGS.filter(s => s.hood === song.hood), nx = list[list.indexOf(song) + 1];
   const canNext = nx && unlocked(nx) && !G.train;
   openModal(`<h2>${song.boss && sc.stars ? t('bossDone') : t('done')}</h2><div class="sub">${t('s_' + song.id)}</div>
     <div class="stars">${[1, 2, 3].map(i => `<img src="${src('stamp_star')}" class="${sc.stars >= i ? 'on' : ''}" style="animation-delay:${0.3 + i * 0.35}s" alt="">`).join('')}</div>
-    <div class="grade ${sc.letter}" style="animation-delay:1.5s">${sc.letter}</div>
-    <div class="stat"><span>${t('perfect')}</span><b>${sc.P}</b></div><div class="stat"><span>${t('good')}</span><b>${sc.B}</b></div><div class="stat"><span>${t('miss')}</span><b>${sc.M}</b></div>
-    <div class="stat"><span>${t('accuracy')}</span><b>${Math.round(sc.acc * 100)} %</b></div><div class="stat"><span>${t('bestCombo')}</span><b>${sc.best}</b></div><div class="stat"><span>${t('score')}</span><b>${G.score}</b></div>
+    <div class="grade ${sc.letter}" style="animation-delay:1.5s">${sc.letter}</div>${almostHtml(sc)}${rec ? `<div class="record">${t('record')}</div>` : ''}
+    <div class="stat"><span>${t('perfect')}</span><b data-n="${sc.P}">0</b></div><div class="stat"><span>${t('good')}</span><b data-n="${sc.B}">0</b></div><div class="stat"><span>${t('miss')}</span><b data-n="${sc.M}">0</b></div>
+    <div class="stat"><span>${t('accuracy')}</span><b data-n="${Math.round(sc.acc * 100)}" data-u=" %">0 %</b></div><div class="stat"><span>${t('bestCombo')}</span><b data-n="${sc.best}">0</b></div><div class="stat"><span>${t('score')}</span><b data-n="${G.score}">0</b></div>
     ${timbres ? `<div class="gain">+${timbres} <i class="ti"></i></div>` : ''}${news.length ? `<div class="sub" data-newstamp>📮 ${t('newStamp')}</div>` : ''}
     ${timbres && !G.train ? `<button class="b1 bad adbtn" data-x2>▶ ${t('x2')} (+${timbres})</button>` : ''}
-    ${canNext ? `<button class="b1 big" data-next>${t('next')}</button>` : ''}<div class="row2"><button class="b2" data-again>${t('again')}</button><button class="b2" data-home>${t('home')}</button></div>`);
+    <button class="b1 big again" data-again>↻ ${t('again')}</button>${canNext ? `<button class="b1" data-next>${t('next')}</button>` : ''}<button class="b2" data-home>${t('home')}</button>`);
+  countUp(modal, 0.25, 0.9);
   [1, 2, 3].forEach(i => { if (sc.stars >= i) setTimeout(() => { SFX.stamp(); buzz(20); }, 300 + i * 350); });
-  setTimeout(() => { if (sc.letter === 'S') { document.body.appendChild(div('goldwash', '')); setTimeout(() => document.querySelector('.goldwash')?.remove(), 1700); SFX.chime(); if (!S.said.mt_s) { say('mt_s', 3, 2600); S.said.mt_s = 1; } } else SFX.click(); }, 1500);
+  setTimeout(() => { if (G.mode !== 'results') return; if (sc.letter === 'S') { document.body.appendChild(div('goldwash', '')); setTimeout(() => document.querySelector('.goldwash')?.remove(), 1700); SFX.chime(); buzz([30, 50, 30]); if (!S.said.mt_s) { say('mt_s', 3, 2600); S.said.mt_s = 1; } } else { SFX.stamp(); buzz(25); } }, 1500);
+  if (rec) setTimeout(() => { if (G.mode !== 'results') return; SFX.fanfare(); JUICE.confetti(80); buzz([30, 50, 30]); }, 2100);
   if (song.boss && sc.stars) setTimeout(() => say('mt_bosswin', 0, 3200), 2200);
   addXp(xp); if (sc.stars >= 2) setTimeout(() => JUICE.confetti(60), 1300);
   const x2 = modal.querySelector('[data-x2]'); if (x2) x2.onclick = async () => { if (await Ads.rewarded('x2')) { S.timbres += timbres; save(); x2.remove(); SFX.coins(); JUICE.confetti(40); } };
@@ -1293,6 +1383,19 @@ function results(sc, timbres, xp, news) {
   const nb = modal.querySelector('[data-next]'); if (nb) nb.onclick = () => go(() => startSong(nx.id));
   modal.querySelector('[data-again]').onclick = () => go(() => startSong(song.id));
   modal.querySelector('[data-home]').onclick = () => go(() => showHome(news.length ? 'album' : ''));
+}
+// "almost": what the next letter grade needs, so the player wants one more go
+function almostHtml(sc) {
+  const nx = R.nextGrade(sc); if (!nx) return '';
+  return `<div class="almost">${nx.noMiss ? t('almostS') : t('almost', { n: nx.pts, g: nx.g })}</div>`;
+}
+// the numbers of the results count up instead of appearing at once
+function countUp(root, delay, dur) {
+  const els = [...root.querySelectorAll('[data-n]')], t0 = performance.now() + delay * 1000;
+  const step = now => { const k = clamp((now - t0) / (dur * 1000), 0, 1), e = 1 - Math.pow(1 - k, 3);
+    for (const el of els) { if (!el.isConnected) return; el.textContent = Math.round(+el.dataset.n * e) + (el.dataset.u || ''); }
+    if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
 }
 function addXp(n) {
   S.xp += n; let up = 0; while (S.xp >= E.xpLevel(S.plv)) { S.xp -= E.xpLevel(S.plv); S.plv++; up++; S.timbres += E.levelGift(S.plv); }
@@ -1557,11 +1660,19 @@ function drawWindows(vb, pulse) {
 }
 // letters in flight: each leaves its window one beat before its time and lands in Pip's bag exactly on it
 function drawLetters(vt) {
+  // approach rings: each coming letter has a ring that closes on Pip's bag and touches it exactly on its beat
+  // (letters of a fast run, sixteenths, in red: one ring per stroke, so ta-ta-ta reads as three)
+  { const [tx, ty] = catchXY(), r0 = PIP.s * 0.16; let any = false;
+    for (let i = G.from; i < G.tab.notes.length; i++) { const n = G.tab.notes[i], fl = Math.min(0.75, 60 / R.bpmAt(G.song, n.beat)), k = (n.t - vt) / fl; if (k > 1) break; if (G.res[i] || k < -0.15) continue;
+      any = true; const kk = Math.max(0, k); cx.globalAlpha = clamp(1.15 - kk, 0, 1); cx.strokeStyle = PAL.ink; cx.lineWidth = 7; cx.beginPath(); cx.arc(tx, ty, r0 * (1 + 2.4 * kk), 0, TAU); cx.stroke();
+      cx.strokeStyle = n.dense ? PAL.red : PAL.yellow; cx.lineWidth = 4; cx.stroke(); }
+    if (any) { cx.globalAlpha = 0.85; cx.strokeStyle = PAL.cream; cx.lineWidth = 3; cx.setLineDash([5, 5]); cx.beginPath(); cx.arc(tx, ty, r0, 0, TAU); cx.stroke(); cx.setLineDash([]); }
+    cx.globalAlpha = 1; }
   for (const n of G.tab.notes) {
     const fl = Math.min(0.75, 60 / R.bpmAt(G.song, n.beat)), t0 = n.t - fl;
     if (vt < t0) break; const r = G.res[n.i]; if (r && r !== 'M') continue;
     let k = (vt - t0) / fl; if (r === 'M' && k > 1.8) continue; if (!r && k > 1.5) continue;
-    const [wx, wy] = winXY(n.w), tx = PIP.x + PIP.s * 0.22, ty = PIP.y - PIP.s * 0.05;
+    const [wx, wy] = winXY(n.w), [tx, ty] = catchXY();
     let x, y; if (k <= 1) { x = wx + (tx - wx) * k; y = wy + (ty - wy) * k - Math.sin(k * Math.PI) * FA.h * 0.18; } else { x = tx + (k - 1) * 60; y = ty + (k - 1) * (k - 1) * 400; }
     spr('letter', x, y, PIP.s * 0.32 * (0.7 + 0.3 * Math.min(1, k)), Math.sin(k * 9 + n.i) * 0.4, r === 'M' ? Math.max(0, 1.8 - k) : 1);
   }
@@ -1579,6 +1690,21 @@ function drawPip(pulse) {
   const ac = !full && S.costume >= 0 ? img('costume_' + S.costume) : null, o = COSWEAR[S.costume]; if (ac && o) { const aw = w * o.w, ah = aw * ac.height / ac.width; cx.drawImage(ac, -aw / 2, -h + h * o.y - ah / 2, aw, ah); }
   cx.restore();
 }
+// the street dresses up with the combo level: ×2 bunting over the façade, ×3 two searchlights, ×4 a golden glitter rain
+const BUNT = [PAL.red, PAL.yellow, PAL.green, PAL.cream];
+function drawTier(vb, pulse, front) {   // front 0: behind the façade (searchlights), 1: over it (bunting, glitter)
+  const lv = G.tier; if (!lv) return;
+  if (!front) { if (lv >= 2) { for (const side of [-1, 1]) { const a = Math.sin(G.time * 0.9 + (side > 0 ? 1.6 : 0)) * 0.35, x0 = W / 2 + side * W * 0.42, y0 = H;
+      cx.save(); cx.translate(x0, y0); cx.rotate(a - side * 0.25); cx.globalAlpha = 0.16 + pulse * 0.12; const gr = cx.createLinearGradient(0, 0, 0, -H); gr.addColorStop(0, PAL.yellow); gr.addColorStop(1, 'rgba(255,201,60,0)');
+      cx.fillStyle = gr; cx.beginPath(); cx.moveTo(-8, 0); cx.lineTo(-W * 0.22, -H); cx.lineTo(W * 0.22, -H); cx.lineTo(8, 0); cx.closePath(); cx.fill(); cx.restore(); } } return; }
+  // bunting: two sagging garlands across the top of the façade, flags swinging on the beat
+  for (let row = 0; row < 2; row++) { const y0 = FA.y + FA.h * (0.12 + row * 0.07), n = 9, sag = FA.h * 0.05;
+    cx.strokeStyle = PAL.ink; cx.lineWidth = 2; cx.beginPath(); for (let i = 0; i <= 20; i++) { const u = i / 20, x = FA.x + FA.w * u, y = y0 + Math.sin(u * Math.PI) * sag; i ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke();
+    for (let i = 0; i < n; i++) { const u = (i + 0.5) / n, x = FA.x + FA.w * u, y = y0 + Math.sin(u * Math.PI) * sag, fw = FA.w / n * 0.62, sw = Math.sin(G.time * 5 + i) * 0.12 + pulse * 0.15 * (i % 2 ? 1 : -1);
+      cx.save(); cx.translate(x, y); cx.rotate(sw); cx.fillStyle = BUNT[(i + row) % 4]; cx.beginPath(); cx.moveTo(-fw / 2, 0); cx.lineTo(fw / 2, 0); cx.lineTo(0, fw * 0.9); cx.closePath(); cx.fill(); cx.stroke(); cx.restore(); } }
+  if (lv >= 3) { cx.fillStyle = PAL.yellow; for (let i = 0; i < 26; i++) { const x = (i * 71.3 + Math.sin(G.time * 1.3 + i) * 24) % W, y = ((i * 131.7 + G.time * (70 + i % 4 * 25)) % H + H) % H, s = 2 + (i % 3) + pulse * 2;
+      cx.globalAlpha = 0.85; cx.save(); cx.translate(x, y); cx.rotate(G.time * 3 + i); cx.fillRect(-s, -s / 2, s * 2, s); cx.restore(); } cx.globalAlpha = 1; }
+}
 function drawFx(dt) {
   for (const p of G.parts) { cx.globalAlpha = clamp(1 - p.t / p.life, 0, 1); cx.fillStyle = p.col; cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, TAU); cx.fill(); } cx.globalAlpha = 1;
   for (const f of G.fx) { const k = f.t / f.d;
@@ -1587,6 +1713,7 @@ function drawFx(dt) {
       if (f.label) { cx.font = `900 ${Math.round(w * 0.17)}px ui-rounded, system-ui`; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.lineWidth = w * 0.035; cx.strokeStyle = PAL.ink; cx.strokeText(f.label, 0, 0); cx.fillStyle = PAL.cream; cx.fillText(f.label, 0, 0); }
       cx.restore(); }
     else if (f.type === 'fw') spr('firework', f.x, f.y, 140 * f.s * (0.4 + k), k * 0.6, 1 - k); }
+  for (const g of G.rings) { const k = clamp(g.t / g.d, 0, 1); cx.globalAlpha = 1 - k; cx.strokeStyle = g.col; cx.lineWidth = g.w * (1 - k * 0.6); cx.beginPath(); cx.arc(g.x, g.y, g.s * (1 + k * 1.8), 0, TAU); cx.stroke(); } cx.globalAlpha = 1;
   for (const f of G.floats) { const k = clamp(f.t / f.d, 0, 1); cx.globalAlpha = clamp(1.6 - k * 1.6, 0, 1); cx.font = `900 ${f.size}px ui-rounded, system-ui`; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.lineWidth = Math.max(4, f.size * 0.18); cx.strokeStyle = PAL.ink; cx.strokeText(f.s, f.x, f.y - k * 40); cx.fillStyle = f.col; cx.fillText(f.s, f.x, f.y - k * 40); cx.globalAlpha = 1; }
 }
 function draw() {
@@ -1597,11 +1724,11 @@ function draw() {
   const sh = G.shake > 0 ? G.shake * 8 : 0; cx.save(); if (sh) cx.translate(rnd(-sh, sh), rnd(-sh, sh));
   { const bg = ART.get('bg_street'); cx.drawImage(bg, 0, 0, W, H); }   // the drawn street (the painted bg_street is the façade itself)
   if (G.song.hood === 'night') { cx.fillStyle = 'rgba(34,34,59,.55)'; cx.fillRect(0, 0, W, H); }
-  drawSky(vb, pulse);
+  drawSky(vb, pulse); drawTier(vb, pulse, 0);
   // the façade dances: squashed on the beat, stretched between
   const sq = 1 + 0.022 * pulse; cx.save(); cx.translate(W / 2, FA.y + FA.h); cx.scale(1 + 0.012 * pulse, 1 / sq); cx.translate(-W / 2, -(FA.y + FA.h));
   const fim = img('facade'); if (fim) cx.drawImage(fim, FA.x, FA.y, FA.w, FA.h);
-  drawWindows(vb, pulse); cx.restore();
+  drawWindows(vb, pulse); cx.restore(); drawTier(vb, pulse, 1);
   drawPip(pulse); drawLetters(vt);
   if (S.theme === 'winter') { cx.fillStyle = '#fff'; for (let i = 0; i < 40; i++) { const x = (i * 53.1 + Math.sin(G.time + i) * 20) % W, y = ((i * 97.7 + G.time * (30 + i % 5 * 10)) % H + H) % H; cx.globalAlpha = 0.8; cx.beginPath(); cx.arc(x, y, 1.5 + i % 3, 0, TAU); cx.fill(); } cx.globalAlpha = 1; }
   drawFx(); cx.restore();
@@ -1613,12 +1740,15 @@ function frame(now) {
   const dt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now; G.time += dt; CLK.sync();
   if (G.mode === 'song' || G.mode === 'results') { if (G.mode === 'song') songFrame(); if (!G.paused && !G.failed) G.frozenT = visT(); renderHud(); }
   if (G.mode === 'calib') calibFrame();
-  if (G.pipT > 0) G.pipT -= dt; for (let i = 0; i < 6; i++) G.habBump[i] = Math.max(0, G.habBump[i] - dt * 5);
-  for (const f of G.fx) f.t += dt; G.fx = G.fx.filter(f => f.t < f.d);
-  for (const p of G.parts) { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += p.g * dt; } G.parts = G.parts.filter(p => p.t < p.life); if (G.parts.length > 400) G.parts.splice(0, G.parts.length - 400);
-  for (const f of G.floats) f.t += dt; G.floats = G.floats.filter(f => f.t < f.d);
+  // hit-stop: on a combo level the effects (stamps, sparks, words, Pip) freeze for 60 ms; the song and its clock never stop
+  const fdt = G.hitstop > 0 ? 0 : dt; if (G.hitstop > 0) G.hitstop -= dt;
+  if (G.pipT > 0) G.pipT -= fdt; for (let i = 0; i < 6; i++) G.habBump[i] = Math.max(0, G.habBump[i] - fdt * 5);
+  for (const f of G.fx) f.t += fdt; G.fx = G.fx.filter(f => f.t < f.d);
+  for (const p of G.parts) { p.t += fdt; p.x += p.vx * fdt; p.y += p.vy * fdt; p.vy += p.g * fdt; } G.parts = G.parts.filter(p => p.t < p.life); if (G.parts.length > 400) G.parts.splice(0, G.parts.length - 400);
+  for (const f of G.floats) f.t += fdt; G.floats = G.floats.filter(f => f.t < f.d);
+  for (const g of G.rings) g.t += fdt; G.rings = G.rings.filter(g => g.t < g.d);
   if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 2.4);
-  if (G.fw > 0) { const before = G.fw; G.fw -= dt; if (Math.floor(before * 3.2) !== Math.floor(G.fw * 3.2)) firework(); }
+  if (G.fw > 0) G.fw -= dt;   // (the fireworks themselves go off on the beats, see songFrame)
   draw();
   if ((saveT += dt) > 5) { saveT = 0; save(); }
   if ((homeT += dt) > 1 && G.mode === 'home') { homeT = 0; if (S.tri && !modal.classList.contains('on')) renderHome(); else if (S.tri && modal.querySelector('.pbar')) { const m = modal.querySelector('[data-tri]') ? triModal : null; if (m) m(); } }
@@ -1665,7 +1795,8 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       for (let i = G.from; i < notes.length; i++) {
         const n = notes[i]; if (planned.has(i) || G.res[i]) continue; const tc = H.noteClock(n); if (tc - now > 0.8) break;
         planned.add(i); if (deb && A.rnd() < 0.07) continue;                     // a beginner lets one go now and then
-        const aim = tc + (deb ? (A.rnd() - 0.5) * 0.14 : 0), ms = (aim - D - H.CLK.now()) * 1000; if (ms < -20) continue;
+        const aim = tc + (deb ? (A.rnd() - 0.5) * 0.14 : 0) - (BETA.capture ? 0.03 : 0),   // capture: a tap lands on the next 33 ms frame, so aim a little early
+          ms = (aim - D - H.CLK.now()) * 1000; if (ms < -20) continue;
         A.wait(Math.max(0, ms)).then(() => { if (!A.running() || G.mode !== 'song' || G.ended) return; calls.push(H.CLK.now()); A.tap(x, y, 'lettre ' + (i + 1)); });
       }
       while (G.downs.length > seen) { const d = G.downs[seen++], c = calls.shift(); if (c != null) { const dl = d - c; if (dl > 0.1 && dl < 0.5) D = D * 0.75 + dl * 0.25; } }
@@ -1730,7 +1861,8 @@ resize(); titleScreen(); requestAnimationFrame(frame);
         for (let k = 0; k < 4 && A.running(); k++) {
           const cur = document.querySelector('#hmid .sc.cur') || document.querySelector('#hmid [data-play]'); if (!cur) break;
           const id = cur.dataset.song || 'm2', T = R.table(R.song(id));
-          await clean(A); const sel = cur.dataset.song ? `#hmid [data-song="${id}"]` : '#hmid [data-play]'; document.querySelector(sel).scrollIntoView({ block: 'center', behavior: 'smooth' }); await A.wait(700); await A.tapEl(sel, 'morceau ' + id);   // the list scrolls the card above the bottom bar await until(A, () => G.mode === 'song', 4000); if (G.mode !== 'song' || !G.song) { A.ev('note', { msg: 'le morceau ne démarre pas', mode: G.mode }); await A.wait(800); continue; }
+          await clean(A); const sel = cur.dataset.song ? `#hmid [data-song="${id}"]` : '#hmid [data-play]'; document.querySelector(sel).scrollIntoView({ block: 'center', behavior: 'smooth' }); await A.wait(700); await A.tapEl(sel, 'morceau ' + id);   // the list scrolls the card above the bottom bar
+          await until(A, () => G.mode === 'song', 4000); if (G.mode !== 'song' || !G.song) { A.ev('note', { msg: 'le morceau ne démarre pas', mode: G.mode }); await A.wait(800); continue; }
           const cut = T.beats - 16; H.resumeAt(cut); for (const n of T.notes) if (n.beat < cut) G.res[n.i] = 'P';   // time-lapse: only the last bars of each song are played
           await playSong(A); await afterSong(A, 'home'); await until(A, () => visible('#modal .alb'), 4000);
           await A.wait(2600); await clean(A); await A.wait(500);

@@ -115,6 +115,12 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
 #toasts{position:fixed;top:calc(env(safe-area-inset-top) + 64px);left:0;right:0;z-index:35;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .toast{background:var(--cream);border:3px solid var(--ink);border-radius:14px;padding:7px 14px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.35);animation:pop .3s;transition:opacity .4s;max-width:90vw;text-align:center}.toast.out{opacity:0}
 .banner{position:fixed;left:0;right:0;top:28%;z-index:25;text-align:center;font-size:40px;font-weight:900;color:var(--brass);-webkit-text-stroke:2.5px var(--ink);text-shadow:4px 4px 0 var(--ink);pointer-events:none;animation:ban 1.8s cubic-bezier(.2,1.4,.4,1) forwards}
+#hintbtn.glow{animation:hint .6s infinite alternate}
+.stampx{height:0;overflow:visible;position:relative;z-index:2;text-align:center;font-size:34px;font-weight:900;color:var(--brick);-webkit-text-stroke:2px var(--ink);text-shadow:3px 3px 0 var(--ink);opacity:0;transform:translateY(-84px) rotate(-8deg) scale(2.6);pointer-events:none}
+.stampx.on{animation:stampx .5s cubic-bezier(.2,1.5,.4,1) forwards}@keyframes stampx{0%{opacity:0;transform:translateY(-84px) rotate(-8deg) scale(2.6)}100%{opacity:1;transform:translateY(-84px) rotate(-8deg) scale(1)}}
+.flp{margin:6px 0 2px;font-size:13px;font-weight:900;color:var(--steel)}.flp .pbar,.unl .pbar{height:9px;border:2px solid var(--ink);border-radius:6px;background:#fff;overflow:hidden;margin-top:3px}.flp .pbar i,.unl .pbar i{display:block;height:100%;background:var(--brass)}
+.unl{display:flex;gap:8px;align-items:center;margin:6px 0;font-size:13px;font-weight:800;text-align:left}.unl .tx{flex:1}.unl img.lk{width:40px;height:40px;object-fit:contain;filter:grayscale(1) brightness(.55)}
+.almost{margin:8px 0 0;font-weight:900;color:var(--brick);font-size:14px}
 .banner.r{color:var(--brick)}.banner.c{color:var(--cream)}@keyframes ban{0%{transform:scale(2.4);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
 .adov{position:fixed;inset:0;z-index:50;background:var(--ink);display:flex;align-items:center;justify-content:center}.adbox{color:var(--cream);text-align:center}.adtag{opacity:.7;font-weight:800}.adart img{width:120px;margin:20px}.adcount{font-size:44px;font-weight:900}
 #replaytag{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 66px);transform:translateX(-50%);z-index:9;display:none;background:var(--brick);color:var(--cream);border:3px solid var(--ink);border-radius:12px;padding:4px 12px;font-weight:900;font-size:15px;box-shadow:3px 3px 0 rgba(0,0,0,.4)}
@@ -218,6 +224,32 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
   if (opts.seed) seedRandom(opts.seed);
   installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  let offCtx = null;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 32000;
+    offCtx = new OfflineAudioContext(1, Math.ceil(AUDIO_LEN * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    Object.defineProperty(offCtx, 'currentTime', { get: () => videoNow() / 1000 });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the whole soundtrack and returns the part from `from` (s) lasting `dur` (s), as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.max(0, Math.floor(from * r)), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
   addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
   addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
   // FPS (real frames per real second)
@@ -767,6 +799,11 @@ window.I18N = (() => {
     k6a: ['Ces moustaches sont fausses, j’en suis sûr.', 'Those moustaches are fake, I’m sure.'], k6b: ['Va vérifier. Je te couvre.', 'Go check. I’ve got your back.'],
     k7a: ['On remonte le temps si je rate ?', 'Can we rewind if I miss?'], k7b: ['Autant de fois que tu veux. Tic l’a promis.', 'As often as you like. Tic promised.'],
     k8a: ['J’ai faim de boulons.', 'I’m hungry for bolts.'], k8b: ['On ne mange pas la monnaie !', 'We don’t eat the money!'],
+    // fun pass: combos, the end of a room, the free hint
+    combo: ['Combo ×{n} !', 'Combo ×{n}!'], perfect: ['Parfait !', 'Perfect!'], better: ['Nouveau record !', 'New best!'],
+    almost: ['Presque ! Il manque : {s}', 'So close! Missing: {s}'], againFor3: ['Rejouer pour les 3 rouages', 'Replay for all 3 cogs'],
+    floorCogs: ['Étage {f} : {n}/18 rouages', 'Floor {f}: {n}/18 cogs'], nextHero: ['{s} rejoint l’équipe après la salle {n}', '{s} joins the team after room {n}'],
+    t_freeHint: ['Coincé ? L’ampoule est offerte !', 'Stuck? The bulb is on me!'], hintFree: ['Indice offert !', 'Free hint!'],
   };
   let lang = 'fr'; const idx = () => Math.max(0, L.indexOf(lang));
   const t = (k, v) => { const e = T[k]; let s = e ? (e[idx()] || e[1] || e[0]) : k; if (v) for (const n in v) s = s.split('{' + n + '}').join(v[n]); return s; };
@@ -1038,7 +1075,7 @@ const SFX = {
   bump() { if (S.sound && ok('bump', 60)) { noise(0.18, 1800, 2, 0.3); tone(240, 0.2, 'square', 0.06, 0, null, 120); } },
   gear() { if (S.sound) { for (let i = 0; i < 6; i++) noise(0.05, 900 + i * 200, 3, 0.25, i * 0.04); tone(90, 0.4, 'sawtooth', 0.08, 0, null, 40); } },
   glass() { if (S.sound) { noise(0.4, 5200, 1.2, 0.35, 0, 'highpass'); for (let i = 0; i < 5; i++) tone(rnd(2400, 4200), 0.12, 'sine', 0.05, i * 0.03); } },
-  ko() { if (S.sound) { noise(0.12, 300, 0.8, 0.5, 0, 'lowpass'); tone(520, 0.08, 'square', 0.06); tone(130, 0.25, 'triangle', 0.2, 0.02, null, 70); } },
+  ko(n = 1) { if (S.sound) { const m = Math.pow(2, (Math.min(n, 12) - 1) / 12); noise(0.12, 300 * m, 0.8, 0.5, 0, 'lowpass'); tone(520 * m, 0.08, 'square', 0.06); tone(130 * m, 0.25, 'triangle', 0.2, 0.02, null, 70 * m); if (n > 1) tone(1047 * m, 0.18, 'triangle', 0.08, 0.03); } },
   stamp() { if (S.sound) { noise(0.1, 200, 0.7, 0.6, 0, 'lowpass'); tone(80, 0.2, 'sine', 0.3); } },
   spring() { if (S.sound) tone(260, 0.35, 'sine', 0.2, 0, null, 900); },
   land() { if (S.sound) { noise(0.1, 300, 1, 0.3, 0, 'lowpass'); tone(400, 0.25, 'sine', 0.12, 0, null, 160); } },
@@ -1050,7 +1087,10 @@ const SFX = {
   zap() { if (S.sound) { noise(0.3, 4000, 0.8, 0.3, 0, 'highpass'); tone(900, 0.25, 'sawtooth', 0.05, 0, null, 200); } },
   swap() { if (S.sound) { tone(500, 0.2, 'sine', 0.12, 0, null, 1000); tone(1000, 0.2, 'sine', 0.1, 0.12, null, 500); } },
   rewind() { if (S.sound) for (let i = 0; i < 9; i++) tone(2600 - i * 120, 0.03, 'square', 0.05, i * 0.07); },
-  cog() { if (S.sound) { noise(0.06, 2500, 3, 0.35); tone(880, 0.25, 'triangle', 0.12); tone(1320, 0.3, 'triangle', 0.08, 0.05); } },
+  cog(i = 0) { if (S.sound) { const m = Math.pow(2, i / 12); noise(0.06, 2500, 3, 0.35); tone(880 * m, 0.25, 'triangle', 0.12); tone(1320 * m, 0.3, 'triangle', 0.08, 0.05); } },
+  clack(i = 0) { if (S.sound) { const m = Math.pow(2, i / 12); noise(0.03, 3000 * m, 4, 0.18); tone(660 * m, 0.07, 'triangle', 0.07); } },   // one wheel of the cascade, a semitone higher each
+  strike() { if (S.sound) { noise(0.25, 180, 0.7, 0.5, 0, 'lowpass'); [[262, 1.6, 0.22], [524, 1.2, 0.1], [786, 0.9, 0.06], [1311, 0.6, 0.04]].forEach(([f, d, v]) => tone(f, d, 'sine', v)); tone(131, 1.4, 'triangle', 0.18); } },   // the tower's bell
+  tally() { if (S.sound && ok('tally', 45)) tone(1500 + rnd(0, 300), 0.04, 'square', 0.03); },
   tic() { if (S.sound) for (let i = 0; i < 3; i++) tone(rnd(380, 560), 0.06, 'triangle', 0.05, i * 0.08); },
   chime() { if (S.sound) [784, 988, 1319].forEach((f, i) => tone(f, 0.4, 'triangle', 0.1, i * 0.07)); },
   fanfare() { if (S.sound) [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, i > 4 ? 0.7 : 0.25, 'triangle', 0.12, i * 0.11)); },
@@ -1066,7 +1106,10 @@ function musicTick() {   // a little music box
     if (n >= 0) tone(sc[n] * 2, 0.45, 'sine', 0.35, w, AU.music); if (s % 4 === 0) tone(sc[[0, 3, 4, 2][(s >> 2) % 4]] / 2, 0.9, 'triangle', 0.4, w, AU.music);
     AU.next += 0.27; }
 }
-const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
+const HAPT = window.webkit?.messageHandlers?.haptic;
+const buzz = ms => { if (!S.vib) return; const tot = [].concat(ms).reduce((a, b) => a + b, 0);
+  if (HAPT) { try { HAPT.postMessage({ style: tot >= 60 ? 'heavy' : tot >= 15 ? 'medium' : 'light' }); } catch (e) {} return; }
+  if (navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
 
 // ---------- ads & purchases (test overlays on the web, AdMob once the native plugin is in) ----------
 const AdMob = () => window.Capacitor?.Plugins?.AdMob;
@@ -1137,7 +1180,8 @@ function spr(k, x, y, w, rot, alpha, flip, sy = 1, sx = 1) { const im = img(k); 
 
 // ---------- state ----------
 const G = { mode: 'title', L: null, P: null, ph: 0, S: null, S0: null, hist: [], seq: [], sel: null, act: null, prev: null, vu: [], disp: {}, tl: null, rw: null,
-  dying: [], parts: [], floats: [], stamps: [], beams: [], fx: [], shake: 0, time: 0, busy: false, replay: false, skip: false, slow: 0, totDmg: 0, totActs: 0, team: {}, ring: null, pulse: '', chainShown: 0 };
+  dying: [], parts: [], floats: [], stamps: [], beams: [], fx: [], shake: 0, time: 0, busy: false, replay: false, skip: false, slow: 0, totDmg: 0, totActs: 0, team: {}, ring: null, pulse: '', chainShown: 0,
+  hs: 0, flash: 0, combo: 0, fails: 0, freeHint: false, roomT: 0, offered: false, spin: 0, spinA: 0, lastKO: null };
 const roomKey = () => G.L.phases ? G.L.id + '-' + G.ph : String(G.L.id);
 const parOf = L => L.phases ? L.phases.reduce((s, p, i) => s + ((SOL[L.id + '-' + i] || {}).par || 3), 0) : ((SOL[L.id] || {}).par || 3);
 const tutRoom = () => G.L && G.L.tut && !S.tut;
@@ -1148,7 +1192,7 @@ const D = id => G.disp[id] || (G.disp[id] = { x: 0, y: 0, z: 0, sx: 1, sy: 1, ro
 
 function startRoom(id) {
   closeModal(); const L = LV.find(l => l.id === id); if (!L) return showHome();
-  G.L = L; G.ph = 0; G.totDmg = 0; G.totActs = 0; G.mode = 'room'; G.busy = false; G.replay = false; G.parts = []; G.floats = []; G.stamps = []; G.dying = []; G.beams = []; G.fx = [];
+  G.L = L; G.ph = 0; G.fails = 0; G.freeHint = false; G.roomT = 0; G.offered = false; G.lastKO = null; G.totDmg = 0; G.totActs = 0; G.mode = 'room'; G.busy = false; G.replay = false; G.parts = []; G.floats = []; G.stamps = []; G.dying = []; G.beams = []; G.fx = [];
   if (L.tut || L.phases) G.team = {};
   $('#home').classList.remove('on'); $('#title').classList.remove('on'); $('#hud').classList.add('on'); $('#tray').classList.add('on'); ticHide();
   loadPhase(); track('room_start', { id });
@@ -1222,21 +1266,45 @@ function rewind(all) {
   SFX.rewind(); buzz([8, 30, 8]); S.totals.rewinds++; renderTray(); return true;
 }
 async function onLost() {
-  SFX.lose(); buzz(40); G.shake = Math.max(G.shake, 0.3); const n = C.robots(G.S).length;
-  banner(t('left', { n }), 'r'); say('t_rewind', 3, 3200); G.pulse = 'rew'; renderTray();
+  SFX.lose(); buzz(40); G.shake = Math.max(G.shake, 0.3); const n = C.robots(G.S).length; G.fails++;
+  banner(t('left', { n }), 'r'); G.pulse = 'rew'; renderTray();
+  if (G.fails >= 2 && !G.offered) setTimeout(offerHint, 900); else say('t_rewind', 3, 3200);
+}
+function offerHint() {   // the next hint is on the house (once per room; the hint pack and the tutorial already have them all)
+  G.offered = true; if (tutRoom() || S.owned.hints || G.mode !== 'room') return;
+  G.freeHint = true; renderHud(); say('t_freeHint', 2, 4200); SFX.chime(); const b = $('#hintbtn'); if (b) JUICE.pop(b);
+}
+// the frame around the 6 × 8 grid, clockwise: 32 cells where the wheels of the cascade turn
+const FRAME = (() => { const a = []; for (let c = -1; c <= 6; c++) a.push([c, -1]); for (let r = 0; r <= 8; r++) a.push([6, r]); for (let c = 5; c >= -1; c--) a.push([c, 8]); for (let r = 7; r >= 0; r--) a.push([-1, r]); return a; })();
+// the room is won: from the last K.O., wheel after wheel engages both ways round the frame (a semitone higher each),
+// they meet on the far side and the tower's bell strikes; the gears of the room spin, the screen flashes, confetti
+async function cascade(short) {
+  const o = G.lastKO || { x: 2.5, y: 3.5 }, n = FRAME.length, half = n / 2, step = short ? 0.028 : 0.04;
+  let i0 = 0, best = 1e9; FRAME.forEach(([c, r], i) => { const d = Math.hypot(c - o.x, r - o.y); if (d < best) { best = d; i0 = i; } });
+  G.spin = 0.6;
+  for (let k = 0; k <= half; k++) {
+    const cells = k === 0 || k === half ? [FRAME[(i0 + k) % n]] : [FRAME[(i0 + k) % n], FRAME[(i0 - k + n) % n]];
+    for (const [c, r] of cells) { G.fx.push({ k: 'wheel', x: c, y: r, t: 0, d: 0.6, dir: k % 2 ? 1 : -1 }); sparks(c, r, 3); }
+    SFX.clack(k); if (k % 4 === 0) buzz(6);
+    await wait(step * 1000);
+  }
+  SFX.strike(); G.spin = 2.2; G.flash = Math.max(G.flash, 0.55); G.shake = Math.max(G.shake, 0.7); buzz([30, 30, 70]);
+  const [ox, oy] = [o.x, o.y]; burst(ox, oy, 14, ['fx_bolt', 'fx_spring', 'fx_bolt'], 1.3);
+  for (let i = 0; i < 3; i++) G.fx.push({ k: 'ring', x: 2.5, y: 3.5, t: -i * 0.12, d: 0.7, r: 4 + i, col: PAL.brass });
 }
 async function onWon() {
   G.busy = true; G.totDmg += G.S.dmg; G.totActs += G.S.acts; S.totals.kos += G.S.kos;
-  SFX.fanfare(); buzz([20, 40, 60]); JUICE.confetti(50);
+  await wait(220); await cascade(G.L.phases && G.ph < G.L.phases.length - 1);
+  SFX.fanfare(); JUICE.confetti(60);
   if (G.L.phases && G.ph < G.L.phases.length - 1) {
     banner(t('nextPhase', { n: G.ph + 2 }), 'r'); SFX.cuckoo(); G.shake = 0.7; await wait(1700); G.ph++; loadPhase(); G.busy = false; say(G.ph === 1 ? 't_mini' : 't_boss', 2, 2600); return;
   }
   banner(t('cleared'), ''); if (tutRoom()) say(G.L.tut === 1 ? 't_ko1' : G.L.tut === 2 ? 't_window' : 't_chain', 1, 2400);
-  await wait(1300); await doReplay(); G.busy = false; finishRoom();
+  await wait(1100); await doReplay(); G.busy = false; finishRoom();
 }
 // the accelerated replay of the last phase, from its first position (a tap skips it)
 async function doReplay() {
-  const final = G.S, seq = G.seq.slice(); if (!seq.length) return;
+  const final = G.S, seq = G.seq.slice(); if (seq.filter(a => !a.end).length < 2) return;   // one move: nothing to replay
   G.replay = true; G.skip = false; const tag = $('#replaytag'); tag.textContent = '⏩ ' + t('replay') + ' ×2.5'; tag.classList.add('on');
   G.S = C.clone(G.S0); syncView(); G.dying = []; await wait(350);
   for (const a of seq) { if (G.skip) break; const ev = a.end ? C.enemyTurn(G.S) : C.act(G.S, a); if (!ev) break; await play(ev, 2.5); }
@@ -1247,9 +1315,10 @@ async function hint() {
   if (G.busy || G.tl || G.rw || G.replay || !G.S) return; audioInit();
   const sol = SOL[roomKey()]; if (!sol) return;
   if (Object.keys(mods().team).some(k => mods().team[k] && mods().team[k] !== k)) { toast(t('hintTeam')); return; }
-  if (!tutRoom() && !S.owned.hints) {
+  if (G.freeHint) { G.freeHint = false; toast(t('hintFree')); }
+  else if (!tutRoom() && !S.owned.hints) {
     if (S.hintTok > 0) { S.hintTok--; save(); toast(t('hintsLeft', { n: S.hintTok })); }
-    else if (!await Ads.rewarded('hint')) return;
+    else if (!await Ads.rewarded('hint')) toast(t('hintFree'));   // no ad to show: the hint comes anyway, nobody stays stuck
   }
   S.totals.hints++; renderHud();
   const same = (a, b) => a && b && !a.end && a.h === b.h && a.a === b.a && a.c === b.c && a.r === b.r;
@@ -1261,7 +1330,7 @@ async function hint() {
 // ---------- animation of the rule events: ticks, slow motion on chains ----------
 function play(ev, speed = 1) {
   return new Promise(res => {
-    if (!ev.length) return res();
+    if (!ev.length) return res(); G.combo = 0;
     const n = ev.reduce((m, e) => Math.max(m, e.t), 0) + 1, ticks = Array.from({ length: n }, () => []); for (const e of ev) ticks[e.t].push(e);
     const dur = ticks.map(tk => { let d = 0.12; for (const e of tk) { const v = { move: e.n >= 2 ? 0.46 : 0.18, jump: 0.38, dash: 0.24, land: 0.16, shot: 0.32, hit: 0.28, bump: 0.22, ko: 0.3, shield: 0.4, swap: 0.4, zap: 0.4, turn: 0.35, act: 0.1 }[e.type] || 0.1; if (e.type === 'move' && e.pull) d = Math.max(d, 0.12); else d = Math.max(d, v); } return d; });
     G.tl = { ticks, dur, i: -1, tt: 0, speed, res };
@@ -1284,7 +1353,7 @@ function startTick(tk) {
     const u = vuOf(e.id), d = u ? D(e.id) : null;
     switch (e.type) {
       case 'act': if (d) { d.sy = 0.75; d.sx = 1.2; } if (e.a === 'shield') SFX.shield(); break;
-      case 'move': moved = true; if (d) { d.fx = e.fc; d.fy = e.fr; } if (e.n >= 2) { G.slow = 1; if (e.n > G.chainShown) { G.chainShown = e.n; floatText(e.c, e.r - 0.8, t('chain', { n: e.n }), PAL.brass, 26); SFX.chain(e.n); buzz(15); } } break;
+      case 'move': moved = true; if (d) { d.fx = e.fc; d.fy = e.fr; } if (e.n >= 2) { G.slow = 1; if (e.n > G.chainShown) { G.chainShown = e.n; floatText(e.c, e.r - 0.8, t('chain', { n: e.n }), PAL.brass, 26); SFX.chain(e.n); buzz(15); if (e.n >= 3 && !G.replay) G.hs = Math.max(G.hs, 0.04); } } break;
       case 'dash': if (d) { d.fx = e.fc; d.fy = e.fr; } SFX.dash(); break;
       case 'jump': if (d) { d.fx = e.fc; d.fy = e.fr; } SFX.spring(); burst(e.fc, e.fr + 0.3, 3, ['fx_spring'], 0.6); break;
       case 'land': if (d) { d.sy = 0.6; d.sx = 1.35; } SFX.land(); G.shake = Math.max(G.shake, 0.25); buzz(12); for (let i = 0; i < 4; i++) G.fx.push({ k: 'ring', x: e.c, y: e.r, t: 0, d: 0.4, r: 0.9, col: PAL.cream }); break;
@@ -1323,7 +1392,12 @@ function endTick(tk) {
     if (e.type === 'ko' && u) {
       G.vu.splice(G.vu.indexOf(u), 1); const x = d ? d.x : e.c, y = d ? d.y : e.r;
       G.dying.push({ id: u.id, k: u.k, x, y, c: e.c, r: e.r, how: e.how, t: 0, d: 0.75, dir: x < 0 ? 3 : x > 5 ? 1 : y < 0 ? 0 : 2 });
-      G.stamps.push({ x: clamp(x, 0, 5), y: clamp(y, 0, 7), t: 0 }); SFX.ko(); setTimeout(SFX.stamp, 120);
+      G.stamps.push({ x: clamp(x, 0, 5), y: clamp(y, 0, 7), t: 0 }); G.combo++; SFX.ko(G.combo); setTimeout(SFX.stamp, 120);
+      if (G.combo >= 2) floatText(clamp(x, 0.5, 4.5), clamp(y, 0.6, 7) - 0.9, t('combo', { n: G.combo }), PAL.brass, 24 + 3 * Math.min(G.combo, 5));
+      // hit-stop: the picture holds a beat on each K.O. (longer on a boss and on the last robot of the room), with a flash
+      const last = !G.vu.some(v => !v.h);
+      if (!G.replay) { G.hs = Math.max(G.hs, last ? 0.09 : e.k === 'boss' ? 0.08 : e.k === 'miniboss' ? 0.07 : 0.05); G.flash = Math.max(G.flash, last ? 0.6 : 0.25); }
+      if (last) G.lastKO = { x: clamp(x, 0, 5), y: clamp(y, 0, 7) };
       if (e.how === 'gear') SFX.gear(); if (e.how === 'window') SFX.glass();
       burst(clamp(x, -0.3, 5.3), clamp(y, -0.3, 7.3), e.k === 'boss' ? 22 : 12, ['fx_bolt', 'fx_spring', 'fx_bolt'], e.how === 'window' ? 1.4 : 1);
       G.shake = Math.max(G.shake, e.k === 'boss' || e.k === 'miniboss' ? 0.9 : 0.45); buzz(e.k === 'boss' ? [60, 40, 90] : [25, 20, 40]);
@@ -1361,7 +1435,7 @@ function banner(s, cls = '') { const el = div('banner ' + cls, s); document.body
 // ---------- tutorial: 3 guided rooms, no timer; the first K.O. comes after two taps ----------
 function tutorialStart() {
   const n = G.L.tut;
-  if (n === 1) { say('t_hello', 1, 2400); setTimeout(() => { if (G.L && G.L.tut === 1 && !G.sel && G.mode === 'room') say('t_tapCat', 2, 0, true); }, 2500); }
+  if (n === 1) setTimeout(() => { if (G.L && G.L.tut === 1 && !G.sel && G.mode === 'room') say('t_tapCat', 2, 0, true); }, 250);
   else if (n === 2) say('t_rabbit', 2, 0, true);
   else say('t_turtle', 2, 0, true);
 }
@@ -1374,7 +1448,8 @@ function tutRing() {   // where the tutorial points: the hero to pick, then the 
 // ---------- room end: cogs, bolts, XP ----------
 function finishRoom() {
   const L = G.L, id = L.id, par = parOf(L), cogs = [1, G.totDmg === 0 ? 1 : 0, G.totActs <= par ? 1 : 0], n = cogs[0] + cogs[1] + cogs[2];
-  const old = S.cogs[id], first = !old; S.cogs[id] = old ? old.map((v, i) => v || cogs[i]) : cogs;
+  const old = S.cogs[id], first = !old, sum = a => a ? a.reduce((x, y) => x + y, 0) : 0; S.cogs[id] = old ? old.map((v, i) => v || cogs[i]) : cogs;
+  const better = !!old && sum(S.cogs[id]) > sum(old);
   const bolts = Math.round(E.bolts(n, first) * (1 + 0.15 * S.up.bolts)), f = E.floorOf(id);
   S.bolts += bolts; if (first) S.floorEarn[f] = (S.floorEarn[f] || 0) + bolts;
   const wasCur = S.cur; S.cur = Math.max(S.cur, Math.min(25, id + 1)); S.plays++; S.totals.rooms++;
@@ -1382,17 +1457,34 @@ function finishRoom() {
   addXp(E.xp(n, first));
   for (const h of ['owl', 'hamster']) if (wasCur <= E.unlock[h] && S.cur > E.unlock[h] && !(h === 'owl' && S.owned.starter)) setTimeout(() => toast('✨ ' + t('newHero', { s: t('h_' + h) })), 1800);
   save(); track('room_end', { id, cogs: n });
+  const labels = [t('cog1'), t('cog2'), t('cog3', { n: par })], miss = labels.filter((s, i) => !cogs[i]);
+  const fIds = [1, 2, 3, 4, 5, 6].map(i => (f - 1) * 6 + i), fGot = fIds.reduce((a, k) => a + sum(S.cogs[k]), 0);
+  const nh = ['owl', 'hamster'].find(h => S.cur <= E.unlock[h] && !(h === 'owl' && S.owned.starter));
+  const unl = nh ? `<div class="unl"><img class="lk" src="${src('h_' + nh)}" alt=""><div class="tx">${t('nextHero', { s: t('h_' + nh), n: E.unlock[nh] })}<div class="pbar"><i style="width:${clamp((S.cur - 1) / E.unlock[nh], 0, 1) * 100}%"></i></div></div></div>` : '';
+  const btnNext = id < 24 ? `<button class="b1 ${n < 3 ? '' : 'big'}" data-next>${t('next')}</button>` : '';
   openModal(`<h2>${t('cleared')}</h2><p class="sub">${t('roomOf', { f, n: id })} · ${I.pick(L.name)}</p>
-    <div class="cogs">${[t('cog1'), t('cog2'), t('cog3', { n: par })].map((s, i) => `<div class="cog" data-cog="${i}"><img src="${src('cog_star')}" alt="">${s}</div>`).join('')}</div>
+    <div class="cogs">${labels.map((s, i) => `<div class="cog" data-cog="${i}"><img src="${src('cog_star')}" alt="">${s}</div>`).join('')}</div><div class="stampx" data-stamp></div>
     <div class="stat"><span>${t('moves')}</span><b>${G.totActs} / ${par}</b></div><div class="stat"><span>${t('hits')}</span><b>${G.totDmg}</b></div>
-    <div class="gain"><i class="bo"></i> +${bolts}</div>
-    <div class="row2"><button class="b2" data-home>${t('home')}</button><button class="b2" data-again>${t('again')}</button></div>${id < 24 ? `<button class="b1 big" data-next>${t('next')}</button>` : ''}`);
-  cogs.forEach((v, i) => { if (v) setTimeout(() => { const el = modal.querySelector(`[data-cog="${i}"]`); if (el) { el.classList.add('on'); SFX.cog(); buzz(20); } }, 350 + i * 420); });
+    <div class="gain"><i class="bo"></i> +<b data-gain>0</b></div>
+    <div class="flp"><span>${t('floorCogs', { f, n: fGot })}</span><div class="pbar"><i style="width:${fGot / 18 * 100}%"></i></div></div>${unl}
+    ${n < 3 ? `<p class="almost">${t('almost', { s: miss.join(' · ') })}</p><button class="b1 big" data-again>⟲ ${t('againFor3')}</button>${btnNext}<button class="b2" data-home>${t('home')}</button>`
+      : `<div class="row2"><button class="b2" data-home>${t('home')}</button><button class="b2" data-again>${t('again')}</button></div>${btnNext}`}`);
+  let lit = 0; cogs.forEach((v, i) => { if (v) setTimeout(() => { const el = modal.querySelector(`[data-cog="${i}"]`); if (el) { el.classList.add('on'); SFX.cog(lit++ * 2); buzz(20); JUICE.flash(el); } }, 350 + i * 420); });
+  // after the cogs: "Perfect!" or "New best!", then the bolts counted up and flown to the counter
+  const hb = $('#hbo b'); if (hb) hb.textContent = S.bolts - bolts;
+  setTimeout(() => { const st = modal.querySelector('[data-stamp]'); if (!st) return;
+    if (n === 3 || better) { st.textContent = n === 3 ? t('perfect') : t('better'); st.classList.add('on'); SFX.chime(); JUICE.confetti(n === 3 ? 70 : 40); buzz([20, 30, 40]); } }, 350 + 3 * 420);
+  setTimeout(() => { const g = modal.querySelector('[data-gain]'); if (!g) return; const t0 = performance.now(), dur = 650;
+    const step = () => { const k = Math.min(1, (performance.now() - t0) / dur); g.textContent = Math.round(bolts * ease(k)); SFX.tally(); if (k < 1 && modal.contains(g)) requestAnimationFrame(step);
+      else { JUICE.pop(g.parentNode); SFX.coins(); JUICE.fly(g.parentNode, $('#hbo'), src('bolt'), 6, () => { const h = $('#hbo b'); if (h) h.textContent = S.bolts; }); } };
+    step(); }, 350 + 3 * 420 + 350);
   if (n === 3 && !tutRoom()) setTimeout(() => say('t_well', 1, 2200), 1500); else if (L.tut === 3) setTimeout(() => say('t_cogs', 0, 3800), 1500);
+  // the ad consent is asked here once the tutorial is over (before anything can show an ad)
+  const gate = fn => () => { if (S.consent == null && S.tut) { closeModal(); return consentModal(false, fn); } fn(); };
   const goNext = async () => { closeModal(); ticHide(); if (id % 6 === 0 && first) return floorModal(f); await Ads.interstitial(); startRoom(id + 1); };
-  const nx = modal.querySelector('[data-next]'); if (nx) nx.onclick = goNext;
-  modal.querySelector('[data-again]').onclick = async () => { closeModal(); await Ads.interstitial(); startRoom(id); };
-  modal.querySelector('[data-home]').onclick = async () => { closeModal(); if (id % 6 === 0 && first) return floorModal(f, true); await Ads.interstitial(); showHome(); };
+  const nx = modal.querySelector('[data-next]'); if (nx) nx.onclick = gate(goNext);
+  modal.querySelector('[data-again]').onclick = gate(async () => { closeModal(); await Ads.interstitial(); startRoom(id); });
+  modal.querySelector('[data-home]').onclick = gate(async () => { closeModal(); if (id % 6 === 0 && first) return floorModal(f, true); await Ads.interstitial(); showHome(); });
   if (id === 24 && first) setTimeout(() => { if (modal.querySelector('[data-home]')) say('t_bossWin', 1, 3200); }, 1800);
 }
 function floorModal(f, home) {
@@ -1495,9 +1587,9 @@ function settingsModal(back) {
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); S = fresh(); save(); location.reload(); } };
   modal.querySelector('[data-close]').onclick = () => { closeModal(); if (back) back(); };
 }
-function consentModal(fromSettings) {
+function consentModal(fromSettings, then) {
   openModal(`<div class="big-ico s"><img src="${src('tic_0')}" alt=""></div><h2>${t('consentTitle')}</h2><p>${t('consentText')}</p><div class="row2"><button class="b2" data-c="0">${t('refuse')}</button><button class="b1" data-c="1">${t('accept')}</button></div>`);
-  modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); fromSettings ? settingsModal() : (closeModal(), afterConsent()); });
+  modal.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { S.consent = b.dataset.c === '1'; save(); if (fromSettings) return settingsModal(); closeModal(); if (then) { Ads.init(); then(); } else afterConsent(); });
 }
 function pauseModal() {
   SFX.click();
@@ -1519,7 +1611,8 @@ function renderHud() {
   $('#rtitle').textContent = `${t('roomOf', { f: E.floorOf(L.id), n: L.id })} · ${I.pick(L.name)}`;
   $('#rpar').innerHTML = `<img src="${src('cog_star')}" alt=""> ≤ ${parOf(L)} · ${t('moves').toLowerCase()} ${G.totActs + (G.S && !G.replay && G.S.phase !== 'won' ? G.S.acts : 0)}${L.phases ? ' · ' + t('phase', { n: G.ph + 1, m: L.phases.length }) : ''}${L.mini ? ' · ' + t('mini') : ''}`;
   $('#hbo b').textContent = S.bolts;
-  const n = $('#hintbtn .n'); if (n) { n.textContent = S.owned.hints || tutRoom() ? '∞' : S.hintTok > 0 ? S.hintTok : '▶'; n.classList.toggle('adbtn', !S.owned.hints && !tutRoom() && S.hintTok <= 0); }
+  const n = $('#hintbtn .n'); if (n) { n.textContent = S.owned.hints || tutRoom() ? '∞' : G.freeHint ? '🎁' : S.hintTok > 0 ? S.hintTok : '▶'; n.classList.toggle('adbtn', !S.owned.hints && !tutRoom() && !G.freeHint && S.hintTok <= 0); }
+  $('#hintbtn').classList.toggle('glow', !!G.freeHint);
 }
 function canSwap() { return !G.L.tut && !G.L.phases && !G.hist.length && !G.busy && (heroOpen('owl') || heroOpen('hamster')); }
 function swapHero(base) {
@@ -1581,7 +1674,9 @@ function showHome() {
   G.mode = 'home'; G.L = null; G.S = null; $('#hud').classList.remove('on'); $('#tray').classList.remove('on'); $('#title').classList.remove('on'); ticHide();
   $('#home').style.backgroundImage = `linear-gradient(rgba(35,32,43,.55),rgba(35,32,43,.55)),url(${src('bg_room')})`; $('#home').classList.add('on');
   ensureLogin(); buildHome(); save();
-  if (S.login.pending && S.tut) setTimeout(giftModal, 450);
+  if (S.consent == null) setTimeout(() => { if (G.mode === 'home') consentModal(false, renderHome); }, 300);   // left the tutorial early
+  else if (!S.said.hello) { S.said.hello = 1; save(); setTimeout(() => say('t_hello', 1, 4600), 400); }   // Maître Tic's greeting, the first time in the tower
+  else if (S.login.pending && S.tut) setTimeout(giftModal, 450);
   else if (!S.ws && E.upgrades.some(id => S.up[id] < E.maxUp && S.bolts >= E.upCost(S.up[id]))) say('t_forge', 2);
 }
 function titleScreen() {
@@ -1589,9 +1684,10 @@ function titleScreen() {
   el.style.backgroundImage = `linear-gradient(rgba(35,32,43,.45),rgba(35,32,43,.45)),url(${src('bg_room')})`;
   el.innerHTML = `<div class="logo"><img src="${src('logo')}" alt="Clockpaw Squad"><p>${t('subtitle')}</p></div><img class="tbg" src="${src('title_bg')}" alt=""><button class="b1 big" data-play>${S.tut ? t('cont') : t('play')}</button>`;
   el.classList.add('on');
-  el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null ? consentModal(false) : afterConsent(); };
+  // a new player plays at once (no ad can show in the 3 tutorial rooms); the ad consent comes when the tutorial is over
+  el.querySelector('[data-play]').onclick = () => { audioInit(); SFX.chime(); el.classList.remove('on'); S.consent == null && S.tut ? consentModal(false) : afterConsent(); };
 }
-function afterConsent() { Ads.init(); Store.init(); if (!S.tut) startRoom(Math.min(3, S.cur)); else showHome(); }
+function afterConsent() { if (S.consent != null) Ads.init(); Store.init(); if (!S.tut) startRoom(Math.min(3, S.cur)); else showHome(); }
 
 // ---------- drawing the room ----------
 function drawTile(k, c, r, rot) { const [x, y] = cellCenter(c, r); spr(k, x, y, SC + 0.6, rot || 0); }
@@ -1606,7 +1702,7 @@ function drawRoom() {
     for (let r = -1; r <= C.ROWS; r++) for (let c = -1; c <= C.COLS; c++) { if (c >= 0 && r >= 0 && c < C.COLS && r < C.ROWS) continue; if (St.map[r + 1][c + 1] !== 'W') continue;
       const [x, y] = cellCenter(clamp(c, -0.31, 5.31), clamp(r, -0.31, 7.31)); spr('t_window', x, y, SC * 0.95, c < 0 ? -Math.PI / 2 : c >= C.COLS ? Math.PI / 2 : r >= C.ROWS ? Math.PI : 0); }
     for (let r = 0; r < C.ROWS; r++) for (let c = 0; c < C.COLS; c++) { const ch = St.t[r * C.COLS + c];
-      if (ch === '#') drawTile('t_wall', c, r); else if (ch === 'G') { const [x, y] = cellCenter(c, r); spr('t_gear', x, y, SC * 0.98, Math.sin(G.time * 3 + c) * 0.04); } else if (ch === 'C') drawTile('t_crate', c, r); }
+      if (ch === '#') drawTile('t_wall', c, r); else if (ch === 'G') { const [x, y] = cellCenter(c, r); spr('t_gear', x, y, SC * 0.98, Math.sin(G.time * 3 + c) * 0.04 + G.spinA * ((c + r) % 2 ? 1 : -1)); } else if (ch === 'C') drawTile('t_crate', c, r); }
     return;
   }
   const k = Math.max(W / bg.width, H / bg.height); cx.drawImage(bg, (W - bg.width * k) / 2, (H - bg.height * k) / 2, bg.width * k, bg.height * k);
@@ -1615,7 +1711,7 @@ function drawRoom() {
   for (let r = -1; r <= C.ROWS; r++) for (let c = -1; c <= C.COLS; c++) { if (c >= 0 && r >= 0 && c < C.COLS && r < C.ROWS) continue; const ch = St.map[r + 1][c + 1]; drawTile(ch === 'W' ? 't_window' : 't_wall', c, r); }
   for (let r = 0; r < C.ROWS; r++) for (let c = 0; c < C.COLS; c++) { const ch = St.t[r * C.COLS + c];
     if (ch === '#') { drawTile('t_wall', c, r); continue; } drawTile('t_floor', c, r);
-    if (ch === 'G') { const [x, y] = cellCenter(c, r); cx.fillStyle = PAL.ink; cx.beginPath(); cx.arc(x, y, SC * 0.47, 0, TAU); cx.fill(); spr('t_gear', x, y, SC * 0.98, G.time * 1.6 * ((c + r) % 2 ? 1 : -1)); }
+    if (ch === 'G') { const [x, y] = cellCenter(c, r); cx.fillStyle = PAL.ink; cx.beginPath(); cx.arc(x, y, SC * 0.47, 0, TAU); cx.fill(); spr('t_gear', x, y, SC * 0.98, (G.time * 1.6 + G.spinA) * ((c + r) % 2 ? 1 : -1)); }
     if (ch === 'C') drawTile('t_crate', c, r); }
   cx.strokeStyle = 'rgba(35,32,43,.18)'; cx.lineWidth = 1; for (let i = 1; i < C.COLS; i++) { cx.beginPath(); cx.moveTo(OX + i * SC, OY); cx.lineTo(OX + i * SC, OY + 8 * SC); cx.stroke(); } for (let i = 1; i < C.ROWS; i++) { cx.beginPath(); cx.moveTo(OX, OY + i * SC); cx.lineTo(OX + 6 * SC, OY + i * SC); cx.stroke(); }
 }
@@ -1704,6 +1800,7 @@ function drawFx() {
   for (const b of G.beams) { const k = b.t / b.d, [x0, y0] = toScreen(b.x0, b.y0), [x1, y1] = toScreen(b.x1, b.y1); cx.save(); cx.globalAlpha = 1 - k; cx.lineCap = 'round'; cx.lineWidth = 12; cx.strokeStyle = PAL.ink; cx.beginPath(); cx.moveTo(x0, y0 - SC * 0.1); cx.lineTo(x1, y1); cx.stroke(); cx.lineWidth = 6; cx.strokeStyle = b.col; cx.stroke(); cx.lineWidth = 2; cx.strokeStyle = PAL.cream; cx.stroke(); cx.restore(); }
   for (const f of G.fx) { if (f.t < 0) continue; const k = clamp(f.t / f.d, 0, 1);
     if (f.k === 'ring') { const [x, y] = toScreen(f.x, f.y); cx.beginPath(); cx.arc(x, y + SC * 0.3, SC * (0.2 + k * f.r), 0, TAU); cx.lineWidth = 5 * (1 - k) + 1; cx.strokeStyle = f.col; cx.globalAlpha = 1 - k; cx.stroke(); cx.globalAlpha = 1; }
+    else if (f.k === 'wheel') { const [x, y] = toScreen(f.x, f.y), s = k < 0.25 ? k / 0.25 * 1.25 : 1.25 - (k - 0.25) / 0.75 * 0.45; cx.save(); cx.globalAlpha = k < 0.7 ? 1 : 1 - (k - 0.7) / 0.3; cx.fillStyle = 'rgba(245,233,208,.55)'; cx.beginPath(); cx.arc(x, y, SC * 0.42 * s, 0, TAU); cx.fill(); cx.restore(); spr('t_gear', x, y, SC * 0.62 * s, (f.dir || 1) * k * 7, k < 0.7 ? 1 : 1 - (k - 0.7) / 0.3); }
     else if (f.k === 'pow') { const [x, y] = toScreen(f.x, f.y); spr('fx_ko', x, y, SC * (0.5 + k * 0.3), k, 1 - k); }
     else if (f.k === 'bubble') { const u = vuOf(f.id); if (u) { const d = D(u.id), [x, y] = toScreen(d.x, d.y); cx.globalAlpha = 1 - k; cx.lineWidth = 6; cx.strokeStyle = PAL.patina; cx.beginPath(); cx.arc(x, y, SC * (0.3 + k * 0.4), 0, TAU); cx.stroke(); cx.globalAlpha = 1; } }
     else if (f.k === 'zap') { const [x, y] = toScreen(f.x, f.y); cx.globalAlpha = 1 - k; for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x + Math.cos(a) * SC * (0.6 + k), y + Math.sin(a) * SC * (0.6 + k)); cx.lineWidth = 4; cx.strokeStyle = PAL.brass; cx.stroke(); } cx.globalAlpha = 1; }
@@ -1721,10 +1818,12 @@ function draw() {
   drawRoom(); drawTargets(); drawIntents(); drawUnits(); drawPreview(); drawDying(); drawFx();
   // the tutorial / hint ring
   const ring = tutRing() || (G.ring && G.sel ? [G.ring.c, G.ring.r] : null);
-  if (ring && !G.tl && !G.rw) { const [x, y] = cellCenter(ring[0], ring[1]), p = (G.time * 1.5) % 1; cx.beginPath(); cx.arc(x, y, SC * (0.4 + p * 0.3), 0, TAU); cx.lineWidth = 6 * (1 - p) + 1; cx.strokeStyle = PAL.brass; cx.stroke(); }
+  if (ring && !G.tl && !G.rw) { const [x, y] = cellCenter(ring[0], ring[1]), p = (G.time * 1.5) % 1; cx.beginPath(); cx.arc(x, y, SC * (0.4 + p * 0.3), 0, TAU); cx.lineWidth = 6 * (1 - p) + 1; cx.strokeStyle = PAL.brass; cx.stroke();
+    if (tutRoom() || G.ring) { const tap = Math.max(0, Math.sin(G.time * 5)), hx = x + SC * 0.28, hy = y + SC * (0.42 + 0.14 * (1 - tap)); cx.save(); cx.font = `${Math.round(SC * 0.62)}px system-ui, sans-serif`; cx.textAlign = 'left'; cx.textBaseline = 'top'; cx.translate(hx, hy); cx.rotate(-0.35); cx.fillText('👆', 0, 0); cx.restore(); } }
   if (S.theme === 'winter') { cx.fillStyle = '#fff'; for (let i = 0; i < 40; i++) { const x = (i * 53.1 + Math.sin(G.time + i) * 20) % W, y = ((i * 97.7 + G.time * (30 + i % 5 * 10)) % H + H) % H; cx.globalAlpha = 0.8; cx.beginPath(); cx.arc(x, y, 1.5 + i % 3, 0, TAU); cx.fill(); } cx.globalAlpha = 1; }
   if (G.slow && G.tl) { cx.fillStyle = 'rgba(35,32,43,.12)'; cx.fillRect(0, 0, W, H); }
   cx.restore();
+  if (G.flash > 0) { cx.fillStyle = `rgba(255,250,235,${Math.min(0.75, G.flash)})`; cx.fillRect(0, 0, W, H); }
   // rewind: sepia wash, a clock spinning backwards
   if (G.rw) { const k = G.rw.t / G.rw.d, a = Math.sin(k * Math.PI); cx.fillStyle = `rgba(212,162,76,${0.28 * a})`; cx.fillRect(0, 0, W, H);
     const [x, y] = toScreen(2.5, 3.5), R = SC * 1.4; cx.save(); cx.globalAlpha = 0.85 * a; cx.beginPath(); cx.arc(x, y, R, 0, TAU); cx.fillStyle = 'rgba(245,233,208,.8)'; cx.fill(); cx.lineWidth = 6; cx.strokeStyle = PAL.ink; cx.stroke();
@@ -1737,8 +1836,10 @@ function draw() {
 let last = performance.now(), saveT = 0, trayT = 0;
 function frame(now) {
   const rdt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now; G.time += rdt;
-  if (G.tl) tlStep(rdt);
-  const pdt = rdt * (G.slow && G.tl ? 0.45 : 1) * (G.replay ? 2 : 1);
+  if (G.hs > 0) G.hs -= rdt; else if (G.tl) tlStep(rdt);
+  const pdt = G.hs > 0 ? 0 : rdt * (G.slow && G.tl ? 0.45 : 1) * (G.replay ? 2 : 1);
+  if (G.flash > 0) G.flash = Math.max(0, G.flash - rdt * 3); if (G.spin > 0) { G.spinA += G.spin * rdt * 10; G.spin = Math.max(0, G.spin - rdt * 0.8); }
+  if (G.mode === 'room' && G.S && G.S.phase === 'play' && !G.busy && !modal.classList.contains('on')) { G.roomT += rdt; if (G.roomT > 70 && !G.offered) offerHint(); }
   if (G.rw) { G.rw.t += rdt; if (G.rw.t >= G.rw.d) { G.rw = null; syncView(); renderTray(); } }
   for (const id in G.disp) { const d = G.disp[id]; if (!G.tl) { d.sx += (1 - d.sx) * Math.min(1, rdt * 12); d.sy += (1 - d.sy) * Math.min(1, rdt * 12); } if (d.fl > 0) d.fl -= rdt; }
   for (const d of G.dying) d.t += pdt; G.dying = G.dying.filter(d => d.t < d.d);
@@ -1859,7 +1960,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       document.querySelectorAll('.bub').forEach(b => b.remove()); await A.wait(500); document.getElementById('tic').classList.remove('on');
     },
     scenes: {
-      // title -> consent -> Maître Tic's tutorial: the cat shoves a robot into the gear, then the rabbit's jump
+      // title -> Maître Tic's tutorial at once (the ad consent comes after it): the cat shoves a robot into the gear, then the rabbit's jump
       async onboarding(A) { watch(A); await start(A); await A.wait(2600);
         for (let i = 0; i < 2 && A.running(); i++) { if (!G.L) break; const ok = await solveRoom(A); if (!ok) break; await next(A); await A.wait(1200); } },
       // the core: a room, the live preview, a wrong move rewound one time out of two, then the right line and the slow-motion chain
