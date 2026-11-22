@@ -298,8 +298,8 @@ if __name__ == '__main__':
         for g in sys.argv[1:]:
             ver = edit_version(find_app(g)['id'])
             cur = call('GET', f"/appStoreVersions/{ver['id']}/appStoreReviewDetail", ok=(200, 404)).get('data')
-            attrs = dict(contact, demoAccountRequired=False,
-                         notes="Jeu sans compte. Les achats intégrés sont dans la Boutique (icône panier sur l'écran d'accueil). Restaurer les achats : Réglages. No account needed; in-app purchases are in the Shop (cart icon on the home screen), Restore purchases in Settings.")
+            notes_all = json.load(open(os.path.join(HERE, 'review-notes.json'), encoding='utf-8')) if os.path.exists(os.path.join(HERE, 'review-notes.json')) else {}
+            attrs = dict(contact, demoAccountRequired=False, notes=notes_all.get(g) or notes_all.get('_default') or "No account needed.")
             if cur:
                 call('PATCH', f"/appStoreReviewDetails/{cur['id']}", {'data': {'type': 'appStoreReviewDetails', 'id': cur['id'], 'attributes': attrs}})
             else:
