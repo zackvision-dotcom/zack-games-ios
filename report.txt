@@ -1,2 +1,8 @@
-CHECK circuitcaper en-US desc=669 kw=81 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
-CHECK circuitcaper fr-FR desc=696 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[]
+BUILD vanvoyage v53 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T01:01
+BUILD vanvoyage v34 VALID internal=IN_BETA_TESTING uploaded=2026-11-21T10:05
+BUILD gullstreet v1002 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:57
+BUILD gullstreet v49 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:58
+BUILD kunaigaiden v1002 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:57
+BUILD kunaigaiden v47 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:57
+BUILD braise v1002 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T02:58
+BUILD braise v48 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T00:59
