@@ -241,6 +241,15 @@ if __name__ == '__main__':
                     call('PATCH', f"/inAppPurchaseLocalizations/{l['id']}", {'data': {'type': 'inAppPurchaseLocalizations', 'id': l['id'], 'attributes': {'description': d}}})
                     print('IAPDESC', pid, l['attributes']['locale'], d)
         sys.exit(0)
+    if os.environ.get('ADSRATING'):
+        # age rating: the app shows ads (AdMob), never submits
+        for g in sys.argv[1:]:
+            infos = call('GET', f"/apps/{find_app(g)['id']}/appInfos?include=ageRatingDeclaration")['data']
+            info = next((i for i in infos if i['attributes'].get('appStoreState') not in ('READY_FOR_SALE', 'READY_FOR_DISTRIBUTION')), infos[0])
+            aid = info['relationships']['ageRatingDeclaration']['data']['id']
+            r = call('PATCH', f'/ageRatingDeclarations/{aid}', {'data': {'type': 'ageRatingDeclarations', 'id': aid, 'attributes': {'advertising': True}}})
+            print('ADSRATING', g, r['data']['attributes'].get('advertising'), 'lootBox', r['data']['attributes'].get('lootBox'))
+        sys.exit(0)
     if os.environ.get('LOOTBOX_OFF'):
         for g in sys.argv[1:]:
             infos = call('GET', f"/apps/{find_app(g)['id']}/appInfos?include=ageRatingDeclaration")['data']
