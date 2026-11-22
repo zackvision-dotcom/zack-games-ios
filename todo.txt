@@ -1,13 +1,2 @@
-textonly
-silkhop
-lanternhold
-clockpawsquad
-pulsepost
-dungeondash
-gullstreet
-coralstack
-crumblecrew
-circuitcaper
-vanvoyage
+addkw naruto
 kunaigaiden
-braise

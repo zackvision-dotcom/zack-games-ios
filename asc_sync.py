@@ -219,6 +219,21 @@ def previews_v2(suffix):
 
 if __name__ == '__main__':
     fiches = json.load(open(os.path.join(HERE, 'fiches-appstore.json'), encoding='utf-8'))
+    if os.environ.get('ADDKW'):
+        # Zack's explicit choice (22/11, warned about guideline 2.3.7): add one keyword to every store language of an app
+        word = os.environ['ADDKW']
+        for g in sys.argv[1:]:
+            ver = edit_version(find_app(g)['id'])
+            for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
+                kws = [k for k in (l['attributes'].get('keywords') or '').split(',') if k]
+                if word in kws:
+                    print('ADDKW', g, l['attributes']['locale'], 'already'); continue
+                kws.insert(1, word)
+                while len(','.join(kws)) > 100:
+                    kws.pop()
+                call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'keywords': ','.join(kws)}}})
+                print('ADDKW', g, l['attributes']['locale'], ','.join(kws))
+        sys.exit(0)
     if os.environ.get('REVIEW'):
         # App Review contact: same as Kunai Gaiden (Zack's OK, 22/11); never submits anything
         src = edit_version(find_app('kunaigaiden')['id'])
