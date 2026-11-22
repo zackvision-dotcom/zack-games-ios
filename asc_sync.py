@@ -271,7 +271,7 @@ if __name__ == '__main__':
                     print('SUBMIT', g, 'version item added')
                 except Exception as e:
                     msg = str(e); print('SUBMIT', g, 'ITEM ERR', ' | '.join(_re.findall(r'"(?:code|detail|title)" : "([^"]+)"', msg))[:2500]); continue
-            for iap in call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']:
+            for iap in ([] if os.environ.get('DRAFT_ONLY') else call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']):
                 a = iap['attributes']
                 if a['state'] != 'READY_TO_SUBMIT':
                     print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], a['state'], 'skipped'); continue
@@ -280,6 +280,8 @@ if __name__ == '__main__':
                     print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], 'queued')
                 except Exception as e:
                     print('SUBMIT', g, 'iap', a['productId'].split('.')[-1], 'ERR', ' | '.join(_re.findall(r'"(?:code|detail)" : "([^"]+)"', str(e)))[:600])
+            if os.environ.get('DRAFT_ONLY'):
+                print('SUBMIT', g, 'draft only, items:', [ (it.get('relationships') or {}).keys() and it['id'] for it in call('GET', f"/reviewSubmissions/{sub['id']}/items?limit=30")['data']]); continue
             try:
                 r = call('PATCH', f"/reviewSubmissions/{sub['id']}", {'data': {'type': 'reviewSubmissions', 'id': sub['id'], 'attributes': {'submitted': True}}})
                 print('SUBMIT', g, 'submission', r['data']['attributes'].get('state'))
