@@ -492,18 +492,10 @@ targets:
       - path: SceneExpress/Assets.xcassets
       - path: SceneExpress/Web
         type: folder
-      - path: SceneExpress/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
-    dependencies:
-      - package: Firebase
-        product: FirebaseAnalytics
-      - package: Firebase
-        product: FirebaseCrashlytics
     info:
       path: SceneExpress/Info.plist
       properties:
         CFBundleDisplayName: Scène Express
-        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
-        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -519,12 +511,6 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.lifestyle
-    postBuildScripts:
-      - name: Crashlytics dSYM upload
-        basedOnDependencyAnalysis: false
-        script: |
-          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.sceneexpress
