@@ -101,13 +101,13 @@
       for (let i = 0; i < 1200 && !($('#k-new') && !$('#k-new').disabled); i++) await A.wait(100);
       const S = D().S; Object.assign(S, midSave()); K.intro.heal(); K.intro.setNoDeath(true);   // a take never ends on a knock-out
       K.intro.begin(); hideToast();
-      { const z = +new URLSearchParams(location.search).get('zoom'); if (z && KMAP.betaZoom) { KMAP.betaZoom(z); __k.snap(); } }   // ?zoom=1.8 (beta-record --zoom): the camera closer on Kaze
+      { const z = +new URLSearchParams(location.search).get('zoom'); if (z && KMAP.betaZoom) { const on = () => KMAP.betaZoom(z); on(); __k.snap(); setInterval(on, 250); } }   // kept on: a map change (village/forest) rebuilds the camera at its own level   // ?zoom=1.8 (beta-record --zoom): the camera closer on Kaze
       dispatchEvent(new Event('pointerdown'));   // the sound starts with the take (ambience.js unlocks on the first touch)
       // every take is far from the great gate (never on camera): each scene has its own place, the first free one of its list
       const sc = A.opts.scene, GATE = [0, 150];
       const SPOTS = { boucle: [[58, 178], [-58, 178], [72, 166], [-72, 166], [40, 196]],   // the southern pine forest
         moment: [[-64, 188], [64, 190], [0, 205], [86, 160]],                               // a clearing deeper in the woods: the wolf pack
-        boss: [[-118, -72], [-125, -80], [-108, -62], [-132, -66]],                          // the bandits' camp in the north-west
+        boss: [[70, 200], [-70, 200], [86, 176], [-86, 176]],                                 // a forest clearing, far from the village
         technique: [[-58, 178], [-72, 166], [-40, 192]],                                     // the west side of the pine forest: one big technique
         village: [[0.5, 112], [1.5, 104], [0, 96]] };                                         // the avenue, well inside the walls
       const h = H(), list = SPOTS[sc] || SPOTS.boucle;
@@ -129,7 +129,7 @@
     },
     scenes: {
       // the core: the pack rushes in, katana swipes through it, techniques drawn in the pad (V, Z, O), the pack thins out
-      async boucle(A) { watch(A); const plan = ['fire', null, null, 'chidori', null, 'sphere', null, null, 'fire', null, 'wind', null];
+      async boucle(A) { watch(A); const plan = ['fire', null, null, 'chidori', null, 'wind', null, null, 'fire', null, 'chidori', null];
         await A.wait(600); let i = 0, far = 0;
         while (A.running()) {
           const [e, d] = nearest();
@@ -149,21 +149,22 @@
       async moment(A) { watch(A); await A.wait(500);
         if (await sign(A, 'wind')) A.mark('lame de vent sur la meute'); await A.wait(900);
         for (let k = 0; k < 4 && A.running() && live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 6); k++) { await slash(A); await A.wait(A.jitter(200, 320)); }
-        if (live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 5)) { await sign(A, 'sphere'); A.mark('sphère de souffle'); }
+        if (live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 5)) { await sign(A, 'chidori'); A.mark('lame-tonnerre'); }
         await A.wait(1200);
         while (A.running()) { if (pack().length < 3) wave(4, 2.8, 4.2, ['wolf', 'bandit'], .4); regroup(4.5); keepClose(['wolf', 'bandit', 'wolf'], .4); if (!(await slash(A))) { const [e, d] = nearest(); if (e && d < 5.5 && A.rnd() < .5) await sign(A, ['fire', 'chidori'][(A.rnd() * 2) | 0]); else await A.wait(300); } await A.wait(250); } },
       // the boss: Kurogane the deserter comes out of the woods at the gate; katana swipes and the four signs until he falls (about 16 s)
       async boss(A) { watch(A); const e = boss; if (!e) return; const t0 = performance.now(); let i = 0, fell = false;
         E.hooks.kill.push(k => { if (k === e && !fell) { fell = true; A.mark('boss vaincu'); } });
-        A.mark('le boss surgit'); await A.wait(700); const plan = ['fire', null, 'chidori', null, null, 'wind', null, 'sphere', null, 'fire', null, 'chidori'];
+        A.mark('le boss surgit'); await A.wait(700); const plan = ['fire', null, 'chidori', null, null, 'wind', null, 'fire', null, 'chidori', null, 'wind'];
         while (A.running() && !e.dead) {
-          const el = (performance.now() - t0) / 1000; if (el > 13 && e.hp > e.max * .08) e.hp = Math.round(e.max * .08);   // the last blows land around 14-16 s
+          const el = (performance.now() - t0) / 1000; if (el > 13 && e.hp > e.max * .08) e.hp = Math.round(e.max * .08); else if (el < 12 && e.hp < e.max * .35) e.hp = Math.round(e.max * .35);   // the last blows land around 14 s, not before
           if (D().S.hp < 60) K.intro.heal();
           const d = Math.hypot(e.x - H().x, e.y - H().y); if (d > 3.8) { e.x = H().x + .3; e.y = H().y + 2.8; e.state = 'chase'; await A.wait(200); continue; }
           const id = plan[i++ % plan.length]; if (id && (await sign(A, id))) { A.mark(NAME[id]); await A.wait(A.jitter(450, 700)); continue; }
           if (!(await slash(A))) await A.wait(200); await A.wait(A.jitter(160, 300));
         }
-        await A.wait(1500); while (A.running()) await A.wait(500); },
+        await A.wait(600); wave(4, 2.8, 4, ['bandit', 'bandit', 'wolf'], .35);   // his men rush in: the fight goes on to the end of the take
+        while (A.running()) { regroup(4.5); keepClose(['bandit', 'wolf'], .35); if (!(await slash(A))) { const [o, d] = nearest(); if (o && d < 5 && A.rnd() < .4) { const id = ['fire', 'chidori', 'wind'][(A.rnd() * 3) | 0]; if (await sign(A, id)) A.mark(NAME[id]); } else await A.wait(250); } await A.wait(220); } },
       // the living village: Kaze runs down the market street past the stalls and the villagers (no techniques, no enemies)
       async village(A) { watch(A); try { if (window.KMAP && KMAP.sprintOn && !KMAP.sprintOn()) KMAP.toggleSprint(); } catch (e) {} await A.wait(200);
         const route = [[1.5, 100], [0, 90], [2, 80], [6, 70], [8, 60], [14, 52]].filter(([x, y]) => E.free(x, y, .6));   // the avenue from the great gate up to Aiko's market
@@ -172,12 +173,12 @@
       // one big technique, centred: seven weakened enemies close around Kaze, the thunder blade then the breath sphere sweep them away
       async technique(A) { watch(A); await A.wait(400);
         if (await sign(A, 'chidori')) A.mark('lame-tonnerre'); await A.wait(1100);
-        if (await sign(A, 'sphere')) A.mark('sphère de souffle'); await A.wait(1300);
+        if (await sign(A, 'wind')) A.mark('lame de vent'); await A.wait(1300);
         while (A.running()) { if (pack().length < 3) wave(5, 2.6, 3.8, ['bandit', 'wolf'], .3); regroup(4); keepClose(['bandit', 'wolf'], .3); const [e, d] = nearest();
-          if (e && d < 5 && A.rnd() < .45) { const id = ['wind', 'fire', 'chidori', 'sphere'][(A.rnd() * 4) | 0]; if (await sign(A, id)) A.mark(NAME[id]); await A.wait(900); } else if (!(await slash(A))) await A.wait(250); await A.wait(200); } },
+          if (e && d < 5 && A.rnd() < .45) { const id = ['wind', 'fire', 'chidori'][(A.rnd() * 3) | 0]; if (await sign(A, id)) A.mark(NAME[id]); await A.wait(900); } else if (!(await slash(A))) await A.wait(250); await A.wait(200); } },
       // plays on until stopped (long tests): the same fight, the pack coming back
       async idle(A) { watch(A); while (A.running()) { const [e, d] = nearest(); if (!e) { wave(4, 6, 9, ['wolf', 'bandit']); await A.wait(1000); continue; }
-        if (d > 6) await run(A, e.x, e.y, 700); else if (A.rnd() < .25) await sign(A, ['fire', 'chidori', 'sphere', 'wind'][(A.rnd() * 4) | 0]); else await slash(A); await A.think(); } },
+        if (d > 6) await run(A, e.x, e.y, 700); else if (A.rnd() < .25) await sign(A, ['fire', 'chidori', 'wind'][(A.rnd() * 3) | 0]); else await slash(A); await A.think(); } },
     },
   });
 })();
