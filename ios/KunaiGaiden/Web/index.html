@@ -5890,9 +5890,9 @@ schedule();
         }
         await A.wait(1500); while (A.running()) await A.wait(500); },
       // the living village: Kaze runs down the market street past the stalls and the villagers (no techniques, no enemies)
-      async village(A) { watch(A); await A.wait(400);
+      async village(A) { watch(A); try { if (window.KMAP && KMAP.sprintOn && !KMAP.sprintOn()) KMAP.toggleSprint(); } catch (e) {} await A.wait(200);
         const route = [[0.5, 128], [1.5, 112], [0, 96], [2, 82], [6, 70], [8, 60]].filter(([x, y]) => E.free(x, y, .6));   // the avenue from the great gate up to Aiko's market
-        for (const [x, y] of route) { for (let k = 0; k < 5 && A.running() && Math.hypot(H().x - x, H().y - y) > 2.5; k++) await run(A, x, y, 1400); A.mark('rue du village'); }
+        for (const [x, y] of route) { for (let k = 0; k < 5 && A.running() && Math.hypot(H().x - x, H().y - y) > 2.5; k++) await run(A, x, y, 2200); A.mark('rue du village'); }
         while (A.running()) await A.wait(500); },
       // plays on until stopped (long tests): the same fight, the pack coming back
       async idle(A) { watch(A); while (A.running()) { const [e, d] = nearest(); if (!e) { wave(4, 6, 9, ['wolf', 'bandit']); await A.wait(1000); continue; }
