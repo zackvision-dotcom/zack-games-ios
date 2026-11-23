@@ -5533,11 +5533,11 @@ function lazySet(lk,anim,n,px,yaw){const k=px/185,arr=new Array(n),base={ax:95*k
   base.fill=()=>{for(let i=0;i<n;i++)if(!arr[i]){arr[i]=bakeOne(i);return true;}return false;};
   return new Proxy(base,{get(t,pr){if(typeof pr==='string'&&pr.length<4&&pr>='0'&&pr<='9'){const i=+pr;if(!arr[i]){const any=arr.find(Boolean);if(any&&frameBudget<=0)return any;frameBudget--;arr[i]=bakeOne(i);}return arr[i];}return t[pr];}});}
 const FIXPX=Math.round(92*1.5*Math.min(window.KTOUCH&&KTOUCH.enabled?1.25:2,devicePixelRatio||1));   // one bake size for every zoom level
-const BANKMAX=LOWMEM?44:110;let bankN=0;
+const BANKMAX=LOWMEM?72:110;let bankN=0;   // phones: 44 made the walkers' poses evict each other and get redrawn mid-game (hitches)
 function frames(lk,anim,yaw){if(lk==='hero')lk='player';const k=lk+anim+yaw;if(bank[k]){bank[k].t=performance.now();return bank[k];}{if(++bankN>BANKMAX){let ok=null,ot=1e18;for(const q in bank)if(bank[q].t<ot){ot=bank[q].t;ok=q;}if(ok){delete bank[ok];bankN--;}}const npc=lk!=='player',n=({idle:npc?4:8,walk:npc?6:10,run:npc?6:10,ninjarun:10,jump:7,attack:10,kick:10,throw:8,seal:8,cast:8,hurt:6,dash:6})[anim]||8;bank[k]=lazySet(lk,anim,n,FIXPX,yaw);bank[k].t=performance.now();}return bank[k];}
 // background warm-up: while frames are cheap, prepare the hero's run/idle in 8 directions, then the villagers' walk
-const WARM=[];for(const an of['run','idle'])for(let y=0;y<360;y+=45)WARM.push(['player',an,y]);if(!LOWMEM)for(const lk of['villager','student','merchant','medic','jonin','kunoichi'])for(let y=0;y<360;y+=45)WARM.push([lk,'walk',y]);
-function warmUp(){if(!WARM.length||ftAvg>24||frameBudget<=0)return;const [lk,an,y]=WARM[0];if(!bank[(lk==='hero'?'player':lk)+an+y]&&lk==='player'&&!LOOKS.player)return;const set=frames(lk,an,y);if(!set.fill())WARM.shift();}
+const WARM=[];for(const an of['run','idle'])for(let y=0;y<360;y+=45)WARM.push(['player',an,y]);for(const lk of['villager','student','merchant','medic','jonin','kunoichi'])for(let y=0;y<360;y+=45)WARM.push([lk,'walk',y]);   // phones too: bake the walkers in calm frames instead of when one turns
+function warmUp(){if(!WARM.length||ftAvg>(LOWMEM?40:24)||frameBudget<=0)return;const [lk,an,y]=WARM[0];if(!bank[(lk==='hero'?'player':lk)+an+y]&&lk==='player'&&!LOOKS.player)return;const set=frames(lk,an,y);if(!set.fill())WARM.shift();}
 const yawOf=(dx,dy)=>((Math.round(Math.atan2(dx,dy)*180/Math.PI/45)*45)%360+360)%360;
 
 /* ---------------- input ---------------- */
