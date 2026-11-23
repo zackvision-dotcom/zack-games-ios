@@ -1,2 +1,4 @@
-SUBMIT vanvoyage version item added
-SUBMIT vanvoyage draft only, items: [dict_keys([])]
+STATUS vanvoyage 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-21
+STATUS braise 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-16
+STATUS clockpawsquad 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-22
+STATUS dungeondash 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-22
