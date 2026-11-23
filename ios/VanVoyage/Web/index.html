@@ -206,7 +206,11 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
     const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
     w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
     out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
-    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    // peak limiter at -1 dBFS (instant attack, 150 ms release): no clipping even when many sounds start together
+    const CEIL = 0.89, rel = Math.exp(-1 / (0.15 * r)); let gain = 1;
+    for (let i = 0; i < n; i++) { const pk = Math.max(Math.abs(L[a + i]), Math.abs(R[a + i])), need = pk * gain > CEIL ? CEIL / pk : 1;
+      gain = need < gain ? need : Math.min(1, need, 1 - (1 - gain) * rel);
+      out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i] * gain)) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i] * gain)) * 32767, true); }
     const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
     return btoa(bin);
   };
@@ -283,7 +287,12 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
   // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
   const lastSon = {};
   function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
-  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+  // a fast-forward (an ellipsis, speed > 1) can fire a dozen sounds in the same 130 ms: they add up and clip. On camera, the same sound
+  // plays at most once every 90 ms and at most 5 sounds start in any 130 ms window (testeur, 23/11: Crumble Crew progression at 0 dB).
+  const lastPlay = {}, recent = [];
+  function allowSon(k) { const t = performance.now(); if (lastPlay[k] != null && t - lastPlay[k] < 90) return false;
+    while (recent.length && t - recent[0] > 130) recent.shift(); if (recent.length >= 5) return false; recent.push(t); lastPlay[k] = t; return true; }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { if (!allowSon(k)) return; logSon(k); return f.apply(this, a); }; } }
 
   // ---- stuck detection: no progress for 60 s of game time ----
   function watchStuck(progress) {
@@ -502,7 +511,7 @@ let S, hadSave = false; try { hadSave = !!localStorage.getItem(KEY); S = Object.
 if (S.tutoDone == null) S.tutoDone = hadSave;   // saves from before the tutorial count it as seen
 I.set(S.lang);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
-const track = (ev, d) => { try { console.debug('[ga]', ev, d || ''); } catch (e) {} };
+const track = (ev, d) => { try { if (window.ZV && ZV.available) ZV.event(ev, d); } catch (e) {} try { console.debug('[ga]', ev, d || ''); } catch (e) {} };
 
 // ---------- audio ----------
 const AU = { ctx: null, master: null, noise: null, music: null, next: 0, step: 0, engine: null };
@@ -546,10 +555,20 @@ const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms)
 // Its promises never reject; on the web there is no handler and the labelled test advert stands in.
 const NADS = () => window.webkit?.messageHandlers?.ads;
 const nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
+
+// ---------- studio kit (ios/Shared/NativeKit.swift): rating after a moment of joy, share, our other games, house ad ----------
+const ZVK = () => window.ZV && ZV.available ? ZV : null;
+const zvLang = () => String((typeof S !== 'undefined' && S && S.lang) || document.documentElement.lang || 'fr');
+const zvEn = () => zvLang().startsWith('en');
+const zvJoy = tag => { const z = ZVK(); if (z) z.joy(tag); };   // NEVER after a failure
+const zvButtons = () => ZVK() ? `${ZVK().others ? `<button class="b2" data-zvmore>${zvEn() ? 'Our other games' : 'Nos autres jeux'}</button>` : ''}<button class="b2" data-zvshare>${zvEn() ? 'Share the game' : 'Partager le jeu'}</button>` : '';
+const zvBind = root => { const m = root && root.querySelector('[data-zvmore]'), s = root && root.querySelector('[data-zvshare]');
+  if (m) m.onclick = () => ZVK().moreGames(zvLang()).then(ok => { if (!ok) { m.textContent = zvEn() ? 'Coming soon!' : 'Bientôt !'; m.disabled = true; } });
+  if (s) s.onclick = () => ZVK().share((zvEn() ? 'I’m playing ' : 'Je joue à ') + 'Van Voyage'); };
 const Ads = {
   async init() { if (NADS()) await nads('init'); },   // first time: Google consent form (if required) → Apple ATT → SDK
   async rewarded(kind) { track('ad_rewarded', { kind }); if (NADS()) return (await nads('rewarded')) === true; return testAd(); },
-  async interstitial() { if (S.owned.noads || S.stagesDriven < 3) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); if (NADS()) { await nads('interstitial'); return; } await testAd(); }
+  async interstitial() { if (S.owned.noads || S.stagesDriven < 3) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); if (NADS()) { if (!(await nads('interstitial')) && ZVK()) await ZVK().houseAd(zvLang()); return; } await testAd(); }
 };
 function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart">🚐🐶🌄</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 700); }); }
 
@@ -606,7 +625,8 @@ function cardFound() {
   const missing = []; for (let i = 0; i < D.postcards; i++) if (!S.cards.includes(i)) missing.push(i);
   SFX.card(); buzz(15);
   if (!missing.length) { S.coins += 20; return; }
-  const c = missing[0]; S.cards.push(c);   // always the next missing postcard, in order: nothing random (coins can be bought) G.newCard = c; revealCard(c);
+  const c = missing[0]; S.cards.push(c); G.newCard = c; revealCard(c);   // always the next missing postcard, in order: nothing random (coins can be bought)
+  if (S.cards.length % 3 === 0) zvJoy('postcards');
 }
 // a postcard flips in, gets stamped, then flies to the corner (never blocks the drive)
 function revealCard(c) {
@@ -915,11 +935,12 @@ function confirmBox(html) { return new Promise(res => { const el = div('confirm'
 function settingsModal() {
   const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}<label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
-    <button class="b2" data-tuto>☝️ ${t('tuReplay')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Van Voyage ${window.VV_VERSION || ''}</div>`);
+    <button class="b2" data-tuto>☝️ ${t('tuReplay')}</button><button class="b2" data-consent>${t('adChoices')}</button>${zvButtons()}<button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('reset')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Van Voyage ${window.VV_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); settingsModal(); };
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.VV_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = settingsModal; };
+  zvBind(modal);
   modal.querySelector('[data-tuto]').onclick = () => { S.tutoDone = false; save(); closeModal(); if (G.mode === 'drive') { G.paused = false; engineHum(true); tuStart(); } else { if (G.mode === 'map') mapScreen(); toast(t('tuNext')); } };
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
   modal.querySelector('[data-close]').onclick = () => G.mode === 'map' ? mapScreen() : menuModal();

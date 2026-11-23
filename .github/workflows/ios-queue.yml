@@ -17,8 +17,8 @@ jobs:
       - uses: actions/checkout@v4
       - id: p
         run: |
-          # one game per line; add "ADS_TEST=0" after the name ONLY for the App Store release build (real AdMob units)
-          echo "apps=$(grep -v '^#' ios/build-queue.txt | grep -v '^ *$' | python3 -c 'import json,sys; print(json.dumps([{"app": l.split()[0], "ads_test": "0" if "ADS_TEST=0" in l.split()[1:] else "1"} for l in sys.stdin]))')" >> "$GITHUB_OUTPUT"
+          # one game per line; "VERSION=1.0.1" sets the App Store version (default 1.0); add "ADS_TEST=0" after the name ONLY for the App Store release build (real AdMob units)
+          echo "apps=$(grep -v '^#' ios/build-queue.txt | grep -v '^ *$' | python3 -c 'import json,sys; print(json.dumps([{"app": l.split()[0], "ads_test": "0" if "ADS_TEST=0" in l.split()[1:] else "1", "version": next((w[8:] for w in l.split()[1:] if w.startswith("VERSION=")), "1.0")} for l in sys.stdin]))')" >> "$GITHUB_OUTPUT"
           echo "bn=$((1000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_OUTPUT"
   build:
     needs: plan
@@ -32,4 +32,5 @@ jobs:
       app: ${{ matrix.app }}
       build_number: ${{ needs.plan.outputs.bn }}
       ads_test: ${{ matrix.ads_test }}
+      marketing_version: ${{ matrix.version }}
     secrets: inherit

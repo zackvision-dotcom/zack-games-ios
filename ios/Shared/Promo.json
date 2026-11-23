@@ -1,0 +1,119 @@
+[
+ {
+  "bundle": "com.zvisionclub.kunaigaiden",
+  "appId": "6835522076",
+  "name": "Kunai Gaiden",
+  "fr": "Le ninja des ombres",
+  "en": "The shadow ninja",
+  "color": "#c0392b",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.braise",
+  "appId": "6835577779",
+  "name": "Braise",
+  "fr": "Garde la flamme en vie",
+  "en": "Keep the flame alive",
+  "color": "#e8590c",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.gullstreet",
+  "appId": "6836973837",
+  "name": "Gull Street",
+  "fr": "Les boutiques du port",
+  "en": "Cozy Harbor Shops",
+  "color": "#1c7ed6",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.coralstack",
+  "appId": "6837288666",
+  "name": "Coral Stack",
+  "fr": "Bâtis ta colonie sous la mer",
+  "en": "Build an Undersea Colony",
+  "color": "#f06595",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.crumblecrew",
+  "appId": "6837609345",
+  "name": "Crumble Crew",
+  "fr": "Des taupes contre un rocher",
+  "en": "Moles versus a giant boulder",
+  "color": "#a9743b",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.circuitcaper",
+  "appId": "6837610084",
+  "name": "Circuit Caper",
+  "fr": "Rebranche tout. Vole tout.",
+  "en": "Rewire it all. Steal it all.",
+  "color": "#7048e8",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.vanvoyage",
+  "appId": "6837698858",
+  "name": "Van Voyage",
+  "fr": "Un van, un chien, la mer",
+  "en": "An old van, a dog, the sea",
+  "color": "#2b8a3e",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.sceneexpress",
+  "appId": "6837721762",
+  "name": "Scène Express",
+  "fr": "Le cinéma express",
+  "en": "Quick-fire movie scenes",
+  "color": "#e64980",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.silkhop",
+  "appId": "6837923108",
+  "name": "Silk Hop",
+  "fr": "Balance-toi de fil en fil",
+  "en": "Swing from thread to thread",
+  "color": "#37b24d",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.lanternhold",
+  "appId": "6837922915",
+  "name": "Lantern Hold",
+  "fr": "Défends la lanterne la nuit",
+  "en": "Guard the lantern all night",
+  "color": "#f59f00",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.clockpawsquad",
+  "appId": "6837923176",
+  "name": "Clockpaw Squad",
+  "fr": "Tactique au tic près",
+  "en": "Tactics to the tick",
+  "color": "#d9480f",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.pulsepost",
+  "appId": "6837923179",
+  "name": "Pulse Post",
+  "fr": "Le courrier en rythme",
+  "en": "Deliver the mail in rhythm",
+  "color": "#1098ad",
+  "live": false
+ },
+ {
+  "bundle": "com.zvisionclub.dungeondash",
+  "appId": "6837923148",
+  "name": "Pocket Dungeon Dash",
+  "fr": "Glisse, roule, pulvérise !",
+  "en": "Slide, roll, blast!",
+  "color": "#5f3dc4",
+  "live": false
+ }
+]

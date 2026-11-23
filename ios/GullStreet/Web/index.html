@@ -253,7 +253,7 @@ h3 small{font-weight:700;color:var(--ink);opacity:.75;font-size:13px}
   let offCtx = null, audioOrigin = null;
   const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
-    const RATE = 32000;
+    const RATE = 48000;   // the App Store previews are 48 kHz
     offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
     const realDest = offCtx.destination, master = offCtx.createGain();
     master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
@@ -264,6 +264,13 @@ h3 small{font-weight:700;color:var(--ink);opacity:.75;font-size:13px}
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
@@ -275,7 +282,11 @@ h3 small{font-weight:700;color:var(--ink);opacity:.75;font-size:13px}
     const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
     w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
     out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
-    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    // peak limiter at -1 dBFS (instant attack, 150 ms release): no clipping even when many sounds start together
+    const CEIL = 0.89, rel = Math.exp(-1 / (0.15 * r)); let gain = 1;
+    for (let i = 0; i < n; i++) { const pk = Math.max(Math.abs(L[a + i]), Math.abs(R[a + i])), need = pk * gain > CEIL ? CEIL / pk : 1;
+      gain = need < gain ? need : Math.min(1, need, 1 - (1 - gain) * rel);
+      out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i] * gain)) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i] * gain)) * 32767, true); }
     const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
     return btoa(bin);
   };
@@ -352,7 +363,12 @@ h3 small{font-weight:700;color:var(--ink);opacity:.75;font-size:13px}
   // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
   const lastSon = {};
   function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
-  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+  // a fast-forward (an ellipsis, speed > 1) can fire a dozen sounds in the same 130 ms: they add up and clip. On camera, the same sound
+  // plays at most once every 90 ms and at most 5 sounds start in any 130 ms window (testeur, 23/11: Crumble Crew progression at 0 dB).
+  const lastPlay = {}, recent = [];
+  function allowSon(k) { const t = performance.now(); if (lastPlay[k] != null && t - lastPlay[k] < 90) return false;
+    while (recent.length && t - recent[0] > 130) recent.shift(); if (recent.length >= 5) return false; recent.push(t); lastPlay[k] = t; return true; }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { if (!allowSon(k)) return; logSon(k); return f.apply(this, a); }; } }
 
   // ---- stuck detection: no progress for 60 s of game time ----
   function watchStuck(progress) {
@@ -1198,7 +1214,7 @@ function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e
 load(); I.set(S.lang);
 
 // ---------- analytics (GameAnalytics adapter; logs locally until the SDK is wired) ----------
-const track = (ev, data) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
+const track = (ev, data) => { try { if (window.ZV && ZV.available) ZV.event(ev, data); } catch (e) {} try { (window.GSAnalytics || console.debug)('[ga]', ev, data || ''); } catch (e) {} };
 
 // ---------- audio (synthesised: no third-party sound files) ----------
 const AU = { ctx: null, master: null, musicGain: null, next: 0, step: 0 };
@@ -1247,6 +1263,16 @@ const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms)
 // Its promises never reject; on the web there is no handler and the labelled test advert stands in.
 const NADS = () => window.webkit?.messageHandlers?.ads;
 const nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
+
+// ---------- studio kit (ios/Shared/NativeKit.swift): rating after a moment of joy, share, our other games, house ad ----------
+const ZVK = () => window.ZV && ZV.available ? ZV : null;
+const zvLang = () => String((typeof S !== 'undefined' && S && S.lang) || document.documentElement.lang || 'fr');
+const zvEn = () => zvLang().startsWith('en');
+const zvJoy = tag => { const z = ZVK(); if (z) z.joy(tag); };   // NEVER after a failure
+const zvButtons = () => ZVK() ? `${ZVK().others ? `<button class="b2" data-zvmore>${zvEn() ? 'Our other games' : 'Nos autres jeux'}</button>` : ''}<button class="b2" data-zvshare>${zvEn() ? 'Share the game' : 'Partager le jeu'}</button>` : '';
+const zvBind = root => { const m = root && root.querySelector('[data-zvmore]'), s = root && root.querySelector('[data-zvshare]');
+  if (m) m.onclick = () => ZVK().moreGames(zvLang()).then(ok => { if (!ok) { m.textContent = zvEn() ? 'Coming soon!' : 'Bientôt !'; m.disabled = true; } });
+  if (s) s.onclick = () => ZVK().share((zvEn() ? 'I’m playing ' : 'Je joue à ') + 'Gull Street'); };
 const Ads = {
   async init() { if (NADS()) await nads('init'); },   // first time: Google consent form (if required) → Apple ATT → SDK
   async rewarded(kind) {
@@ -1257,7 +1283,7 @@ const Ads = {
   async interstitial() {
     if (S.owned.noads || S.day < ECO.ads.interstitialFromDay) return;
     const now = Date.now(); if (now - S.lastAdAt < ECO.ads.interstitialGapSec * 1000) return;
-    S.lastAdAt = now; track('ad_interstitial'); if (NADS()) { await nads('interstitial'); return; }
+    S.lastAdAt = now; track('ad_interstitial'); if (NADS()) { if (!(await nads('interstitial')) && ZVK()) await ZVK().houseAd(zvLang()); return; }
     await testAdOverlay(false);
   }
 };
@@ -1514,7 +1540,7 @@ function endDay() {
   S.coins += chest.coins; S.shells += chest.shells; if (chest.deco) S.inv[chest.deco] = (S.inv[chest.deco] || 0) + 1;
   S.lastHappy = st.happy; S.totals.served += st.served; S.totals.earned += st.income + st.tips; S.totals.days++;
   questProgress('days', 1); save();
-  track('day_end', { day: S.day, income: st.income, tips: st.tips, mood: st.moodAvg, stars });
+  track('day_end', { day: S.day, income: st.income, tips: st.tips, mood: st.moodAvg, stars }); if (stars >= 3 && S.day > 2) zvJoy('day');
   if (stars) SFX.star();
   showSummary(st, res, stars, shellsWon, chest);
 }
@@ -1969,7 +1995,7 @@ function settingsModal() {
     <button class="b2" data-restore>${t('restore')}</button>
     <button class="b2" data-consent>${t('adChoices')}</button>
     <button class="b2" data-tuto>☝️ ${t('tutReplay')}</button>
-    <button class="b2" data-privacy>${t('privacy')}</button>
+    ${zvButtons()}<button class="b2" data-privacy>${t('privacy')}</button>
     <button class="b3" data-reset>${t('reset')}</button>
     <button class="b2 big" data-close>${t('close')}</button>
     <div class="ver">Gull Street ${window.GS_VERSION || ''}</div>`);
@@ -1979,6 +2005,7 @@ function settingsModal() {
   modal.querySelector('[data-tuto]').onclick = tutReplay;
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = privacyModal;
+  zvBind(modal);
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
   modal.querySelector('[data-close]').onclick = closeModal;
 }

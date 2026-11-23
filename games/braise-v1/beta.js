@@ -122,7 +122,11 @@
     const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
     w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
     out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
-    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    // peak limiter at -1 dBFS (instant attack, 150 ms release): no clipping even when many sounds start together
+    const CEIL = 0.89, rel = Math.exp(-1 / (0.15 * r)); let gain = 1;
+    for (let i = 0; i < n; i++) { const pk = Math.max(Math.abs(L[a + i]), Math.abs(R[a + i])), need = pk * gain > CEIL ? CEIL / pk : 1;
+      gain = need < gain ? need : Math.min(1, need, 1 - (1 - gain) * rel);
+      out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i] * gain)) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i] * gain)) * 32767, true); }
     const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
     return btoa(bin);
   };
@@ -199,7 +203,12 @@
   // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
   const lastSon = {};
   function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
-  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+  // a fast-forward (an ellipsis, speed > 1) can fire a dozen sounds in the same 130 ms: they add up and clip. On camera, the same sound
+  // plays at most once every 90 ms and at most 5 sounds start in any 130 ms window (testeur, 23/11: Crumble Crew progression at 0 dB).
+  const lastPlay = {}, recent = [];
+  function allowSon(k) { const t = performance.now(); if (lastPlay[k] != null && t - lastPlay[k] < 90) return false;
+    while (recent.length && t - recent[0] > 130) recent.shift(); if (recent.length >= 5) return false; recent.push(t); lastPlay[k] = t; return true; }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { if (!allowSon(k)) return; logSon(k); return f.apply(this, a); }; } }
 
   // ---- stuck detection: no progress for 60 s of game time ----
   function watchStuck(progress) {

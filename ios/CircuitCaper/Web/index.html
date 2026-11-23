@@ -163,7 +163,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
   let offCtx = null, audioOrigin = null;
   const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
-    const RATE = 32000;
+    const RATE = 48000;   // the App Store previews are 48 kHz
     offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
     const realDest = offCtx.destination, master = offCtx.createGain();
     master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
@@ -174,6 +174,13 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
@@ -185,7 +192,11 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
     const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
     w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
     out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
-    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    // peak limiter at -1 dBFS (instant attack, 150 ms release): no clipping even when many sounds start together
+    const CEIL = 0.89, rel = Math.exp(-1 / (0.15 * r)); let gain = 1;
+    for (let i = 0; i < n; i++) { const pk = Math.max(Math.abs(L[a + i]), Math.abs(R[a + i])), need = pk * gain > CEIL ? CEIL / pk : 1;
+      gain = need < gain ? need : Math.min(1, need, 1 - (1 - gain) * rel);
+      out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i] * gain)) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i] * gain)) * 32767, true); }
     const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
     return btoa(bin);
   };
@@ -262,7 +273,12 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
   // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
   const lastSon = {};
   function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
-  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+  // a fast-forward (an ellipsis, speed > 1) can fire a dozen sounds in the same 130 ms: they add up and clip. On camera, the same sound
+  // plays at most once every 90 ms and at most 5 sounds start in any 130 ms window (testeur, 23/11: Crumble Crew progression at 0 dB).
+  const lastPlay = {}, recent = [];
+  function allowSon(k) { const t = performance.now(); if (lastPlay[k] != null && t - lastPlay[k] < 90) return false;
+    while (recent.length && t - recent[0] > 130) recent.shift(); if (recent.length >= 5) return false; recent.push(t); lastPlay[k] = t; return true; }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { if (!allowSon(k)) return; logSon(k); return f.apply(this, a); }; } }
 
   // ---- stuck detection: no progress for 60 s of game time ----
   function watchStuck(progress) {
@@ -616,7 +632,7 @@ const fresh = () => ({ v: 1, stars: {}, coins: 0, deco: [], fails: {}, hints: {}
 let S; try { const raw = JSON.parse(localStorage.getItem(KEY) || 'null'); S = Object.assign(fresh(), raw || {}); if (raw && raw.tuto == null) S.tuto = 1; } catch (e) { S = fresh(); }   // saves from before the tutorial: already seen
 I.set(S.lang);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
-const track = (ev, d) => { try { console.debug('[ga]', ev, d || ''); } catch (e) {} };
+const track = (ev, d) => { try { if (window.ZV && ZV.available) ZV.event(ev, d); } catch (e) {} try { console.debug('[ga]', ev, d || ''); } catch (e) {} };
 const unlocked = id => id === 1 || (S.stars[id - 1] || 0) > 0;
 const DI = (id, e) => SPR['deco_' + id] ? `<img src="${SPR['deco_' + id]}" alt="">` : e;
 const DECO = [['cat', 150, '🖼️'], ['vase', 250, '🏺'], ['flamingo', 400, '🦩'], ['chandelier', 600, '💡'], ['rug', 800, '🧶'], ['record', 1000, '💿'], ['globe', 1400, '🌍'], ['armor', 1900, '🛡️'], ['aquarium', 2500, '🐠'], ['throne', 3500, '👑']];
@@ -663,10 +679,20 @@ const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms)
 // Its promises never reject; on the web there is no handler and the labelled test advert stands in.
 const NADS = () => window.webkit?.messageHandlers?.ads;
 const nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
+
+// ---------- studio kit (ios/Shared/NativeKit.swift): rating after a moment of joy, share, our other games, house ad ----------
+const ZVK = () => window.ZV && ZV.available ? ZV : null;
+const zvLang = () => String((typeof S !== 'undefined' && S && S.lang) || document.documentElement.lang || 'fr');
+const zvEn = () => zvLang().startsWith('en');
+const zvJoy = tag => { const z = ZVK(); if (z) z.joy(tag); };   // NEVER after a failure
+const zvButtons = () => ZVK() ? `${ZVK().others ? `<button class="b2" data-zvmore>${zvEn() ? 'Our other games' : 'Nos autres jeux'}</button>` : ''}<button class="b2" data-zvshare>${zvEn() ? 'Share the game' : 'Partager le jeu'}</button>` : '';
+const zvBind = root => { const m = root && root.querySelector('[data-zvmore]'), s = root && root.querySelector('[data-zvshare]');
+  if (m) m.onclick = () => ZVK().moreGames(zvLang()).then(ok => { if (!ok) { m.textContent = zvEn() ? 'Coming soon!' : 'Bientôt !'; m.disabled = true; } });
+  if (s) s.onclick = () => ZVK().share((zvEn() ? 'I’m playing ' : 'Je joue à ') + 'Circuit Caper'); };
 const Ads = {
   async init() { if (NADS()) await nads('init'); },   // first time: Google consent form (if required) → Apple ATT → SDK
   async rewarded(kind) { track('ad_rewarded', { kind }); if (NADS()) return (await nads('rewarded')) === true; return testAd(); },
-  async interstitial() { if (S.owned.noads || S.levelsPlayed < 6) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); if (NADS()) { await nads('interstitial'); return; } await testAd(); }
+  async interstitial() { if (S.owned.noads || S.levelsPlayed < 6) return; if (Date.now() - S.lastAdAt < 180000) return; S.lastAdAt = Date.now(); if (NADS()) { if (!(await nads('interstitial')) && ZVK()) await ZVK().houseAd(zvLang()); return; } await testAd(); }
 };
 function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adart">🦝💰🦝</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 700); }); }
 const STORE = [{ id: 'noads', price: '3,99 €', once: true }, { id: 'starter', price: '1,99 €', once: true }, { id: 'costume', price: '1,99 €', once: true }, { id: 'loot', price: '0,99 €', coins: 1000 }];
@@ -924,7 +950,7 @@ function win() {
   if (G.mode !== 'heist') return; G.mode = 'win'; const L = G.lvl, st = C.stars(L, G.s, G.wires);
   rico(Math.random() < 0.5 ? 'r_win' : 'r_win2'); SFX.fanfare(); JUICE.confetti(50);
   safeGame(mult => {
-    const base = (40 + L.id * 12) * st * mult, prev = S.stars[L.id] || 0; S.stars[L.id] = Math.max(prev, st); S.coins += Math.round(base); save();
+    const base = (40 + L.id * 12) * st * mult, prev = S.stars[L.id] || 0; S.stars[L.id] = Math.max(prev, st); S.coins += Math.round(base); save(); if (st === 3 && L.id > 3) zvJoy('stars3');
     openModal(`<h2>${L.boss ? t('jackpot') : t('win')}</h2><div class="stars">${[0, 1, 2].map(i => `<span class="st" data-i="${i}">★</span>`).join('')}</div>
       <div class="starlist">${[t('star1'), t('star2'), t('star3') + ` (${changed()}/${L.par})`].map((s, i) => `<div class="${i < st ? 'ok' : ''}">${i < st ? '✔' : '✖'} ${s}</div>`).join('')}</div>
       <div class="gain">+${Math.round(base)} 💰</div><button class="b2" data-double>${t('double')}</button><button class="b1 big" data-next>${t('next')}</button>`, 'wincard');
@@ -1028,12 +1054,13 @@ function giftModal() {
 function settingsModal() {
   const sw = (k, l) => `<label class="sw"><span>${l}</span><input type="checkbox" data-k="${k}" ${S[k] ? 'checked' : ''}></label>`;
   openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vibration'))}<label class="sw"><span>${t('language')}</span><select data-lang>${I.langs.map(l => `<option value="${l}" ${l === S.lang ? 'selected' : ''}>${I.names[l]}</option>`).join('')}</select></label>
-    <button class="b2" data-tuto>${t('tuReplay')}</button><button class="b2" data-consent>${t('adChoices')}</button><button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('resetGame')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Circuit Caper ${window.CC_VERSION || ''}</div>`);
+    <button class="b2" data-tuto>${t('tuReplay')}</button><button class="b2" data-consent>${t('adChoices')}</button>${zvButtons()}<button class="b2" data-privacy>${t('privacy')}</button><button class="b3" data-reset>${t('resetGame')}</button><button class="b2 big" data-close>${t('close')}</button><div class="ver">Circuit Caper ${window.CC_VERSION || ''}</div>`);
   modal.querySelectorAll('[data-k]').forEach(c => c.onchange = () => { S[c.dataset.k] = c.checked; save(); });
   modal.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); renderHud(); renderBar(); settingsModal(); };
   modal.querySelector('[data-tuto]').onclick = tutoReplay;
   modal.querySelector('[data-consent]').onclick = () => consentModal(true);
   modal.querySelector('[data-privacy]').onclick = () => { openModal(`<div class="legal">${window.CC_PRIVACY || ''}</div><button class="b2 big" data-close>${t('close')}</button>`, 'wide'); modal.querySelector('[data-close]').onclick = settingsModal; };
+  zvBind(modal);
   modal.querySelector('[data-reset]').onclick = async () => { if (await confirmBox(t('resetSure'))) { localStorage.removeItem(KEY); location.reload(); } };
   modal.querySelector('[data-close]').onclick = closeModal;
 }

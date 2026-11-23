@@ -1,3 +1,1 @@
-# one game per line (project.yml target), optionally "Game ADS_TEST=0" for a release build: pushing this file builds and uploads to TestFlight
-ClockpawSquad ADS_TEST=0
-KunaiGaiden
+VanVoyage ADS_TEST=0
