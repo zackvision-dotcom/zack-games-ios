@@ -1,4 +1,39 @@
-REVIEW braise ok
-REVIEW clockpawsquad ok
-REVIEW dungeondash ok
-REVIEW vanvoyage ok
+SETBUILD braise version 1.0 PREPARE_FOR_SUBMISSION -> build 1011 VALID
+  notes 1100 chars, UMP/ATT sentence: True | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+  privacy ja https://zackvision.fr/jeux/confidentialite/
+  privacy es-ES https://zackvision.fr/jeux/confidentialite/
+  privacy en-GB https://zackvision.fr/jeux/confidentialite/
+  privacy zh-Hans https://zackvision.fr/jeux/confidentialite/
+  privacy vi https://zackvision.fr/jeux/confidentialite/
+  privacy de-DE https://zackvision.fr/jeux/confidentialite/
+  privacy es-MX https://zackvision.fr/jeux/confidentialite/
+  privacy pl https://zackvision.fr/jeux/confidentialite/
+  privacy pt-BR https://zackvision.fr/jeux/confidentialite/
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
+  privacy pt-PT https://zackvision.fr/jeux/confidentialite/
+  privacy fr-CA https://zackvision.fr/jeux/confidentialite/
+  privacy tr https://zackvision.fr/jeux/confidentialite/
+  privacy uk https://zackvision.fr/jeux/confidentialite/
+  privacy ru https://zackvision.fr/jeux/confidentialite/
+  privacy th https://zackvision.fr/jeux/confidentialite/
+  privacy id https://zackvision.fr/jeux/confidentialite/
+  privacy ko https://zackvision.fr/jeux/confidentialite/
+  privacy ar-SA https://zackvision.fr/jeux/confidentialite/
+  privacy hi https://zackvision.fr/jeux/confidentialite/
+  privacy nl-NL https://zackvision.fr/jeux/confidentialite/
+  privacy ms https://zackvision.fr/jeux/confidentialite/
+  privacy zh-Hant https://zackvision.fr/jeux/confidentialite/
+  privacy it https://zackvision.fr/jeux/confidentialite/
+SETBUILD clockpawsquad build 1011 not found
+SETBUILD dungeondash version 1.0 PREPARE_FOR_SUBMISSION -> build 1011 VALID
+  notes 945 chars, UMP/ATT sentence: False | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
+SETBUILD vanvoyage version 1.0 PREPARE_FOR_SUBMISSION -> build 1011 VALID
+  notes 931 chars, UMP/ATT sentence: False | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
