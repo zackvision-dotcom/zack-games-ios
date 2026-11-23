@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#F4A6B8">
+<title>Nimbus Catch</title>
+<style>
+:root{--blue:#7EC8E3;--cream:#FFF8F0;--red:#E0574F;--yolk:#E8B04B;--copper:#5B4B8A;--ink:#26203A;--green:#7DBE6A;--blued:#5B4B8A;--pink:#F4A6B8}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--pink);font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#cv{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none;padding:0}
+.b1,.b2{border-radius:16px;padding:11px 16px;font-weight:900;border:3px solid var(--ink);transition:transform .08s;display:block;width:100%;margin-top:9px;font-size:17px}
+.b1{background:var(--red);color:var(--cream);box-shadow:0 4px 0 var(--ink)}.b2{background:var(--cream);box-shadow:0 4px 0 var(--ink)}.bad{background:var(--green);color:var(--cream)}
+.b1:active,.b2:active,.rb:active,.buy:active{transform:translateY(3px)}.b1:disabled,.b2:disabled{opacity:.45}.big{font-size:21px;padding:14px}.huge{font-size:24px;padding:16px}
+.row2{display:flex;gap:9px}.row2>*{flex:1}
+i.shell,i.pearl{display:inline-block;width:1em;height:1em;border-radius:50%;vertical-align:-.12em;border:2px solid var(--ink);margin-right:3px}i.shell{background:var(--pink)}i.pearl{background:#DFF3FA}
+#hud{position:fixed;left:0;right:0;top:0;z-index:5;display:none;flex-direction:column;gap:6px;padding:calc(env(safe-area-inset-top) + 8px) 8px 4px;pointer-events:none}
+#hud.on{display:flex}#hud button{pointer-events:auto}.hrow{display:flex;align-items:center;gap:6px}
+.rb{width:44px;height:44px;flex:none;border-radius:50%;background:var(--cream);border:3px solid var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.35);font-size:20px;font-weight:900;position:relative;display:grid;place-items:center}
+.rb.dot::after{content:'';position:absolute;right:-3px;top:-3px;width:13px;height:13px;border-radius:50%;background:var(--red);border:2px solid var(--ink)}
+.chip{display:flex;align-items:center;gap:3px;background:var(--cream);border:3px solid var(--ink);border-radius:999px;padding:3px 10px;box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:15px;white-space:nowrap}
+.chip.sm{font-size:12px;padding:2px 8px}.chip.hint{background:var(--yolk);animation:pulse .8s infinite alternate}@keyframes pulse{to{transform:scale(1.08)}}
+#firmin{position:fixed;left:8px;right:8px;z-index:8;display:flex;justify-content:center;pointer-events:none;opacity:0;transform:translateY(16px) scale(.94);transition:.22s;top:calc(env(safe-area-inset-top) + 96px)}
+#firmin.on{opacity:1;transform:none}#firmin .lt{background:var(--cream);border:3px solid var(--ink);border-radius:18px;padding:9px 14px;font-weight:800;font-size:16px;line-height:1.3;box-shadow:4px 4px 0 rgba(0,0,0,.35);max-width:320px;text-align:center}
+#home{position:fixed;inset:0;z-index:4;display:none;flex-direction:column;background:var(--pink)}#home.on{display:flex}
+#hhead{padding:calc(env(safe-area-inset-top) + 8px) 10px 8px;background:rgba(34,32,46,.9);border-bottom:3px solid var(--cream)}
+.mrow{display:flex;align-items:center;gap:8px}#plv{background:var(--yolk);font-weight:900;border-radius:10px;padding:3px 9px;font-size:13px;white-space:nowrap;border:3px solid var(--ink)}
+#xpbar{flex:1;height:14px;background:var(--ink);border:3px solid var(--cream);border-radius:8px;overflow:hidden}#xpbar i{display:block;height:100%;background:var(--green);transition:width .6s}
+#hmid{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:10px 12px 14px;gap:9px}
+#hship{width:100%;max-width:400px;aspect-ratio:2/1;border:4px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 rgba(0,0,0,.35);background:var(--cream)}
+.map{width:100%;max-width:400px;background:rgba(34,32,46,.5);border:3px solid var(--cream);border-radius:16px;padding:8px}.map h3{margin:0 0 6px;color:var(--cream);font-size:15px}
+.lvls{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.lv{aspect-ratio:1;background:var(--cream);border:3px solid var(--ink);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:17px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.lv small{font-size:10px;color:var(--copper);letter-spacing:-1px}.lv.lock{opacity:.45}.lv.cur{background:var(--yolk);animation:pulse .9s infinite alternate}.lv.chef{background:#FFD9C2}
+#hmid .b1{max-width:400px}
+.hcard{display:flex;gap:10px;align-items:center;background:var(--cream);border:3px solid var(--ink);border-radius:16px;padding:8px 10px;width:100%;max-width:400px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.hcard .tx{flex:1;min-width:0;font-weight:800;font-size:13px}.hcard .tx b{font-size:15px;display:block}
+#hfoot{display:flex;justify-content:space-around;padding:8px 4px calc(env(safe-area-inset-bottom) + 10px);background:rgba(34,32,46,.92);border-top:3px solid var(--cream)}
+#hfoot .rb{width:48px;height:48px;border-radius:14px}#hfoot small{display:block;text-align:center;font-weight:900;font-size:10px;margin-top:4px;color:var(--cream)}
+#modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(34,32,46,.6);padding:14px}#modal.on{display:flex}
+.card{background:var(--cream);border:4px solid var(--ink);border-radius:22px;padding:14px;max-width:390px;width:100%;max-height:90vh;overflow:auto;box-shadow:7px 7px 0 rgba(0,0,0,.45);animation:pop .35s cubic-bezier(.3,1.6,.5,1);text-align:center}
+.card.wide{max-width:520px;text-align:left}@keyframes pop{from{transform:scale(.6);opacity:0}}.card h2{margin:2px 0 8px;font-size:24px;text-align:center}.card p{margin:6px 0 10px;line-height:1.35}
+.big-ico{font-size:72px;text-align:center}.gain{font-size:30px;font-weight:900;margin:6px 0}.sub{font-size:13px;opacity:.85;font-weight:800}
+.stars{display:flex;justify-content:center;gap:6px;margin:6px 0 2px}.st{width:100px;display:flex;flex-direction:column;align-items:center;font-weight:900;font-size:11px;line-height:1.15}
+.st .sti{width:64px;height:64px;display:block;background:var(--yolk);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);transform:scale(0);transition:transform .35s cubic-bezier(.3,1.8,.5,1)}
+.st.on .sti{transform:scale(1)}.st.miss .sti{transform:scale(.8);opacity:.3;background:#999}.st small{font-weight:800;opacity:.8;font-size:11px;margin-top:3px}
+.near{background:#FFF0C9;border:2px dashed var(--ink);border-radius:12px;padding:6px;font-weight:800;font-size:14px;margin:6px 0}
+.login{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}.lg{background:#fff;border:3px solid var(--ink);border-radius:10px;padding:4px 1px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.lg small{font-size:9px;font-weight:800}.lg b{font-size:12px}.lg.got{opacity:.4}.lg.now{background:var(--yolk)}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:800;border-bottom:2px solid rgba(34,32,46,.15)}.sw input{width:24px;height:24px;accent-color:var(--red)}.sw select{font:inherit;font-weight:800;border:3px solid var(--ink);border-radius:10px;background:#fff;padding:3px 6px}
+.ver{font-size:11px;opacity:.6;margin-top:8px;text-align:center}.legal{font-size:13px}
+.it{display:flex;align-items:center;gap:8px;background:#fff;border:3px solid var(--ink);border-radius:16px;padding:7px 9px;margin-bottom:8px;flex-wrap:wrap}
+.it .tx{flex:1;min-width:120px}.it .tx b{display:block;font-size:15px}.it .tx small{display:block;font-size:12px;line-height:1.25;opacity:.85}
+.buy{min-width:70px;background:var(--green);color:var(--cream);border:3px solid var(--ink);border-radius:12px;padding:6px 8px;box-shadow:0 3px 0 var(--ink);font-weight:900;font-size:14px;white-space:nowrap}
+.buy.ad{background:var(--yolk);color:var(--ink)}.buy.gm{background:var(--cream);color:var(--ink)}.own{font-weight:900;color:#3d7a2e;min-width:70px;text-align:center}
+.note{font-size:12px;text-align:center;margin:2px 0 10px;font-weight:700;opacity:.85;color:inherit}#hmid .note{color:var(--cream)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.gi{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px;display:flex;flex-direction:column;align-items:center;font-size:11px;font-weight:900;min-height:84px;text-align:center;justify-content:center}
+.gi b{font-size:28px}.gi.lock{opacity:.5}.gi.on{background:var(--yolk)}.gi small{font-size:10px;line-height:1.1;font-weight:800}
+h3{margin:10px 0 6px;font-size:16px}
+.confirm{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(34,32,46,.6);padding:20px}
+#toasts{position:fixed;top:calc(env(safe-area-inset-top) + 150px);left:0;right:0;z-index:35;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.toast{background:var(--cream);border:3px solid var(--ink);border-radius:14px;padding:7px 14px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.35);animation:pop .3s;transition:opacity .4s;max-width:90vw;text-align:center}.toast.out{opacity:0}
+.banner{position:fixed;left:0;right:0;top:30%;z-index:45;text-align:center;font-size:46px;font-weight:900;color:var(--red);-webkit-text-stroke:2.5px var(--ink);text-shadow:4px 4px 0 var(--ink);pointer-events:none;animation:ban 1.8s cubic-bezier(.2,1.4,.4,1) forwards;padding:0 10px}
+.banner.g{color:var(--cream)}.banner.y{color:var(--yolk)}@keyframes ban{0%{transform:scale(2.4);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+.adov{position:fixed;inset:0;z-index:50;background:var(--ink);display:flex;align-items:center;justify-content:center}.adbox{color:var(--cream);text-align:center}.adtag{opacity:.7;font-weight:800}.adcount{font-size:44px;font-weight:900;margin-top:20px}
+#title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 30px) 24px calc(env(safe-area-inset-bottom) + 40px);background:var(--pink)}
+#title.on{display:flex}#title h1{margin:0;font-size:64px;line-height:.92;text-align:center;color:var(--yolk);-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink);transform:rotate(-4deg)}
+#title canvas{width:min(86vw,46vh);aspect-ratio:360/300}#title p{font-weight:900;margin:4px 0;font-size:17px;color:var(--cream);text-align:center;text-shadow:0 2px 0 var(--ink)}#title .b1{max-width:320px}
+
+.banner.r{color:var(--red)}.stat{display:flex;justify-content:space-between;font-weight:800;padding:4px;border-bottom:2px dashed rgba(38,32,58,.15);font-size:14px}
+.zone{width:100%;max-width:400px;border:3px solid var(--ink);border-radius:16px;padding:14px;box-shadow:0 4px 0 var(--ink);text-align:left;color:var(--cream);display:flex;flex-direction:column}.zone b{font-size:20px;-webkit-text-stroke:.6px var(--ink)}.zone small{font-weight:800}.zone.lock{opacity:.55}
+.hcard.ok{background:#E2F3D8}.sw.gb{width:100%;max-width:400px;background:var(--cream);border:3px solid var(--ink);border-radius:14px;padding:8px 12px}
+.gi canvas{width:100%;height:auto}.gi.leg{background:#FFF1CC}
+.ccard{position:fixed;left:50%;top:18%;z-index:46;width:240px;margin-left:-120px;perspective:800px;animation:rcin .5s cubic-bezier(.3,1.5,.5,1)}.ccard.out{opacity:0;transition:opacity .3s}
+.ccard .in{transform-style:preserve-3d;animation:rflip .8s .2s cubic-bezier(.3,1.4,.5,1) both;position:relative;height:330px}
+.ccard .fr,.ccard .bk{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;border:6px solid var(--ink);box-shadow:6px 6px 0 rgba(0,0,0,.4);background:var(--cream);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;text-align:center;font-weight:900}
+.ccard .bk{transform:rotateY(180deg);background:var(--copper)}.ccard canvas{width:220px;height:165px}.ccard b{font-size:20px}.ccard .rar{border:2px solid var(--ink);border-radius:999px;padding:2px 10px;font-size:13px}.ccard span{font-size:22px}.ccard em{color:var(--red);font-style:normal;font-size:15px}
+.ccard.legendaire .fr{box-shadow:0 0 0 6px var(--yolk),8px 8px 0 rgba(0,0,0,.4)}
+@keyframes rflip{from{transform:rotateY(180deg)}to{transform:rotateY(0)}}@keyframes rcin{from{transform:scale(.4) translateY(80px);opacity:0}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="hud"></div>
+<div id="firmin"><div class="lt"></div></div>
+<div id="home"><div id="hhead"></div><div id="hmid"></div><div id="hfoot"></div></div>
+<div id="modal"></div><div id="toasts"></div><div id="title"></div>
+<script>window.NC_VERSION="1.0";window.NC_PRIVACY="<h4>Politique de confidentialité — Nimbus Catch</h4>\n<p>Nimbus Catch fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix de confidentialité.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. Aucun achat ne donne d’objet tiré au hasard ni d’amélioration de puissance, et il n’y a aucun abonnement.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) peuvent être envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Nimbus Catch convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Nimbus Catch</h4>\n<p>Nimbus Catch works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Privacy choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. No purchase gives a random item or a power upgrade, and there is no subscription.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) may be sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Nimbus Catch suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 48000;   // the App Store previews are 48 kHz
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    for (let i = 0; i < n; i++) { out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i])) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i])) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { logSon(k); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script>
+<script>// Nimbus Catch — the sky creatures, the zones, the airship upgrades and the economy.
+// 24 creatures for version 1: zone 1 (dawn clouds, 10 + its legendary) and zone 2 (storm sky, 12 + its legendary).
+// Each creature: one simple shape and one idea (k = the vector shape drawn by art.js), its size range in cm, its fight
+// (str = how hard it pulls, agi = how often it changes direction, dive = sudden dives from zone 3 on), and its catch weights.
+// Rarity is rolled per catch (common / rare / epic / legendary border); the legendaries are separate species, always legendary.
+(function (root) {
+  const CR = [
+    // zone 1 — Nuages de l'aube (pink): simple fights, learn to release
+    { id: 'meduse', z: 1, k: 'jelly', c: '#F4A6B8', cm: [20, 60], str: .30, agi: .25, w: 30 },
+    { id: 'plumon', z: 1, k: 'puff', c: '#FFF8F0', cm: [15, 40], str: .25, agi: .35, w: 24 },
+    { id: 'raie', z: 1, k: 'ray', c: '#7EC8E3', cm: [60, 220], str: .55, agi: .30, w: 14 },
+    { id: 'carpe', z: 1, k: 'carp', c: '#E8B04B', cm: [40, 120], str: .45, agi: .40, w: 14 },
+    { id: 'hippo', z: 1, k: 'horse', c: '#F4A6B8', cm: [10, 30], str: .25, agi: .60, w: 12 },
+    { id: 'anguille', z: 1, k: 'eel', c: '#FFF8F0', cm: [50, 160], str: .50, agi: .55, w: 9 },
+    { id: 'tortue', z: 1, k: 'turtle', c: '#7EC8E3', cm: [40, 110], str: .65, agi: .15, w: 7 },
+    { id: 'calmar', z: 1, k: 'squid', c: '#E8B04B', cm: [30, 90], str: .50, agi: .65, w: 6 },
+    { id: 'poisson_lune', z: 1, k: 'moon', c: '#FFF8F0', cm: [60, 180], str: .70, agi: .20, w: 4 },
+    { id: 'colibri', z: 1, k: 'bird', c: '#F4A6B8', cm: [8, 20], str: .35, agi: .85, w: 4 },
+    { id: 'carpe_aurore', z: 1, k: 'carp', c: '#E8B04B', cm: [300, 520], str: .95, agi: .55, w: 0, legend: 1 },
+    // zone 2 — Ciel d'orage (grey-violet): creatures that change direction, lightning to tap
+    { id: 'meduse_eclair', z: 2, k: 'jelly', c: '#E8B04B', cm: [30, 80], str: .45, agi: .55, w: 22 },
+    { id: 'raie_nuit', z: 2, k: 'ray', c: '#5B4B8A', cm: [80, 260], str: .65, agi: .55, w: 14 },
+    { id: 'brochet', z: 2, k: 'pike', c: '#7EC8E3', cm: [50, 140], str: .60, agi: .70, w: 13 },
+    { id: 'grele', z: 2, k: 'puff', c: '#BFD4E8', cm: [15, 45], str: .35, agi: .80, w: 12 },
+    { id: 'serpent', z: 2, k: 'eel', c: '#5B4B8A', cm: [100, 300], str: .70, agi: .70, w: 9 },
+    { id: 'tonnerre', z: 2, k: 'moon', c: '#E8B04B', cm: [70, 200], str: .80, agi: .40, w: 7 },
+    { id: 'pieuvre', z: 2, k: 'squid', c: '#F4A6B8', cm: [40, 140], str: .65, agi: .75, w: 7 },
+    { id: 'requin', z: 2, k: 'shark', c: '#BFD4E8', cm: [120, 320], str: .85, agi: .50, w: 5 },
+    { id: 'hibou', z: 2, k: 'bird', c: '#5B4B8A', cm: [20, 50], str: .45, agi: .90, w: 5 },
+    { id: 'cerf_volant', z: 2, k: 'kite', c: '#E8B04B', cm: [60, 180], str: .60, agi: .85, w: 4 },
+    { id: 'tortue_orage', z: 2, k: 'turtle', c: '#5B4B8A', cm: [80, 200], str: .90, agi: .30, w: 3 },
+    { id: 'hippo_foudre', z: 2, k: 'horse', c: '#E8B04B', cm: [15, 45], str: .50, agi: .95, w: 3 },
+    { id: 'baleine_orage', z: 2, k: 'whale', c: '#5B4B8A', cm: [900, 1600], str: 1.0, agi: .45, w: 0, legend: 1 },
+  ];
+  const ZONES = [
+    { id: 1, lvl: 1, sky: ['#F4A6B8', '#FBD3DC', '#FFF8F0'], cloud: ['#FFF8F0', '#FBE3E8', '#F4C6D2'] },
+    { id: 2, lvl: 4, sky: ['#5B4B8A', '#7E6FA8', '#A89CC4'], cloud: ['#C9C2DC', '#A89CC4', '#8A7DB0'] },
+  ];
+  const RAR = [{ id: 'commune', p: 70, col: '#FFF8F0', mul: 1 }, { id: 'rare', p: 22, col: '#7EC8E3', mul: 1.15 }, { id: 'epique', p: 7, col: '#5B4B8A', mul: 1.3 }, { id: 'legendaire', p: 1, col: '#E8B04B', mul: 1.5 }];
+  const E = {
+    CR, ZONES, RAR, castsPerOuting: 8,
+    price: (c, r, cm) => Math.round((6 + c.str * 20 + cm / 12) * RAR.find(x => x.id === r).mul * (c.legend ? 6 : 1)),
+    xpCatch: (c, r) => 10 + Math.round(c.str * 20) + (r === 'legendaire' ? 60 : r === 'epique' ? 25 : r === 'rare' ? 10 : 0),
+    xpLevel: n => Math.round(90 * Math.pow(n, 1.3)),
+    // the airship: level = sum of upgrade levels + 1; zone 2 opens at airship level 4
+    ups: [{ id: 'moulinet', max: 5, cost: n => 60 * Math.pow(2, n) }, { id: 'ligne', max: 5, cost: n => 50 * Math.pow(2, n) }, { id: 'appat', max: 5, cost: n => 70 * Math.pow(2, n) }],
+    baits: [{ id: 'mouche', shells: 0 }, { id: 'dore', shells: 40, legend: 1 }],   // the golden bait: the only way a legendary bites
+    traps: { slots: 2, opts: [{ h: 1, shells: 30 }, { h: 4, shells: 110 }, { h: 8, shells: 240 }] },
+    finishPearls: min => Math.max(4, Math.ceil(min / 10)),
+    login: [20, 30, 45, 60, 80, 110, 160], loginPearls: 10,
+    // the wind merchant's chest: shells only, odds shown; duplicates become shells
+    chest: { shells: 160, dup: 50, odds: [{ r: 'commun', p: 70 }, { r: 'rare', p: 25 }, { r: 'epique', p: 5 }] },
+    loot: [{ id: 'bocal_coquillages', r: 'commun', k: 'deco' }, { id: 'nuage_coton', r: 'commun', k: 'deco' }, { id: 'echarpe_bleue', r: 'commun', k: 'outfit' }, { id: 'appat_x3', r: 'commun', k: 'bait' },
+      { id: 'chateau', r: 'rare', k: 'deco' }, { id: 'bonnet_pilote', r: 'rare', k: 'outfit' }, { id: 'appat_dore', r: 'rare', k: 'bait' },
+      { id: 'arc_en_ciel', r: 'epique', k: 'deco' }, { id: 'lunettes_or', r: 'epique', k: 'outfit' }],
+    outfits: [{ id: 'none', how: 'free' }, { id: 'echarpe_rouge', pearls: 30 }, { id: 'casquette', pearls: 45 }, { id: 'aviateur', how: 'starter' }, { id: 'noel', how: 'pass' }],
+    paints: [{ id: 'classique', how: 'free' }, { id: 'rouge', how: 'starter' }, { id: 'rayures', pearls: 60 }, { id: 'nuit', pearls: 80 }],
+    store: [{ id: 'noads', price: '3,99 €', once: true }, { id: 'starter', price: '1,99 €', once: true }, { id: 'perles_100', price: '1,99 €', n: 100 }, { id: 'perles_300', price: '4,99 €', n: 300 }, { id: 'pass_saison_2026', price: '2,99 €', once: true }],
+    starterPearls: 200,   // starter pack: red airship paint, reel n° 2 right away, 200 pearls — never shells (they open the chest)
+    ads: { interFromOuting: 3, gapSec: 180 },
+    weather: ['clair', 'vent', 'pluie', 'arc'],    // changes every 3 real hours
+  };
+  root.NCE = E; if (typeof module !== 'undefined') module.exports = E;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Nimbus Catch — French (reference) and English texts. I18N.t(key, ...args); I18N.fir(key) = Firmin's lines; I18N.cr(id) = a creature's name.
+(function (root) {
+  const FR = {
+    play: 'Jouer', tapToStart: 'Le dirigeable est prêt', outing: 'Sortie · lancer {0}/{1}', zone1: 'Nuages de l’aube', zone2: 'Ciel d’orage', zoneLock: 'Dirigeable niveau {0}',
+    pull: 'Tire vers le bas puis lâche', perfect: 'PARFAIT !', hooked: 'FERRÉ !', tapNow: 'Touche !', missed: 'Elle a filé…', snapped: 'La ligne a cassé !', release: 'Relâche !', hold: 'Garde le doigt appuyé',
+    newRecord: 'Nouveau record !', newSpecies: 'Nouvelle créature !', cm: '{0} cm', stolen: 'Un oiseau a chipé l’appât !', luck: 'Chance !',
+    r_commune: 'Commune', r_rare: 'Rare', r_epique: 'Épique', r_legendaire: 'LÉGENDAIRE',
+    summary: 'Bilan de la sortie', sell: 'Vendre au marché (+{0})', keep: 'Garder pour la volière', again: 'Nouvelle sortie', home: 'Dirigeable', catches: '{0} prises',
+    book: 'Carnet', aviary: 'Volière', airship: 'Dirigeable', traps: 'Casiers', chest: 'Coffre du vent', shop: 'Boutique', settings: 'Réglages', gift: 'Cadeau',
+    best: 'Ta plus grosse : {0} cm', unknown: '???', collected: '{0}/{1} créatures',
+    u_moulinet: 'Moulinet', u_ligne: 'Ligne', u_appat: 'Appâts', uLvl: 'Niv. {0}/{1}', upBuy: '{0} coquilles', max: 'Max',
+    goldBait: 'Appât doré ({0})', goldBaitSub: 'Le seul qui fait mordre une légendaire.', baits: '{0} appâts dorés',
+    trapSet: 'Poser ({0} h)', trapReady: 'Relever (+{0})', trapWait: 'Se remplit… {0}', finish: 'Finir',
+    chestOpen: 'Ouvrir ({0} coquilles)', chestOdds: 'Chances : commun {0} %, rare {1} %, épique {2} %. Un objet déjà obtenu devient {3} coquilles.', chestAd: '1 coffre gratuit par jour (vidéo)', dup: 'Déjà obtenu : +{0} coquilles', got: 'Obtenu !',
+    giftTitle: 'Cadeau du jour', giftDay: 'Jour {0}', giftTake: 'Récupérer', giftBack: 'Reviens demain pour le jour {0} !',
+    challenge: 'Défi du jour', challengeTxt: 'Attrape {0} de plus de {1} cm', challengeDone: 'Défi réussi ! +1 appât doré',
+    weather: 'Météo : {0}', w_clair: 'ciel clair', w_vent: 'grand vent', w_pluie: 'pluie fine', w_arc: 'arc-en-ciel', nextWeather: 'change dans {0}',
+    sound: 'Sons', music: 'Musique', vib: 'Vibrations', lang: 'Langue', privacy: 'Confidentialité', privacyChoices: 'Choix de confidentialité', restore: 'Restaurer les achats', restored: 'Achats restaurés.',
+    testAd: 'Publicité de test', testBuy: 'Achat de test (rien n’est facturé)', buyFail: 'L’achat n’a pas abouti.', buyPending: 'Achat en attente de validation.', x2: 'Coquilles ×2', x2Done: 'Doublé !', bonusCast: 'Lancer bonus (vidéo)', relink: 'Remettre la ligne (vidéo)',
+    s_noads: 'Sans publicité', s_noadsSub: 'Plus aucune publicité entre les sorties. Les vidéos bonus restent au choix.',
+    s_starter: 'Pack de démarrage', s_starterSub: 'La peinture « dirigeable rouge », le moulinet n° 2 tout de suite et 200 perles.',
+    s_perles_100: '100 perles de rosée', s_perles_100Sub: 'Pour les tenues, les peintures, les décos et finir un casier (prix fixes).',
+    s_perles_300: '300 perles de rosée', s_perles_300Sub: 'Pour les tenues, les peintures, les décos et finir un casier (prix fixes).',
+    s_pass_saison_2026: 'Passe de saison : Noël', s_pass_saison_2026Sub: 'Achat unique : le bonnet de Noël de Firmin et les décos d’hiver de la volière.',
+    pearlNote: 'Les perles n’achètent jamais rien d’aléatoire.', lvUp: 'Dirigeable niveau {0} !', outfits: 'Tenues', paints: 'Peintures', own: 'Acquis',
+    o_none: 'Écharpe rouge', o_echarpe_rouge: 'Grande écharpe', o_casquette: 'Casquette', o_aviateur: 'Tenue d’aviateur', o_noel: 'Bonnet de Noël', o_echarpe_bleue: 'Écharpe bleue', o_bonnet_pilote: 'Bonnet de pilote', o_lunettes_or: 'Lunettes dorées',
+    p_classique: 'Classique', p_rouge: 'Rouge', p_rayures: 'Rayures', p_nuit: 'Nuit étoilée',
+    d_bocal_coquillages: 'Bocal de coquillages', d_nuage_coton: 'Nuage de coton', d_chateau: 'Château volant', d_arc_en_ciel: 'Arc-en-ciel', b_appat_x3: '3 mouches', b_appat_dore: 'Appât doré',
+  };
+  const FIR_FR = {
+    t1: 'Mon oncle disait que les nuages sont pleins de vie… On essaie ?', t2: 'Ferre ! Touche l’écran quand le flotteur plonge !', t3: 'Garde le doigt appuyé pour remonter !',
+    t4: 'Relâche ! La ligne rougit !', t5: '… C’était quoi, ça ?', first: 'Ma première prise ! Une méduse-nuage !',
+    big: 'Elle est énorme !', jelly: 'Encore une méduse… elles m’aiment bien.', rec: 'Un record ! Je danse !', panic: 'Elle tire, elle tire !', follow: 'Suis-la avec ton doigt !',
+    snap: 'Ma ligne… Bon, on recommence.', miss: 'Trop tard, elle a filé.', bird: 'Ouste, l’oiseau ! C’est mon appât !', bubble: 'Des bulles dorées ! Touche-les !',
+    storm: 'L’orage gronde… les créatures sont nerveuses.', light: 'Un éclair ! Touche-le vite !', legend: 'Une ombre GIGANTESQUE…', legendGot: 'ON L’A EUE ! Oncle Gaspard serait fier !',
+    page: 'Une page du journal de l’oncle Gaspard !', zone2: 'Le dirigeable peut monter dans l’orage !', back: 'Te revoilà ! Les nuages ont bougé.', trap: 'Les casiers se remplissent même quand on dort.', chest: 'Le marchand de vent a laissé un coffre. Les chances sont écrites dessus.',
+  };
+  const CR_FR = { meduse: 'Méduse-nuage', plumon: 'Plumon', raie: 'Raie cerf-volant', carpe: 'Carpe arc-en-ciel', hippo: 'Hippocampe-bulle', anguille: 'Anguille-brume', tortue: 'Tortue-cumulus', calmar: 'Calmar-soleil', poisson_lune: 'Poisson-lune', colibri: 'Colibri-nuage', carpe_aurore: 'Carpe de l’aurore',
+    meduse_eclair: 'Méduse-éclair', raie_nuit: 'Raie de nuit', brochet: 'Brochet-grain', grele: 'Grêlon', serpent: 'Serpent-nuée', tonnerre: 'Poisson-tonnerre', pieuvre: 'Pieuvre-orage', requin: 'Requin-rafale', hibou: 'Hibou-gouttes', cerf_volant: 'Cerf-volant sauvage', tortue_orage: 'Tortue-orage', hippo_foudre: 'Hippocampe-foudre', baleine_orage: 'Baleine-orage' };
+  const EN = {
+    play: 'Play', tapToStart: 'The airship is ready', outing: 'Outing · cast {0}/{1}', zone1: 'Dawn clouds', zone2: 'Storm sky', zoneLock: 'Airship level {0}',
+    pull: 'Pull down, then let go', perfect: 'PERFECT!', hooked: 'HOOKED!', tapNow: 'Tap!', missed: 'It got away…', snapped: 'The line snapped!', release: 'Let go!', hold: 'Keep your finger down',
+    newRecord: 'New record!', newSpecies: 'New creature!', cm: '{0} cm', stolen: 'A bird stole the bait!', luck: 'Lucky!',
+    r_commune: 'Common', r_rare: 'Rare', r_epique: 'Epic', r_legendaire: 'LEGENDARY',
+    summary: 'Outing report', sell: 'Sell at the market (+{0})', keep: 'Keep for the aviary', again: 'New outing', home: 'Airship', catches: '{0} catches',
+    book: 'Logbook', aviary: 'Aviary', airship: 'Airship', traps: 'Traps', chest: 'Wind chest', shop: 'Shop', settings: 'Settings', gift: 'Gift',
+    best: 'Your biggest: {0} cm', unknown: '???', collected: '{0}/{1} creatures',
+    u_moulinet: 'Reel', u_ligne: 'Line', u_appat: 'Bait', uLvl: 'Lv {0}/{1}', upBuy: '{0} shells', max: 'Max',
+    goldBait: 'Golden bait ({0})', goldBaitSub: 'The only one a legendary will bite.', baits: '{0} golden baits',
+    trapSet: 'Set ({0} h)', trapReady: 'Haul (+{0})', trapWait: 'Filling… {0}', finish: 'Finish',
+    chestOpen: 'Open ({0} shells)', chestOdds: 'Odds: common {0}%, rare {1}%, epic {2}%. An item you already own becomes {3} shells.', chestAd: '1 free chest a day (video)', dup: 'Already owned: +{0} shells', got: 'Got it!',
+    giftTitle: 'Daily gift', giftDay: 'Day {0}', giftTake: 'Collect', giftBack: 'Come back tomorrow for day {0}!',
+    challenge: 'Daily challenge', challengeTxt: 'Catch a {0} over {1} cm', challengeDone: 'Challenge done! +1 golden bait',
+    weather: 'Weather: {0}', w_clair: 'clear sky', w_vent: 'strong wind', w_pluie: 'light rain', w_arc: 'rainbow', nextWeather: 'changes in {0}',
+    sound: 'Sounds', music: 'Music', vib: 'Vibration', lang: 'Language', privacy: 'Privacy', privacyChoices: 'Privacy choices', restore: 'Restore purchases', restored: 'Purchases restored.',
+    testAd: 'Test advert', testBuy: 'Test purchase (nothing is charged)', buyFail: 'The purchase didn’t go through.', buyPending: 'Purchase awaiting approval.', x2: 'Shells ×2', x2Done: 'Doubled!', bonusCast: 'Bonus cast (video)', relink: 'Fix the line (video)',
+    s_noads: 'No ads', s_noadsSub: 'No more adverts between outings. Bonus videos stay optional.',
+    s_starter: 'Starter pack', s_starterSub: 'The “red airship” paint, reel n° 2 right away and 200 pearls.',
+    s_perles_100: '100 dew pearls', s_perles_100Sub: 'For outfits, paints, decorations and finishing a trap (fixed prices).',
+    s_perles_300: '300 dew pearls', s_perles_300Sub: 'For outfits, paints, decorations and finishing a trap (fixed prices).',
+    s_pass_saison_2026: 'Season pass: Christmas', s_pass_saison_2026Sub: 'One-time purchase: Firmin’s Christmas hat and the aviary’s winter decorations.',
+    pearlNote: 'Pearls never buy anything random.', lvUp: 'Airship level {0}!', outfits: 'Outfits', paints: 'Paints', own: 'Owned',
+    o_none: 'Red scarf', o_echarpe_rouge: 'Long scarf', o_casquette: 'Cap', o_aviateur: 'Aviator outfit', o_noel: 'Christmas hat', o_echarpe_bleue: 'Blue scarf', o_bonnet_pilote: 'Pilot cap', o_lunettes_or: 'Golden goggles',
+    p_classique: 'Classic', p_rouge: 'Red', p_rayures: 'Stripes', p_nuit: 'Starry night',
+    d_bocal_coquillages: 'Shell jar', d_nuage_coton: 'Cotton cloud', d_chateau: 'Flying castle', d_arc_en_ciel: 'Rainbow', b_appat_x3: '3 flies', b_appat_dore: 'Golden bait',
+  };
+  const FIR_EN = {
+    t1: 'My uncle said the clouds are full of life… Shall we try?', t2: 'Strike! Tap the screen when the float dives!', t3: 'Keep your finger down to reel in!',
+    t4: 'Let go! The line is turning red!', t5: '… What was THAT?', first: 'My first catch! A cloud jellyfish!',
+    big: 'It’s huge!', jelly: 'Another jellyfish… they like me.', rec: 'A record! I’m dancing!', panic: 'It’s pulling, it’s pulling!', follow: 'Follow it with your finger!',
+    snap: 'My line… Right, again.', miss: 'Too late, it got away.', bird: 'Shoo, bird! That’s my bait!', bubble: 'Golden bubbles! Tap them!',
+    storm: 'The storm rumbles… the creatures are nervous.', light: 'Lightning! Tap it, quick!', legend: 'A GIGANTIC shadow…', legendGot: 'WE GOT IT! Uncle Gaspard would be proud!',
+    page: 'A page from Uncle Gaspard’s journal!', zone2: 'The airship can climb into the storm!', back: 'You’re back! The clouds have moved.', trap: 'The traps fill up even while we sleep.', chest: 'The wind merchant left a chest. The odds are written on it.',
+  };
+  const CR_EN = { meduse: 'Cloud jellyfish', plumon: 'Puffling', raie: 'Kite ray', carpe: 'Rainbow carp', hippo: 'Bubble seahorse', anguille: 'Mist eel', tortue: 'Cumulus turtle', calmar: 'Sun squid', poisson_lune: 'Moonfish', colibri: 'Cloud hummingbird', carpe_aurore: 'Dawn carp',
+    meduse_eclair: 'Spark jellyfish', raie_nuit: 'Night ray', brochet: 'Squall pike', grele: 'Hailstone', serpent: 'Cloud serpent', tonnerre: 'Thunderfish', pieuvre: 'Storm octopus', requin: 'Gust shark', hibou: 'Raindrop owl', cerf_volant: 'Wild kite', tortue_orage: 'Storm turtle', hippo_foudre: 'Bolt seahorse', baleine_orage: 'Storm whale' };
+  const T = { fr: { ...FR, fir: FIR_FR, cr: CR_FR }, en: { ...EN, fir: FIR_EN, cr: CR_EN } };
+  let L = 'fr'; const fmt = (s, a) => String(s).replace(/\{(\d)\}/g, (_, i) => a[i] !== undefined ? a[i] : '');
+  root.I18N = { langs: ['fr', 'en'], detect() { const l = (navigator.language || 'fr').slice(0, 2); return T[l] ? l : 'en'; }, set(l) { if (T[l]) L = l; document.documentElement.lang = L; }, get lang() { return L; },
+    t(k, ...a) { return fmt(T[L][k] ?? T.fr[k] ?? k, a); }, fir(k) { return T[L].fir[k] || ''; }, cr(id) { return T[L].cr[id] || id; } };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Shared "juice": flying coins, confetti, pops, dust and hearts (DOM + CSS only, cheap on phones). From Pocket Dungeon Dash, in the Nimbus Catch palette.
+window.JUICE = (() => {
+  const css = `
+.jz{position:fixed;z-index:60;pointer-events:none;left:0;top:0;will-change:transform,opacity}
+.jz-coin{width:26px;height:26px;object-fit:contain;transition:transform .7s cubic-bezier(.55,-0.25,.4,1),opacity .7s}
+.jz-conf{width:8px;height:12px;border-radius:2px;animation:jzfall var(--d) cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes jzfall{0%{transform:translate(var(--x0),var(--y0)) rotate(0)}100%{transform:translate(var(--x1),var(--y1)) rotate(var(--r));opacity:0}}
+.jz-dust{width:10px;height:10px;border-radius:50%;background:rgba(255,243,224,.95);animation:jzdust .6s ease-out forwards}
+@keyframes jzdust{0%{transform:translate(var(--x0),var(--y0)) scale(.6);opacity:1}100%{transform:translate(var(--x1),var(--y1)) scale(1.8);opacity:0}}
+.jz-heart{font-size:20px;animation:jzheart 1.1s ease-out forwards}
+@keyframes jzheart{0%{transform:translate(var(--x0),var(--y0)) scale(.4);opacity:0}25%{opacity:1;transform:translate(var(--x0),calc(var(--y0) - 14px)) scale(1.2)}100%{transform:translate(var(--x0),calc(var(--y0) - 54px)) scale(1);opacity:0}}
+.jz-pop{animation:jzpop .45s cubic-bezier(.3,1.6,.5,1)}@keyframes jzpop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+.jz-bump{animation:jzbump .35s ease-out}@keyframes jzbump{40%{transform:scale(1.25)}}
+.jz-flash{position:fixed;inset:0;z-index:58;pointer-events:none;background:radial-gradient(circle at var(--fx) var(--fy),rgba(255,243,224,.8),rgba(255,243,224,0) 45%);animation:jzflash .7s ease-out forwards}@keyframes jzflash{to{opacity:0}}
+`;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+  const center = el => { if (!el) return [innerWidth / 2, innerHeight / 2]; const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  const mk = (cls, html = '') => { const d = document.createElement(html === 'img' ? 'img' : 'div'); d.className = 'jz ' + cls; if (html && html !== 'img') d.innerHTML = html; document.body.appendChild(d); return d; };
+  // coins (or any icon) flying from an element to a counter, which bumps on arrival
+  function fly(fromEl, toEl, src, n = 6, done) {
+    const [x0, y0] = center(fromEl), [x1, y1] = center(toEl);
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-coin', 'img'); c.src = src; const ox = (Math.random() - 0.5) * 50, oy = (Math.random() - 0.5) * 40;
+      c.style.transform = `translate(${x0 - 13 + ox}px,${y0 - 13 + oy}px) scale(.6)`;
+      setTimeout(() => { c.style.transform = `translate(${x1 - 13}px,${y1 - 13}px) scale(.9)`; c.style.opacity = '.4'; }, 30 + i * 55);
+      setTimeout(() => { c.remove(); if (i === n - 1) { bump(toEl); done && done(); } }, 780 + i * 55);
+    }
+  }
+  function bump(el) { if (!el) return; el.classList.remove('jz-bump'); void el.offsetWidth; el.classList.add('jz-bump'); }
+  function confetti(n = 70, cols0) {
+    const cols = (window.JUICE_COLS || ['#F4A6B8', '#7EC8E3', '#FFF8F0', '#E8B04B', '#5B4B8A', '#FFFFFF']);   // confetti in the bistro palette
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-conf'); const x0 = innerWidth / 2 + (Math.random() - 0.5) * 80, y0 = innerHeight * 0.35;
+      c.style.background = (cols0 || cols)[i % (cols0 || cols).length];
+      c.style.setProperty('--x0', x0 + 'px'); c.style.setProperty('--y0', y0 + 'px');
+      c.style.setProperty('--x1', x0 + (Math.random() - 0.5) * innerWidth * 1.1 + 'px'); c.style.setProperty('--y1', y0 + innerHeight * (0.4 + Math.random() * 0.5) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg'); c.style.setProperty('--d', (1.2 + Math.random() * 1.1) + 's');
+      setTimeout(() => c.remove(), 2600);
+    }
+  }
+  function dust(el, n = 10) {
+    const [x, y] = center(el);
+    for (let i = 0; i < n; i++) { const d = mk('jz-dust'), a = Math.random() * Math.PI * 2, r = 26 + Math.random() * 30;
+      d.style.setProperty('--x0', x - 5 + 'px'); d.style.setProperty('--y0', y + 10 + 'px'); d.style.setProperty('--x1', x - 5 + Math.cos(a) * r + 'px'); d.style.setProperty('--y1', y + 10 + Math.sin(a) * r * 0.5 + 'px'); setTimeout(() => d.remove(), 650); }
+  }
+  function heart(x, y, ch = '❤️') { const h = mk('jz-heart', ch); h.style.setProperty('--x0', x - 10 + 'px'); h.style.setProperty('--y0', y + 'px'); setTimeout(() => h.remove(), 1150); }
+  function pop(el) { if (!el) return; el.classList.remove('jz-pop'); void el.offsetWidth; el.classList.add('jz-pop'); }
+  function flash(el) { const [x, y] = center(el); const f = mk('jz-flash'); f.style.setProperty('--fx', x + 'px'); f.style.setProperty('--fy', y + 'px'); setTimeout(() => f.remove(), 750); }
+  return { fly, bump, confetti, dust, heart, pop, flash };
+})();
+</script>
+<script>// Nimbus Catch — vector stand-ins in the game's style: flat colours, thick even ink outline #26203A, one hard shadow, NO gradient
+// (the clouds are 3 flat tones stacked), dot eyes, a rarity border. World units: 360 × 640 portrait; the cloud sea starts at SEA.
+(function (root) {
+  const P = { pink: '#F4A6B8', sky: '#7EC8E3', cloud: '#FFF8F0', brass: '#E8B04B', storm: '#5B4B8A', ink: '#26203A', green: '#7DBE6A', greenD: '#4E8C45', red: '#E0574F', shadow: 'rgba(38,32,58,.22)' };
+  const TAU = Math.PI * 2, LW = 3;
+  const line = (g, w, c) => { g.lineWidth = w; g.strokeStyle = c || P.ink; g.lineJoin = g.lineCap = 'round'; };
+  const fs = (g, f, w) => { g.fillStyle = f; g.fill(); line(g, w || LW); g.stroke(); };
+  function bumps(g, y, amp, step, ph, W, H) { g.beginPath(); g.moveTo(-10, H + 10); g.lineTo(-10, y); for (let x = -10; x <= W + step; x += step) g.quadraticCurveTo(x + step / 2, y - amp * (1 + .4 * Math.sin(x * .07 + ph)), x + step, y); g.lineTo(W + 20, H + 10); g.closePath(); }
+  // the sky (3 flat bands) and the far clouds; drawn every frame (cheap)
+  function sky(g, Z, W, H, SEA, t, night) {
+    const s = Z.sky; g.fillStyle = night ? '#26203A' : s[0]; g.fillRect(0, 0, W, H); g.fillStyle = night ? '#3A3060' : s[1]; g.fillRect(0, SEA * .35, W, H); g.fillStyle = night ? '#4E4580' : s[2]; g.fillRect(0, SEA * .7, W, H);
+    if (!night) { g.fillStyle = P.cloud; g.beginPath(); g.arc(300, 64, 24, 0, TAU); g.fill(); }
+  }
+  // the cloud sea: three flat layers that drift; the creatures' shadows swim between them
+  function sea(g, Z, W, H, SEA, t, layer) {
+    const c = Z.cloud;
+    if (layer === 0) { g.fillStyle = c[2]; bumps(g, SEA - 30, 12, 46, t * .4, W, H); g.fill(); g.fillStyle = c[1]; bumps(g, SEA - 14, 12, 52, t * .6 + 2, W, H); g.fill(); }
+    else {
+      g.fillStyle = c[0]; bumps(g, SEA, 14, 60, t * .8 + 4, W, H); g.fill(); line(g, 2.5); bumps(g, SEA, 14, 60, t * .8 + 4, W, H); g.stroke();
+      // deeper in the sea: flat puffs of the 2nd and 3rd tones drifting slowly (depth without a gradient)
+      for (let i = 0; i < 9; i++) { const y = SEA + 50 + (i * 61) % (H - SEA - 60), x = ((i * 137 + t * (8 + i * 2)) % (W + 160)) - 80, w = 50 + (i * 23) % 50; g.fillStyle = i % 3 ? c[1] : c[2]; g.beginPath(); g.ellipse(x, y, w, 10 + (i % 4) * 3, 0, 0, TAU); g.ellipse(x + w * .5, y - 6, w * .5, 9, 0, 0, TAU); g.fill(); }
+    }
+  }
+  // the explorer's airship: a striped brass-and-white balloon, a wicker basket, a propeller
+  function airship(g, x, y, t, paint) {
+    const a = paint === 'rouge' ? P.red : paint === 'nuit' ? P.storm : P.brass, b = paint === 'rayures' ? P.sky : P.cloud;
+    g.save(); g.translate(x, y + Math.sin(t * 1.3) * 3); g.rotate(Math.sin(t * .9) * .02);
+    line(g, 2); g.beginPath(); g.moveTo(-30, -6); g.lineTo(-20, 26); g.moveTo(30, -6); g.lineTo(20, 26); g.stroke();
+    g.beginPath(); g.ellipse(0, -30, 66, 30, 0, 0, TAU); g.save(); g.clip(); g.fillStyle = b; g.fillRect(-70, -64, 140, 70); g.fillStyle = a; for (let i = -66; i < 70; i += 22) g.fillRect(i, -64, 11, 70); g.restore();
+    g.beginPath(); g.ellipse(0, -30, 66, 30, 0, 0, TAU); line(g, LW); g.stroke();
+    g.beginPath(); g.moveTo(-70, -30); g.lineTo(-84, -44); g.lineTo(-84, -16); g.closePath(); fs(g, a);
+    g.save(); g.translate(70, -30); g.rotate(t * 20); g.beginPath(); g.ellipse(0, -9, 3, 9, 0, 0, TAU); g.ellipse(0, 9, 3, 9, 0, 0, TAU); fs(g, P.cloud, 2); g.restore();
+    g.beginPath(); g.moveTo(-26, 22); g.lineTo(26, 22); g.lineTo(22, 44); g.lineTo(-22, 44); g.closePath(); fs(g, '#C98B4B');
+    g.strokeStyle = '#9C6532'; g.lineWidth = 1.5; for (let i = -20; i < 24; i += 7) { g.beginPath(); g.moveTo(i, 24); g.lineTo(i * .85, 42); g.stroke(); }
+    g.restore();
+  }
+  // Firmin the aviator frog, leaning out of the basket with his rod
+  function firmin(g, x, y, o) {
+    const t = o.t || 0, pose = o.pose || 'idle', out = o.outfit || 'none';
+    g.save(); g.translate(x, y + Math.sin(t * 1.3) * 3);
+    let lean = 0, hop = 0; if (pose === 'dance') { hop = -Math.abs(Math.sin(t * 9)) * 6; lean = Math.sin(t * 9) * .15; } if (pose === 'panic') lean = Math.sin(t * 30) * .06; if (pose === 'pull') lean = -.12;
+    g.translate(0, hop); g.rotate(lean);
+    g.beginPath(); g.ellipse(0, 6, 15, 13, 0, 0, TAU); fs(g, P.green);
+    g.beginPath(); g.ellipse(0, -10, 17, 13, 0, 0, TAU); fs(g, P.green);
+    g.fillStyle = '#CFE8B8'; g.beginPath(); g.ellipse(0, -5, 10, 6, 0, 0, TAU); g.fill();
+    // the too-big goggles
+    const gc = out === 'lunettes_or' ? P.brass : '#9C6532';
+    g.beginPath(); g.arc(-7, -20, 8, 0, TAU); g.arc(7, -20, 8, 0, TAU); fs(g, gc); g.fillStyle = '#BFE3F2'; g.beginPath(); g.arc(-7, -20, 5, 0, TAU); g.arc(7, -20, 5, 0, TAU); g.fill();
+    g.fillStyle = P.ink; const blink = (t % 3.6) > 3.45; if (pose === 'panic') { g.beginPath(); g.arc(-7, -20, 2.6, 0, TAU); g.arc(7, -20, 2.6, 0, TAU); g.fill(); } else if (!blink) { g.beginPath(); g.arc(-6, -20, 1.8, 0, TAU); g.arc(8, -20, 1.8, 0, TAU); g.fill(); }
+    line(g, 2); g.beginPath(); pose === 'panic' ? g.ellipse(0, -4, 4, 3, 0, 0, TAU) : g.arc(0, -8, 6, .2, Math.PI - .2); g.stroke();
+    // leather cap / outfit hat, the scarf that floats
+    if (out === 'noel') { g.beginPath(); g.moveTo(-14, -26); g.lineTo(10, -46); g.lineTo(14, -26); g.closePath(); fs(g, P.red); g.beginPath(); g.arc(10, -46, 4, 0, TAU); fs(g, P.cloud, 2); }
+    else { g.beginPath(); g.arc(0, -24, 15, Math.PI, 0); g.closePath(); fs(g, out === 'casquette' ? P.sky : out === 'bonnet_pilote' ? P.storm : '#8C5A36'); }
+    const sc = out === 'echarpe_bleue' ? P.sky : P.red, len = out === 'echarpe_rouge' ? 34 : 22;
+    g.beginPath(); g.moveTo(8, 2); g.quadraticCurveTo(8 + len * .6, -2 + Math.sin(t * 6) * 4, 8 + len, 4 + Math.sin(t * 6 + 1) * 5); g.lineTo(8 + len - 3, 10 + Math.sin(t * 6 + 1) * 5); g.quadraticCurveTo(8 + len * .5, 6, 6, 8); g.closePath(); fs(g, sc, 2);
+    g.beginPath(); g.ellipse(0, 1, 14, 4, 0, 0, TAU); fs(g, sc, 2);
+    g.restore();
+  }
+  // the creatures: one simple shape, one idea, dot eyes, a rarity border (rc). s = scale; sil = shadow silhouette only
+  function creature(g, k, x, y, s, col, rc, t, sil, flip) {
+    g.save(); g.translate(x, y); g.scale(s * (flip ? -1 : 1), s);
+    const fill = sil ? 'rgba(38,32,58,.28)' : col, w = sil ? 0 : 3; const F = () => { if (sil) { g.fillStyle = fill; g.fill(); } else { g.fillStyle = fill; g.fill(); line(g, w, rc && rc !== '#FFF8F0' ? rc : P.ink); g.stroke(); } };
+    const wv = Math.sin(t * 4);
+    if (k === 'jelly') { g.beginPath(); g.arc(0, 0, 16, Math.PI, 0); g.quadraticCurveTo(8, 6, 0, 4); g.quadraticCurveTo(-8, 6, -16, 0); F(); if (!sil) { line(g, 3, col); for (let i = -9; i <= 9; i += 6) { g.beginPath(); g.moveTo(i, 4); g.quadraticCurveTo(i + wv * 5, 16, i - wv * 3, 28); g.stroke(); } } }
+    else if (k === 'puff') { g.beginPath(); g.arc(-8, 2, 10, 0, TAU); g.arc(6, -2, 12, 0, TAU); g.arc(10, 8, 8, 0, TAU); F(); }
+    else if (k === 'ray') { g.beginPath(); g.moveTo(-26, 0); g.quadraticCurveTo(0, -16 - wv * 6, 26, 0); g.quadraticCurveTo(0, 10, -26, 0); F(); if (!sil) { line(g, 2.5); g.beginPath(); g.moveTo(26, 0); g.quadraticCurveTo(40, 6 + wv * 4, 52, 2); g.stroke(); } }
+    else if (k === 'carp' || k === 'pike') { const L = k === 'pike' ? 30 : 22; g.beginPath(); g.ellipse(0, 0, L, 11, 0, 0, TAU); F(); g.beginPath(); g.moveTo(L - 2, 0); g.lineTo(L + 14, -10 + wv * 3); g.lineTo(L + 14, 10 + wv * 3); g.closePath(); F(); if (!sil && k === 'carp') { g.fillStyle = P.pink; g.fillRect(-6, -10, 4, 20); g.fillStyle = P.sky; g.fillRect(2, -10, 4, 20); } }
+    else if (k === 'horse') { g.beginPath(); g.arc(0, -10, 9, 0, TAU); F(); g.beginPath(); g.moveTo(-4, -2); g.quadraticCurveTo(-8, 14, 2, 18); g.quadraticCurveTo(10, 16, 6, 8); g.quadraticCurveTo(6, -2, 4, -2); g.closePath(); F(); }
+    else if (k === 'eel') { g.beginPath(); for (let i = 0; i <= 10; i++) { const xx = -30 + i * 6, yy = Math.sin(t * 5 + i * .8) * 5; i ? g.lineTo(xx, yy) : g.moveTo(xx, yy); } line(g, sil ? 9 : 12, sil ? fill : P.ink); g.stroke(); if (!sil) { line(g, 7, col); g.stroke(); } }
+    else if (k === 'turtle') { g.beginPath(); g.arc(0, 0, 18, Math.PI, 0); g.closePath(); F(); g.beginPath(); g.arc(22, -4, 7, 0, TAU); F(); g.beginPath(); g.ellipse(-12, 4, 8, 4, wv * .3, 0, TAU); g.ellipse(12, 4, 8, 4, -wv * .3, 0, TAU); F(); }
+    else if (k === 'squid') { g.beginPath(); g.moveTo(0, -22); g.quadraticCurveTo(14, -6, 10, 6); g.lineTo(-10, 6); g.quadraticCurveTo(-14, -6, 0, -22); F(); if (!sil) { line(g, 3, col); for (let i = -7; i <= 7; i += 7) { g.beginPath(); g.moveTo(i, 6); g.quadraticCurveTo(i - wv * 4, 16, i + wv * 3, 24); g.stroke(); } } }
+    else if (k === 'moon') { g.beginPath(); g.arc(0, 0, 20, 0, TAU); F(); g.beginPath(); g.moveTo(0, -20); g.lineTo(6, -32); g.lineTo(-6, -32); g.closePath(); F(); }
+    else if (k === 'bird') { g.beginPath(); g.ellipse(0, 0, 10, 7, 0, 0, TAU); F(); g.beginPath(); g.moveTo(-2, -2); g.lineTo(-10, -14 - wv * 6); g.lineTo(6, -4); g.closePath(); F(); g.beginPath(); g.moveTo(10, 0); g.lineTo(18, 2); g.lineTo(10, 3); F(); }
+    else if (k === 'shark') { g.beginPath(); g.moveTo(-34, 0); g.quadraticCurveTo(0, -16, 30, -2); g.lineTo(30, 4); g.quadraticCurveTo(0, 12, -34, 0); F(); g.beginPath(); g.moveTo(-4, -10); g.lineTo(4, -24); g.lineTo(10, -8); F(); g.beginPath(); g.moveTo(-32, 0); g.lineTo(-44, -12 + wv * 3); g.lineTo(-44, 10 + wv * 3); g.closePath(); F(); }
+    else if (k === 'kite') { g.beginPath(); g.moveTo(0, -22); g.lineTo(16, 0); g.lineTo(0, 22); g.lineTo(-16, 0); g.closePath(); F(); if (!sil) { line(g, 2); g.beginPath(); g.moveTo(0, 22); g.quadraticCurveTo(wv * 8, 34, -wv * 6, 46); g.stroke(); } }
+    else if (k === 'whale') { g.beginPath(); g.moveTo(-60, 0); g.quadraticCurveTo(-50, -34, 10, -30); g.quadraticCurveTo(58, -26, 60, 6); g.quadraticCurveTo(20, 26, -60, 0); F(); g.beginPath(); g.moveTo(-58, 0); g.lineTo(-80, -18 + wv * 4); g.lineTo(-76, 14 + wv * 4); g.closePath(); F(); if (!sil) { line(g, 2.5, P.brass); g.beginPath(); g.moveTo(-10, -26); g.lineTo(-4, -14); g.lineTo(-12, -12); g.lineTo(-6, 0); g.stroke(); } }
+    if (!sil) { g.fillStyle = P.ink; const ex = k === 'whale' ? 40 : k === 'shark' ? 18 : k === 'carp' || k === 'pike' ? 12 : k === 'ray' ? 8 : k === 'turtle' ? 24 : k === 'horse' ? 2 : k === 'bird' ? 5 : k === 'moon' ? 6 : k === 'eel' ? 28 : 0, ey = k === 'jelly' ? -6 : k === 'squid' ? -6 : k === 'horse' ? -12 : k === 'turtle' ? -5 : k === 'moon' ? -4 : k === 'whale' ? -6 : -2;
+      g.beginPath(); g.arc(ex - (k === 'jelly' || k === 'squid' || k === 'puff' ? 4 : 0), ey, 1.9, 0, TAU); if (k === 'jelly' || k === 'squid' || k === 'puff') g.arc(ex + 4, ey, 1.9, 0, TAU); g.fill(); }
+    g.restore();
+  }
+  function float(g, x, y, t, dip) { g.save(); g.translate(x, y + Math.sin(t * 3) * 2 + dip * 10); g.beginPath(); g.arc(0, 0, 6, 0, TAU); g.save(); g.clip(); g.fillStyle = P.cloud; g.fillRect(-6, -6, 12, 12); g.fillStyle = P.red; g.fillRect(-6, -6, 12, 6); g.restore(); g.beginPath(); g.arc(0, 0, 6, 0, TAU); line(g, 2); g.stroke(); g.restore(); }
+  function bubble(g, x, y, r, t) { g.save(); g.globalAlpha = .9; g.beginPath(); g.arc(x, y, r, 0, TAU); fs(g, P.brass, 2); g.fillStyle = P.cloud; g.beginPath(); g.arc(x - r * .35, y - r * .35, r * .25, 0, TAU); g.fill(); g.restore(); }
+  function thief(g, x, y, t, dir) { g.save(); g.translate(x, y); g.scale(dir, 1); g.beginPath(); g.ellipse(0, 0, 11, 7, 0, 0, TAU); fs(g, '#3A3A48', 2.5); g.beginPath(); g.moveTo(-2, -2); g.lineTo(-10, -12 - Math.sin(t * 20) * 8); g.lineTo(5, -4); g.closePath(); fs(g, '#3A3A48', 2.5); g.beginPath(); g.moveTo(10, -1); g.lineTo(18, 1); g.lineTo(10, 3); fs(g, P.brass, 2); g.fillStyle = P.cloud; g.beginPath(); g.arc(5, -2, 2, 0, TAU); g.fill(); g.restore(); }
+  function bolt(g, x, y, a) { g.save(); g.globalAlpha = a; g.translate(x, y); g.beginPath(); g.moveTo(0, -40); g.lineTo(10, -8); g.lineTo(2, -8); g.lineTo(8, 30); g.lineTo(-10, -2); g.lineTo(-2, -2); g.closePath(); fs(g, P.brass, 3); g.restore(); }
+  root.NCART = { P, sky, sea, airship, firmin, creature, float, bubble, thief, bolt, line, fs };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Nimbus Catch — fishing in a sea of clouds from the basket of a little airship. One gesture, three decisions:
+// cast (pull down, let go: the gauge glows green when it's perfect), strike (tap when the float dives), then fight:
+// keep the finger down to reel in, slide it to follow the creature's pull, let go half a second when the line turns red.
+// The catch leaps out of the clouds in slow motion and its collection card flips over. 8 casts = one outing.
+(() => {
+'use strict';
+const E = window.NCE, I = window.I18N, t = I.t, ART = window.NCART, P = ART.P;
+const W = 360, H = 640, SEA = 300, TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), lerp = (a, b, k) => a + (b - a) * k, rnd = (a, b) => a + Math.random() * (b - a);
+const $ = s => document.querySelector(s), today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
+const CRB = Object.fromEntries(E.CR.map(c => [c.id, c]));
+
+// ---------- save ----------
+const KEY = 'nimbuscatch.save.v1';
+function fresh() { return { v: 1, lang: I.detect(), sound: true, music: true, vib: true, consent: null, shells: 0, pearls: 0, xp: 0, lvl: 1, ups: { moulinet: 0, ligne: 0, appat: 0 }, goldBait: 0, useGold: false,
+  book: {}, rec: {}, aviary: {}, outfits: { none: 1 }, outfit: 'none', paints: { classique: 1 }, paint: 'classique', decos: {}, owned: {}, traps: [null, null], login: { last: '', streak: 0, pending: false },
+  chestDay: '', chal: { day: '', done: false }, outings: 0, catches: 0, lastAdAt: 0, said: {}, pages: 0, zone: 1, tut: 0 }; }
+let S; try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+for (const k of ['ups', 'login', 'chal']) S[k] = Object.assign(fresh()[k], S[k]);
+I.set(S.lang);
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const track = (ev, d) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, d || ''); } catch (e) {} };
+const shipLvl = () => 1 + S.ups.moulinet + S.ups.ligne + S.ups.appat;
+
+// ---------- audio ----------
+const AU = { ctx: null, master: null, music: null, noise: null, next: 0, step: 0 };
+function audioInit() { if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; } try { AU.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+  AU.master = AU.ctx.createGain(); AU.master.gain.value = .55; AU.master.connect(AU.ctx.destination); AU.music = AU.ctx.createGain(); AU.music.gain.value = .12; AU.music.connect(AU.master);
+  const len = AU.ctx.sampleRate * .8, b = AU.ctx.createBuffer(1, len, AU.ctx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; AU.noise = b; }
+function tone(f, dur, type = 'sine', vol = .2, when = 0, dest, slide) { if (!AU.ctx) return; const c = AU.ctx, o = c.createOscillator(), g = c.createGain(), t0 = c.currentTime + when; o.type = type; o.frequency.setValueAtTime(f, t0); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t0 + dur); g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + .005); g.gain.exponentialRampToValueAtTime(.0008, t0 + dur); o.connect(g); g.connect(dest || AU.master); o.start(t0); o.stop(t0 + dur + .05); }
+function noise(dur, freq, q, vol, when = 0, type = 'bandpass', dest) { if (!AU.ctx) return; const c = AU.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(), t0 = c.currentTime + when; s.buffer = AU.noise; f.type = type; f.frequency.value = freq; f.Q.value = q; g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + dur); s.connect(f); f.connect(g); g.connect(dest || AU.master); s.start(t0, Math.random() * .3); s.stop(t0 + dur + .02); }
+const rate = {}; const ok = (k, ms) => { const n = performance.now(); if (n - (rate[k] || 0) < ms) return false; rate[k] = n; return true; };
+const SFX = {
+  whistle(p) { if (S.sound && ok('wh', 70)) tone(300 + p * 900, .08, 'sine', .04 + p * .05); },
+  cast() { if (S.sound) { noise(.4, 1800, .7, .14); tone(900, .35, 'sine', .05, 0, null, 400); } },
+  perfect() { if (S.sound) [1568, 2093, 2637].forEach((f, i) => tone(f, .2, 'triangle', .08, i * .05)); },
+  ploc() { if (S.sound) { tone(420, .18, 'sine', .2, 0, null, 160); noise(.1, 600, 1, .08, 0, 'lowpass'); } },
+  dive() { if (S.sound) { tone(200, .25, 'sine', .2, 0, null, 90); noise(.15, 400, 1, .15, 0, 'lowpass'); } },
+  hook() { if (S.sound) { noise(.05, 3000, 3, .25); tone(880, .1, 'square', .06); tone(1320, .15, 'triangle', .1, .05); } },
+  click(n) { if (S.sound && ok('clk', 55 - Math.min(40, n * 40))) { noise(.02, 3800, 5, .12); } },
+  strain() { if (S.sound && ok('str', 160)) tone(1400, .12, 'sawtooth', .025, 0, null, 1700); },
+  snap() { if (S.sound) { noise(.08, 5000, 2, .35); tone(1800, .2, 'square', .06, 0, null, 300); } },
+  tug() { if (S.sound) noise(.08, 300, 1, .2, 0, 'lowpass'); },
+  splash() { if (S.sound) { noise(.6, 900, .5, .25, 0, 'lowpass'); noise(.4, 3500, .7, .1, .05, 'highpass'); } },
+  card(r) { if (!S.sound) return; if (r === 'legendaire') [262, 330, 392, 523, 659, 784].forEach((f, i) => { tone(f, 1.4, 'sine', .07, i * .12); tone(f * 2, 1.2, 'triangle', .03, i * .12); }); else if (r === 'epique') [523, 659, 784, 1047].forEach((f, i) => tone(f, .5, 'triangle', .1, i * .09)); else if (r === 'rare') [659, 784, 988].forEach((f, i) => tone(f, .3, 'triangle', .1, i * .07)); else [784, 988].forEach((f, i) => tone(f, .22, 'triangle', .09, i * .07)); },
+  coin() { if (S.sound && ok('coin', 40)) { tone(1400, .08, 'square', .03); tone(2100, .12, 'sine', .05, .04); } },
+  coins() { if (S.sound) for (let i = 0; i < 6; i++) tone(1200 + i * 140, .1, 'square', .03, i * .05); },
+  bird() { if (S.sound) for (let i = 0; i < 3; i++) tone(rnd(1800, 2600), .06, 'square', .03, i * .07, null, rnd(1500, 2800)); },
+  thunder() { if (S.sound) { noise(1.2, 120, .7, .4, 0, 'lowpass'); noise(.2, 2500, .8, .15); } },
+  fanfare() { if (S.sound) [392, 523, 659, 784, 659, 784, 1047].forEach((f, i) => tone(f, i > 4 ? .7 : .26, 'triangle', .13, i * .12)); },
+  firmin() { if (S.sound) for (let i = 0; i < 3; i++) tone(rnd(260, 420), .08, 'square', .03, i * .08, null, rnd(200, 500)); },
+  ui() { if (S.sound) tone(720, .04, 'square', .04); },
+};
+function musicTick() { if (!AU.ctx || !S.music) return; const c = AU.ctx; if (AU.next < c.currentTime) AU.next = c.currentTime + .05;
+  const CH = [[262, 330, 392], [220, 262, 330], [175, 220, 262], [196, 247, 294]];
+  while (AU.next < c.currentTime + .3) { const s = AU.step++, w = AU.next - c.currentTime, ch = CH[(s >> 3) % 4]; if (s % 8 === 0) tone(ch[0] / 2, 1.4, 'sine', .5, w, AU.music); if (s % 2 === 0) tone(ch[(s >> 1) % 3] * 2, .5, 'triangle', .18, w, AU.music); AU.next += 60 / 92 / 2; } }
+const buzz = p => { if (S.vib && navigator.vibrate) try { navigator.vibrate(p); } catch (e) {} };
+
+// ---------- ads & purchases (native bridges of the iOS shell; test stand-ins on the web) ----------
+const NADS = () => window.webkit?.messageHandlers?.ads, nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
+const Ads = { async init() { if (NADS()) await nads('init'); }, async rewarded(kind) { track('ad_rewarded', { kind }); if (NADS()) return (await nads('rewarded')) === true; return testAd(); },
+  async interstitial() { if (S.owned.noads || S.outings < E.ads.interFromOuting) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); if (NADS()) { await nads('interstitial'); return; } await testAd(); } };
+function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 1000); }); }
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.nimbuscatch.' + id, iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
+const Store = { prices: {}, price(it) { return this.prices[it.id] || it.price; },
+  async init() { if (!IAP || this.ready) return; this.ready = true; window.nativeStoreUpdate = pid => this.deliver(pid, true); try { for (const p of await iap('products', { ids: E.store.map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {} try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid, true); } catch (e) {} },
+  deliver(pid, loud) { const it = E.store.find(x => PID(x.id) === pid); if (!it || (it.once && S.owned[it.id])) return; grant(it, loud); },
+  own(pids) { for (const pid of pids || []) { const it = E.store.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) grant(it, false); } },
+  async buy(it) { if (!IAP) { const okk = await confirmBox(t('testBuy') + `<br><b>${t('s_' + it.id)} — ${it.price}</b>`); if (okk) grant(it); return okk; }
+    try { const r = await iap('buy', { id: PID(it.id) }); if (r.ok) { grant(it); return true; } if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); } return false; },
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return; } } toast(t('restored')); } };
+// nothing random for real money; no pack contains shells (the shells open the chest)
+function grant(it, loud = true) { if (it.n) S.pearls += it.n; else { S.owned[it.id] = true; if (it.id === 'starter') { S.paints.rouge = 1; S.paint = 'rouge'; S.ups.moulinet = Math.max(S.ups.moulinet, 1); S.outfits.aviateur = 1; S.pearls += E.starterPearls; } if (it.id === 'pass_saison_2026') { S.outfits.noel = 1; S.decos.hiver = 1; } }
+  save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } if (G.mode === 'home') renderHome(); }
+
+// ---------- canvas & view ----------
+const cv = $('#cv'), g = cv.getContext('2d'), V = { d: 1, sc: 1, ox: 0, oy: 0 };
+function resize() { V.d = Math.min(2, devicePixelRatio || 1); cv.width = Math.round(innerWidth * V.d); cv.height = Math.round(innerHeight * V.d); V.sc = Math.max(innerWidth / W, Math.min(innerWidth / W, innerHeight / H)); V.sc = Math.min(innerWidth / W, innerHeight / H); V.ox = (innerWidth - W * V.sc) / 2; V.oy = (innerHeight - H * V.sc) / 2; }
+addEventListener('resize', resize); resize();
+const toWorld = (x, y) => [(x - V.ox) / V.sc, (y - V.oy) / V.sc], toScreen = (x, y) => [V.ox + x * V.sc, V.oy + y * V.sc];
+const SHIP = [110, 140], TIP = [168, 168];
+
+// ---------- the world of the time: weather every 3 h, night 20 h - 6 h ----------
+const wIdx = () => Math.floor(Date.now() / 36e5 / 3) % E.weather.length, weather = () => E.weather[wIdx()], wNext = () => { const p = 3 * 36e5, n = (Math.floor(Date.now() / p) + 1) * p; return n - Date.now(); };
+const night = () => { const h = new Date().getHours(); return h >= 20 || h < 6; };
+function challenge() { const d = today(); if (S.chal.day !== d) { const seed = d.split('-').reduce((a, b) => a * 31 + +b, 7), pool = E.CR.filter(c => !c.legend && c.z <= (shipLvl() >= 4 ? 2 : 1) && c.w >= 6), c = pool[seed % pool.length]; S.chal = { day: d, done: false, id: c.id, cm: Math.round(c.cm[0] + (c.cm[1] - c.cm[0]) * .65) }; save(); } return S.chal; }
+
+// ---------- game state ----------
+const G = { mode: 'title', phase: 'aim', zone: 1, cast: 0, catches: [], drag: null, power: 0, float: null, flyT: 0, waitT: 0, bite: 0, biteT: 0, pick: null, rar: 'commune', luck: 0, perfect: false,
+  fight: null, hold: false, fx0: 0, fdir: 0, leap: null, shadows: [], bubbles: [], bird: null, bolt: null, parts: [], firPose: 'idle', firT: 0, time: 0, slow: 1, giant: null, misses: 0 };
+function startOuting(z) { G.zone = z; S.zone = z; G.cast = 0; G.catches = []; G.mode = 'play'; showHome(false); newCast(); renderHud(); spawnShadows(); if (z === 2 && !S.said.storm) { S.said.storm = 1; say('storm', 3000); } track('outing_start', { z }); }
+function newCast() { G.phase = 'aim'; G.power = 0; G.float = null; G.fight = null; G.leap = null; G.bite = 0; G.bird = null; G.bolt = null; G.luck = 0; G.perfect = false; G.firPose = 'idle'; G.misses = 0;
+  if (tut() && G.cast === 0) setTimeout(() => G.phase === 'aim' && say('t1', 3500), 400); }
+const tut = () => S.catches < 2 && S.tut < 2;
+function spawnShadows() { G.shadows = []; const pool = E.CR.filter(c => c.z === G.zone && !c.legend); for (let i = 0; i < 4; i++) { const c = pool[(Math.random() * pool.length) | 0]; G.shadows.push({ k: c.k, x: rnd(0, W), y: rnd(SEA + 60, H - 60), v: rnd(10, 26) * (Math.random() < .5 ? -1 : 1), s: rnd(.8, 1.3) }); } }
+
+// roll the creature at the strike: zone, weather, bait, distance (a far cast = bigger), luck (perfect cast, lightning)
+function roll() {
+  const wz = weather(), pool = E.CR.filter(c => c.z === G.zone && !c.legend);
+  if (G.forceLegend) { G.forceLegend = false; return { c: E.CR.find(c => c.z === G.zone && c.legend), r: 'legendaire' }; }   // BETA take of the legendary only
+  if (S.useGold && S.goldBait > 0) { const lg = E.CR.find(c => c.z === G.zone && c.legend); const pLeg = (G.zone === 2 && wz !== 'pluie' && !G.luck) ? .06 : .14 + G.luck * .1; if (Math.random() < pLeg) return { c: lg, r: 'legendaire' }; }
+  const wts = pool.map(c => c.w * (1 + (wz === 'pluie' && (c.k === 'jelly' || c.k === 'eel') ? .8 : 0) + (wz === 'vent' && (c.k === 'ray' || c.k === 'kite' || c.k === 'bird') ? .8 : 0) + (G.power > .8 ? c.str * .6 : 0)));
+  let x = Math.random() * wts.reduce((a, b) => a + b, 0), c = pool[0]; for (let i = 0; i < pool.length; i++) { x -= wts[i]; if (x <= 0) { c = pool[i]; break; } }
+  if (tut()) c = G.cast === 0 ? CRB.meduse : CRB.plumon;
+  const boost = (G.perfect ? 1.6 : 1) * (1 + S.ups.appat * .15) * (wz === 'arc' ? 1.5 : 1) * (1 + G.luck);
+  let r = 'commune', q = Math.random() * 100; const R = E.RAR.slice().reverse(); for (const rr of R) { if (rr.id === 'commune') break; if (q < rr.p * boost) { r = rr.id; break; } q -= rr.p * boost; }
+  if (tut()) r = 'commune'; return { c, r };
+}
+
+// ---------- input ----------
+let ptr = null;
+cv.addEventListener('pointerdown', e => {
+  audioInit(); if (G.mode !== 'play') return; const [x, y] = toWorld(e.clientX, e.clientY);
+  // things to tap while waiting: golden bubbles, the thief bird, a lightning bolt, the strike
+  if (G.phase === 'wait' || G.phase === 'flying') {
+    for (const b of G.bubbles) if (!b.got && Math.hypot(b.x - x, b.y - y) < 26) { b.got = 1; S.shells += 2; SFX.coin(); for (let i = 0; i < 6; i++) G.parts.push({ x: b.x, y: b.y, vx: rnd(-60, 60), vy: rnd(-90, -20), t: 0, life: .5, r: 2.5, c: P.brass }); return; }
+    if (G.bird && Math.hypot(G.bird.x - x, G.bird.y - y) < 34) { G.bird.flee = 1; SFX.bird(); if (!S.said.bird) { S.said.bird = 1; say('bird', 1800); } return; }
+    if (G.bolt && G.bolt.a > .2 && Math.hypot(G.bolt.x - x, G.bolt.y - y) < 40) { G.luck = .6; G.bolt.a = 0; banner(t('luck'), 'y'); SFX.perfect(); return; }
+  }
+  if (G.phase === 'wait' && G.bite > 0) { strike(); return; }
+  if (G.phase === 'aim') { ptr = e.pointerId; try { cv.setPointerCapture(e.pointerId); } catch (er) {} G.drag = [x, y]; G.power = 0; G.firPose = 'pull'; hideSay(); return; }
+  if (G.phase === 'fight') { ptr = e.pointerId; try { cv.setPointerCapture(e.pointerId); } catch (er) {} G.hold = true; G.fx0 = x; G.fingerX = x; }
+});
+cv.addEventListener('pointermove', e => { if (e.pointerId !== ptr) return; const [x, y] = toWorld(e.clientX, e.clientY);
+  if (G.phase === 'aim' && G.drag) { G.power = clamp((y - G.drag[1]) / 170, 0, 1); G.aimX = clamp((x - G.drag[0]) / 120, -1, 1); SFX.whistle(G.power); }
+  if (G.phase === 'fight') G.fingerX = x; });
+const up = e => { if (e.pointerId !== ptr) return; ptr = null;
+  if (G.phase === 'aim' && G.drag) { G.drag = null; if (G.power < .12) { G.firPose = 'idle'; return; } castIt(); }
+  if (G.phase === 'fight') G.hold = false; };
+cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+
+function castIt() {
+  const p = tut() && G.cast === 0 ? .84 : G.power; G.power = p; G.perfect = p >= .78 && p <= .9; if (G.perfect) { SFX.perfect(); banner(t('perfect'), 'y'); for (let i = 0; i < 10; i++) G.parts.push({ x: TIP[0], y: TIP[1], vx: rnd(-80, 80), vy: rnd(-120, 10), t: 0, life: .6, r: 2.5, c: P.brass }); }
+  const fx = clamp(TIP[0] + 30 + p * 170 + (G.aimX || 0) * 20, 120, W - 24); G.float = { x0: TIP[0], y0: TIP[1], x: fx, y: SEA - 4 }; G.flyT = 0; G.phase = 'flying'; G.firPose = 'cast'; SFX.cast(); buzz(10);
+}
+function strike() { G.bite = 0; G.phase = 'fight'; const { c, r } = G.pick; const cm = Math.round(c.cm[0] + (c.cm[1] - c.cm[0]) * Math.pow(Math.random(), r === 'commune' ? 1.4 : .8) * (G.power > .8 ? 1 : .85));
+  G.fight = { c, r, cm, dist: 1, tension: 0, red: 0, dir: 0, dirT: .8, x: 0, pulls: 0, t: 0 }; SFX.hook(); buzz([30, 30, 60]); banner(t('hooked'), 'g'); G.firPose = 'pull';
+  if (tut()) setTimeout(() => G.phase === 'fight' && say('t3', 2600), 500); if (c.legend) { say('legend', 2400); buzz([80, 40, 80, 40, 120]); } }
+
+// ---------- the simulation ----------
+function tick(dt) {
+  G.time += dt; G.firT += dt; for (let i = G.parts.length - 1; i >= 0; i--) { const p = G.parts[i]; p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += (p.g ?? 300) * dt; if (p.t > p.life) G.parts.splice(i, 1); }
+  for (const s of G.shadows) { s.x += s.v * dt; if (s.x < -60) s.x = W + 60; if (s.x > W + 60) s.x = -60; }
+  if (G.mode !== 'play') return;
+  // golden bubbles rise through the clouds while waiting
+  if ((G.phase === 'wait' || G.phase === 'flying') && Math.random() < dt * .7) G.bubbles.push({ x: rnd(30, W - 30), y: SEA + 30, r: rnd(7, 11), v: rnd(40, 70) });
+  for (let i = G.bubbles.length - 1; i >= 0; i--) { const b = G.bubbles[i]; b.y -= b.v * dt; b.x += Math.sin(G.time * 2 + i) * .3; if (b.got || b.y < 200) G.bubbles.splice(i, 1); }
+  if (G.phase === 'flying') { G.flyT += dt / .7; if (G.flyT >= 1) { G.phase = 'wait'; SFX.ploc(); G.waitT = tut() ? .9 : rnd(2, 4); G.pick = roll(); G.biteT = 0; G.approach = 0;
+      if (G.cast >= 2 && Math.random() < .22) G.bird = { x: W + 30, y: rnd(190, 240), flee: 0 };
+      if (G.zone === 2 && Math.random() < .35) setTimeout(() => { if (G.phase === 'wait') { G.bolt = { x: rnd(80, W - 60), y: rnd(220, 280), a: 1 }; SFX.thunder(); if (!S.said.light) { S.said.light = 1; say('light', 1600); } } }, rnd(400, 1400)); } return; }
+  if (G.bolt) { G.bolt.a -= dt / .9; if (G.bolt.a <= 0) G.bolt = null; }
+  if (G.phase === 'wait') {
+    const f = G.float; if (G.bird) { const b = G.bird; if (b.flee) { b.x += 260 * dt; b.y -= 120 * dt; if (b.x > W + 60) G.bird = null; } else { b.x += (f.x - b.x) * dt * .5; b.y += (f.y - 8 - b.y) * dt * .5; if (Math.hypot(b.x - f.x, b.y - f.y) < 14) { toast(t('stolen')); G.bird = null; SFX.bird(); newCast(); return; } } }
+    if (G.bite > 0) { G.bite -= dt; if (G.bite <= 0) { G.misses++; say('miss', 1400); if (G.misses >= 2) { G.cast++; afterCast(); return; } G.waitT = rnd(1.5, 3); } return; }
+    G.waitT -= dt; G.approach = clamp(1 - G.waitT / 2, 0, 1);
+    if (G.waitT <= 0) { G.bite = tut() ? 2.5 : .75 + S.ups.appat * .05; SFX.dive(); buzz(40); if (tut() && !S.said.t2) { S.said.t2 = 1; say('t2', 2500); } }
+    return;
+  }
+  if (G.phase === 'fight') fight(dt);
+  if (G.phase === 'leap') { G.leap.t += dt * (G.leap.t < .5 ? .45 : 1); if (G.leap.t >= 1.3) caught(); }
+}
+function fight(dt) {
+  const F = G.fight, c = F.c, protect = tut(); F.t += dt;
+  F.dirT -= dt; if (F.dirT <= 0) { const old = F.dir; F.dir = Math.random() < .25 ? 0 : (Math.random() < .5 ? -1 : 1); if (G.zone === 2 && Math.random() < c.agi * .5) F.dir = -old || F.dir; F.dirT = rnd(.6, 1.8) * (1.2 - c.agi * .7); if (F.dir !== old && F.dir) { F.pulls++; SFX.tug(); buzz(Math.round(20 + c.str * 40)); if (F.pulls === 2 && !S.said.follow) { S.said.follow = 1; say('follow', 2200); } } }
+  F.x = lerp(F.x, F.dir, dt * 2);
+  const fd = G.hold ? (Math.abs(G.fingerX - G.fx0) > 18 ? Math.sign(G.fingerX - G.fx0) : 0) : 0, match = F.dir === 0 || fd === F.dir;
+  const big = 1 + c.cm[1] / 900, reel = (.16 + S.ups.moulinet * .035) * (match ? 1 : .35) / big, strain = c.str * (.55 + (match ? 0 : .9)) * (1 - S.ups.ligne * .09);
+  if (G.hold) { F.dist -= reel * dt; F.tension += strain * dt * (c.legend ? 1.1 : 1); SFX.click(reel); } else { F.tension -= 1.5 * dt; F.dist += c.str * .07 * dt; }
+  F.tension = clamp(F.tension, 0, 1.25); if (protect) { F.tension = Math.min(F.tension, .97); if (F.tension > .85 && !S.said.t4) { S.said.t4 = 1; say('t4', 2000); } }
+  if (F.tension > 1) { F.red += dt; SFX.strain(); buzz(10); if (F.red > .35) return snap(); } else F.red = 0;
+  if (F.tension > .9 && !S.said['p' + G.cast] && Math.random() < dt) { S.said['p' + G.cast] = 1; say('panic', 1200); G.firPose = 'panic'; }
+  if (F.dist > 1.25) { toast(t('missed')); SFX.dive(); G.cast++; return afterCast(); }
+  if (F.dist <= 0) { G.phase = 'leap'; G.leap = { t: 0, x: G.float.x + F.x * 60 }; SFX.splash(); buzz([40, 30, 80]); for (let i = 0; i < 24; i++) G.parts.push({ x: G.leap.x, y: SEA, vx: rnd(-120, 120), vy: rnd(-220, -60), t: 0, life: 1.1, r: rnd(4, 9), c: 'rgba(255,248,240,.9)', g: 120 }); }
+}
+function snap() { SFX.snap(); buzz(80); banner(t('snapped'), 'r'); say('snap', 1600); G.cast++; G.firPose = 'panic';
+  if (!G.relinked && !S.owned.noads && G.cast < E.castsPerOuting) { G.relinked = true; } afterCast(); }
+function caught() {
+  G.phase = 'card';   // once: the card is shown a single time
+  const F = G.fight, c = F.c, r = F.r, isNew = !S.book[c.id], rec = F.cm > (S.rec[c.id] || 0); S.book[c.id] = 1; S.aviary[c.id] = 1; if (rec) S.rec[c.id] = F.cm; S.catches++; G.catches.push({ id: c.id, r, cm: F.cm }); G.cast++;
+  const ch = challenge(); let chalNow = false; if (!ch.done && ch.id === c.id && F.cm >= ch.cm) { ch.done = true; S.goldBait++; chalNow = true; }
+  if (S.useGold && S.goldBait > 0 && c.legend) S.goldBait--;
+  addXp(E.xpCatch(c, r)); save(); G.firPose = 'dance'; G.firT = 0; SFX.card(r); track('catch', { id: c.id, r, cm: F.cm });
+  if (tut()) S.tut++;
+  showCard(c, r, F.cm, isNew, rec && !isNew, chalNow, () => {
+    if (S.catches === 1) say('first', 2400); else if (c.legend) { say('legendGot', 3000); S.pages++; setTimeout(() => toast(I.fir('page')), 1500); } else if (rec && !isNew) say('rec', 1800); else if (c.k === 'jelly' && Math.random() < .4) say('jelly', 1800); else if (F.cm > c.cm[1] * .85) say('big', 1500);
+    if (S.catches === 2 && !S.said.t5) { S.said.t5 = 1; G.giant = { x: -160, t: 0 }; setTimeout(() => say('t5', 2600), 1400); }
+    afterCast();
+  });
+}
+function afterCast() { G.fight = null; G.hold = false; renderHud(); if (G.cast >= E.castsPerOuting) return setTimeout(summary, 600); setTimeout(() => { if (G.mode === 'play') newCast(); }, 500); }
+function addXp(n) { S.xp += n; while (S.xp >= E.xpLevel(S.lvl)) { S.xp -= E.xpLevel(S.lvl); S.lvl++; S.shells += 20 + S.lvl * 8; } }
+
+// ---------- drawing ----------
+function draw() {
+  const s = V.sc * V.d, Z = E.ZONES[G.zone - 1]; g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = Z.sky[0]; g.fillRect(0, 0, cv.width, cv.height);
+  if (G.mode === 'title') return;
+  g.setTransform(s, 0, 0, s, V.ox * V.d, V.oy * V.d); g.save(); g.beginPath(); g.rect(0, 0, W, H); g.clip();
+  const T = G.time, nt = night();
+  ART.sky(g, Z, W, H, SEA, T, nt); ART.sea(g, Z, W, H, SEA, T, 0); ART.sea(g, Z, W, H, SEA, T, 1);
+  // the creatures swim under the surface: dark silhouettes over the cloud sea
+  for (const sh of G.shadows) ART.creature(g, sh.k, sh.x, sh.y, sh.s, '', null, T, true, sh.v < 0);
+  if (G.giant) { G.giant.t += 1 / 60; G.giant.x += 1.6; ART.creature(g, 'whale', G.giant.x, SEA + 150, 2.4, '', null, T, true, false); if (G.giant.x > W + 220) G.giant = null; }
+  // the approaching shadow of the creature that is going to bite, then the one on the line
+  if (G.phase === 'wait' && G.pick) { const a = G.approach, f = G.float; ART.creature(g, G.pick.c.k, lerp(f.x - 140, f.x, a), SEA + lerp(160, 30, a), G.pick.c.legend ? 2 : 1, '', null, T, true, false); }
+  const f = G.float;
+  if (G.phase === 'fight' && G.fight) { const F = G.fight, cx = f.x + F.x * 60, cy = SEA + 24 + F.dist * 150; ART.creature(g, F.c.k, cx, cy, F.c.legend ? 1.8 : 1.1, '', null, T, true, F.x < 0); lineTo(cx, cy, F.tension); }
+  for (const b of G.bubbles) ART.bubble(g, b.x, b.y, b.r, T);
+  ART.airship(g, SHIP[0], SHIP[1], T, S.paint); ART.firmin(g, SHIP[0] + 4, SHIP[1] + 18, { t: G.firT + T, pose: G.firPose, outfit: S.outfit });
+  // the rod
+  ART.line(g, 3, '#8C5A36'); g.beginPath(); g.moveTo(SHIP[0] + 18, SHIP[1] + 30); g.lineTo(TIP[0], TIP[1] + Math.sin(T * 1.3) * 3 + (G.phase === 'fight' ? 6 : 0)); g.stroke();
+  if (G.phase === 'flying') { const k = G.flyT, x = lerp(f.x0, f.x, k), y = lerp(f.y0, f.y, k) - Math.sin(k * Math.PI) * 120; lineTo(x, y, 0); ART.float(g, x, y, T, 0); }
+  if (G.phase === 'wait') { lineTo(f.x, f.y, 0); ART.float(g, f.x, f.y, T, G.bite > 0 ? 1 : 0); if (G.bite > 0) { g.fillStyle = P.cloud; g.beginPath(); g.arc(f.x, f.y - 26, 13, 0, TAU); g.fill(); ART.line(g, 2.5); g.stroke(); g.fillStyle = P.red; g.font = '900 18px ui-rounded,system-ui'; g.textAlign = 'center'; g.fillText('!', f.x, f.y - 20); } }
+  if (G.phase === 'aim') gauge();
+  if (G.phase === 'leap' && G.leap) { const F = G.fight, k = clamp(G.leap.t / 1.3, 0, 1), x = lerp(G.leap.x, SHIP[0] + 10, k), y = SEA - Math.sin(k * Math.PI) * 170 + k * (SHIP[1] - SEA + 30);
+    const rc = E.RAR.find(r => r.id === F.r).col; ART.creature(g, F.c.k, x, y, (F.c.legend ? 1.6 : 1.2) * (1 - k * .4), F.c.c, rc, T, false, false); if (F.r !== 'commune') { g.globalAlpha = .4; g.fillStyle = rc; g.beginPath(); g.arc(x, y, 38, 0, TAU); g.fill(); g.globalAlpha = 1; } }
+  if (G.bird) ART.thief(g, G.bird.x, G.bird.y, T, G.bird.flee ? 1 : -1);
+  if (G.bolt) ART.bolt(g, G.bolt.x, G.bolt.y, G.bolt.a);
+  for (const p of G.parts) { g.globalAlpha = 1 - p.t / p.life; g.fillStyle = p.c; g.beginPath(); g.arc(p.x, p.y, p.r, 0, TAU); g.fill(); } g.globalAlpha = 1;
+  if (G.phase === 'fight' && G.fight) tensionBar(G.fight);
+  if (G.phase === 'aim' && tut() && G.cast === 0) ghost();
+  g.restore();
+}
+function lineTo(x, y, tn) { const k = clamp(tn, 0, 1); g.strokeStyle = tn > 1 ? P.red : `rgb(${255},${Math.round(248 - k * 160)},${Math.round(240 - k * 170)})`; g.lineWidth = 1.6 + k; g.beginPath(); g.moveTo(TIP[0], TIP[1]); g.quadraticCurveTo((TIP[0] + x) / 2, Math.max(TIP[1], y) + 30 * (1 - k), x, y); g.stroke(); }
+function gauge() { const x = 26, y = 190, h = 150; g.fillStyle = 'rgba(38,32,58,.35)'; g.fillRect(x, y, 14, h); g.fillStyle = '#7DBE6A'; g.fillRect(x, y + h * (1 - .9), 14, h * .12); const p = G.power; g.fillStyle = p >= .78 && p <= .9 ? '#7DBE6A' : P.brass; g.fillRect(x, y + h * (1 - p), 14, h * p); ART.line(g, 2.5); g.strokeRect(x, y, 14, h);
+  if (!G.drag) { g.fillStyle = P.cloud; g.font = '800 14px ui-rounded,system-ui'; g.textAlign = 'center'; g.fillText(t('pull'), W / 2, SEA - 40); } }
+function tensionBar(F) { const x = 60, y = H - 46, w = W - 120; g.fillStyle = 'rgba(38,32,58,.45)'; g.fillRect(x, y, w, 12); g.fillStyle = F.tension > 1 ? P.red : F.tension > .75 ? '#F0A04B' : P.cloud; g.fillRect(x, y, w * clamp(F.tension / 1.2, 0, 1), 12); ART.line(g, 2.5); g.strokeRect(x, y, w, 12);
+  g.fillStyle = P.cloud; g.font = '900 13px ui-rounded,system-ui'; g.textAlign = 'center'; g.fillText(G.hold ? (F.tension > .95 ? t('release') : '⟵  ⟶') : t('hold'), W / 2, y - 8);
+  const d = 1 - clamp(F.dist, 0, 1); g.fillStyle = 'rgba(38,32,58,.45)'; g.fillRect(W - 22, 200, 10, 140); g.fillStyle = '#7DBE6A'; g.fillRect(W - 22, 200 + 140 * (1 - d), 10, 140 * d); ART.line(g, 2); g.strokeRect(W - 22, 200, 10, 140); }
+function ghost() { const ph = (G.time % 2) / 2, k = ph < .15 ? 0 : ph < .7 ? (ph - .15) / .55 : 1, x = W / 2, y = 330 + 110 * k; g.save(); g.globalAlpha = ph > .85 ? 1 - (ph - .85) / .15 : .85; g.fillStyle = '#FFFFFF'; ART.line(g, 3); g.beginPath(); g.ellipse(x + 8, y + 16, 11, 14, -.3, 0, TAU); g.fill(); g.stroke(); g.beginPath(); g.rect(x - 2, y - 8, 9, 22); g.fill(); g.stroke(); g.restore(); }
+
+// ---------- interface ----------
+function renderHud() { const h = $('#hud'); if (G.mode !== 'play') { h.classList.remove('on'); return; } h.classList.add('on');
+  h.innerHTML = `<div class="hrow"><button class="rb" data-home>⌂</button><div class="chip">${t('outing', Math.min(G.cast + 1, E.castsPerOuting), E.castsPerOuting)}</div><span style="flex:1"></span><div class="chip"><i class="shell"></i>${S.shells}</div></div>`;
+  h.querySelector('[data-home]').onclick = () => { SFX.ui(); goHome(); }; }
+let sayT = 0; function say(k, ms = 2400) { const el = $('#firmin'), tx = I.fir(k); if (!tx) return; el.querySelector('.lt').textContent = tx; el.classList.add('on'); SFX.firmin(); clearTimeout(sayT); sayT = setTimeout(hideSay, ms); }
+function hideSay() { $('#firmin').classList.remove('on'); }
+function banner(tx, cls) { const b = div('banner ' + (cls || ''), tx); document.body.appendChild(b); setTimeout(() => b.remove(), 1900); }
+function toast(tx) { const el = div('toast', tx); $('#toasts').appendChild(el); setTimeout(() => el.classList.add('out'), 2200); setTimeout(() => el.remove(), 2700); }
+function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row2"><button class="b2" data-n>✕</button><button class="b1" data-y>OK</button></div></div>`); document.body.appendChild(el); el.querySelector('[data-y]').onclick = () => { el.remove(); res(true); }; el.querySelector('[data-n]').onclick = () => { el.remove(); res(false); }; }); }
+const modal = $('#modal'); function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); const x = modal.querySelector('[data-close]'); if (x) x.onclick = closeModal; return modal; }
+function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
+// the collection card that flips over: rarity border, name, size, "New record!"
+function showCard(c, r, cm, isNew, rec, chal, done) {
+  const rr = E.RAR.find(x => x.id === r), el = div('ccard ' + r, `<div class="in"><div class="bk"></div><div class="fr" style="border-color:${rr.col}"><canvas width="240" height="180"></canvas><b>${I.cr(c.id)}</b><small class="rar" style="background:${rr.col}">${t('r_' + r)}</small><span>${t('cm', cm)}</span>${isNew ? `<em>${t('newSpecies')}</em>` : rec ? `<em>${t('newRecord')}</em>` : ''}${chal ? `<em>${t('challengeDone')}</em>` : ''}</div></div>`);
+  document.body.appendChild(el); const q = el.querySelector('canvas').getContext('2d'); q.translate(120, 95); ART.creature(q, c.k, 0, 0, c.legend ? 1.3 : 2.2, c.c, rr.col, 0, false, false);
+  if (r === 'legendaire' || r === 'epique') JUICE.confetti(r === 'legendaire' ? 120 : 50);
+  let closed = false; const close = () => { if (closed) return; closed = true; el.classList.add('out'); setTimeout(() => { el.remove(); done(); }, 300); };
+  el.onclick = close; setTimeout(close, c.legend ? 4200 : 2400);
+}
+function summary() {
+  G.phase = 'summary'; S.outings++; const total = G.catches.reduce((a, x) => a + E.price(CRB[x.id], x.r, x.cm), 0); save();
+  const m = openModal(`<h2>${t('summary')}</h2><p class="sub">${t('catches', G.catches.length)}</p>${G.catches.map(x => `<div class="stat"><span>${I.cr(x.id)} · <b>${t('r_' + x.r)}</b></span><span>${t('cm', x.cm)}</span></div>`).join('') || '<p>—</p>'}
+    <div class="gain"><i class="shell"></i> +<span data-g>${total}</span></div><button class="b2 bad" data-x2>▶ ${t('x2')}</button><div class="row2"><button class="b2" data-h>${t('home')}</button><button class="b1 big" data-again>${t('again')}</button></div>`);
+  S.shells += total; save(); SFX.coins();
+  const x2 = m.querySelector('[data-x2]'); if (S.outings < 2) x2.remove(); else x2.onclick = async () => { if (await Ads.rewarded('x2')) { S.shells += total; save(); x2.remove(); m.querySelector('[data-g]').textContent = total * 2; SFX.coins(); } };
+  m.querySelector('[data-h]').onclick = () => { closeModal(); goHome(); };
+  m.querySelector('[data-again]').onclick = async () => { closeModal(); await Ads.interstitial(); startOuting(G.zone); };
+  track('outing_done', { n: G.catches.length, shells: total });
+}
+
+// ---------- home: the airship, the zones, and the between-outings ----------
+function showHome(on) { $('#home').classList.toggle('on', on); }
+function goHome() { G.mode = 'home'; G.phase = 'aim'; closeModal(); hideSay(); renderHud(); renderHome(); showHome(true); }
+const left = ms => { const m = Math.max(0, Math.ceil(ms / 60000)); return m >= 60 ? Math.floor(m / 60) + ' h ' + (m % 60) + ' min' : m + ' min'; };
+function renderHome() {
+  checkLogin(); const ch = challenge(), lv = shipLvl();
+  $('#hhead').innerHTML = `<div class="mrow"><div id="plv">Nv ${S.lvl}</div><div id="xpbar"><i style="width:${(S.xp / E.xpLevel(S.lvl) * 100).toFixed(0)}%"></i></div><div class="chip"><i class="shell"></i>${S.shells}</div><div class="chip"><i class="pearl"></i>${S.pearls}</div></div>`;
+  $('#hmid').innerHTML = `<canvas id="hship" width="720" height="360"></canvas>
+    <div class="hcard"><div class="tx"><b>${t('weather', t('w_' + weather()))}</b>${t('nextWeather', left(wNext()))}</div></div>
+    <div class="hcard ${ch.done ? 'ok' : ''}"><div class="tx"><b>${t('challenge')}</b>${t('challengeTxt', I.cr(ch.id), ch.cm)}${ch.done ? ' ✓' : ''}</div></div>
+    ${E.ZONES.map(z => { const lock = lv < z.lvl; return `<button class="zone ${lock ? 'lock' : ''}" data-z="${z.id}" ${lock ? 'disabled' : ''} style="background:${z.sky[1]}"><b>${t('zone' + z.id)}</b><small>${lock ? '🔒 ' + t('zoneLock', z.lvl) : t('collected', E.CR.filter(c => c.z === z.id && S.book[c.id]).length, E.CR.filter(c => c.z === z.id).length)}</small></button>`; }).join('')}
+    <label class="sw gb">${t('goldBait', S.goldBait)}<input type="checkbox" data-gold ${S.useGold ? 'checked' : ''} ${S.goldBait ? '' : 'disabled'}></label>`;
+  const tr = S.traps.some(x => x && x.end <= Date.now());
+  $('#hfoot').innerHTML = [['book', '📖'], ['aviary', '🫙'], ['airship', '🎈'], ['traps', '🧺', tr], ['chest', '🎁', S.chestDay !== today()], ['shop', '🛒'], ['settings', '⚙️']].map(([k, ic, dot]) => `<div><button class="rb ${dot ? 'dot' : ''}" data-f="${k}">${ic}</button><small>${t(k)}</small></div>`).join('');
+  $('#hmid').querySelectorAll('[data-z]').forEach(b => b.onclick = () => { SFX.ui(); startOuting(+b.dataset.z); });
+  $('#hmid [data-gold]').onchange = e => { S.useGold = e.target.checked; save(); };
+  $('#hfoot').querySelectorAll('[data-f]').forEach(b => b.onclick = () => { SFX.ui(); ({ book: bookModal, aviary: aviaryModal, airship: shipModal, traps: trapsModal, chest: chestModal, shop: shopModal, settings: settingsModal })[b.dataset.f](); });
+  drawShip(); if (S.login.pending) setTimeout(giftModal, 400);
+}
+function drawShip() { const c = $('#hship'); if (!c) return; const q = c.getContext('2d'), s = c.width / W; q.setTransform(s, 0, 0, s, 0, -s * 60); const Z = E.ZONES[0], T = performance.now() / 1000; ART.sky(q, Z, W, H, SEA - 60, T, night()); ART.sea(q, Z, W, H, SEA - 60, T, 0); ART.sea(q, Z, W, H, SEA - 60, T, 1); ART.airship(q, W / 2, 150, T, S.paint); ART.firmin(q, W / 2 + 4, 168, { t: T, outfit: S.outfit }); }
+function checkLogin() { const d = today(); if (S.login.last === d) return; const y = new Date(Date.now() - 864e5), yd = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); S.login.streak = S.login.last === yd ? (S.login.streak % 7) + 1 : 1; S.login.last = d; S.login.pending = true; save(); }
+function giftModal() { const n = S.login.streak; const m = openModal(`<h2>${t('giftTitle')}</h2><div class="login">${E.login.map((c, i) => `<div class="lg ${i < n - 1 ? 'got' : i === n - 1 ? 'now' : ''}"><small>${t('giftDay', i + 1)}</small><b>${c}</b></div>`).join('')}</div><button class="b1 big" data-claim>${t('giftTake')}</button>`);
+  m.querySelector('[data-claim]').onclick = () => { S.shells += E.login[n - 1]; if (n === 7) S.pearls += E.loginPearls; S.login.pending = false; save(); SFX.coins(); closeModal(); toast(t('giftBack', n % 7 + 1)); renderHome(); }; }
+function bookModal() { const n = Object.keys(S.book).length;
+  const m = openModal(`<h2>${t('book')}</h2><p class="sub">${t('collected', n, E.CR.length)}</p><div class="grid3">${E.CR.map(c => `<div class="gi ${S.book[c.id] ? '' : 'lock'} ${c.legend ? 'leg' : ''}"><canvas width="120" height="80" data-c="${c.id}"></canvas><small>${S.book[c.id] ? I.cr(c.id) : t('unknown')}</small>${S.rec[c.id] ? `<small>${t('cm', S.rec[c.id])}</small>` : ''}</div>`).join('')}</div><button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('canvas[data-c]').forEach(cv2 => { const c = CRB[cv2.dataset.c], q = cv2.getContext('2d'); q.translate(60, 42); ART.creature(q, c.k, 0, 0, c.legend ? .5 : 1, c.c, null, 0, !S.book[c.id], false); }); }
+// the aviary: a big jar where every creature caught flies in a loop
+let avRaf = 0;
+function aviaryModal() { const ids = Object.keys(S.aviary); openModal(`<h2>${t('aviary')}</h2><canvas id="avc" width="640" height="720" style="width:100%;border-radius:18px;border:4px solid #26203A;background:#BFE3F2"></canvas><p class="sub">${t('collected', ids.length, E.CR.length)}</p><button class="b2" data-close>OK</button>`, 'wide');
+  const c = $('#avc'), q = c.getContext('2d'), fl = ids.map((id, i) => ({ c: CRB[id], a: i * 1.7, r: 80 + (i * 37) % 180, y: 120 + (i * 83) % 460, v: .4 + (i % 5) * .12 }));
+  cancelAnimationFrame(avRaf); const loop = () => { if (!document.body.contains(c)) return; const T = performance.now() / 1000; q.setTransform(1, 0, 0, 1, 0, 0); q.fillStyle = '#BFE3F2'; q.fillRect(0, 0, 640, 720); q.fillStyle = '#FFF8F0'; q.fillRect(0, 600, 640, 120);
+    for (const f of fl) { const x = 320 + Math.cos(T * f.v + f.a) * f.r, y = f.y + Math.sin(T * f.v * 2 + f.a) * 30; ART.creature(q, f.c.k, x, y, f.c.legend ? .9 : 1.6, f.c.c, null, T, false, Math.sin(T * f.v + f.a) > 0); }
+    avRaf = requestAnimationFrame(loop); }; loop(); }
+function shipModal() {
+  const m = openModal(`<h2>${t('airship')} · Nv ${shipLvl()}</h2>${E.ups.map(u => { const n = S.ups[u.id], cost = u.cost(n); return `<div class="it"><div class="tx"><b>${t('u_' + u.id)}</b><small>${t('uLvl', n, u.max)}</small></div>${n >= u.max ? `<span class="own">${t('max')}</span>` : `<button class="buy" data-u="${u.id}" ${S.shells < cost ? 'disabled' : ''}>${t('upBuy', cost)}</button>`}</div>`; }).join('')}
+    <div class="it"><div class="tx"><b>${t('goldBait', S.goldBait)}</b><small>${t('goldBaitSub')}</small></div><button class="buy" data-gb ${S.shells < 40 ? 'disabled' : ''}>${t('upBuy', 40)}</button></div>
+    <h3>${t('paints')}</h3><div class="grid3">${E.paints.map(p => `<button class="gi ${S.paint === p.id ? 'on' : ''} ${S.paints[p.id] ? '' : 'lock'}" data-p="${p.id}"><b>🎈</b><small>${t('p_' + p.id)}</small><small>${S.paints[p.id] ? '' : p.pearls ? p.pearls + ' 💧' : t('s_starter')}</small></button>`).join('')}</div>
+    <h3>${t('outfits')}</h3><div class="grid3">${[...E.outfits.map(o => o.id), ...E.loot.filter(x => x.k === 'outfit').map(x => x.id)].map(id => { const o = E.outfits.find(x => x.id === id); return `<button class="gi ${S.outfit === id ? 'on' : ''} ${S.outfits[id] ? '' : 'lock'}" data-o="${id}"><b>🐸</b><small>${t('o_' + id)}</small><small>${S.outfits[id] ? '' : o && o.pearls ? o.pearls + ' 💧' : o && o.how === 'starter' ? t('s_starter') : o && o.how === 'pass' ? t('s_pass_saison_2026') : t('chest')}</small></button>`; }).join('')}</div>
+    <p class="note">${t('pearlNote')}</p><button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-u]').forEach(b => b.onclick = () => { const u = E.ups.find(x => x.id === b.dataset.u), cost = u.cost(S.ups[u.id]); if (S.shells < cost) return; const before = shipLvl(); S.shells -= cost; S.ups[u.id]++; save(); SFX.fanfare(); if (before < 4 && shipLvl() >= 4) { say('zone2', 3000); banner(t('lvUp', shipLvl()), 'y'); } shipModal(); renderHome(); });
+  m.querySelector('[data-gb]').onclick = () => { if (S.shells < 40) return; S.shells -= 40; S.goldBait++; save(); SFX.coin(); shipModal(); renderHome(); };
+  m.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { const p = E.paints.find(x => x.id === b.dataset.p); if (S.paints[p.id]) S.paint = p.id; else if (p.pearls && S.pearls >= p.pearls) { S.pearls -= p.pearls; S.paints[p.id] = 1; S.paint = p.id; SFX.fanfare(); } else return; save(); shipModal(); renderHome(); });
+  m.querySelectorAll('[data-o]').forEach(b => b.onclick = () => { const id = b.dataset.o, o = E.outfits.find(x => x.id === id); if (S.outfits[id]) S.outfit = id; else if (o && o.pearls && S.pearls >= o.pearls) { S.pearls -= o.pearls; S.outfits[id] = 1; S.outfit = id; SFX.fanfare(); } else return; save(); shipModal(); renderHome(); });
+}
+function trapsModal() { if (!S.said.trap) { S.said.trap = 1; say('trap', 2600); }
+  const m = openModal(`<h2>${t('traps')}</h2>${S.traps.map((tr, i) => { if (!tr) return `<div class="it"><div class="tx"><b>#${i + 1}</b></div>${E.traps.opts.map((o, j) => `<button class="buy" data-set="${i}:${j}">${t('trapSet', o.h)}</button>`).join('')}</div>`;
+      const ready = tr.end <= Date.now(); return `<div class="it"><div class="tx"><b>#${i + 1}</b><small>${ready ? '' : t('trapWait', left(tr.end - Date.now()))}</small></div>${ready ? `<button class="buy" data-take="${i}">${t('trapReady', tr.shells)}</button>` : `<button class="buy gm" data-fin="${i}">${E.finishPearls(Math.ceil((tr.end - Date.now()) / 60000))} 💧</button><button class="buy ad" data-fad="${i}">▶</button>`}</div>`; }).join('')}<p class="note">${t('pearlNote')}</p><button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-set]').forEach(b => b.onclick = () => { const [i, j] = b.dataset.set.split(':').map(Number), o = E.traps.opts[j]; S.traps[i] = { end: Date.now() + o.h * 36e5, shells: o.shells }; save(); trapsModal(); renderHome(); });
+  m.querySelectorAll('[data-take]').forEach(b => b.onclick = () => { const i = +b.dataset.take; S.shells += S.traps[i].shells; S.traps[i] = null; save(); SFX.coins(); trapsModal(); renderHome(); });
+  m.querySelectorAll('[data-fin]').forEach(b => b.onclick = () => { const i = +b.dataset.fin, cost = E.finishPearls(Math.ceil((S.traps[i].end - Date.now()) / 60000)); if (S.pearls < cost) return; S.pearls -= cost; S.traps[i].end = Date.now(); save(); trapsModal(); });
+  m.querySelectorAll('[data-fad]').forEach(b => b.onclick = async () => { if (await Ads.rewarded('trap')) { S.traps[+b.dataset.fad].end = Date.now(); save(); trapsModal(); } }); }
+// the wind merchant's chest: shells only, odds shown before opening
+function chestModal() { if (!S.said.chest) { S.said.chest = 1; say('chest', 2800); } const O = E.chest.odds, free = S.chestDay !== today();
+  const m = openModal(`<h2>${t('chest')}</h2><div class="big-ico">🎁</div><p class="sub">${t('chestOdds', O[0].p, O[1].p, O[2].p, E.chest.dup)}</p><button class="b1 big" data-open ${S.shells < E.chest.shells ? 'disabled' : ''}>${t('chestOpen', E.chest.shells)}</button>${free ? `<button class="b2 bad" data-free>▶ ${t('chestAd')}</button>` : ''}<button class="b2" data-close>OK</button>`);
+  m.querySelector('[data-open]').onclick = () => { if (S.shells < E.chest.shells) return; S.shells -= E.chest.shells; openChest(); };
+  const f = m.querySelector('[data-free]'); if (f) f.onclick = async () => { if (await Ads.rewarded('chest')) { S.chestDay = today(); openChest(); } }; }
+function openChest() { let q = Math.random() * 100, r = 'epique'; for (const o of E.chest.odds) { if (q < o.p) { r = o.r; break; } q -= o.p; }
+  const pool = E.loot.filter(x => x.r === r), it = pool[(Math.random() * pool.length) | 0]; let dup = false;
+  if (it.k === 'bait') S.goldBait += it.id === 'appat_dore' ? 1 : 0; else if (it.k === 'outfit') { dup = !!S.outfits[it.id]; S.outfits[it.id] = 1; } else { dup = !!S.decos[it.id]; S.decos[it.id] = 1; }
+  if (dup) S.shells += E.chest.dup; save(); SFX.card(r === 'epique' ? 'epique' : r); JUICE.confetti(r === 'epique' ? 90 : 40); track('chest_open', { r, id: it.id, dup });
+  openModal(`<h2>${t('r_' + (r === 'commun' ? 'commune' : r))}</h2><div class="big-ico">${it.k === 'outfit' ? '🐸' : it.k === 'bait' ? '🪱' : '🫙'}</div><p><b>${t((it.k === 'outfit' ? 'o_' : it.k === 'bait' ? 'b_' : 'd_') + it.id)}</b></p><p class="sub">${dup ? t('dup', E.chest.dup) : t('got')}</p><button class="b2" data-close>OK</button>`); renderHome(); }
+function shopModal() { Store.init();
+  const m = openModal(`<h2>${t('shop')}</h2>${E.store.map(it => `<div class="it"><div class="tx"><b>${t('s_' + it.id)}</b><small>${t('s_' + it.id + 'Sub')}</small></div>${it.once && S.owned[it.id] ? `<span class="own">${t('own')}</span>` : `<button class="buy price" data-buy="${it.id}">${Store.price(it)}</button>`}</div>`).join('')}<p class="note">${t('pearlNote')}</p><button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { SFX.ui(); if (await Store.buy(E.store.find(x => x.id === b.dataset.buy))) shopModal(); }); }
+function settingsModal() { const sw = (k, l) => `<label class="sw">${l}<input type="checkbox" data-s="${k}" ${S[k] ? 'checked' : ''}></label>`;
+  const m = openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vib'))}<label class="sw">${t('lang')}<select data-lang>${I.langs.map(l => `<option value="${l}" ${l === I.lang ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('')}</select></label>
+    <button class="b2" data-restore>${t('restore')}</button>${NADS() ? `<button class="b2" data-ump>${t('privacyChoices')}</button>` : ''}<button class="b2" data-priv>${t('privacy')}</button><div class="ver">Nimbus Catch ${window.NC_VERSION || ''}</div><button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-s]').forEach(c => c.onchange = () => { S[c.dataset.s] = c.checked; save(); });
+  m.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); settingsModal(); renderHome(); };
+  m.querySelector('[data-restore]').onclick = () => Store.restore(); const u = m.querySelector('[data-ump]'); if (u) u.onclick = () => nads('privacy');
+  m.querySelector('[data-priv]').onclick = () => openModal(`<div class="legal">${window.NC_PRIVACY || ''}</div><button class="b2" data-close>OK</button>`, 'wide'); }
+
+// ---------- title & loop ----------
+function showTitle() { G.mode = 'title'; const el = $('#title'); el.classList.add('on');
+  el.innerHTML = `<div class="logo"><h1>Nimbus<br>Catch</h1></div><canvas id="tship" width="360" height="300"></canvas><div style="width:100%;display:flex;flex-direction:column;align-items:center"><p>${t('tapToStart')}</p><button class="b1 huge" data-play>${t('play')}</button></div>`;
+  el.querySelector('[data-play]').onclick = async () => { audioInit(); SFX.ui(); el.classList.remove('on'); await Ads.init(); Store.init(); if (S.catches === 0) startOuting(1); else goHome(); }; }
+function drawTitle() { const c = $('#tship'); if (!c || G.mode !== 'title') return; const q = c.getContext('2d'), T = performance.now() / 1000; q.setTransform(1, 0, 0, 1, 0, 0); q.clearRect(0, 0, 360, 300); q.setTransform(1.6, 0, 0, 1.6, 0, 40); ART.airship(q, 112, 70, T, S.paint); ART.firmin(q, 116, 88, { t: T, outfit: S.outfit, pose: 'dance' }); }
+let last = performance.now();
+function loop(now) { const dt = Math.min(.05, (now - last) / 1000); last = now;
+  try { tick(dt); draw(); drawTitle(); if (G.mode === 'home' && ((now / 200) | 0) % 2 === 0) drawShip(); if (G.mode !== 'play' || G.phase === 'aim' || G.phase === 'wait') musicTick(); } catch (e) { console.error(e); }
+  requestAnimationFrame(loop); }
+showTitle(); requestAnimationFrame(loop);
+document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+window.NC = { G, S: () => S, SFX, E, save, startOuting, goHome, say, toScreen, closeModal, resetSave: () => { S = fresh(); I.set(S.lang); save(); }, floatScreen: () => G.float && toScreen(G.float.x, G.float.y), scale: () => V.sc };
+})();
+</script>
+<script>// Nimbus Catch scenes for the BETA IA simulated player (shared core: beta.js, spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Real gestures: the cast is a real downward drag (A.drag), the strike a real tap (A.tap); the fight is a finger held down that
+// slides left/right after the creature and lifts when the line turns red (pointer events on the canvas, like a thumb).
+// The 5 scenes of the plan: lancer (perfect cast), combat (the line turns red, "Let go!", reeled in), legende (the storm whale
+// leaps in slow motion, LEGENDARY card = App Store preview n° 1), voliere (20 creatures flying in the jar), carnet (the logbook).
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const D = window.NC, G = D.G, S = () => D.S(), E = D.E, cv = document.getElementById('cv');
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}[data-x2]{display:none!important}.price{visibility:hidden!important}'; document.head.appendChild(st); }
+  const ev = (type, x, y) => cv.dispatchEvent(new PointerEvent(type, { bubbles: true, clientX: x, clientY: y, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+  async function until(A, cond, sec) { const t0 = performance.now(); while (A.running() && !cond() && (performance.now() - t0) / 1000 < sec) await A.wait(100); }
+  async function start(A) { if (A.opts.ui === 'propre') { if (S().consent == null) S().consent = false; S().owned.noads = true; } if (G.mode !== 'title') return; await A.wait(900); await A.tapEl('#title [data-play]', 'jouer'); await A.wait(900); }
+  // one full catch: cast (power p), strike when the float dives, fight (follow the pulls, let go on red)
+  async function cast(A, p = .84, label = 'lancer') {
+    await until(A, () => G.mode === 'play' && G.phase === 'aim', 8); if (!A.running()) return;
+    const k = D.scale(), x = innerWidth / 2 + A.jitter(-10, 10), y = innerHeight * .45; await A.think();
+    await A.drag(x, y, x + A.jitter(-6, 6), y + p * 170 * k, label, 650); if (G.perfect) A.mark('lancer parfait : étincelles');
+  }
+  async function strike(A) { await until(A, () => (G.phase === 'wait' && G.bite > 0) || G.phase === 'aim', 9); if (G.phase !== 'wait') return false; await A.wait(A.jitter(160, 320)); const f = D.floatScreen(); await A.tap(f[0], f[1] - 20, 'ferrer'); A.mark('FERRÉ !'); return G.phase === 'fight'; }
+  async function fightIt(A, o = {}) {
+    const x0 = innerWidth / 2, y0 = innerHeight * .78; ev('pointerdown', x0, y0); let red = false;
+    while (A.running() && G.phase === 'fight') { const F = G.fight;
+      if (F.tension > (o.risky ? 1.02 : .82)) { if (!red && F.tension > .95) { red = true; A.mark('la ligne rougit : Relâche !'); } ev('pointerup', x0, y0); await A.wait(A.jitter(380, 520)); ev('pointerdown', x0, y0); }
+      ev('pointermove', x0 + F.dir * 50, y0); await A.wait(90); }
+    ev('pointerup', x0, y0);
+    if (G.phase === 'leap') { A.mark('la créature jaillit des nuages au ralenti'); await until(A, () => !!document.querySelector('.ccard'), 4); A.mark('la carte se retourne'); }
+  }
+  async function catchOne(A, o = {}) { await cast(A, o.p || .84, o.label); if (await strike(A)) await fightIt(A, o); await A.wait(o.card || 2600); const c = document.querySelector('.ccard'); if (c) c.click(); await A.wait(600); }
+  function makeSave(kind) {
+    const s = S(); s.consent = false; s.tut = 2; s.catches = 30; s.outings = 4; s.said = { t2: 1, t4: 1, t5: 1, follow: 1, bird: 1, light: 1, storm: 1, trap: 1, chest: 1 };
+    s.login = { last: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(), streak: 2, pending: false };
+    s.ups = kind === 'avance' ? { moulinet: 3, ligne: 3, appat: 2 } : { moulinet: 2, ligne: 1, appat: 1 }; s.shells = 900; s.lvl = 6;
+    const ids = E.CR.filter(c => !c.legend).slice(0, kind === 'avance' ? 20 : 9).map(c => c.id); for (const id of ids) { s.book[id] = 1; s.aviary[id] = 1; const c = E.CR.find(x => x.id === id); s.rec[id] = Math.round(c.cm[0] + (c.cm[1] - c.cm[0]) * .7); }
+    D.save();
+  }
+  BETA.game({
+    sfx: D.SFX, endText: () => document.documentElement.lang === 'en' ? 'Play free' : 'Joue gratuitement', progress: () => [G.mode, G.phase, G.cast, S().catches],
+    async prepare(save, A) {
+      const sc = A.opts.scene; if (sc === 'onboarding') { D.resetSave(); return; }
+      makeSave(sc === 'voliere' || sc === 'carnet' || save === 'avance' ? 'avance' : 'milieu'); await start(A); D.closeModal(); await A.wait(300);
+      if (sc === 'legende' || sc === 'moment') { S().goldBait = 3; S().useGold = true; D.startOuting(2); D.G.forceLegend = true; }   // the golden bait in the storm sky: the whale bites (forced for the take)
+      else if (sc === 'voliere' || sc === 'carnet') D.goHome(); else D.startOuting(sc === 'combat' ? 2 : 1);
+      document.getElementById('firmin').classList.remove('on'); await A.wait(300);
+    },
+    scenes: {
+      onboarding: async A => { await start(A); for (let i = 0; i < 3 && A.running(); i++) await catchOne(A, { card: 2400 }); await A.wait(3000); },
+      lancer: async A => { await catchOne(A, { p: .84, label: 'lancer parfait' }); await A.wait(1500); },
+      boucle: async A => { for (let i = 0; i < 3 && A.running(); i++) await catchOne(A); },
+      combat: async A => { await catchOne(A, { risky: true }); await A.wait(1500); },
+      legende: async A => { await catchOne(A, { p: .86, card: 4200, label: 'appât doré dans l’orage' }); await A.wait(1500); },
+      moment: async A => { await catchOne(A, { p: .86, card: 4200 }); },
+      voliere: async A => { await A.wait(1200); await A.tapEl('#hfoot [data-f="aviary"]', 'la volière'); A.mark('la volière : 20 créatures'); await A.wait(7000); },
+      carnet: async A => { await A.wait(1200); await A.tapEl('#hfoot [data-f="book"]', 'le carnet'); A.mark('le carnet et les records'); await A.wait(2500); const c = document.querySelector('#modal .card'); if (c) c.scrollBy({ top: 600, behavior: 'smooth' }); await A.wait(3500); },
+      idle: async A => { while (A.running()) { if (G.mode === 'home') { await A.tapEl('#hmid [data-z="1"]', 'partir'); await A.wait(1200); continue; } const a = document.querySelector('#modal [data-again]'); if (a) { await A.tapEl(a, 'nouvelle sortie'); await A.wait(1200); continue; } await catchOne(A); } },
+    },
+  });
+})();
+</script>
+
+</body>
+</html>
