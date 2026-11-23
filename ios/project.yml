@@ -635,3 +635,46 @@ targets:
         PRODUCT_NAME: DungeonDash
         OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  TossBistro:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: TossBistro/Assets.xcassets
+      - path: TossBistro/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: TossBistro/Info.plist
+      properties:
+        CFBundleDisplayName: Toss Bistro
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.casual-games
+        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
+        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.tossbistro
+        PRODUCT_NAME: TossBistro
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later

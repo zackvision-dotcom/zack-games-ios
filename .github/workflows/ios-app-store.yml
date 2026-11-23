@@ -19,7 +19,7 @@ on:
         description: "Which game"
         required: true
         type: choice
-        options: [KunaiGaiden, Braise, GullStreet, CoralStack, CrumbleCrew, CircuitCaper, VanVoyage, SceneExpress, SilkHop, LanternHold, ClockpawSquad, PulsePost, DungeonDash]
+        options: [KunaiGaiden, Braise, GullStreet, CoralStack, CrumbleCrew, CircuitCaper, VanVoyage, SceneExpress, SilkHop, LanternHold, ClockpawSquad, PulsePost, DungeonDash, TossBistro]
         default: KunaiGaiden
       marketing_version:
         description: "Version shown on the App Store (CFBundleShortVersionString)"

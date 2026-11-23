@@ -1,0 +1,1462 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#3D6FB6">
+<title>Toss Bistro</title>
+<style>
+:root{--blue:#3D6FB6;--cream:#FFF4E2;--red:#E5483B;--yolk:#F6C343;--copper:#C9733B;--ink:#22202E;--green:#5C9A4A;--blued:#2C528C}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--blue);font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#cv{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none;padding:0}
+.b1,.b2{border-radius:16px;padding:11px 16px;font-weight:900;border:3px solid var(--ink);transition:transform .08s;display:block;width:100%;margin-top:9px;font-size:17px}
+.b1{background:var(--red);color:var(--cream);box-shadow:0 4px 0 var(--ink)}.b2{background:var(--cream);box-shadow:0 4px 0 var(--ink)}.bad{background:var(--green);color:var(--cream)}
+.b1:active,.b2:active,.rb:active,.buy:active{transform:translateY(3px)}.b1:disabled,.b2:disabled{opacity:.45}.big{font-size:21px;padding:14px}.huge{font-size:24px;padding:16px}
+.row2{display:flex;gap:9px}.row2>*{flex:1}
+i.coin,i.truf{display:inline-block;width:1em;height:1em;border-radius:50%;vertical-align:-.12em;border:2px solid var(--ink);margin-right:3px}i.coin{background:var(--yolk)}i.truf{background:#5B3A29}
+#hud{position:fixed;left:0;right:0;top:0;z-index:5;display:none;flex-direction:column;gap:6px;padding:calc(env(safe-area-inset-top) + 8px) 8px 4px;pointer-events:none}
+#hud.on{display:flex}#hud button{pointer-events:auto}.hrow{display:flex;align-items:center;gap:6px}
+.rb{width:44px;height:44px;flex:none;border-radius:50%;background:var(--cream);border:3px solid var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.35);font-size:20px;font-weight:900;position:relative;display:grid;place-items:center}
+.rb.dot::after{content:'';position:absolute;right:-3px;top:-3px;width:13px;height:13px;border-radius:50%;background:var(--red);border:2px solid var(--ink)}
+.chip{display:flex;align-items:center;gap:3px;background:var(--cream);border:3px solid var(--ink);border-radius:999px;padding:3px 10px;box-shadow:0 3px 0 rgba(0,0,0,.35);font-weight:900;font-size:15px;white-space:nowrap}
+.chip.sm{font-size:12px;padding:2px 8px}.chip.hint{background:var(--yolk);animation:pulse .8s infinite alternate}@keyframes pulse{to{transform:scale(1.08)}}
+#momo{position:fixed;left:8px;right:8px;z-index:8;display:flex;justify-content:center;pointer-events:none;opacity:0;transform:translateY(16px) scale(.94);transition:.22s;top:calc(env(safe-area-inset-top) + 96px)}
+#momo.on{opacity:1;transform:none}#momo .lt{background:var(--cream);border:3px solid var(--ink);border-radius:18px;padding:9px 14px;font-weight:800;font-size:16px;line-height:1.3;box-shadow:4px 4px 0 rgba(0,0,0,.35);max-width:320px;text-align:center}
+#home{position:fixed;inset:0;z-index:4;display:none;flex-direction:column;background:var(--blue)}#home.on{display:flex}
+#hhead{padding:calc(env(safe-area-inset-top) + 8px) 10px 8px;background:rgba(34,32,46,.9);border-bottom:3px solid var(--cream)}
+.mrow{display:flex;align-items:center;gap:8px}#plv{background:var(--yolk);font-weight:900;border-radius:10px;padding:3px 9px;font-size:13px;white-space:nowrap;border:3px solid var(--ink)}
+#xpbar{flex:1;height:14px;background:var(--ink);border:3px solid var(--cream);border-radius:8px;overflow:hidden}#xpbar i{display:block;height:100%;background:var(--green);transition:width .6s}
+#hmid{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:10px 12px 14px;gap:9px}
+#hbistro{width:100%;max-width:400px;aspect-ratio:12/5;border:4px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 rgba(0,0,0,.35);background:var(--cream)}
+.map{width:100%;max-width:400px;background:rgba(34,32,46,.5);border:3px solid var(--cream);border-radius:16px;padding:8px}.map h3{margin:0 0 6px;color:var(--cream);font-size:15px}
+.lvls{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.lv{aspect-ratio:1;background:var(--cream);border:3px solid var(--ink);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:17px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.lv small{font-size:10px;color:var(--copper);letter-spacing:-1px}.lv.lock{opacity:.45}.lv.cur{background:var(--yolk);animation:pulse .9s infinite alternate}.lv.chef{background:#FFD9C2}
+#hmid .b1{max-width:400px}
+.hcard{display:flex;gap:10px;align-items:center;background:var(--cream);border:3px solid var(--ink);border-radius:16px;padding:8px 10px;width:100%;max-width:400px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.hcard .tx{flex:1;min-width:0;font-weight:800;font-size:13px}.hcard .tx b{font-size:15px;display:block}
+#hfoot{display:flex;justify-content:space-around;padding:8px 4px calc(env(safe-area-inset-bottom) + 10px);background:rgba(34,32,46,.92);border-top:3px solid var(--cream)}
+#hfoot .rb{width:48px;height:48px;border-radius:14px}#hfoot small{display:block;text-align:center;font-weight:900;font-size:10px;margin-top:4px;color:var(--cream)}
+#modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(34,32,46,.6);padding:14px}#modal.on{display:flex}
+.card{background:var(--cream);border:4px solid var(--ink);border-radius:22px;padding:14px;max-width:390px;width:100%;max-height:90vh;overflow:auto;box-shadow:7px 7px 0 rgba(0,0,0,.45);animation:pop .35s cubic-bezier(.3,1.6,.5,1);text-align:center}
+.card.wide{max-width:520px;text-align:left}@keyframes pop{from{transform:scale(.6);opacity:0}}.card h2{margin:2px 0 8px;font-size:24px;text-align:center}.card p{margin:6px 0 10px;line-height:1.35}
+.big-ico{font-size:72px;text-align:center}.gain{font-size:30px;font-weight:900;margin:6px 0}.sub{font-size:13px;opacity:.85;font-weight:800}
+.stars{display:flex;justify-content:center;gap:6px;margin:6px 0 2px}.st{width:100px;display:flex;flex-direction:column;align-items:center;font-weight:900;font-size:11px;line-height:1.15}
+.st .sti{width:64px;height:64px;display:block;background:var(--yolk);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);transform:scale(0);transition:transform .35s cubic-bezier(.3,1.8,.5,1)}
+.st.on .sti{transform:scale(1)}.st.miss .sti{transform:scale(.8);opacity:.3;background:#999}.st small{font-weight:800;opacity:.8;font-size:11px;margin-top:3px}
+.near{background:#FFF0C9;border:2px dashed var(--ink);border-radius:12px;padding:6px;font-weight:800;font-size:14px;margin:6px 0}
+.login{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}.lg{background:#fff;border:3px solid var(--ink);border-radius:10px;padding:4px 1px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.lg small{font-size:9px;font-weight:800}.lg b{font-size:12px}.lg.got{opacity:.4}.lg.now{background:var(--yolk)}
+.sw{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-weight:800;border-bottom:2px solid rgba(34,32,46,.15)}.sw input{width:24px;height:24px;accent-color:var(--red)}.sw select{font:inherit;font-weight:800;border:3px solid var(--ink);border-radius:10px;background:#fff;padding:3px 6px}
+.ver{font-size:11px;opacity:.6;margin-top:8px;text-align:center}.legal{font-size:13px}
+.it{display:flex;align-items:center;gap:8px;background:#fff;border:3px solid var(--ink);border-radius:16px;padding:7px 9px;margin-bottom:8px;flex-wrap:wrap}
+.it .tx{flex:1;min-width:120px}.it .tx b{display:block;font-size:15px}.it .tx small{display:block;font-size:12px;line-height:1.25;opacity:.85}
+.buy{min-width:70px;background:var(--green);color:var(--cream);border:3px solid var(--ink);border-radius:12px;padding:6px 8px;box-shadow:0 3px 0 var(--ink);font-weight:900;font-size:14px;white-space:nowrap}
+.buy.ad{background:var(--yolk);color:var(--ink)}.buy.gm{background:var(--cream);color:var(--ink)}.own{font-weight:900;color:#3d7a2e;min-width:70px;text-align:center}
+.note{font-size:12px;text-align:center;margin:2px 0 10px;font-weight:700;opacity:.85;color:inherit}#hmid .note{color:var(--cream)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.gi{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:4px;display:flex;flex-direction:column;align-items:center;font-size:11px;font-weight:900;min-height:84px;text-align:center;justify-content:center}
+.gi b{font-size:28px}.gi.lock{opacity:.5}.gi.on{background:var(--yolk)}.gi small{font-size:10px;line-height:1.1;font-weight:800}
+h3{margin:10px 0 6px;font-size:16px}
+.confirm{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(34,32,46,.6);padding:20px}
+#toasts{position:fixed;top:calc(env(safe-area-inset-top) + 150px);left:0;right:0;z-index:35;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+.toast{background:var(--cream);border:3px solid var(--ink);border-radius:14px;padding:7px 14px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.35);animation:pop .3s;transition:opacity .4s;max-width:90vw;text-align:center}.toast.out{opacity:0}
+.banner{position:fixed;left:0;right:0;top:30%;z-index:45;text-align:center;font-size:46px;font-weight:900;color:var(--red);-webkit-text-stroke:2.5px var(--ink);text-shadow:4px 4px 0 var(--ink);pointer-events:none;animation:ban 1.8s cubic-bezier(.2,1.4,.4,1) forwards;padding:0 10px}
+.banner.g{color:var(--cream)}.banner.y{color:var(--yolk)}@keyframes ban{0%{transform:scale(2.4);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+.adov{position:fixed;inset:0;z-index:50;background:var(--ink);display:flex;align-items:center;justify-content:center}.adbox{color:var(--cream);text-align:center}.adtag{opacity:.7;font-weight:800}.adcount{font-size:44px;font-weight:900;margin-top:20px}
+#title{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 30px) 24px calc(env(safe-area-inset-bottom) + 40px);background:var(--blue)}
+#title.on{display:flex}#title h1{margin:0;font-size:64px;line-height:.92;text-align:center;color:var(--yolk);-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink);transform:rotate(-4deg)}
+#title canvas{width:min(70vw,38vh);aspect-ratio:300/360}#title p{font-weight:900;margin:4px 0;font-size:17px;color:var(--cream);text-align:center;text-shadow:0 2px 0 var(--ink)}#title .b1{max-width:320px}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="hud"></div>
+<div id="momo"><div class="lt"></div></div>
+<div id="home"><div id="hhead"></div><div id="hmid"></div><div id="hfoot"></div></div>
+<div id="modal"></div><div id="toasts"></div><div id="title"></div>
+<script>window.TB_VERSION="1.0";window.TB_PRIVACY="<h4>Politique de confidentialité — Toss Bistro</h4>\n<p>Toss Bistro fonctionne hors ligne. Ta partie est enregistrée uniquement sur ton appareil. Nous ne demandons ni compte, ni nom, ni adresse e-mail.</p>\n<h4>Publicités</h4>\n<p>Le jeu affiche des publicités via Google AdMob. Si tu acceptes les publicités personnalisées, Google peut utiliser un identifiant publicitaire de ton appareil (IDFA sur iPhone, après ton autorisation ; identifiant publicitaire Android) pour choisir les annonces. Si tu refuses, les annonces ne sont pas personnalisées. Tu peux changer d’avis à tout moment dans Réglages → Choix de confidentialité.</p>\n<h4>Achats</h4>\n<p>Les achats passent par l’App Store ou Google Play. Nous ne voyons jamais tes données de paiement. Aucun achat ne donne d’objet tiré au hasard ni d’amélioration de puissance, et il n’y a aucun abonnement.</p>\n<h4>Statistiques et plantages</h4>\n<p>Des statistiques anonymes (progression, durée des parties, plantages) peuvent être envoyées à GameAnalytics et Firebase Crashlytics pour améliorer le jeu. Elles ne contiennent ni nom, ni e-mail, ni position.</p>\n<h4>Enfants</h4>\n<p>Toss Bistro convient à tous les âges mais ne s’adresse pas spécialement aux enfants. Nous ne collectons sciemment aucune donnée personnelle d’enfant.</p>\n<h4>Tes droits</h4>\n<p>Tu peux effacer ta partie dans Réglages → Effacer la partie. Pour toute question ou pour exercer tes droits (RGPD), écris-nous via la page d’assistance indiquée sur la fiche du jeu.</p>\n<hr>\n<h4>Privacy policy — Toss Bistro</h4>\n<p>Toss Bistro works offline. Your progress is stored only on your device. We ask for no account, name or email address.</p>\n<p><b>Ads:</b> the game shows ads through Google AdMob. If you accept personalised ads, Google may use your device’s advertising identifier (IDFA on iPhone, after your permission; Android advertising ID) to choose ads. If you decline, ads are not personalised. Change this any time in Settings → Privacy choices.</p>\n<p><b>Purchases:</b> purchases go through the App Store or Google Play. We never see your payment details. No purchase gives a random item or a power upgrade, and there is no subscription.</p>\n<p><b>Analytics and crashes:</b> anonymous statistics (progress, session length, crashes) may be sent to GameAnalytics and Firebase Crashlytics to improve the game. They contain no name, email or location.</p>\n<p><b>Children:</b> Toss Bistro suits all ages but is not directed at children. We do not knowingly collect personal data from children.</p>\n<p><b>Your rights:</b> erase your progress in Settings → Erase progress. For questions or GDPR requests, contact us through the support page linked on the store listing.</p>\n";</script>
+<script>// BETA IA — a simulated player inside the game, for tests and in-game video capture (spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Shared by every game: copy this file into <game>/src/beta.js, load it BEFORE the game scripts, and register the game's
+// scenes after them with BETA.game({...}) (see <game>/src/beta-game.js).
+// Turned on only by the address (?beta=ia) and never inside the iOS app (the native store handler is present there).
+(() => {
+  const Q = new URLSearchParams(location.search);
+  const NATIVE = !!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store);
+  const ON = !NATIVE && Q.get('beta') === 'ia';
+  const num = (k, d) => { const v = parseFloat(Q.get(k)); return isFinite(v) ? v : d; };
+  const opts = {
+    scene: Q.get('scene') || 'boucle', style: Q.get('style') || 'pro', seed: num('seed', 0), save: Q.get('save') || 'neuf',
+    vitesse: num('vitesse', 1), doigt: Q.get('doigt') !== '0', ui: Q.get('ui') || 'normal', duree: num('duree', 0),
+    format: Q.get('format') || '', log: Q.get('log') === '1', auto: Q.get('auto') !== '0',
+  };
+
+  // ---- seeded randomness: same seed, same game (needed to redo a take) ----
+  let rnd = Math.random;
+  function seedRandom(seed) {
+    let a = (seed >>> 0) || 1;
+    rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    Math.random = rnd;
+  }
+
+  // ---- game clock ----
+  // Normal mode: time runs ×1 to ×20 (performance.now, Date.now, requestAnimationFrame stamps and timers all follow).
+  // Capture mode (?capture=1, used by tools/beta-record.mjs): time stands still and only moves with BETA.step(ms),
+  // timers and animation frames included, so a slow PC still gives a perfect 30 frames per second video.
+  let scale = 1;
+  const CAPTURE = Q.get('capture') === '1';
+  const realPerf = performance.now.bind(performance), realDate = Date.now, realRaf = requestAnimationFrame.bind(window), realCaf = cancelAnimationFrame.bind(window);
+  const realSetTimeout = setTimeout.bind(window), realSetInterval = setInterval.bind(window), realClearTimeout = clearTimeout.bind(window), realClearInterval = clearInterval.bind(window);
+  let pBase = realPerf(), pV = pBase, dV = realDate();
+  const vPerf = () => CAPTURE ? pV : pV + (realPerf() - pBase) * scale;
+  function setSpeed(s) { if (CAPTURE) { scale = Math.max(0.1, s); return; } const now = realPerf(); pV = pV + (now - pBase) * scale; dV = dV + (now - pBase) * scale; pBase = now; scale = Math.max(0.1, s); }
+  let vAcc = 0;   // capture mode: milliseconds of video stepped so far
+  const videoNow = () => CAPTURE ? vAcc : realPerf();
+  // capture-mode scheduler
+  let tid = 1e6; const timers = new Map(); let rafs = [];
+  function installClock() {
+    performance.now = vPerf;
+    Date.now = () => Math.round(dV0 + (vPerf() - pV0));
+    if (!CAPTURE) {
+      window.requestAnimationFrame = cb => realRaf(() => cb(vPerf()));
+      window.setTimeout = (f, ms, ...a) => realSetTimeout(f, (ms || 0) / scale, ...a);
+      window.setInterval = (f, ms, ...a) => realSetInterval(f, (ms || 0) / scale, ...a);
+      return;
+    }
+    window.requestAnimationFrame = cb => { const id = ++tid; rafs.push([id, cb]); return id; };
+    window.cancelAnimationFrame = id => { rafs = rafs.filter(r => r[0] !== id); };
+    window.setTimeout = (f, ms, ...a) => { const id = ++tid; timers.set(id, { at: pV + Math.max(0, ms || 0), f, a, every: 0 }); return id; };
+    window.setInterval = (f, ms, ...a) => { const id = ++tid; const every = Math.max(1, ms || 0); timers.set(id, { at: pV + every, f, a, every }); return id; };
+    window.clearTimeout = window.clearInterval = id => { timers.delete(id); };
+  }
+  const pV0 = pV, dV0 = dV;
+  // Moves the game clock by ms (game time = ms × speed), runs due timers in order, then one animation frame, then lets the page paint.
+  async function step(ms) {
+    vAcc += ms; const target = pV + ms * scale;
+    // timers due now; one set from inside a callback waits for the next step (like a new browser task), so long jobs can slice themselves
+    const due = [...timers].filter(([, t]) => t.at <= target).sort((x, y) => x[1].at - y[1].at);
+    for (const [id, t] of due) {
+      if (timers.get(id) !== t) continue; pV = Math.max(pV, t.at);
+      if (t.every) { t.at += t.every; if (t.at <= target) t.at = target + 1e-3; } else timers.delete(id);
+      try { typeof t.f === 'function' ? t.f(...t.a) : null; } catch (e) { B.errors.push(String(e)); }
+      await Promise.resolve();
+    }
+    pV = target;
+    const q = rafs; rafs = []; for (const [, cb] of q) { try { cb(pV); } catch (e) { B.errors.push(String(e)); } }
+    for (const an of document.getAnimations ? document.getAnimations() : []) { try { if (an.playState === 'running') an.pause(); if (an.__bt == null) an.__bt = 0; an.__bt += ms * scale; an.currentTime = an.__bt; } catch (e) {} }
+    await new Promise(r => realRaf(() => realRaf(r)));   // two real frames: the canvas and the DOM are painted
+  }
+
+  // ---- journal ----
+  const t0 = () => (videoNow() - B.startedAt) / 1000;   // seconds of VIDEO since the scene started (what the editor cuts on), whatever the game speed
+  const B = {
+    on: ON, opts, log: [], marqueurs: [], sons: [], errors: [], running: false, startedAt: 0, scene: null, fps: 0, rnd: () => rnd(),
+    ev(type, data) { const e = { t: +t0().toFixed(2), type, ...(data || {}) }; B.log.push(e); if (opts.log) console.log('[BETA]', JSON.stringify(e)); return e; },
+    mark(label) { const m = { t: +t0().toFixed(2), label }; B.marqueurs.push(m); B.ev('moment', { label }); return m; },
+    state() { return { on: ON, running: B.running, ready: !!B.ready, scene: B.scene, t: +t0().toFixed(2), fps: B.fps, actions: B.log.filter(e => e.type === 'action').length, errors: B.errors.length, marqueurs: B.marqueurs, stuck: B.stuck || false }; },
+  };
+  window.BETA = B;
+  if (!ON) { B.start = B.stop = () => {}; B.game = () => {}; return; }
+
+  // synthetic touches have no real pointer behind them: capturing one must not throw inside the game's handler
+  for (const m of ['setPointerCapture', 'releasePointerCapture']) { const f = Element.prototype[m]; Element.prototype[m] = function (id) { try { return f.call(this, id); } catch (e) {} }; }
+  if (opts.seed) seedRandom(opts.seed);
+  installClock(); setSpeed(opts.vitesse);
+  // ---- sound in capture mode (?capture=1&audio=N seconds): every AudioContext the game creates is one OfflineAudioContext whose clock
+  // is the video clock, so each note and sound lands at its exact video time; BETA.renderAudio() then gives the soundtrack as a WAV ----
+  const AUDIO_LEN = CAPTURE ? num('audio', 0) : 0;
+  // The buffer only covers the clip itself (not the preparation, which can last minutes of game time): the audio clock stays at 0
+  // until the recording starts, then runs from LEAD seconds. Whatever the preparation played is stacked before LEAD and muted by
+  // a master gain, so the render is short (rendering 150 s of unused preparation made 30 s clips time out).
+  let offCtx = null, audioOrigin = null;
+  const LEAD = 1;
+  if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
+    const RATE = 48000;   // the App Store previews are 48 kHz
+    offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
+    const realDest = offCtx.destination, master = offCtx.createGain();
+    master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
+    Object.defineProperty(offCtx, 'destination', { get: () => master });
+    Object.defineProperty(offCtx, 'currentTime', { get: () => {
+      if (audioOrigin == null) { if (!B.ready) return 0; audioOrigin = B.startedAt; }
+      return LEAD + Math.max(0, videoNow() - audioOrigin) / 1000; } });
+    Object.defineProperty(offCtx, 'state', { get: () => 'running' });
+    offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
+    offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
+    const Fake = function () { return offCtx; };
+    window.AudioContext = Fake; window.webkitAudioContext = Fake;
+  }
+  // renders the soundtrack and returns `dur` seconds from the start of the recording, as a 16-bit stereo WAV in base64
+  B.renderAudio = async (from, dur) => {
+    if (!offCtx) return '';
+    const buf = await offCtx.startRendering(), r = buf.sampleRate, a = Math.floor(LEAD * r), n = Math.min(buf.length - a, Math.floor(dur * r));
+    const L = buf.getChannelData(0), R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L, out = new DataView(new ArrayBuffer(44 + n * 4));
+    const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); out.setUint32(4, 36 + n * 4, true); w(8, 'WAVE'); w(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 2, true);
+    out.setUint32(24, r, true); out.setUint32(28, r * 4, true); out.setUint16(32, 4, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * 4, true);
+    // peak limiter at -1 dBFS (instant attack, 150 ms release): no clipping even when many sounds start together
+    const CEIL = 0.89, rel = Math.exp(-1 / (0.15 * r)); let gain = 1;
+    for (let i = 0; i < n; i++) { const pk = Math.max(Math.abs(L[a + i]), Math.abs(R[a + i])), need = pk * gain > CEIL ? CEIL / pk : 1;
+      gain = need < gain ? need : Math.min(1, need, 1 - (1 - gain) * rel);
+      out.setInt16(44 + i * 4, Math.max(-1, Math.min(1, L[a + i] * gain)) * 32767, true); out.setInt16(46 + i * 4, Math.max(-1, Math.min(1, R[a + i] * gain)) * 32767, true); }
+    const bytes = new Uint8Array(out.buffer); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  };
+  addEventListener('error', e => { B.errors.push(String(e.message)); B.ev('erreur', { msg: String(e.message) }); });
+  addEventListener('unhandledrejection', e => { B.errors.push(String(e.reason)); B.ev('erreur', { msg: String(e.reason) }); });
+  // FPS (real frames per real second)
+  (() => { let n = 0, last = realPerf(); const f = () => { n++; const now = realPerf(); if (now - last >= 1000) { B.fps = Math.round(n * 1000 / (now - last)); n = 0; last = now; } realRaf(f); }; realRaf(f); })();
+
+  // ---- the finger and the real gestures ----
+  const css = `#beta-finger{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;z-index:2147483646;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 30%,rgba(255,255,255,.55) 31% 60%,rgba(255,255,255,0) 61%);box-shadow:0 2px 10px rgba(0,0,0,.35);transition:transform .08s, opacity .2s;opacity:0}
+    #beta-finger.down{transform:scale(.78)}#beta-finger.on{opacity:1}
+    .beta-ring{position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid rgba(255,255,255,.9);pointer-events:none;z-index:2147483645;animation:betaRing .45s ease-out forwards}
+    @keyframes betaRing{to{transform:scale(3.2);opacity:0}}
+    #beta-end{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,20,.82);color:#fff;font:900 28px system-ui;text-align:center;animation:betaFade .5s}
+    #beta-end img{max-width:72%;max-height:40%}@keyframes betaFade{from{opacity:0}}
+    body.beta-propre .beta-hide{display:none!important}`;
+  let finger = null, fx = innerWidth / 2, fy = innerHeight * 0.75;
+  function ensureUI() {
+    if (finger || !document.body) return;
+    const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    finger = document.createElement('div'); finger.id = 'beta-finger'; document.body.appendChild(finger);
+    if (opts.ui === 'propre') document.body.classList.add('beta-propre');
+  }
+  const wait = ms => new Promise(r => setTimeout(r, ms));           // game-time ms (follows the speed)
+  const realWait = ms => new Promise(r => setTimeout(r, ms * scale));   // gesture timing (a finger moves at human speed whatever the game speed)
+  const frame = () => new Promise(r => requestAnimationFrame(r));
+  const jitter = (a, b) => a + (b - a) * rnd();
+  const pace = () => opts.style === 'rapide' ? [250, 550] : opts.style === 'debutant' ? [900, 2200] : [600, 1400];
+  function place(x, y) { fx = x; fy = y; if (finger) finger.style.transform = '', finger.style.left = x + 'px', finger.style.top = y + 'px'; }
+  async function moveTo(x, y) {
+    ensureUI(); if (finger && opts.doigt) finger.classList.add('on');
+    const sx = fx, sy = fy, d = Math.hypot(x - sx, y - sy), dur = Math.min(350, 150 + d * 0.5) * scale, t = performance.now();
+    const cx = (sx + x) / 2 + (sy - y) * 0.18, cy = (sy + y) / 2 + (x - sx) * 0.18;   // gentle curve
+    while (true) { const k = Math.min(1, (performance.now() - t) / dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      const px = (1 - e) * (1 - e) * sx + 2 * (1 - e) * e * cx + e * e * x, py = (1 - e) * (1 - e) * sy + 2 * (1 - e) * e * cy + e * e * y; place(px, py);
+      if (k >= 1) break; await frame(); }
+  }
+  function fire(type, x, y, target) {
+    const el = target || document.elementFromPoint(x, y) || document.body;
+    const common = { bubbles: true, cancelable: true, composed: true, clientX: x, clientY: y, screenX: x, screenY: y, button: 0, buttons: type.endsWith('down') || type.endsWith('move') ? 1 : 0, view: window };
+    if (type.startsWith('pointer')) el.dispatchEvent(new PointerEvent(type, { ...common, pointerId: 7, pointerType: 'touch', isPrimary: true }));
+    else el.dispatchEvent(new MouseEvent(type, common));
+    return el;
+  }
+  function ring(x, y) { if (!opts.doigt || !document.body) return; const r = document.createElement('div'); r.className = 'beta-ring'; r.style.left = x + 'px'; r.style.top = y + 'px'; document.body.appendChild(r); setTimeout(() => r.remove(), 500 * scale); }
+  // A tap where a finger would land: pointer + mouse events, then a click on the element under it.
+  async function tap(x, y, label) {
+    if (!B.running) return; await moveTo(x, y); await realWait(jitter(40, 110));
+    if (finger) finger.classList.add('down'); ring(x, y);
+    const el = fire('pointerdown', x, y); fire('mousedown', x, y, el); await realWait(jitter(50, 90));
+    fire('pointerup', x, y, el); fire('mouseup', x, y, el); el.click && el.click();
+    if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'tap', x: Math.round(x), y: Math.round(y), cible: label || describe(el) });
+  }
+  async function drag(x1, y1, x2, y2, label, ms = 420) {
+    if (!B.running) return; await moveTo(x1, y1); await realWait(jitter(60, 120)); if (finger) finger.classList.add('down');
+    const el = fire('pointerdown', x1, y1); fire('mousedown', x1, y1, el); const t = performance.now(); let k = 0; ms *= scale;
+    while (k < 1) { k = Math.min(1, (performance.now() - t) / ms); const e = 1 - Math.pow(1 - k, 3), x = x1 + (x2 - x1) * e, y = y1 + (y2 - y1) * e; place(x, y); fire('pointermove', x, y, el); fire('mousemove', x, y, el); await frame(); }
+    const end = document.elementFromPoint(x2, y2) || el; fire('pointerup', x2, y2, end); fire('mouseup', x2, y2, end); if (finger) finger.classList.remove('down');
+    B.ev('action', { action: 'glisser', x: Math.round(x1), y: Math.round(y1), x2: Math.round(x2), y2: Math.round(y2), cible: label || describe(el) });
+  }
+  const describe = el => el ? (el.dataset && Object.keys(el.dataset).length ? Object.entries(el.dataset).map(([k, v]) => k + '=' + v).join(',') : (el.id || el.tagName.toLowerCase())) : '';
+  // Tap a DOM element by selector (its visible centre). Returns false when it is not on screen.
+  async function tapEl(sel, label) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!el) return false;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height || r.bottom < 0 || r.top > innerHeight) { el.scrollIntoView && el.scrollIntoView({ block: 'center' }); await realWait(150); }
+    const q = el.getBoundingClientRect(); if (!q.width) return false;
+    await tap(q.left + q.width * jitter(0.4, 0.6), q.top + q.height * jitter(0.4, 0.6), label); return true;
+  }
+  const think = () => wait(jitter(...pace()));   // the pause a person takes between two actions
+
+  // ---- sounds: the game passes its SFX object; every call is logged with its time (the Monteur re-syncs the track) ----
+  // only what is on camera (after 'pret'), one entry per sound name every 60 ms, at most 4000 (a time-lapse plays thousands of sounds)
+  const lastSon = {};
+  function logSon(k) { if (!B.ready || B.sons.length >= 4000) return; const t = t0(); if (lastSon[k] != null && t - lastSon[k] < 0.06) return; lastSon[k] = t; B.sons.push({ t: +t.toFixed(3), son: k }); }
+  // a fast-forward (an ellipsis, speed > 1) can fire a dozen sounds in the same 130 ms: they add up and clip. On camera, the same sound
+  // plays at most once every 90 ms and at most 5 sounds start in any 130 ms window (testeur, 23/11: Crumble Crew progression at 0 dB).
+  const lastPlay = {}, recent = [];
+  function allowSon(k) { const t = performance.now(); if (lastPlay[k] != null && t - lastPlay[k] < 90) return false;
+    while (recent.length && t - recent[0] > 130) recent.shift(); if (recent.length >= 5) return false; recent.push(t); lastPlay[k] = t; return true; }
+  function wrapSfx(sfx) { if (!sfx) return; for (const k of Object.keys(sfx)) { const f = sfx[k]; if (typeof f !== 'function') continue; sfx[k] = function (...a) { if (!allowSon(k)) return; logSon(k); return f.apply(this, a); }; } }
+
+  // ---- stuck detection: no progress for 60 s of game time ----
+  function watchStuck(progress) {
+    let last = null, since = performance.now();
+    const iv = setInterval(() => { if (!B.running) return clearInterval(iv); let p; try { p = JSON.stringify(progress()); } catch (e) { p = 'err'; }
+      if (p !== last) { last = p; since = performance.now(); B.stuck = false; }
+      else if (performance.now() - since > 60000 && !B.stuck) { B.stuck = true; B.ev('blocage', { etat: p }); } }, 1000);
+  }
+
+  // ---- end card ----
+  function endCard() {
+    if (!G.logo && !G.endText) return;
+    const el = document.createElement('div'); el.id = 'beta-end';
+    el.innerHTML = (G.logo ? `<img src="${G.logo()}" alt="">` : '') + `<div>${G.endText ? G.endText() : 'Joue gratuitement'}</div>`;
+    document.body.appendChild(el); if (finger) finger.classList.remove('on');
+  }
+
+  // ---- scenes ----
+  let G = {};
+  const api = { tap, drag, tapEl, wait, think, realWait, mark: B.mark, ev: B.ev, rnd: () => rnd(), jitter, opts, running: () => B.running, speed: setSpeed };
+  B.game = def => { G = def || {}; wrapSfx(G.sfx); if (opts.auto) { const go = () => setTimeout(() => B.start(), 300); document.readyState === 'complete' ? go() : addEventListener('load', go); } };
+  B.start = async (o = {}) => {
+    Object.assign(opts, o); if (o.vitesse) setSpeed(o.vitesse); if (o.seed) seedRandom(o.seed);
+    ensureUI(); if (B.running) return; const fn = G.scenes && G.scenes[opts.scene];
+    if (!fn) { B.ev('erreur', { msg: 'scène inconnue : ' + opts.scene }); return; }
+    B.running = true; B.ready = false; B.scene = opts.scene; B.log.length = 0; B.marqueurs.length = 0; B.sons.length = 0; B.startedAt = videoNow();
+    B.ev('debut', { scene: opts.scene, style: opts.style, seed: opts.seed, save: opts.save, vitesse: opts.vitesse });
+    if (G.progress) watchStuck(G.progress);
+    const stopAt = opts.duree ? opts.duree * 1000 : 0;   // video time, counted from 'pret'
+    if (stopAt) (async () => { while (B.running && !(B.ready && videoNow() - B.startedAt >= stopAt)) await wait(100); if (B.running) { B.stop(); endCard(); } })();
+    try { if (G.prepare) await G.prepare(opts.save, api);
+      B.startedAt = videoNow(); B.marqueurs.length = 0; B.sons.length = 0; B.ready = true; B.ev('pret');   // recording starts here
+      await fn(api); }
+    catch (e) { if (B.running) { B.errors.push(String(e)); B.ev('erreur', { msg: String(e && e.message || e) }); } }
+    if (B.running && opts.scene !== 'idle') { B.stop(); if (opts.duree) endCard(); }
+  };
+  B.stop = () => { if (!B.running) return; B.running = false; B.ev('fin', { fps: B.fps, erreurs: B.errors.length }); if (finger) finger.classList.remove('on'); };
+  B.api = api; B.step = step; B.capture = CAPTURE;
+})();
+</script>
+<script>// Toss Bistro — the rules: Momo's kitchen seen from the front like a theatre set (360 × 640 world units, portrait),
+// one ingredient thrown with a slingshot pull, bouncing on the utensils hung on the walls, and one dish to land in.
+// Pure and deterministic (fixed 1/240 s step, no Math.random): the game, the level generator, the solver and the BETA robot
+// all run the very same simulation. A throw is simulated in full at release and then played back from the recording,
+// which is what lets the game slow down the last 1.5 s of a success before it happens.
+(function (root) {
+  'use strict';
+  const W = 360, H = 640, FLOOR = 548, CEIL = 64, G = 1500, DT = 1 / 240, TMAX = 6;
+  const MAXPULL = 130, PK = 9.2;               // pull length (world units) -> launch speed: speed = pull * PK
+  // surfaces: e = restitution, f = tangential friction kept (1 = slippery), sfx = the sound it makes, ut = counts as a trick bounce
+  const MAT = {
+    wall:   { e: .34, f: .80, sfx: 'tok' },
+    pan:    { e: .88, f: .95, sfx: 'bong', ut: 1 },
+    hood:   { e: .55, f: .90, sfx: 'clang', ut: 1 },
+    ladle:  { e: .74, f: .95, sfx: 'dzing', ut: 1 },
+    towel:  { e: .12, f: .45, sfx: 'pof', ut: 1 },
+    bell:   { e: .78, f: .96, sfx: 'ding', ut: 1 },
+    sieve:  { e: .40, f: .85, sfx: 'tic', ut: 1, sieve: 9 },   // lets through anything smaller than radius 9
+    ice:    { e: .20, f: 1.0, sfx: 'shh', ut: 1 },
+    cheese: { e: .00, f: .10, sfx: 'splotch', ut: 1, sticky: .35 },   // holds the ingredient 0.35 s, then lets it slide
+    pot:    { e: .30, f: .70, sfx: 'clonk' },
+    shelf:  { e: .40, f: .85, sfx: 'tok' },
+  };
+  const ING = {
+    egg:    { r: 11, spin: .0, label: 'egg' },
+    tomato: { r: 13, spin: .0, label: 'tomato' },
+    olive:  { r: 7, spin: .0, label: 'olive' },
+    crepe:  { r: 14, flip: .9, flat: true, label: 'crepe' },      // one full somersault every 0.9 s: the flight time (the power) decides how it lands
+    cheese: { r: 12, spin: .0, label: 'cheese' },
+  };
+
+  // ---------- level building: a level is plain JSON; build() turns it into segments, zones and a target ----------
+  // shape kinds: seg (x1,y1,x2,y2,m), plank (x,y,len,ang,m) = a utensil hung on the wall, dome (x,y,r,m = bell), fan (x,y,w,h,fx,fy),
+  // target: { k: 'pot' | 'plate' | 'pan', x, y, w } — the dish; its inside (lower half) is the success sensor
+  function build(L) {
+    const segs = [], fans = [], deco = [];
+    const seg = (x1, y1, x2, y2, m, id) => segs.push({ x1, y1, x2, y2, m, id, mat: MAT[m] });
+    seg(0, CEIL, 0, H, 'wall', 'wl'); seg(W, CEIL, W, H, 'wall', 'wr'); seg(0, CEIL, W, CEIL, 'wall', 'wc');
+    let n = 0;
+    for (const s of L.shapes || []) {
+      const id = s.id || ('s' + n++);
+      if (s.k === 'seg') seg(s.x1, s.y1, s.x2, s.y2, s.m, id);
+      else if (s.k === 'plank') { const a = s.ang * Math.PI / 180, dx = Math.cos(a) * s.len / 2, dy = Math.sin(a) * s.len / 2; seg(s.x - dx, s.y - dy, s.x + dx, s.y + dy, s.m, id); }
+      else if (s.k === 'dome') { const N = 9; for (let i = 0; i < N; i++) { const a0 = Math.PI + i / N * Math.PI, a1 = Math.PI + (i + 1) / N * Math.PI; seg(s.x + Math.cos(a0) * s.r, s.y + Math.sin(a0) * s.r, s.x + Math.cos(a1) * s.r, s.y + Math.sin(a1) * s.r, s.m || 'bell', id); } seg(s.x - s.r, s.y, s.x + s.r, s.y, s.m || 'bell', id); }
+      else if (s.k === 'fan') fans.push({ x: s.x, y: s.y, w: s.w, h: s.h, fx: s.fx, fy: s.fy, id });
+      deco.push(Object.assign({ id }, s));
+    }
+    const T = L.target, tw = T.w, th = T.k === 'pot' ? 46 : 16;
+    // the dish: two rims and a bottom (a pot is deep, a plate or a pan is shallow)
+    seg(T.x - tw / 2, T.y - th, T.x - tw / 2 + 4, T.y, 'pot', 'tg'); seg(T.x + tw / 2, T.y - th, T.x + tw / 2 - 4, T.y, 'pot', 'tg'); seg(T.x - tw / 2 + 4, T.y, T.x + tw / 2 - 4, T.y, 'pot', 'tg');
+    const sensor = { x0: T.x - tw / 2 + 5, x1: T.x + tw / 2 - 5, y0: T.y - th * (T.k === 'pot' ? .62 : .9), y1: T.y + 2 };
+    return { L, segs, fans, deco, sensor, ing: ING[L.ing], start: L.start };
+  }
+
+  function closest(px, py, s) {
+    const dx = s.x2 - s.x1, dy = s.y2 - s.y1, l2 = dx * dx + dy * dy || 1;
+    let u = ((px - s.x1) * dx + (py - s.y1) * dy) / l2; u = u < 0 ? 0 : u > 1 ? 1 : u;
+    return [s.x1 + dx * u, s.y1 + dy * u];
+  }
+
+  // ---------- the throw: simulate everything from a pull vector, return the recording ----------
+  // pull = [px, py], the finger's offset from the ingredient (the throw goes the opposite way), already clamped to MAXPULL.
+  // opts.stopAtFirst: stop at the first contact (the dotted preview); opts.magnet: the tutorial's gentle pull towards the dish.
+  function simulate(B, pull, opts = {}) {
+    const I = B.ing, r = I.r; let [px, py] = pull; const pl = Math.hypot(px, py); if (pl > MAXPULL) { px *= MAXPULL / pl; py *= MAXPULL / pl; }
+    const b = { x: B.start[0], y: B.start[1], vx: -px * PK, vy: -py * PK, a: 0, w: 0 };
+    b.w = I.flip ? Math.sign(b.vx || 1) * Math.PI * 2 / I.flip : b.vx / r * .25;
+    const S = B.sensor, frames = [], events = [], hits = new Set(); let t = 0, rest = 0, stick = 0, stickSeg = null, bounces = 0, lastHit = {}, result = null, surfaces = new Set();
+    const every = opts.stopAtFirst ? 2 : 4;
+    for (let i = 0; t < TMAX; i++) {
+      t = i * DT;
+      if (i % every === 0) frames.push(b.x, b.y, b.a);
+      // forces
+      if (stick > 0) { stick -= DT; b.vx *= .9; b.vy *= .9; if (stick <= 0) stickSeg = null; }
+      else b.vy += G * DT;
+      for (const f of B.fans) if (b.x > f.x - f.w / 2 && b.x < f.x + f.w / 2 && b.y > f.y - f.h / 2 && b.y < f.y + f.h / 2) { b.vx += f.fx * DT; b.vy += f.fy * DT; }
+      if (opts.magnet) { const cx = (S.x0 + S.x1) / 2, cy = S.y0, dx = cx - b.x, dy = cy - b.y, d = Math.hypot(dx, dy); if (d < 150 && b.vy > -200) { b.vx += dx / d * 1400 * DT; b.vy += dy / d * 600 * DT; b.vx *= .995; } }
+      b.x += b.vx * DT; b.y += b.vy * DT; b.a += b.w * DT;
+      // collisions (two passes settle corners)
+      for (let pass = 0; pass < 2; pass++) for (const s of B.segs) {
+        if (s.mat.sieve && r < s.mat.sieve) continue;
+        const [cx, cy] = closest(b.x, b.y, s); let nx = b.x - cx, ny = b.y - cy; const d = Math.hypot(nx, ny);
+        if (d >= r || d === 0) continue;
+        nx /= d; ny /= d; b.x = cx + nx * r; b.y = cy + ny * r;
+        const vn = b.vx * nx + b.vy * ny; if (vn >= 0) continue;
+        const tx = -ny, ty = nx, vt = b.vx * tx + b.vy * ty, M = s.mat;
+        const e = Math.abs(vn) < 60 ? 0 : M.e;
+        b.vx = (-vn * e) * nx + vt * M.f * tx; b.vy = (-vn * e) * ny + vt * M.f * ty;
+        if (I.flat) b.w *= .55; else b.w = vt * M.f / r;
+        if (M.sticky && stickSeg !== s.id && Math.abs(vn) > 80) { stick = M.sticky; stickSeg = s.id; }
+        if (Math.abs(vn) > 70 && (t - (lastHit[s.id] || -1)) > .09) {
+          lastHit[s.id] = t; events.push({ t, k: 'hit', m: s.m, id: s.id, v: Math.abs(vn), x: b.x, y: b.y });
+          if (M.ut && Math.abs(vn) > 140) { bounces++; surfaces.add(s.m); hits.add(s.id); }
+          if (opts.stopAtFirst) { frames.push(b.x, b.y, b.a); return { frames, events, every, result: 'preview', t }; }
+        }
+      }
+      // the dish
+      if (b.x > S.x0 && b.x < S.x1 && b.y > S.y0 && b.y < S.y1 + r) {
+        if (I.flat) { const c = Math.cos(b.a); result = c > .55 ? 'win' : 'upside'; }
+        else result = 'win';
+        events.push({ t, k: result, x: b.x, y: b.y }); break;
+      }
+      if (b.y > FLOOR + r) { result = 'floor'; events.push({ t, k: 'floor', x: b.x, y: FLOOR }); break; }
+      if (b.x < -60 || b.x > W + 60) { result = 'out'; events.push({ t, k: 'out', x: b.x, y: b.y }); break; }
+      if (Math.hypot(b.vx, b.vy) < 22 && stick <= 0) { rest += DT; if (rest > .5) { result = 'rest'; events.push({ t, k: 'rest', x: b.x, y: b.y }); break; } } else rest = 0;
+    }
+    frames.push(b.x, b.y, b.a);
+    if (!result) { result = 'time'; events.push({ t, k: 'time', x: b.x, y: b.y }); }
+    return { frames, events, every, result, t, bounces, surfaces: [...surfaces], hits: [...hits] };
+  }
+
+  // stars: 1 = served, 2 = in 3 tries or fewer, 3 = the bonus objective
+  function bonusOk(L, rec) {
+    const o = L.bonus; if (!o || rec.result !== 'win') return false;
+    if (o.k === 'touch') return rec.hits.includes(o.id);
+    if (o.k === 'bounces') return rec.bounces >= o.n;
+    if (o.k === 'surfaces') return rec.surfaces.length >= o.n;
+    return false;
+  }
+
+  // ---------- the solver: sweeps the pull space, keeps the winning pulls, picks the safest one ----------
+  // run at build time (tools/gen-levels.mjs) for every level: a level ships only if it has a solution that isn't too narrow.
+  function solve(B, o = {}) {
+    const wins = [], A0 = o.a0 ?? 0, A1 = o.a1 ?? 360, DA = o.da || 1.5, P0 = o.p0 || 40, P1 = o.p1 || MAXPULL, DP = o.dp || 6;
+    let tried = 0, minB = 99, bonus = 0;
+    for (let ad = A0; ad < A1; ad += DA) for (let p = P0; p <= P1; p += DP) {
+      const a = ad * Math.PI / 180, pull = [Math.cos(a) * p, Math.sin(a) * p]; tried++;
+      const rec = simulate(B, pull, { magnet: B.L.magnet });
+      if (rec.result === 'win') { wins.push({ ad, p, b: rec.bounces, bonus: bonusOk(B.L, rec) }); minB = Math.min(minB, rec.bounces); }
+    }
+    // the safest pull: the win with the most winning neighbours
+    let best = null, bestN = -1;
+    for (const w of wins) { let n = 0; for (const v of wins) if (Math.abs(v.ad - w.ad) <= DA * 2.01 && Math.abs(v.p - w.p) <= DP * 2.01) n++; if (n > bestN) { bestN = n; best = w; } }
+    let bestBonus = null, bbN = -1;
+    for (const w of wins) if (w.bonus) { bonus++; let n = 0; for (const v of wins) if (v.bonus && Math.abs(v.ad - w.ad) <= DA * 2.01 && Math.abs(v.p - w.p) <= DP * 2.01) n++; if (n > bbN) { bbN = n; bestBonus = w; } }
+    const toPull = w => w && [Math.cos(w.ad * Math.PI / 180) * w.p, Math.sin(w.ad * Math.PI / 180) * w.p];   // full precision: a rounded pull can land elsewhere
+    let trick = null; for (const w of wins) if (!trick || w.b > trick.b) trick = w;   // the throw with the most bounces (the TRICK SHOT the robot films)
+    const share = n => wins.length ? wins.filter(w => w.b >= n).length / wins.length : 0;   // share of the winning pulls that bounce n times or more
+    return { tried, wins: wins.length, ratio: wins.length / tried, minBounces: wins.length ? minB : -1, share1: share(1), share2: share(2), best: toPull(best), bestN, bonus, bonusPull: toPull(bestBonus), trickPull: toPull(trick), trickB: trick ? trick.b : 0 };
+  }
+
+  // ---------- seeded randomness for the generator and the dish of the day ----------
+  function rng(seed) { let a = (seed >>> 0) || 1; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  const api = { W, H, FLOOR, CEIL, G, DT, TMAX, MAXPULL, PK, MAT, ING, build, simulate, solve, bonusOk, rng, closest };
+  root.TBC = api; if (typeof module !== 'undefined') module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// generated by tools/gen-levels.mjs (pulls recomputed by tools/resolve-levels.mjs) — do not edit by hand
+window.TB_LEVELS = [{"id":1,"kitchen":1,"ing":"egg","start":[86,430],"magnet":true,"target":{"k":"pot","x":250,"y":520,"w":92},"shapes":[],"bonus":null,"say":"l1","sol":[-61.70761052990778,73.54026653942189],"solB":null,"solT":[113.2796367476825,50.43534374139922],"trickB":0,"ratio":0.175},{"id":2,"kitchen":1,"ing":"egg","start":[70,470],"target":{"k":"pot","x":292,"y":520,"w":80},"shapes":[{"k":"plank","m":"pan","x":200,"y":200,"len":78,"ang":18,"id":"pan1"},{"k":"seg","m":"shelf","x1":150,"y1":380,"x2":230,"y2":380,"id":"sh1"}],"bonus":{"k":"touch","id":"pan1"},"say":"l2","sol":[-79.12737803725165,76.41242075048969],"solB":[-41.20672527575033,101.99022400234662],"solT":[-12.22983020231544,116.35906175808799],"trickB":1,"ratio":0.0935},{"id":3,"kitchen":1,"ing":"crepe","start":[84,470],"target":{"k":"plate","x":262,"y":500,"w":96},"shapes":[],"bonus":null,"say":"l3","sol":[-48.35557096694672,90.94360206446949],"solB":null,"solT":[65.70998876491741,105.15796392339684],"trickB":0,"ratio":0.0234},{"id":4,"kitchen":1,"ing":"tomato","start":[60,453],"target":{"k":"pot","x":259,"y":507,"w":88},"shapes":[{"k":"plank","m":"pan","x":75,"y":306,"len":75,"ang":28,"id":"pan0"},{"k":"plank","m":"towel","x":196,"y":252,"len":83,"ang":38,"id":"towel1"},{"k":"plank","m":"ladle","x":201,"y":196,"len":46,"ang":1,"id":"ladle2"},{"k":"seg","m":"shelf","x1":158,"y1":412,"x2":158,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[-66.20712379771355,78.90257764125474],"solB":[28.304861785161144,113.52459997429159],"solT":[47.588187239868624,106.8848185441843],"trickB":3,"ratio":0.047,"seed":1001},{"id":5,"kitchen":1,"ing":"crepe","start":[77,457],"target":{"k":"plate","x":247,"y":489,"w":88},"shapes":[{"k":"plank","m":"sieve","x":72,"y":368,"len":73,"ang":-39,"id":"sieve0"},{"k":"plank","m":"towel","x":132,"y":218,"len":66,"ang":-38,"id":"towel1"},{"k":"dome","m":"bell","x":154,"y":305,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[-53.682518733191685,79.58760696528401],"solB":null,"solT":[-18.743340195555934,65.36579532380568],"trickB":0,"ratio":0.0094,"seed":1002},{"id":6,"kitchen":1,"ing":"egg","start":[268,457],"target":{"k":"pot","x":47,"y":471,"w":71},"shapes":[{"k":"plank","m":"pan","x":92,"y":401,"len":84,"ang":7,"id":"pan0"},{"k":"plank","m":"sieve","x":285,"y":279,"len":75,"ang":32,"id":"sieve1"},{"k":"plank","m":"pan","x":185,"y":420,"len":80,"ang":30,"id":"pan2"},{"k":"plank","m":"pan","x":214,"y":339,"len":62,"ang":16,"id":"pan3"},{"k":"dome","m":"bell","x":213,"y":329,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[53.95048502539884,52.099377784424796],"solB":[6.306931015608869e-15,103],"solT":[107.3871500692704,61.99999999999999],"trickB":8,"ratio":0.0491,"seed":1007},{"id":7,"kitchen":1,"ing":"olive","start":[91,477],"target":{"k":"pot","x":230,"y":505,"w":87},"shapes":[{"k":"plank","m":"pan","x":140,"y":362,"len":88,"ang":0,"id":"pan0"},{"k":"plank","m":"hood","x":231,"y":135,"len":95,"ang":37,"id":"hood1"},{"k":"plank","m":"sieve","x":134,"y":116,"len":80,"ang":-23,"id":"sieve2"},{"k":"seg","m":"shelf","x1":173,"y1":423,"x2":173,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[-54.99999999999998,95.26279441628826],"solB":null,"solT":[66.20712379771355,78.90257764125474],"trickB":2,"ratio":0.047,"seed":1014},{"id":8,"kitchen":1,"ing":"tomato","start":[89,463],"target":{"k":"pan","x":288,"y":488,"w":97},"shapes":[{"k":"plank","m":"ladle","x":299,"y":134,"len":36,"ang":-33,"id":"ladle0"},{"k":"plank","m":"hood","x":127,"y":167,"len":92,"ang":-23,"id":"hood1"},{"k":"plank","m":"towel","x":251,"y":398,"len":70,"ang":-31,"id":"towel2"},{"k":"plank","m":"pan","x":125,"y":352,"len":82,"ang":-38,"id":"pan3"},{"k":"seg","m":"shelf","x1":214,"y1":422,"x2":214,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":239,"y":319,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[-61.70761052990778,73.54026653942189],"solB":[-73.60436669947441,81.74593080251337],"solT":[-69.33992003037258,102.80065899682518],"trickB":4,"ratio":0.0299,"seed":1029},{"id":9,"kitchen":1,"ing":"olive","start":[301,451],"target":{"k":"pot","x":78,"y":484,"w":85},"shapes":[{"k":"plank","m":"ladle","x":153,"y":163,"len":45,"ang":-25,"id":"ladle0"},{"k":"plank","m":"hood","x":79,"y":306,"len":102,"ang":-39,"id":"hood1"},{"k":"seg","m":"shelf","x1":195,"y1":372,"x2":195,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[51.641871906447996,97.12423521448196],"solB":[21.532374030699373,122.11616137351379],"solT":[21.532374030699373,122.11616137351379],"trickB":2,"ratio":0.0355,"seed":1033},{"id":10,"kitchen":1,"chef":true,"steps":[{"id":10,"kitchen":1,"ing":"egg","start":[68,469],"target":{"k":"plate","x":280,"y":517,"w":99},"shapes":[{"k":"plank","m":"ladle","x":249,"y":340,"len":43,"ang":-7,"id":"ladle0"},{"k":"plank","m":"ladle","x":160,"y":330,"len":48,"ang":11,"id":"ladle1"},{"k":"plank","m":"towel","x":206,"y":217,"len":80,"ang":26,"id":"towel2"},{"k":"plank","m":"hood","x":286,"y":222,"len":106,"ang":2,"id":"hood3"},{"k":"seg","m":"shelf","x1":158,"y1":391,"x2":158,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[-53.682518733191685,79.58760696528401],"solB":[-32.24957063058889,112.46761842478331],"solT":[-8.161507428062663,116.71499388039943],"trickB":5,"ratio":0.0248,"seed":1089},{"id":10,"kitchen":1,"ing":"tomato","start":[270,470],"target":{"k":"plate","x":51,"y":514,"w":86},"shapes":[{"k":"plank","m":"towel","x":279,"y":380,"len":86,"ang":13,"id":"towel0"},{"k":"plank","m":"pan","x":215,"y":349,"len":82,"ang":14,"id":"pan1"},{"k":"seg","m":"shelf","x1":178,"y1":397,"x2":178,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":173,"y":176,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[38.49666814844305,72.401702614432],"solB":null,"solT":[-79.70566360113088,94.98951094675327],"trickB":2,"ratio":0.0303,"seed":1131},{"id":10,"kitchen":1,"ing":"crepe","start":[56,456],"target":{"k":"plate","x":303,"y":245,"w":87},"shapes":[{"k":"seg","m":"shelf","x1":246,"y1":248,"x2":361,"y2":248,"id":"tshelf"},{"k":"plank","m":"towel","x":242,"y":347,"len":84,"ang":11,"id":"towel0"},{"k":"plank","m":"pan","x":183,"y":262,"len":68,"ang":-20,"id":"pan1"},{"k":"plank","m":"hood","x":215,"y":389,"len":125,"ang":9,"id":"hood2"},{"k":"seg","m":"shelf","x1":163,"y1":435,"x2":163,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[-26.611408515963458,106.73252989035961],"solB":null,"solT":[-21.53237403069936,122.11616137351379],"trickB":1,"ratio":0.0047,"seed":1136}]},{"id":11,"kitchen":1,"ing":"tomato","start":[92,480],"target":{"k":"pan","x":309,"y":521,"w":82},"shapes":[{"k":"plank","m":"hood","x":230,"y":326,"len":109,"ang":21,"id":"hood0"},{"k":"plank","m":"pan","x":153,"y":128,"len":68,"ang":30,"id":"pan1"},{"k":"seg","m":"shelf","x1":227,"y1":389,"x2":227,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[-70.70663706551933,84.26488874308758],"solB":null,"solT":[-10.766431716568293,102.43575522293216],"trickB":1,"ratio":0.0359,"seed":1165},{"id":12,"kitchen":1,"ing":"tomato","start":[268,461],"target":{"k":"pot","x":55,"y":511,"w":84},"shapes":[{"k":"plank","m":"pan","x":269,"y":128,"len":83,"ang":-31,"id":"pan0"},{"k":"plank","m":"pan","x":226,"y":239,"len":88,"ang":-5,"id":"pan1"},{"k":"plank","m":"pan","x":106,"y":200,"len":86,"ang":-12,"id":"pan2"},{"k":"seg","m":"shelf","x1":150,"y1":314,"x2":150,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[44.741030738338026,100.4900003406861],"solB":null,"solT":[-40.01635676910324,109.94403663195129],"trickB":3,"ratio":0.0226,"seed":1167},{"id":13,"kitchen":1,"ing":"tomato","start":[74,459],"target":{"k":"pot","x":288,"y":496,"w":86},"shapes":[{"k":"plank","m":"pan","x":160,"y":258,"len":67,"ang":-8,"id":"pan0"},{"k":"plank","m":"hood","x":250,"y":392,"len":112,"ang":36,"id":"hood1"},{"k":"plank","m":"hood","x":176,"y":297,"len":116,"ang":1,"id":"hood2"},{"k":"plank","m":"pan","x":154,"y":195,"len":69,"ang":-10,"id":"pan3"}],"bonus":{"k":"bounces","n":2},"sol":[-87.70036393368967,39.04671773527684],"solB":[-51.64187190644796,97.12423521448198],"solT":[-51.64187190644796,97.12423521448198],"trickB":2,"ratio":0.0466,"seed":1174},{"id":14,"kitchen":1,"ing":"egg","start":[291,452],"target":{"k":"pot","x":111,"y":356,"w":84},"shapes":[{"k":"seg","m":"shelf","x1":55,"y1":359,"x2":167,"y2":359,"id":"tshelf"},{"k":"plank","m":"pan","x":291,"y":286,"len":86,"ang":26,"id":"pan0"},{"k":"plank","m":"pan","x":117,"y":199,"len":86,"ang":-16,"id":"pan1"},{"k":"seg","m":"shelf","x1":217,"y1":331,"x2":217,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":163,"y":186,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[28.390647649150914,99.00995468164685],"solB":[33.99186938124422,104.61621679246689],"solT":[44.741030738338026,100.4900003406861],"trickB":1,"ratio":0.0128,"seed":1183},{"id":15,"kitchen":1,"ing":"crepe","start":[65,440],"target":{"k":"plate","x":192,"y":495,"w":83},"shapes":[{"k":"plank","m":"pan","x":53,"y":117,"len":83,"ang":-36,"id":"pan0"},{"k":"plank","m":"towel","x":169,"y":174,"len":78,"ang":14,"id":"towel1"},{"k":"plank","m":"pan","x":230,"y":201,"len":61,"ang":16,"id":"pan2"},{"k":"plank","m":"pan","x":301,"y":122,"len":66,"ang":-32,"id":"pan3"},{"k":"seg","m":"shelf","x1":128,"y1":367,"x2":128,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[-16.450688900777408,65.98010938676777],"solB":null,"solT":[3.838944637275119,109.93299097210054],"trickB":1,"ratio":0.0073,"seed":1184},{"id":16,"kitchen":1,"ing":"egg","start":[80,477],"target":{"k":"pan","x":279,"y":362,"w":100},"shapes":[{"k":"seg","m":"shelf","x1":215,"y1":365,"x2":343,"y2":365,"id":"tshelf"},{"k":"plank","m":"ladle","x":182,"y":258,"len":49,"ang":-36,"id":"ladle0"},{"k":"plank","m":"hood","x":228,"y":303,"len":108,"ang":-6,"id":"hood1"},{"k":"plank","m":"sieve","x":179,"y":222,"len":77,"ang":-15,"id":"sieve2"},{"k":"plank","m":"pan","x":291,"y":153,"len":77,"ang":32,"id":"pan3"},{"k":"seg","m":"shelf","x1":192,"y1":406,"x2":192,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[-58.29111906565252,93.28529057720687],"solB":[-31.828750420619578,97.95882117840083],"solT":[-31.828750420619578,97.95882117840083],"trickB":3,"ratio":0.0175,"seed":1231},{"id":17,"kitchen":1,"ing":"egg","start":[278,454],"target":{"k":"pot","x":118,"y":507,"w":73},"shapes":[{"k":"plank","m":"hood","x":135,"y":321,"len":120,"ang":38,"id":"hood0"},{"k":"plank","m":"hood","x":69,"y":376,"len":111,"ang":29,"id":"hood1"},{"k":"plank","m":"hood","x":130,"y":414,"len":111,"ang":-22,"id":"hood2"},{"k":"plank","m":"sieve","x":189,"y":358,"len":81,"ang":8,"id":"sieve3"},{"k":"seg","m":"shelf","x1":184,"y1":433,"x2":184,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[90.94360206446947,48.35557096694675],"solB":null,"solT":[95.49993702037911,38.58447912183894],"trickB":1,"ratio":0.0312,"seed":1249},{"id":18,"kitchen":1,"ing":"egg","start":[71,446],"target":{"k":"pan","x":297,"y":471,"w":94},"shapes":[{"k":"plank","m":"towel","x":52,"y":169,"len":81,"ang":26,"id":"towel0"},{"k":"plank","m":"ladle","x":197,"y":214,"len":49,"ang":28,"id":"ladle1"},{"k":"plank","m":"hood","x":97,"y":244,"len":114,"ang":-40,"id":"hood2"},{"k":"plank","m":"pan","x":280,"y":386,"len":78,"ang":20,"id":"pan3"},{"k":"seg","m":"shelf","x1":199,"y1":352,"x2":199,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[-11.498130959441866,109.39740849051007],"solB":[-51.49999999999998,89.20061658979719],"solT":[-10.766431716568293,102.43575522293216],"trickB":5,"ratio":0.0432,"seed":1272},{"id":19,"kitchen":1,"ing":"tomato","start":[59,466],"target":{"k":"pot","x":249,"y":489,"w":82},"shapes":[{"k":"plank","m":"sieve","x":194,"y":348,"len":63,"ang":8,"id":"sieve0"},{"k":"plank","m":"hood","x":219,"y":413,"len":96,"ang":31,"id":"hood1"},{"k":"plank","m":"ladle","x":211,"y":343,"len":39,"ang":31,"id":"ladle2"}],"bonus":{"k":"surfaces","n":2},"sol":[-86.28422844472004,42.08363009175142],"solB":[-66.20712379771355,78.90257764125474],"solT":[-61.82459497085073,64.02124223013998],"trickB":4,"ratio":0.0325,"seed":1283},{"id":20,"kitchen":1,"chef":true,"steps":[{"id":20,"kitchen":1,"ing":"egg","start":[267,461],"target":{"k":"plate","x":92,"y":365,"w":83},"shapes":[{"k":"seg","m":"shelf","x1":36,"y1":368,"x2":147,"y2":368,"id":"tshelf"},{"k":"plank","m":"pan","x":186,"y":388,"len":87,"ang":-5,"id":"pan0"},{"k":"plank","m":"towel","x":174,"y":218,"len":68,"ang":10,"id":"towel1"},{"k":"plank","m":"pan","x":217,"y":264,"len":83,"ang":1,"id":"pan2"},{"k":"plank","m":"pan","x":192,"y":155,"len":69,"ang":-32,"id":"pan3"},{"k":"seg","m":"shelf","x1":151,"y1":375,"x2":151,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[-61.511219381782134,91.1941329810546],"solB":[-65.7099887649174,105.15796392339684],"solT":[32.2495706305889,112.46761842478331],"trickB":6,"ratio":0.0137,"seed":1299},{"id":20,"kitchen":1,"ing":"tomato","start":[286,478],"target":{"k":"plate","x":63,"y":496,"w":91},"shapes":[{"k":"plank","m":"pan","x":255,"y":273,"len":61,"ang":-24,"id":"pan0"},{"k":"plank","m":"towel","x":135,"y":304,"len":80,"ang":8,"id":"towel1"},{"k":"seg","m":"shelf","x1":187,"y1":336,"x2":187,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":109,"y":205,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[41.206725275750316,101.99022400234662],"solB":[44.741030738338026,100.4900003406861],"solT":[-25.781049661402133,121.2903024909919],"trickB":2,"ratio":0.0085,"seed":1307},{"id":20,"kitchen":1,"ing":"crepe","start":[88,480],"target":{"k":"plate","x":250,"y":510,"w":99},"shapes":[{"k":"plank","m":"ladle","x":130,"y":353,"len":44,"ang":-16,"id":"ladle0"},{"k":"plank","m":"towel","x":278,"y":165,"len":83,"ang":21,"id":"towel1"},{"k":"plank","m":"towel","x":235,"y":191,"len":79,"ang":-2,"id":"towel2"},{"k":"plank","m":"pan","x":112,"y":224,"len":77,"ang":11,"id":"pan3"},{"k":"dome","m":"bell","x":184,"y":170,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[-54.58168421602009,87.34895390411188],"solB":[29.99831505435882,120.31667005822356],"solT":[29.99831505435882,120.31667005822356],"trickB":5,"ratio":0.0141,"seed":1308}]},{"id":21,"kitchen":2,"ing":"tomato","start":[265,446],"target":{"k":"pan","x":78,"y":349,"w":99},"shapes":[{"k":"seg","m":"shelf","x1":15,"y1":352,"x2":142,"y2":352,"id":"tshelf"},{"k":"plank","m":"pan","x":169,"y":387,"len":61,"ang":39,"id":"pan0"},{"k":"plank","m":"hood","x":143,"y":244,"len":111,"ang":-20,"id":"hood1"},{"k":"plank","m":"ladle","x":131,"y":292,"len":44,"ang":12,"id":"ladle2"},{"k":"seg","m":"shelf","x1":196,"y1":302,"x2":196,"y2":548,"id":"wall"},{"k":"fan","x":290,"y":237,"w":120,"h":70,"fx":-788,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[15.309041105607225,108.92948756157273],"solB":[-29.665631459994945,91.30142556433475],"solT":[-29.665631459994945,91.30142556433475],"trickB":3,"ratio":0.0103,"seed":1320},{"id":22,"kitchen":2,"ing":"egg","start":[284,458],"target":{"k":"pot","x":71,"y":266,"w":82},"shapes":[{"k":"seg","m":"shelf","x1":16,"y1":269,"x2":126,"y2":269,"id":"tshelf"},{"k":"plank","m":"ladle","x":192,"y":111,"len":41,"ang":-26,"id":"ladle0"},{"k":"plank","m":"ice","x":82,"y":336,"len":64,"ang":10,"id":"ice1"},{"k":"plank","m":"hood","x":71,"y":161,"len":101,"ang":-36,"id":"hood2"},{"k":"seg","m":"shelf","x1":191,"y1":425,"x2":191,"y2":548,"id":"wall"},{"k":"fan","x":290,"y":342,"w":120,"h":70,"fx":-704,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[37.62221576582357,103.36618828644991],"solB":[32.2495706305889,112.46761842478331],"solT":[32.2495706305889,112.46761842478331],"trickB":2,"ratio":0.0068,"seed":1348},{"id":23,"kitchen":2,"ing":"egg","start":[65,460],"target":{"k":"pot","x":238,"y":477,"w":76},"shapes":[{"k":"plank","m":"cheese","x":277,"y":249,"len":69,"ang":-1,"id":"cheese0"},{"k":"plank","m":"towel","x":53,"y":370,"len":72,"ang":-37,"id":"towel1"},{"k":"plank","m":"ladle","x":179,"y":159,"len":43,"ang":-12,"id":"ladle2"},{"k":"plank","m":"ice","x":115,"y":356,"len":77,"ang":-14,"id":"ice3"},{"k":"seg","m":"shelf","x1":122,"y1":404,"x2":122,"y2":548,"id":"wall"},{"k":"fan","x":290,"y":235,"w":120,"h":70,"fx":-534,"fy":-120,"id":"fan"}],"bonus":{"k":"surfaces","n":2},"sol":[-35.228074762543876,96.78833994094857],"solB":null,"solT":[72.03239261310202,92.19725817198648],"trickB":1,"ratio":0.0209,"seed":1379},{"id":24,"kitchen":2,"ing":"olive","start":[282,470],"target":{"k":"pot","x":124,"y":474,"w":72},"shapes":[{"k":"plank","m":"towel","x":53,"y":239,"len":67,"ang":-16,"id":"towel0"},{"k":"plank","m":"ice","x":240,"y":162,"len":87,"ang":-5,"id":"ice1"},{"k":"plank","m":"ice","x":52,"y":389,"len":72,"ang":26,"id":"ice2"},{"k":"seg","m":"shelf","x1":173,"y1":342,"x2":173,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[27.502512499370322,84.64402995026866],"solB":[65.70998876491741,105.15796392339684],"solT":[65.70998876491741,105.15796392339684],"trickB":2,"ratio":0.0209,"seed":1394},{"id":25,"kitchen":2,"ing":"crepe","start":[281,462],"target":{"k":"plate","x":155,"y":375,"w":97},"shapes":[{"k":"seg","m":"shelf","x1":92,"y1":378,"x2":217,"y2":378,"id":"tshelf"},{"k":"plank","m":"ice","x":58,"y":361,"len":86,"ang":38,"id":"ice1"},{"k":"plank","m":"ice","x":108,"y":302,"len":72,"ang":13,"id":"ice2"},{"k":"seg","m":"shelf","x1":217,"y1":371,"x2":217,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[17.048758647056275,80.20810326017205],"solB":[21.532374030699373,122.11616137351379],"solT":[21.532374030699373,122.11616137351379],"trickB":2,"ratio":0.0077,"seed":1400},{"id":26,"kitchen":2,"ing":"cheese","start":[279,477],"target":{"k":"pan","x":103,"y":515,"w":97},"shapes":[{"k":"plank","m":"ladle","x":224,"y":415,"len":38,"ang":-33,"id":"ladle0"},{"k":"plank","m":"hood","x":120,"y":273,"len":97,"ang":26,"id":"hood1"},{"k":"plank","m":"cheese","x":208,"y":119,"len":64,"ang":7,"id":"cheese2"},{"k":"plank","m":"towel","x":171,"y":353,"len":67,"ang":-32,"id":"towel3"},{"k":"plank","m":"cheese","x":93,"y":133,"len":78,"ang":-2,"id":"cheese4"},{"k":"seg","m":"shelf","x1":191,"y1":430,"x2":191,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":95,"y":282,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[-81.74593080251336,73.60436669947441],"solB":null,"solT":[19.95952231850491,93.90216967044533],"trickB":4,"ratio":0.0235,"seed":1418},{"id":27,"kitchen":2,"ing":"egg","start":[78,443],"target":{"k":"pan","x":305,"y":486,"w":91},"shapes":[{"k":"plank","m":"ice","x":134,"y":159,"len":69,"ang":8,"id":"ice0"},{"k":"plank","m":"hood","x":169,"y":341,"len":109,"ang":27,"id":"hood1"},{"k":"plank","m":"ladle","x":158,"y":308,"len":37,"ang":-18,"id":"ladle2"},{"k":"seg","m":"shelf","x1":198,"y1":365,"x2":198,"y2":548,"id":"wall"},{"k":"fan","x":290,"y":242,"w":120,"h":70,"fx":-820,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[-17.88576229969382,101.43519856025743],"solB":[-19.101299543362334,108.32885283134289],"solT":[79.70566360113088,94.98951094675327],"trickB":3,"ratio":0.0064,"seed":1429},{"id":28,"kitchen":2,"ing":"egg","start":[267,448],"target":{"k":"pot","x":95,"y":477,"w":82},"shapes":[{"k":"plank","m":"ladle","x":202,"y":336,"len":47,"ang":-27,"id":"ladle1"},{"k":"plank","m":"ladle","x":156,"y":374,"len":36,"ang":3,"id":"ladle2"},{"k":"plank","m":"ice","x":233,"y":126,"len":85,"ang":5,"id":"ice3"},{"k":"seg","m":"shelf","x1":176,"y1":325,"x2":176,"y2":548,"id":"wall"},{"k":"fan","x":70,"y":226,"w":120,"h":70,"fx":868,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[19.101299543362344,108.32885283134289],"solB":[12.229830202315455,116.35906175808798],"solT":[11.412194278725387,81.20198163680877],"trickB":2,"ratio":0.0081,"seed":1431},{"id":29,"kitchen":2,"ing":"olive","start":[279,477],"target":{"k":"pot","x":54,"y":476,"w":83},"shapes":[{"k":"plank","m":"pan","x":139,"y":288,"len":68,"ang":4,"id":"pan0"},{"k":"plank","m":"ladle","x":298,"y":357,"len":39,"ang":18,"id":"ladle1"},{"k":"plank","m":"hood","x":116,"y":296,"len":124,"ang":-8,"id":"hood2"},{"k":"seg","m":"shelf","x1":141,"y1":307,"x2":141,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[26.61140851596347,106.73252989035961],"solB":[19.95952231850491,93.90216967044533],"solT":[12.96152944518903,123.32071502566589],"trickB":4,"ratio":0.0171,"seed":1441},{"id":30,"kitchen":2,"chef":true,"steps":[{"id":30,"kitchen":2,"ing":"egg","start":[80,477],"target":{"k":"plate","x":289,"y":331,"w":91},"shapes":[{"k":"seg","m":"shelf","x1":230,"y1":334,"x2":349,"y2":334,"id":"tshelf"},{"k":"plank","m":"ice","x":205,"y":259,"len":80,"ang":16,"id":"ice0"},{"k":"plank","m":"hood","x":157,"y":265,"len":122,"ang":-2,"id":"hood2"},{"k":"plank","m":"pan","x":301,"y":156,"len":62,"ang":-20,"id":"pan3"},{"k":"dome","m":"bell","x":154,"y":200,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[-54.99999999999998,95.26279441628826],"solB":null,"solT":[-35.96223296792756,89.00965003841159],"trickB":1,"ratio":0.0132,"seed":1446},{"id":30,"kitchen":2,"ing":"tomato","start":[60,474],"target":{"k":"plate","x":294,"y":503,"w":84},"shapes":[{"k":"plank","m":"pan","x":145,"y":396,"len":82,"ang":36,"id":"pan0"},{"k":"plank","m":"ice","x":203,"y":242,"len":65,"ang":36,"id":"ice1"},{"k":"plank","m":"ice","x":180,"y":355,"len":68,"ang":35,"id":"ice2"},{"k":"seg","m":"shelf","x1":170,"y1":360,"x2":170,"y2":548,"id":"wall"},{"k":"fan","x":290,"y":243,"w":120,"h":70,"fx":-587,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[-19.959522318504874,93.90216967044535],"solB":[-19.959522318504874,93.90216967044535],"solT":[46.45121758357308,114.97079796628164],"trickB":3,"ratio":0.0192,"seed":1478},{"id":30,"kitchen":2,"ing":"crepe","start":[69,442],"target":{"k":"plate","x":241,"y":475,"w":82},"shapes":[{"k":"plank","m":"cheese","x":68,"y":272,"len":71,"ang":4,"id":"cheese0"},{"k":"plank","m":"ladle","x":299,"y":201,"len":45,"ang":-39,"id":"ladle1"},{"k":"plank","m":"cheese","x":272,"y":137,"len":81,"ang":-3,"id":"cheese2"},{"k":"plank","m":"pan","x":194,"y":376,"len":69,"ang":36,"id":"pan3"},{"k":"seg","m":"shelf","x1":148,"y1":376,"x2":148,"y2":548,"id":"wall"}],"bonus":{"k":"bounces","n":2},"sol":[-50.87224936638766,81.4126172310169],"solB":[-51.28942417432207,105.15890341700253],"solT":[-45.15222811927499,92.5757867688142],"trickB":3,"ratio":0.0085,"seed":1479}]},{"id":31,"kitchen":2,"ing":"cheese","start":[66,480],"target":{"k":"pot","x":293,"y":494,"w":83},"shapes":[{"k":"plank","m":"ice","x":286,"y":259,"len":62,"ang":-29,"id":"ice0"},{"k":"plank","m":"hood","x":85,"y":321,"len":109,"ang":-35,"id":"hood1"},{"k":"plank","m":"pan","x":233,"y":184,"len":83,"ang":32,"id":"pan2"},{"k":"plank","m":"ice","x":190,"y":403,"len":66,"ang":16,"id":"ice3"},{"k":"seg","m":"shelf","x1":162,"y1":317,"x2":162,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":249,"y":311,"r":20,"id":"bell"},{"k":"fan","x":290,"y":164,"w":120,"h":70,"fx":-520,"fy":-120,"id":"fan"}],"bonus":{"k":"touch","id":"bell"},"sol":[-33.99186938124421,104.6162167924669],"solB":[-31.828750420619578,97.95882117840083],"solT":[-38.31810730249347,117.93100802059905],"trickB":4,"ratio":0.0107,"seed":1620},{"id":32,"kitchen":2,"ing":"cheese","start":[94,479],"target":{"k":"pan","x":271,"y":496,"w":84},"shapes":[{"k":"plank","m":"ladle","x":299,"y":250,"len":49,"ang":-20,"id":"ladle0"},{"k":"plank","m":"towel","x":233,"y":343,"len":72,"ang":38,"id":"towel1"},{"k":"plank","m":"hood","x":263,"y":369,"len":106,"ang":37,"id":"hood2"},{"k":"plank","m":"ice","x":176,"y":319,"len":75,"ang":-13,"id":"ice3"},{"k":"plank","m":"ladle","x":277,"y":220,"len":45,"ang":20,"id":"ladle4"},{"k":"seg","m":"shelf","x1":180,"y1":347,"x2":180,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":153,"y":260,"r":20,"id":"bell"},{"k":"fan","x":290,"y":355,"w":120,"h":70,"fx":-505,"fy":-120,"id":"fan"}],"bonus":{"k":"touch","id":"bell"},"sol":[-44.74103073833801,100.49000034068611],"solB":[-8.649802744271541,123.6979422322182],"solT":[-40.01635676910324,109.94403663195129],"trickB":2,"ratio":0.0064,"seed":1792},{"id":33,"kitchen":2,"ing":"egg","start":[79,460],"target":{"k":"pot","x":264,"y":379,"w":75},"shapes":[{"k":"seg","m":"shelf","x1":213,"y1":382,"x2":316,"y2":382,"id":"tshelf"},{"k":"plank","m":"ice","x":88,"y":237,"len":89,"ang":1,"id":"ice0"},{"k":"plank","m":"ice","x":287,"y":165,"len":87,"ang":29,"id":"ice1"},{"k":"plank","m":"pan","x":188,"y":284,"len":73,"ang":5,"id":"pan2"},{"k":"plank","m":"cheese","x":156,"y":396,"len":78,"ang":3,"id":"cheese3"},{"k":"plank","m":"pan","x":195,"y":208,"len":85,"ang":34,"id":"pan4"},{"k":"seg","m":"shelf","x1":198,"y1":363,"x2":198,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":150,"y":242,"r":20,"id":"bell"},{"k":"fan","x":70,"y":315,"w":120,"h":70,"fx":793,"fy":-120,"id":"fan"}],"bonus":{"k":"touch","id":"bell"},"sol":[-22.870285989953505,107.59623608071863],"solB":[-22.870285989953505,107.59623608071863],"solT":[-34.179032121307884,119.19645029635154],"trickB":10,"ratio":0.0064,"seed":2064},{"id":34,"kitchen":2,"ing":"tomato","start":[82,448],"target":{"k":"pot","x":300,"y":497,"w":72},"shapes":[{"k":"plank","m":"cheese","x":138,"y":145,"len":84,"ang":-33,"id":"cheese0"},{"k":"plank","m":"ice","x":122,"y":181,"len":71,"ang":28,"id":"ice1"},{"k":"plank","m":"ladle","x":227,"y":370,"len":44,"ang":8,"id":"ladle2"},{"k":"plank","m":"ice","x":165,"y":352,"len":77,"ang":-5,"id":"ice3"},{"k":"plank","m":"ice","x":279,"y":338,"len":81,"ang":23,"id":"ice4"},{"k":"seg","m":"shelf","x1":182,"y1":362,"x2":182,"y2":548,"id":"wall"}],"bonus":{"k":"surfaces","n":2},"sol":[-18.50414048278056,87.0551364653087],"solB":[64.65637775217205,88.99186938124421],"solT":[-18.50414048278056,87.0551364653087],"trickB":6,"ratio":0.0175,"seed":2311},{"id":35,"kitchen":2,"ing":"crepe","start":[80,457],"target":{"k":"plate","x":305,"y":508,"w":93},"shapes":[{"k":"plank","m":"towel","x":63,"y":337,"len":62,"ang":-26,"id":"towel0"},{"k":"plank","m":"towel","x":264,"y":171,"len":71,"ang":-23,"id":"towel1"},{"k":"plank","m":"pan","x":242,"y":225,"len":65,"ang":-26,"id":"pan2"},{"k":"plank","m":"hood","x":232,"y":305,"len":113,"ang":-6,"id":"hood3"},{"k":"plank","m":"ladle","x":94,"y":117,"len":38,"ang":-7,"id":"ladle4"},{"k":"seg","m":"shelf","x1":171,"y1":371,"x2":171,"y2":548,"id":"wall"},{"k":"fan","x":70,"y":374,"w":120,"h":70,"fx":812,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[-19.83759543917276,79.56424955463172],"solB":[-17.048758647056246,80.20810326017207],"solT":[-17.048758647056246,80.20810326017207],"trickB":2,"ratio":0.0098,"seed":2315},{"id":36,"kitchen":2,"ing":"tomato","start":[84,443],"target":{"k":"pot","x":215,"y":347,"w":77},"shapes":[{"k":"seg","m":"shelf","x1":163,"y1":350,"x2":268,"y2":350,"id":"tshelf"},{"k":"plank","m":"hood","x":143,"y":135,"len":116,"ang":4,"id":"hood0"},{"k":"plank","m":"hood","x":286,"y":282,"len":93,"ang":-25,"id":"hood1"},{"k":"plank","m":"hood","x":101,"y":196,"len":119,"ang":33,"id":"hood2"},{"k":"dome","m":"bell","x":229,"y":268,"r":20,"id":"bell"},{"k":"fan","x":290,"y":269,"w":120,"h":70,"fx":-615,"fy":-120,"id":"fan"}],"bonus":{"k":"touch","id":"bell"},"sol":[-29.665631459994945,91.30142556433475],"solB":[-32.8339337592642,90.21049159544721],"solT":[-26.461186158431907,92.28112281007861],"trickB":4,"ratio":0.0103,"seed":2407},{"id":37,"kitchen":2,"ing":"cheese","start":[81,462],"target":{"k":"pot","x":223,"y":523,"w":84},"shapes":[{"k":"plank","m":"pan","x":253,"y":407,"len":87,"ang":-13,"id":"pan0"},{"k":"plank","m":"ice","x":257,"y":265,"len":81,"ang":-8,"id":"ice1"},{"k":"plank","m":"ladle","x":107,"y":160,"len":43,"ang":19,"id":"ladle2"},{"k":"plank","m":"hood","x":142,"y":176,"len":125,"ang":-19,"id":"hood3"},{"k":"plank","m":"ladle","x":106,"y":251,"len":43,"ang":8,"id":"ladle4"},{"k":"seg","m":"shelf","x1":173,"y1":396,"x2":173,"y2":548,"id":"wall"},{"k":"fan","x":290,"y":329,"w":120,"h":70,"fx":-699,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[-23.17627457812105,71.32923872213652],"solB":[-23.17627457812105,71.32923872213652],"solT":[-25.651510749425153,70.47694655894313],"trickB":6,"ratio":0.0158,"seed":2721},{"id":38,"kitchen":2,"ing":"cheese","start":[304,444],"target":{"k":"pot","x":139,"y":323,"w":82},"shapes":[{"k":"seg","m":"shelf","x1":84,"y1":326,"x2":194,"y2":326,"id":"tshelf"},{"k":"plank","m":"cheese","x":135,"y":157,"len":75,"ang":-6,"id":"cheese0"},{"k":"plank","m":"cheese","x":224,"y":163,"len":66,"ang":19,"id":"cheese1"},{"k":"plank","m":"ladle","x":164,"y":251,"len":45,"ang":-2,"id":"ladle2"},{"k":"plank","m":"hood","x":77,"y":282,"len":98,"ang":38,"id":"hood4"},{"k":"seg","m":"shelf","x1":233,"y1":398,"x2":233,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":267,"y":188,"r":20,"id":"bell"},{"k":"fan","x":290,"y":233,"w":120,"h":70,"fx":-844,"fy":-120,"id":"fan"}],"bonus":{"k":"touch","id":"bell"},"sol":[33.99186938124422,104.61621679246689],"solB":[19.101299543362344,108.32885283134289],"solT":[32.2495706305889,112.46761842478331],"trickB":5,"ratio":0.0124,"seed":2757},{"id":39,"kitchen":2,"ing":"egg","start":[288,450],"target":{"k":"pot","x":168,"y":523,"w":82},"shapes":[{"k":"plank","m":"hood","x":75,"y":372,"len":114,"ang":0,"id":"hood0"},{"k":"plank","m":"towel","x":226,"y":340,"len":64,"ang":-40,"id":"towel1"},{"k":"plank","m":"ladle","x":248,"y":281,"len":47,"ang":-39,"id":"ladle2"},{"k":"seg","m":"shelf","x1":245,"y1":350,"x2":245,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":152,"y":269,"r":20,"id":"bell"},{"k":"fan","x":70,"y":337,"w":120,"h":70,"fx":884,"fy":-120,"id":"fan"}],"bonus":{"k":"touch","id":"bell"},"sol":[-61.99999999999997,107.3871500692704],"solB":[3.838944637275119,109.93299097210054],"solT":[-34.179032121307884,119.19645029635154],"trickB":5,"ratio":0.0068,"seed":2791},{"id":40,"kitchen":2,"chef":true,"steps":[{"id":40,"kitchen":2,"ing":"egg","start":[76,443],"target":{"k":"plate","x":262,"y":493,"w":82},"shapes":[{"k":"plank","m":"hood","x":283,"y":121,"len":128,"ang":-39,"id":"hood0"},{"k":"plank","m":"ice","x":147,"y":315,"len":77,"ang":14,"id":"ice1"},{"k":"plank","m":"hood","x":155,"y":256,"len":103,"ang":40,"id":"hood2"},{"k":"plank","m":"ice","x":309,"y":402,"len":75,"ang":-27,"id":"ice3"},{"k":"seg","m":"shelf","x1":163,"y1":319,"x2":163,"y2":548,"id":"wall"},{"k":"dome","m":"bell","x":231,"y":310,"r":20,"id":"bell"}],"bonus":{"k":"touch","id":"bell"},"sol":[70.70663706551933,84.26488874308758],"solB":[79.70566360113088,94.98951094675327],"solT":[-6.696621479436032,95.76614882494312],"trickB":3,"ratio":0.0137,"seed":2989},{"id":40,"kitchen":2,"ing":"tomato","start":[76,463],"target":{"k":"plate","x":200,"y":473,"w":94},"shapes":[{"k":"plank","m":"ladle","x":308,"y":418,"len":46,"ang":-12,"id":"ladle0"},{"k":"plank","m":"ladle","x":267,"y":175,"len":40,"ang":-11,"id":"ladle1"},{"k":"plank","m":"cheese","x":231,"y":346,"len":69,"ang":7,"id":"cheese2"},{"k":"seg","m":"shelf","x1":164,"y1":304,"x2":164,"y2":548,"id":"wall"},{"k":"fan","x":290,"y":298,"w":120,"h":70,"fx":-722,"fy":-120,"id":"fan"}],"bonus":{"k":"surfaces","n":2},"sol":[-30.320109139869896,105.73878655321508],"solB":[-30.320109139869896,105.73878655321508],"solT":[-26.611408515963458,106.73252989035961],"trickB":4,"ratio":0.0051,"seed":3160},{"id":40,"kitchen":2,"ing":"crepe","start":[87,450],"target":{"k":"plate","x":222,"y":271,"w":98},"shapes":[{"k":"seg","m":"shelf","x1":159,"y1":274,"x2":285,"y2":274,"id":"tshelf"},{"k":"plank","m":"hood","x":152,"y":114,"len":92,"ang":-7,"id":"hood1"},{"k":"plank","m":"ice","x":208,"y":121,"len":81,"ang":23,"id":"ice2"},{"k":"fan","x":70,"y":200,"w":120,"h":70,"fx":610,"fy":-120,"id":"fan"}],"bonus":{"k":"bounces","n":2},"sol":[-10.03473247369472,95.47410195535424],"solB":null,"solT":[-15.30904110560719,108.92948756157274],"trickB":1,"ratio":0.0056,"seed":3166}]}];
+</script>
+<script>// Toss Bistro — the numbers between two throws: the bistro that grows (8 upgrades), the real-time vegetable garden and bread oven,
+// the recipe book, the daily gift, XP, Momo's outfits, the supplier's mystery box, the store and the ads.
+// No energy, no subscription, nothing random for real money: truffles (sold) only buy fixed-price outfits and decorations
+// or finish a timer. The mystery box is opened with coins only (earned by playing), its odds are shown before opening,
+// and no paid pack ever contains coins.
+(function (root) {
+  const E = {
+    coinsWin: s => 5 + s * 5,                     // coins for a level served with s stars
+    coinsChef: 60,
+    xpLevel: n => Math.round(80 * Math.pow(n, 1.25)),
+    xpWin: s => 30 + s * 15,
+    levelGift: n => 25 + n * 10,
+    // the bistro: each upgrade brings more customers to applaud (fixed coin prices; the terrace also comes in the starter pack)
+    bistro: [
+      { id: 'tables', gold: 60, seats: 2 }, { id: 'nappes', gold: 120, seats: 1 }, { id: 'lampes', gold: 200, seats: 1 },
+      { id: 'piano', gold: 320, seats: 2 }, { id: 'enseigne', gold: 450, seats: 2 }, { id: 'vitrail', gold: 600, seats: 2 },
+      { id: 'terrasse', gold: 800, seats: 4 }, { id: 'lustre', truffles: 80, seats: 2 },
+    ],
+    // the garden: 3 plots, real time; a crop gives coins and unlocks a bonus ingredient level
+    crops: [{ id: 'basilic', gold: 40, min: 30, coins: 60 }, { id: 'tomates', gold: 120, min: 120, coins: 170 }, { id: 'potiron', gold: 260, min: 360, coins: 380 }],
+    plots: 3,
+    oven: { min: 120, coins: 90 },                 // the bread oven fills in 2 h
+    finishTruffles: min => Math.max(4, Math.ceil(min / 8)),
+    login: [25, 35, 50, 70, 90, 120, 180],         // coins, days 1..7 (day 7 also gives truffles)
+    loginTruffles: 10,
+    // the supplier's mystery box: coins only, odds shown before opening; duplicates turn into coins (shown too)
+    box: { gold: 150, dupCoins: 60, odds: [{ r: 'commun', p: 70 }, { r: 'rare', p: 25 }, { r: 'epique', p: 5 }] },
+    loot: [
+      { id: 'tq_rouge', r: 'commun', k: 'outfit' }, { id: 'tq_rayee', r: 'commun', k: 'outfit' }, { id: 'nappe_vichy', r: 'commun', k: 'deco' },
+      { id: 'pot_fleurs', r: 'commun', k: 'deco' }, { id: 'tablier_vert', r: 'commun', k: 'outfit' }, { id: 'horloge', r: 'commun', k: 'deco' },
+      { id: 'beret', r: 'rare', k: 'outfit' }, { id: 'moustache_or', r: 'rare', k: 'outfit' }, { id: 'tableau', r: 'rare', k: 'deco' },
+      { id: 'toque_geante', r: 'epique', k: 'outfit' }, { id: 'aquarium', r: 'epique', k: 'deco' },
+    ],
+    // Momo's outfits: fixed truffle prices, the box, or a pack
+    outfits: [{ id: 'none', how: 'free' }, { id: 'noeud', truffles: 30 }, { id: 'lunettes', truffles: 45 }, { id: 'etoile', how: 'starter' }, { id: 'noel', how: 'pass' }],
+    store: [
+      { id: 'noads', price: '3,99 €', once: true },
+      { id: 'starter', price: '1,99 €', once: true },
+      { id: 'truffes_100', price: '1,99 €', once: false, n: 100 },
+      { id: 'truffes_300', price: '4,99 €', once: false, n: 300 },
+      { id: 'pass_saison_2026', price: '2,99 €', once: true },
+    ],
+    starterTruffles: 200,                          // the starter pack: the "chef étoilé" outfit, the terrace, 200 truffles — no coins
+    hintAfter: 8, hintFreePerService: 1,
+    ads: { interFromLevel: 10, gapSec: 180 },
+    // the recipe book: one dish per level served (the chef's dishes are the 3-throw finales)
+    dishes: ['oeuf_coque', 'oeuf_plat', 'crepe_sucre', 'omelette', 'tomate_farcie', 'oeuf_cocotte', 'salade', 'crepe_jambon', 'tapenade', 'menu_chef_1',
+      'gaspacho', 'oeufs_meurette', 'crepe_suzette', 'ratatouille', 'oeuf_mimosa', 'tomates_provencales', 'crepe_choco', 'tian', 'olives_marinees', 'menu_chef_2',
+      'raclette', 'tartiflette', 'crepe_myrtille', 'fondue', 'croziflette', 'oeuf_montagne', 'crozets', 'crepe_chataigne', 'polenta', 'menu_chef_3',
+      'gratin', 'diots', 'crepe_genepi', 'beignets', 'soupe_ortie', 'oeuf_neige', 'reblochon', 'crepe_miel', 'tomme', 'menu_chef_4'],
+  };
+  root.TBE = E; if (typeof module !== 'undefined') module.exports = E;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Toss Bistro — French (reference) and English texts. I18N.t(key, ...args): {0} {1} are replaced by the arguments.
+(function (root) {
+  const FR = {
+    play: 'Jouer', tapToStart: 'Touchez pour ouvrir le bistro', level: 'Niveau {0}', tries: 'Essai {0}', service: 'Service {0}',
+    kitchen1: 'Le bistro de quartier', kitchen2: 'La cuisine de montagne', soon: 'Bientôt : le food-truck, le palace, la cuisine de l’espace',
+    perfect: 'PARFAIT !', trick: 'TRICK SHOT !', served: 'Servi !', chefDish: 'Le plat du chef', chefStep: 'Plat du chef · {0}/3', starter: 'Entrée', main: 'Plat', dessert: 'Dessert',
+    star1: 'Servi', firstTry: 'Du premier coup', star2: 'En 3 essais ou moins', star3b: 'Bonus : {0}', bTouch_bell: 'passer par la cloche', bTouch_pan1: 'rebondir sur la poêle', bBounces: '{0} rebonds ou plus', bSurfaces: '{0} surfaces différentes',
+    next: 'Niveau suivant', replay: 'Rejouer', home: 'Bistro', share: 'Partager le ralenti', shareNone: 'Le partage n’est pas disponible ici.', x2: 'Pièces ×2', x2Done: 'Doublé !',
+    hint: 'Indice', hintFree: 'Indice gratuit', hintAd: 'Indice (vidéo)', hintShown: 'Voilà le chemin jusqu’au 2e rebond.',
+    bistro: 'Le bistro', recipes: 'Recettes', garden: 'Potager', oven: 'Four à pain', shop: 'Boutique', gift: 'Cadeau', box: 'Boîte mystère', settings: 'Réglages', outfits: 'Tenues',
+    newDish: 'Nouveau plat !', dishes: '{0}/{1} plats servis', locked: 'À découvrir', seats: '+{0} clients',
+    buy: 'Acheter', own: 'Acquis', plant: 'Planter', harvest: 'Récolter', ready: 'Prêt !', finish: 'Finir', watch: 'Vidéo', growing: 'Pousse… {0}',
+    ovenFill: 'Le four se remplit… {0}', ovenTake: 'Sortir le pain (+{0})',
+    boxOpen: 'Ouvrir ({0} pièces)', boxOdds: 'Chances : commun {0} %, rare {1} %, épique {2} %. Un objet déjà obtenu devient {3} pièces.', boxAd: '1 boîte gratuite par jour (vidéo)', boxDup: 'Déjà obtenu : +{0} pièces', boxGot: 'Obtenu !',
+    r_commun: 'Commun', r_rare: 'Rare', r_epique: 'Épique',
+    giftTitle: 'Cadeau du jour', giftDay: 'Jour {0}', giftTake: 'Récupérer', giftBack: 'Reviens demain pour le jour {0} !',
+    sound: 'Sons', music: 'Musique', vib: 'Vibrations', lang: 'Langue', privacy: 'Confidentialité', restore: 'Restaurer les achats', restored: 'Achats restaurés.', privacyChoices: 'Choix de confidentialité', moreGames: 'Nos autres jeux', shareGame: 'Partager le jeu', shareGameText: 'Je lance des crêpes en trick shot dans Toss Bistro 🍳', shareClipText: 'Mon trick shot dans Toss Bistro 🍳',
+    testAd: 'Publicité de test', testBuy: 'Achat de test (rien n’est facturé)', buyFail: 'L’achat n’a pas abouti.', buyPending: 'Achat en attente de validation.',
+    s_noads: 'Sans publicité', s_noadsSub: 'Plus aucune publicité entre les niveaux. Les vidéos bonus restent au choix.',
+    s_starter: 'Pack de démarrage', s_starterSub: 'La tenue « chef étoilé », la terrasse du bistro et 200 truffes.',
+    s_truffes_100: '100 truffes', s_truffes_100Sub: 'Pour les tenues, les décos et finir une minuterie (prix fixes).',
+    s_truffes_300: '300 truffes', s_truffes_300Sub: 'Pour les tenues, les décos et finir une minuterie (prix fixes).',
+    s_pass_saison_2026: 'Passe de saison : Noël', s_pass_saison_2026Sub: 'Achat unique : la tenue de Noël et la bûche du bistro.',
+    truffleNote: 'Les truffes n’achètent jamais rien d’aléatoire.', lvUp: 'Niveau {0} !', lvGift: '+{0} pièces',
+    retry: 'Encore un !', fail_floor: 'Oups…', fail_out: 'Ouh là !', fail_rest: 'Presque…', fail_upside: 'À l’envers !', fail_time: 'Hmm…',
+    b_tables: 'Tables en bois', b_nappes: 'Nappes à carreaux', b_lampes: 'Lampes suspendues', b_piano: 'Petit piano', b_enseigne: 'Enseigne lumineuse', b_vitrail: 'Vitrail', b_terrasse: 'La terrasse', b_lustre: 'Lustre en cuivre',
+    c_basilic: 'Basilic', c_tomates: 'Tomates cerises', c_potiron: 'Potiron',
+    o_none: 'Classique', o_noeud: 'Nœud papillon', o_lunettes: 'Lunettes rondes', o_etoile: 'Chef étoilé', o_noel: 'Bonnet de Noël',
+    o_tq_rouge: 'Toque rouge', o_tq_rayee: 'Toque rayée', o_tablier_vert: 'Tablier vert', o_beret: 'Béret', o_moustache_or: 'Moustache dorée', o_toque_geante: 'Toque géante',
+    d_nappe_vichy: 'Nappe vichy', d_pot_fleurs: 'Pot de fleurs', d_horloge: 'Horloge', d_tableau: 'Tableau', d_aquarium: 'Aquarium',
+    critic: 'La critique', critic3: '« Trois étoiles. Je reviendrai. »', critic2: '« Correct. Sans plus… »', critic1: '« Servi. C’est déjà ça. »',
+  };
+  // Momo's lines (25): the first 30 seconds, reactions and tips
+  const MOMO_FR = {
+    l1: 'Mon bistro ouvre ce soir… et je cuisine en lançant !', l1b: 'Tire en arrière, comme une fronde, et lâche !',
+    l2: 'Un rebond sur la poêle… et dans la casserole !', l3: 'La crêpe ! Elle doit retomber bien à plat.', l3b: 'Plus fort, elle tourne plus vite. Trouve le bon salto !',
+    win1: 'PARFAIT !', win2: 'Miam, ça sent bon !', win3: 'Tu as vu ça ?!', trick: 'TRICK SHOT ! La salle est debout !',
+    f1: 'Oups…', f2: 'Ouh là !', f3: 'Encore un !', f4: 'Presque ! Un poil plus fort ?', f5: 'Le chat n’a rien vu. Je crois.', f6: 'On ne dira rien au patron.',
+    upside: 'À l’envers ! On la retourne ?', hint: 'Besoin d’un coup de main ? Je te montre le chemin.', chef: 'Le plat du chef : entrée, plat, dessert. Trois lancers d’affilée !',
+    k2: 'La montagne ! La glace glisse, le fromage colle, et ces ventilateurs…', bistro: 'Avec les pièces, on agrandit le bistro. Plus de clients, plus d’applaudissements !',
+    critic: 'Attention, la critique est là ce soir…', box: 'Le fournisseur a laissé une boîte. Les chances sont écrites dessus.', garden: 'Mes tomates poussent même quand tu dors.', back: 'Te revoilà ! Le four est chaud.',
+  };
+  const DISH_FR = { oeuf_coque: 'Œuf à la coque', oeuf_plat: 'Œuf au plat', crepe_sucre: 'Crêpe au sucre', omelette: 'Omelette', tomate_farcie: 'Tomate farcie', oeuf_cocotte: 'Œuf cocotte', salade: 'Salade du marché', crepe_jambon: 'Crêpe jambon', tapenade: 'Tapenade', menu_chef_1: 'Menu du chef I',
+    gaspacho: 'Gaspacho', oeufs_meurette: 'Œufs meurette', crepe_suzette: 'Crêpe Suzette', ratatouille: 'Ratatouille', oeuf_mimosa: 'Œuf mimosa', tomates_provencales: 'Tomates provençales', crepe_choco: 'Crêpe chocolat', tian: 'Tian de légumes', olives_marinees: 'Olives marinées', menu_chef_2: 'Menu du chef II',
+    raclette: 'Raclette', tartiflette: 'Tartiflette', crepe_myrtille: 'Crêpe myrtille', fondue: 'Fondue', croziflette: 'Croziflette', oeuf_montagne: 'Œuf de montagne', crozets: 'Crozets', crepe_chataigne: 'Crêpe châtaigne', polenta: 'Polenta', menu_chef_3: 'Menu du chef III',
+    gratin: 'Gratin', diots: 'Diots', crepe_genepi: 'Crêpe du refuge', beignets: 'Beignets', soupe_ortie: 'Soupe d’ortie', oeuf_neige: 'Œufs à la neige', reblochon: 'Tarte au fromage', crepe_miel: 'Crêpe au miel', tomme: 'Plateau de tommes', menu_chef_4: 'Menu du chef IV' };
+  const EN = {
+    play: 'Play', tapToStart: 'Tap to open the bistro', level: 'Level {0}', tries: 'Try {0}', service: 'Service {0}',
+    kitchen1: 'The corner bistro', kitchen2: 'The mountain kitchen', soon: 'Coming soon: the food truck, the palace, the space kitchen',
+    perfect: 'PERFECT!', trick: 'TRICK SHOT!', served: 'Served!', chefDish: 'The chef’s dish', chefStep: 'Chef’s dish · {0}/3', starter: 'Starter', main: 'Main', dessert: 'Dessert',
+    star1: 'Served', firstTry: 'First try', star2: 'In 3 tries or fewer', star3b: 'Bonus: {0}', bTouch_bell: 'go through the bell', bTouch_pan1: 'bounce off the pan', bBounces: '{0}+ bounces', bSurfaces: '{0} different surfaces',
+    next: 'Next level', replay: 'Replay', home: 'Bistro', share: 'Share the slow-mo', shareNone: 'Sharing isn’t available here.', x2: 'Coins ×2', x2Done: 'Doubled!',
+    hint: 'Hint', hintFree: 'Free hint', hintAd: 'Hint (video)', hintShown: 'Here’s the path to the 2nd bounce.',
+    bistro: 'The bistro', recipes: 'Recipes', garden: 'Garden', oven: 'Bread oven', shop: 'Shop', gift: 'Gift', box: 'Mystery box', settings: 'Settings', outfits: 'Outfits',
+    newDish: 'New dish!', dishes: '{0}/{1} dishes served', locked: 'To discover', seats: '+{0} customers',
+    buy: 'Buy', own: 'Owned', plant: 'Plant', harvest: 'Harvest', ready: 'Ready!', finish: 'Finish', watch: 'Video', growing: 'Growing… {0}',
+    ovenFill: 'The oven is filling… {0}', ovenTake: 'Take the bread (+{0})',
+    boxOpen: 'Open ({0} coins)', boxOdds: 'Odds: common {0}%, rare {1}%, epic {2}%. An item you already own becomes {3} coins.', boxAd: '1 free box a day (video)', boxDup: 'Already owned: +{0} coins', boxGot: 'Got it!',
+    r_commun: 'Common', r_rare: 'Rare', r_epique: 'Epic',
+    giftTitle: 'Daily gift', giftDay: 'Day {0}', giftTake: 'Collect', giftBack: 'Come back tomorrow for day {0}!',
+    sound: 'Sounds', music: 'Music', vib: 'Vibration', lang: 'Language', privacy: 'Privacy', restore: 'Restore purchases', restored: 'Purchases restored.', privacyChoices: 'Privacy choices', moreGames: 'Our other games', shareGame: 'Share the game', shareGameText: 'I’m trick-shotting crêpes in Toss Bistro 🍳', shareClipText: 'My trick shot in Toss Bistro 🍳',
+    testAd: 'Test advert', testBuy: 'Test purchase (nothing is charged)', buyFail: 'The purchase didn’t go through.', buyPending: 'Purchase awaiting approval.',
+    s_noads: 'No ads', s_noadsSub: 'No more adverts between levels. Bonus videos stay optional.',
+    s_starter: 'Starter pack', s_starterSub: 'The “star chef” outfit, the bistro terrace and 200 truffles.',
+    s_truffes_100: '100 truffles', s_truffes_100Sub: 'For outfits, decorations and finishing a timer (fixed prices).',
+    s_truffes_300: '300 truffles', s_truffes_300Sub: 'For outfits, decorations and finishing a timer (fixed prices).',
+    s_pass_saison_2026: 'Season pass: Christmas', s_pass_saison_2026Sub: 'One-time purchase: the Christmas outfit and the bistro’s yule log.',
+    truffleNote: 'Truffles never buy anything random.', lvUp: 'Level {0}!', lvGift: '+{0} coins',
+    retry: 'One more!', fail_floor: 'Oops…', fail_out: 'Whoa!', fail_rest: 'So close…', fail_upside: 'Upside down!', fail_time: 'Hmm…',
+    b_tables: 'Wooden tables', b_nappes: 'Checked tablecloths', b_lampes: 'Hanging lamps', b_piano: 'Little piano', b_enseigne: 'Neon sign', b_vitrail: 'Stained glass', b_terrasse: 'The terrace', b_lustre: 'Copper chandelier',
+    c_basilic: 'Basil', c_tomates: 'Cherry tomatoes', c_potiron: 'Pumpkin',
+    o_none: 'Classic', o_noeud: 'Bow tie', o_lunettes: 'Round glasses', o_etoile: 'Star chef', o_noel: 'Christmas hat',
+    o_tq_rouge: 'Red toque', o_tq_rayee: 'Striped toque', o_tablier_vert: 'Green apron', o_beret: 'Beret', o_moustache_or: 'Golden moustache', o_toque_geante: 'Giant toque',
+    d_nappe_vichy: 'Gingham cloth', d_pot_fleurs: 'Flower pot', d_horloge: 'Clock', d_tableau: 'Painting', d_aquarium: 'Aquarium',
+    critic: 'The critic', critic3: '“Three stars. I’ll be back.”', critic2: '“Decent. Nothing more…”', critic1: '“Served. That’s something.”',
+  };
+  const MOMO_EN = {
+    l1: 'My bistro opens tonight… and I cook by throwing!', l1b: 'Pull back like a slingshot, and let go!',
+    l2: 'One bounce off the pan… and into the pot!', l3: 'The crepe! It has to land flat.', l3b: 'Harder makes it spin faster. Find the right flip!',
+    win1: 'PERFECT!', win2: 'Yum, smells good!', win3: 'Did you see that?!', trick: 'TRICK SHOT! The room is on its feet!',
+    f1: 'Oops…', f2: 'Whoa!', f3: 'One more!', f4: 'Close! A touch harder?', f5: 'The cat didn’t see a thing. I think.', f6: 'We won’t tell the boss.',
+    upside: 'Upside down! Flip it again?', hint: 'Need a hand? I’ll show you the way.', chef: 'The chef’s dish: starter, main, dessert. Three throws in a row!',
+    k2: 'The mountains! Ice slides, cheese sticks, and those fans…', bistro: 'Coins grow the bistro. More customers, more applause!',
+    critic: 'Careful, the critic is in tonight…', box: 'The supplier left a box. The odds are written on it.', garden: 'My tomatoes grow even while you sleep.', back: 'You’re back! The oven is hot.',
+  };
+  const DISH_EN = { oeuf_coque: 'Soft-boiled egg', oeuf_plat: 'Fried egg', crepe_sucre: 'Sugar crepe', omelette: 'Omelette', tomate_farcie: 'Stuffed tomato', oeuf_cocotte: 'Baked egg', salade: 'Market salad', crepe_jambon: 'Ham crepe', tapenade: 'Tapenade', menu_chef_1: 'Chef’s menu I',
+    gaspacho: 'Gazpacho', oeufs_meurette: 'Eggs in red wine', crepe_suzette: 'Crepe Suzette', ratatouille: 'Ratatouille', oeuf_mimosa: 'Devilled egg', tomates_provencales: 'Provençal tomatoes', crepe_choco: 'Chocolate crepe', tian: 'Vegetable tian', olives_marinees: 'Marinated olives', menu_chef_2: 'Chef’s menu II',
+    raclette: 'Raclette', tartiflette: 'Tartiflette', crepe_myrtille: 'Blueberry crepe', fondue: 'Fondue', croziflette: 'Pasta bake', oeuf_montagne: 'Mountain egg', crozets: 'Crozets', crepe_chataigne: 'Chestnut crepe', polenta: 'Polenta', menu_chef_3: 'Chef’s menu III',
+    gratin: 'Gratin', diots: 'Sausages', crepe_genepi: 'Refuge crepe', beignets: 'Fritters', soupe_ortie: 'Nettle soup', oeuf_neige: 'Floating islands', reblochon: 'Cheese tart', crepe_miel: 'Honey crepe', tomme: 'Cheese board', menu_chef_4: 'Chef’s menu IV' };
+  const T = { fr: Object.assign({}, FR, { momo: MOMO_FR, dish: DISH_FR }), en: Object.assign({}, EN, { momo: MOMO_EN, dish: DISH_EN }) };
+  let L = 'fr';
+  const fmt = (s, a) => String(s).replace(/\{(\d)\}/g, (_, i) => a[i] !== undefined ? a[i] : '');
+  const I18N = {
+    langs: ['fr', 'en'], detect() { const l = (navigator.language || 'fr').slice(0, 2); return T[l] ? l : 'en'; },
+    set(l) { if (T[l]) L = l; document.documentElement.lang = L; }, get lang() { return L; },
+    t(k, ...a) { return fmt(T[L][k] ?? T.fr[k] ?? k, a); }, momo(k) { return T[L].momo[k] || T.fr.momo[k] || ''; }, dish(k) { return T[L].dish[k] || k; },
+  };
+  root.I18N = I18N;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Shared "juice": flying coins, confetti, pops, dust and hearts (DOM + CSS only, cheap on phones). From Pocket Dungeon Dash, in the Toss Bistro palette.
+window.JUICE = (() => {
+  const css = `
+.jz{position:fixed;z-index:60;pointer-events:none;left:0;top:0;will-change:transform,opacity}
+.jz-coin{width:26px;height:26px;object-fit:contain;transition:transform .7s cubic-bezier(.55,-0.25,.4,1),opacity .7s}
+.jz-conf{width:8px;height:12px;border-radius:2px;animation:jzfall var(--d) cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes jzfall{0%{transform:translate(var(--x0),var(--y0)) rotate(0)}100%{transform:translate(var(--x1),var(--y1)) rotate(var(--r));opacity:0}}
+.jz-dust{width:10px;height:10px;border-radius:50%;background:rgba(255,243,224,.95);animation:jzdust .6s ease-out forwards}
+@keyframes jzdust{0%{transform:translate(var(--x0),var(--y0)) scale(.6);opacity:1}100%{transform:translate(var(--x1),var(--y1)) scale(1.8);opacity:0}}
+.jz-heart{font-size:20px;animation:jzheart 1.1s ease-out forwards}
+@keyframes jzheart{0%{transform:translate(var(--x0),var(--y0)) scale(.4);opacity:0}25%{opacity:1;transform:translate(var(--x0),calc(var(--y0) - 14px)) scale(1.2)}100%{transform:translate(var(--x0),calc(var(--y0) - 54px)) scale(1);opacity:0}}
+.jz-pop{animation:jzpop .45s cubic-bezier(.3,1.6,.5,1)}@keyframes jzpop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+.jz-bump{animation:jzbump .35s ease-out}@keyframes jzbump{40%{transform:scale(1.25)}}
+.jz-flash{position:fixed;inset:0;z-index:58;pointer-events:none;background:radial-gradient(circle at var(--fx) var(--fy),rgba(255,243,224,.8),rgba(255,243,224,0) 45%);animation:jzflash .7s ease-out forwards}@keyframes jzflash{to{opacity:0}}
+`;
+  const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+  const center = el => { if (!el) return [innerWidth / 2, innerHeight / 2]; const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  const mk = (cls, html = '') => { const d = document.createElement(html === 'img' ? 'img' : 'div'); d.className = 'jz ' + cls; if (html && html !== 'img') d.innerHTML = html; document.body.appendChild(d); return d; };
+  // coins (or any icon) flying from an element to a counter, which bumps on arrival
+  function fly(fromEl, toEl, src, n = 6, done) {
+    const [x0, y0] = center(fromEl), [x1, y1] = center(toEl);
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-coin', 'img'); c.src = src; const ox = (Math.random() - 0.5) * 50, oy = (Math.random() - 0.5) * 40;
+      c.style.transform = `translate(${x0 - 13 + ox}px,${y0 - 13 + oy}px) scale(.6)`;
+      setTimeout(() => { c.style.transform = `translate(${x1 - 13}px,${y1 - 13}px) scale(.9)`; c.style.opacity = '.4'; }, 30 + i * 55);
+      setTimeout(() => { c.remove(); if (i === n - 1) { bump(toEl); done && done(); } }, 780 + i * 55);
+    }
+  }
+  function bump(el) { if (!el) return; el.classList.remove('jz-bump'); void el.offsetWidth; el.classList.add('jz-bump'); }
+  function confetti(n = 70, cols0) {
+    const cols = (window.JUICE_COLS || ['#E5483B', '#3D6FB6', '#FFF4E2', '#F6C343', '#C9733B', '#FFFFFF']);   // confetti in the bistro palette
+    for (let i = 0; i < n; i++) {
+      const c = mk('jz-conf'); const x0 = innerWidth / 2 + (Math.random() - 0.5) * 80, y0 = innerHeight * 0.35;
+      c.style.background = (cols0 || cols)[i % (cols0 || cols).length];
+      c.style.setProperty('--x0', x0 + 'px'); c.style.setProperty('--y0', y0 + 'px');
+      c.style.setProperty('--x1', x0 + (Math.random() - 0.5) * innerWidth * 1.1 + 'px'); c.style.setProperty('--y1', y0 + innerHeight * (0.4 + Math.random() * 0.5) + 'px');
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg'); c.style.setProperty('--d', (1.2 + Math.random() * 1.1) + 's');
+      setTimeout(() => c.remove(), 2600);
+    }
+  }
+  function dust(el, n = 10) {
+    const [x, y] = center(el);
+    for (let i = 0; i < n; i++) { const d = mk('jz-dust'), a = Math.random() * Math.PI * 2, r = 26 + Math.random() * 30;
+      d.style.setProperty('--x0', x - 5 + 'px'); d.style.setProperty('--y0', y + 10 + 'px'); d.style.setProperty('--x1', x - 5 + Math.cos(a) * r + 'px'); d.style.setProperty('--y1', y + 10 + Math.sin(a) * r * 0.5 + 'px'); setTimeout(() => d.remove(), 650); }
+  }
+  function heart(x, y, ch = '❤️') { const h = mk('jz-heart', ch); h.style.setProperty('--x0', x - 10 + 'px'); h.style.setProperty('--y0', y + 'px'); setTimeout(() => h.remove(), 1150); }
+  function pop(el) { if (!el) return; el.classList.remove('jz-pop'); void el.offsetWidth; el.classList.add('jz-pop'); }
+  function flash(el) { const [x, y] = center(el); const f = mk('jz-flash'); f.style.setProperty('--fx', x + 'px'); f.style.setProperty('--fy', y + 'px'); setTimeout(() => f.remove(), 750); }
+  return { fly, bump, confetti, dust, heart, pop, flash };
+})();
+</script>
+<script>// Toss Bistro — vector stand-ins drawn on the canvas in the game's flat style (thick ink outline, flat colours, one hard shadow,
+// no gradient, no shine), until the ChatGPT sheets (art/prompts.md) replace the characters. Everything is in world units
+// (the kitchen is 360 × 640). ART.P = the 6-colour palette.
+(function (root) {
+  const P = { blue: '#3D6FB6', cream: '#FFF4E2', red: '#E5483B', yolk: '#F6C343', copper: '#C9733B', ink: '#22202E',
+    copperD: '#9A5427', creamD: '#EADAC0', blueD: '#2C528C', shadow: 'rgba(34,32,46,.22)', wood: '#B9824F', woodD: '#8E5F35', ice: '#BFE3F2', cheese: '#F6C343', green: '#5C9A4A' };
+  const TAU = Math.PI * 2, LW = 3;
+  function line(g, w, c) { g.lineWidth = w; g.strokeStyle = c || P.ink; g.lineJoin = g.lineCap = 'round'; }
+  function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+  function fs(g, fill) { g.fillStyle = fill; g.fill(); line(g, LW); g.stroke(); }
+  function shadowed(g, dx, draw) { g.save(); g.translate(dx, dx); g.fillStyle = P.shadow; g.strokeStyle = 'transparent'; draw(true); g.restore(); draw(false); }
+
+  // ---------- the kitchen background (baked once per kitchen) ----------
+  function kitchen(g, k, W, H, FLOOR, CEIL) {
+    const wall = k === 2 ? '#F2E2C4' : P.cream, band = k === 2 ? P.woodD : P.blue, tile = k === 2 ? '#E7D2AE' : P.creamD;
+    g.fillStyle = band; g.fillRect(0, 0, W, CEIL);                                    // the top band under the HUD
+    g.fillStyle = wall; g.fillRect(0, CEIL, W, FLOOR - CEIL);
+    // wall tiles (kitchen 1) or chalet planks (kitchen 2)
+    g.strokeStyle = tile; g.lineWidth = 1.5;
+    if (k === 2) { for (let y = CEIL + 30; y < FLOOR; y += 30) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); } }
+    else { for (let y = CEIL + 24; y < FLOOR - 80; y += 24) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); } for (let x = 24; x < W; x += 24) { g.beginPath(); g.moveTo(x, CEIL); g.lineTo(x, FLOOR - 80); g.stroke(); } }
+    // the counter band and its checker tiles
+    g.fillStyle = band; g.fillRect(0, FLOOR - 80, W, 80);
+    for (let x = 0; x < W; x += 20) for (let y = FLOOR - 80; y < FLOOR; y += 20) if (((x + y) / 20) % 2 === 0) { g.fillStyle = k === 2 ? P.wood : P.blueD; g.fillRect(x, y, 20, 20); }
+    g.fillStyle = P.ink; g.fillRect(0, FLOOR - 82, W, 4); g.fillRect(0, FLOOR - 2, W, 4);
+    // a window with the street (or the mountains) behind
+    g.save(); rr(g, W / 2 - 46, CEIL + 22, 92, 70, 8); g.fillStyle = k === 2 ? '#CDE8F5' : '#9CC9E8'; g.fill(); g.clip();
+    if (k === 2) { g.fillStyle = '#FFFFFF'; g.beginPath(); g.moveTo(W / 2 - 50, CEIL + 92); g.lineTo(W / 2 - 14, CEIL + 46); g.lineTo(W / 2 + 18, CEIL + 92); g.fill(); g.beginPath(); g.moveTo(W / 2 - 4, CEIL + 92); g.lineTo(W / 2 + 26, CEIL + 54); g.lineTo(W / 2 + 56, CEIL + 92); g.fill(); }
+    else { g.fillStyle = P.red; g.fillRect(W / 2 - 46, CEIL + 64, 30, 30); g.fillStyle = P.yolk; g.fillRect(W / 2 - 10, CEIL + 54, 26, 40); g.fillStyle = P.creamD; g.fillRect(W / 2 + 20, CEIL + 60, 30, 34); }
+    g.restore(); rr(g, W / 2 - 46, CEIL + 22, 92, 70, 8); line(g, LW); g.stroke(); g.beginPath(); g.moveTo(W / 2, CEIL + 22); g.lineTo(W / 2, CEIL + 92); g.moveTo(W / 2 - 46, CEIL + 57); g.lineTo(W / 2 + 46, CEIL + 57); g.stroke();
+  }
+  // the dining room under the kitchen: tables and the customers who clap
+  function dining(g, W, FLOOR, H, n, clap, t, critic) {
+    g.fillStyle = '#6E4A2E'; g.fillRect(0, FLOOR, W, H - FLOOR);
+    for (let x = 0; x < W; x += 30) { g.fillStyle = ((x / 30) % 2) ? '#7C5536' : '#6E4A2E'; g.fillRect(x, FLOOR, 30, H - FLOOR); }
+    const seats = Math.min(10, n);
+    for (let i = 0; i < seats; i++) {
+      const x = 22 + (i * (W - 44)) / Math.max(1, seats - 1), y = FLOOR + 44, hop = clap > 0 ? Math.abs(Math.sin(t * 18 + i)) * 8 * Math.min(1, clap) : Math.sin(t * 2 + i) * 1.2;
+      customer(g, x, y - hop, i === 0 ? 'badger' : i === seats - 1 && critic ? 'cat' : ['fox', 'rabbit', 'bear', 'owl', 'mouse'][i % 5], clap > 0, t + i);
+    }
+    g.fillStyle = P.ink; g.fillRect(0, FLOOR, W, 4);
+  }
+  function customer(g, x, y, kind, clapping, t) {
+    const col = { badger: '#8A8A90', cat: '#2E2B3A', fox: '#D9733A', rabbit: '#EDE3D6', bear: '#8C5A36', owl: '#A08463', mouse: '#B9B2AC' }[kind];
+    g.save(); g.translate(x, y);
+    // body
+    g.beginPath(); g.ellipse(0, 10, 13, 15, 0, 0, TAU); fs(g, col);
+    // head
+    g.beginPath(); g.arc(0, -10, 11, 0, TAU); fs(g, col);
+    if (kind === 'badger') { g.fillStyle = P.cream; g.fillRect(-2, -21, 4, 16); }
+    if (kind === 'cat') { g.beginPath(); g.moveTo(-9, -16); g.lineTo(-6, -26); g.lineTo(-2, -19); g.moveTo(9, -16); g.lineTo(6, -26); g.lineTo(2, -19); fs(g, col); g.fillStyle = P.cream; g.beginPath(); g.arc(-4, -11, 3.4, 0, TAU); g.arc(4, -11, 3.4, 0, TAU); g.fill(); line(g, 1.5); g.stroke(); }   // the critic's monocle-like glasses
+    if (kind === 'rabbit') { g.beginPath(); g.ellipse(-4, -26, 3, 9, -.15, 0, TAU); g.ellipse(4, -26, 3, 9, .15, 0, TAU); fs(g, col); }
+    if (kind === 'fox' || kind === 'bear' || kind === 'mouse') { g.beginPath(); g.arc(-8, -18, 4, 0, TAU); g.arc(8, -18, 4, 0, TAU); fs(g, col); }
+    g.fillStyle = P.ink; g.beginPath(); g.arc(-4, -11, 1.8, 0, TAU); g.arc(4, -11, 1.8, 0, TAU); g.fill();
+    // arms: clapping above the head, or resting
+    line(g, 3.4, P.ink); g.beginPath();
+    if (clapping) { const c = Math.abs(Math.sin(t * 22)) * 5; g.moveTo(-10, 4); g.lineTo(-3 - c, -24); g.moveTo(10, 4); g.lineTo(3 + c, -24); } else { g.moveTo(-11, 6); g.lineTo(-14, 18); g.moveTo(11, 6); g.lineTo(14, 18); }
+    g.stroke();
+    // the table edge in front
+    g.fillStyle = P.cream; g.fillRect(-18, 18, 36, 8); line(g, 2.5); g.strokeRect(-18, 18, 36, 8);
+    g.restore();
+  }
+
+  // ---------- utensils, drawn along their segment ----------
+  function along(g, s, draw) { const cx = (s.x1 + s.x2) / 2, cy = (s.y1 + s.y2) / 2, a = Math.atan2(s.y2 - s.y1, s.x2 - s.x1), len = Math.hypot(s.x2 - s.x1, s.y2 - s.y1); g.save(); g.translate(cx, cy); g.rotate(a); draw(len); g.restore(); }
+  function utensil(g, d, t, flash) {
+    const m = d.m; if (d.k === 'fan') return fan(g, d, t);
+    if (d.k === 'dome') return bell(g, d, flash);
+    const s = d.k === 'seg' ? d : (() => { const a = d.ang * Math.PI / 180, dx = Math.cos(a) * d.len / 2, dy = Math.sin(a) * d.len / 2; return { x1: d.x - dx, y1: d.y - dy, x2: d.x + dx, y2: d.y + dy }; })();
+    const vertical = Math.abs(s.x2 - s.x1) < 2;
+    if (m === 'shelf' && vertical) { const top = Math.min(s.y1, s.y2), bot = Math.max(s.y1, s.y2); g.save(); rr(g, s.x1 - 11, top, 22, bot - top, 4); fs(g, P.wood); line(g, 2); g.beginPath(); for (let y = top + 18; y < bot - 6; y += 22) { g.moveTo(s.x1 - 11, y); g.lineTo(s.x1 + 11, y); } g.stroke(); g.restore(); return; }
+    along(g, s, len => {
+      const L = len / 2, f = flash ? 1 + flash * .15 : 1; g.scale(f, f);
+      if (m === 'pan') {   // a round copper pan seen from the side, the handle out to the right
+        g.beginPath(); g.moveTo(L - 4, 0); g.lineTo(L + 26, -3); g.lineTo(L + 26, 3); g.closePath(); fs(g, P.ink);
+        g.beginPath(); g.moveTo(-L, -5); g.quadraticCurveTo(0, 12, L, -5); g.lineTo(L, -1); g.quadraticCurveTo(0, 18, -L, -1); g.closePath(); fs(g, P.copper);
+        g.beginPath(); g.ellipse(0, -5, L, 4, 0, 0, TAU); fs(g, P.copperD);
+      } else if (m === 'hood') {   // the hood: a copper plate with rivets, its body rising above it
+        g.beginPath(); g.moveTo(-L, -3); g.lineTo(-L * .55, -32); g.lineTo(L * .55, -32); g.lineTo(L, -3); g.closePath(); fs(g, P.creamD);
+        rr(g, -L, -4, len, 9, 3); fs(g, P.copper); g.fillStyle = P.ink; for (let x = -L + 8; x < L - 4; x += 14) { g.beginPath(); g.arc(x, 0, 1.6, 0, TAU); g.fill(); }
+      } else if (m === 'ladle') {
+        line(g, 5, P.ink); g.beginPath(); g.moveTo(-L, 0); g.lineTo(L - 10, 0); g.stroke(); line(g, 2.5, P.copper); g.beginPath(); g.moveTo(-L, 0); g.lineTo(L - 10, 0); g.stroke();
+        g.beginPath(); g.arc(L - 4, 2, 9, Math.PI * .95, Math.PI * 2.05, true); g.closePath(); fs(g, P.copper);
+      } else if (m === 'towel') {   // a striped tea towel hung by its corners
+        g.beginPath(); g.moveTo(-L, -4); g.quadraticCurveTo(0, 6, L, -4); g.lineTo(L, 6); g.quadraticCurveTo(0, 16, -L, 6); g.closePath(); fs(g, P.cream);
+        g.save(); g.clip(); g.fillStyle = P.blue; for (let x = -L + 6; x < L; x += 14) g.fillRect(x, -10, 5, 30); g.restore();
+        g.beginPath(); g.moveTo(-L, -4); g.quadraticCurveTo(0, 6, L, -4); g.lineTo(L, 6); g.quadraticCurveTo(0, 16, -L, 6); g.closePath(); line(g, LW); g.stroke();
+      } else if (m === 'sieve') {
+        g.beginPath(); g.moveTo(-L, -3); g.quadraticCurveTo(0, 14, L, -3); line(g, 7, P.ink); g.stroke(); line(g, 4, P.creamD); g.setLineDash([3, 4]); g.stroke(); g.setLineDash([]);
+      } else if (m === 'ice') {
+        rr(g, -L, -6, len, 12, 3); fs(g, P.ice); g.strokeStyle = '#FFFFFF'; g.lineWidth = 2; g.beginPath(); g.moveTo(-L + 6, -2); g.lineTo(-L + 18, -2); g.moveTo(L - 22, 2); g.lineTo(L - 12, 2); g.stroke();
+      } else if (m === 'cheese') {
+        rr(g, -L, -7, len, 14, 3); fs(g, P.cheese); g.fillStyle = '#E2A92E'; for (let x = -L + 9; x < L - 4; x += 15) { g.beginPath(); g.arc(x, (x % 2) * 2, 3, 0, TAU); g.fill(); }
+      } else {   // shelf, wall pieces: a wooden plank
+        rr(g, -L, -4, len, 8, 3); fs(g, P.wood);
+      }
+    });
+  }
+  function bell(g, d, flash) {
+    const r = d.r * (1 + (flash || 0) * .12); g.save(); g.translate(d.x, d.y);
+    g.beginPath(); g.arc(0, 0, r, Math.PI, 0); g.closePath(); fs(g, flash ? P.yolk : P.creamD);
+    g.beginPath(); g.arc(0, -r - 3, 4, 0, TAU); fs(g, P.copper); rr(g, -r - 4, -2, r * 2 + 8, 5, 2); fs(g, P.copper); g.restore();
+  }
+  function fan(g, d, t) {
+    // the wind: soft lines in the zone, then the fan itself on the side it blows from
+    g.save(); g.globalAlpha = .35; line(g, 2, P.blue); const dir = Math.sign(d.fx);
+    for (let i = 0; i < 4; i++) { const y = d.y - d.h / 2 + 12 + i * (d.h - 24) / 3, ph = ((t * 1.6 + i * .3) % 1); const x0 = d.x - d.w / 2 + ph * d.w * .7; g.beginPath(); g.moveTo(dir > 0 ? x0 : d.x + d.w / 2 - (x0 - (d.x - d.w / 2)), y); g.lineTo(dir > 0 ? x0 + 22 : d.x + d.w / 2 - (x0 - (d.x - d.w / 2)) - 22, y); g.stroke(); }
+    g.restore();
+    const fx = dir > 0 ? d.x - d.w / 2 - 4 : d.x + d.w / 2 + 4; g.save(); g.translate(fx, d.y);
+    g.beginPath(); g.arc(0, 0, 20, 0, TAU); fs(g, P.creamD); g.rotate(t * 14);
+    for (let i = 0; i < 3; i++) { g.rotate(TAU / 3); g.beginPath(); g.ellipse(0, -9, 5, 9, 0, 0, TAU); fs(g, P.blue); }
+    g.beginPath(); g.arc(0, 0, 4, 0, TAU); fs(g, P.copper); g.restore();
+  }
+  // ---------- the dish ----------
+  function target(g, T, glow) {
+    const w = T.w, x = T.x, y = T.y;
+    if (glow) { g.save(); g.globalAlpha = .25 + glow * .4; g.fillStyle = P.yolk; g.beginPath(); g.ellipse(x, y - 20, w * .7, 34, 0, 0, TAU); g.fill(); g.restore(); }
+    if (T.k === 'pot') {
+      g.beginPath(); g.moveTo(x - w / 2 - 8, y - 40); g.lineTo(x - w / 2 - 14, y - 34); g.moveTo(x + w / 2 + 8, y - 40); g.lineTo(x + w / 2 + 14, y - 34); line(g, 6, P.ink); g.stroke();
+      g.beginPath(); g.moveTo(x - w / 2, y - 46); g.lineTo(x - w / 2 + 4, y); g.lineTo(x + w / 2 - 4, y); g.lineTo(x + w / 2, y - 46); g.closePath(); fs(g, P.copper);
+      g.beginPath(); g.ellipse(x, y - 46, w / 2, 6, 0, 0, TAU); fs(g, P.copperD); g.fillStyle = P.creamD; g.fillRect(x - w / 2 + 6, y - 30, w - 12, 4);
+    } else if (T.k === 'pan') {
+      g.beginPath(); g.moveTo(x + w / 2 - 4, y - 8); g.lineTo(x + w / 2 + 30, y - 12); g.lineTo(x + w / 2 + 30, y - 6); g.closePath(); fs(g, P.ink);
+      g.beginPath(); g.moveTo(x - w / 2, y - 16); g.quadraticCurveTo(x, y + 6, x + w / 2, y - 16); g.lineTo(x + w / 2 - 4, y); g.lineTo(x - w / 2 + 4, y); g.closePath(); fs(g, P.copper);
+      g.beginPath(); g.ellipse(x, y - 16, w / 2, 5, 0, 0, TAU); fs(g, P.copperD);
+    } else {   // a plate on a little stand
+      g.beginPath(); g.ellipse(x, y - 4, w / 2, 9, 0, 0, TAU); fs(g, P.cream); g.beginPath(); g.ellipse(x, y - 5, w / 2 - 9, 5, 0, 0, TAU); line(g, 2, P.blue); g.stroke();
+    }
+  }
+  // ---------- the ingredients ----------
+  function ingredient(g, kind, x, y, a, sq, r) {
+    g.save(); g.translate(x, y); g.rotate(a); const sx = sq ? 1 + sq * .35 : 1, sy = sq ? 1 - sq * .3 : 1; g.scale(sx, sy);
+    if (kind === 'egg') { g.beginPath(); g.ellipse(0, 0, r * .86, r * 1.08, 0, 0, TAU); fs(g, P.cream); g.fillStyle = '#FFFFFF'; g.beginPath(); g.ellipse(-r * .3, -r * .4, r * .22, r * .3, -.4, 0, TAU); g.fill(); }
+    else if (kind === 'tomato') { g.beginPath(); g.arc(0, 0, r, 0, TAU); fs(g, P.red); g.fillStyle = P.green; g.beginPath(); for (let i = 0; i < 5; i++) { const b = i / 5 * TAU; g.lineTo(Math.cos(b) * r * .5, -r * .75 + Math.sin(b) * r * .25); g.lineTo(Math.cos(b + .6) * r * .2, -r * .8); } g.closePath(); g.fill(); line(g, 2); g.stroke(); }
+    else if (kind === 'olive') { g.beginPath(); g.ellipse(0, 0, r * 1.15, r * .9, 0, 0, TAU); fs(g, '#5E7A2E'); g.fillStyle = P.red; g.beginPath(); g.arc(r * .7, 0, r * .3, 0, TAU); g.fill(); }
+    else if (kind === 'cheese') { rr(g, -r, -r * .8, r * 2, r * 1.6, 3); fs(g, P.cheese); g.fillStyle = '#E2A92E'; g.beginPath(); g.arc(-r * .3, -r * .2, 2.6, 0, TAU); g.arc(r * .4, r * .3, 2, 0, TAU); g.fill(); }
+    else if (kind === 'crepe') {   // a thin disc seen edge-on: its tilt shows the somersault; the golden side is the top
+      const c = Math.cos(a); g.rotate(-a); g.rotate(a);
+      g.beginPath(); g.ellipse(0, 0, r * 1.3, Math.max(2.5, r * .32), 0, 0, TAU); fs(g, P.yolk);
+      g.fillStyle = '#E0A33A'; g.beginPath(); g.ellipse(0, -1, r * 1.0, Math.max(1, r * .14), 0, 0, TAU); g.fill();
+      if (c < 0) { g.fillStyle = P.creamD; g.beginPath(); g.ellipse(0, 1, r * .9, Math.max(1, r * .12), 0, 0, TAU); g.fill(); }
+    }
+    g.restore();
+  }
+  // ---------- Momo the penguin chef ----------
+  function momo(g, x, y, o) {
+    const pose = o.pose || 'idle', t = o.t || 0, out = o.outfit || 'none', s = o.s || 1;
+    g.save(); g.translate(x, y); g.scale(s * (o.flip ? -1 : 1), s);
+    let bob = Math.sin(t * 3) * 1.5, lean = 0; if (pose === 'dance') { bob = Math.abs(Math.sin(t * 9)) * -8; lean = Math.sin(t * 9) * .2; } if (pose === 'wince') lean = -.12; if (pose === 'pull') lean = -.08 * (o.k || 0);
+    g.translate(0, bob); g.rotate(lean);
+    g.fillStyle = P.shadow; g.beginPath(); g.ellipse(4, 40 - bob, 26, 6, 0, 0, TAU); g.fill();
+    // feet
+    g.beginPath(); g.ellipse(-10, 38, 9, 4, 0, 0, TAU); g.ellipse(10, 38, 9, 4, 0, 0, TAU); fs(g, P.yolk);
+    // body + belly + apron
+    g.beginPath(); g.ellipse(0, 8, 24, 31, 0, 0, TAU); fs(g, P.ink);
+    g.beginPath(); g.ellipse(0, 12, 17, 24, 0, 0, TAU); g.fillStyle = P.cream; g.fill();
+    const apron = out === 'tablier_vert' ? P.green : P.blue;
+    g.save(); g.beginPath(); g.ellipse(0, 12, 17, 24, 0, 0, TAU); g.clip(); g.fillStyle = P.cream; g.fillRect(-18, 6, 36, 34); g.fillStyle = apron; for (let i = -18; i < 18; i += 8) g.fillRect(i, 6, 4, 34); g.restore();
+    line(g, 2.2); g.beginPath(); g.moveTo(-14, 6); g.lineTo(14, 6); g.stroke();
+    // flippers (the right one holds the ingredient / the pan)
+    g.beginPath(); g.ellipse(-24, 10, 6, 15, .5, 0, TAU); fs(g, P.ink);
+    const arm = pose === 'pull' ? .9 : pose === 'throw' ? -1.2 : pose === 'dance' ? -1.6 + Math.sin(t * 9) : -.4;
+    g.save(); g.translate(20, 0); g.rotate(arm); g.beginPath(); g.ellipse(0, 12, 6, 15, 0, 0, TAU); fs(g, P.ink); g.restore();
+    // head: eyes, beak, the felt-tip moustache
+    g.beginPath(); g.arc(0, -24, 18, 0, TAU); fs(g, P.ink);
+    g.fillStyle = P.cream; g.beginPath(); g.ellipse(-6, -25, 7, 8, 0, 0, TAU); g.ellipse(6, -25, 7, 8, 0, 0, TAU); g.fill();
+    g.fillStyle = P.ink; const blink = (t % 4) > 3.85; if (pose === 'wince' || blink) { line(g, 2.2); g.beginPath(); g.moveTo(-9, -25); g.lineTo(-3, -23); g.moveTo(9, -25); g.lineTo(3, -23); g.stroke(); } else { g.beginPath(); g.arc(-5, -24, 2.6, 0, TAU); g.arc(5, -24, 2.6, 0, TAU); g.fill(); }
+    if (out === 'lunettes') { line(g, 2, P.copper); g.beginPath(); g.arc(-6, -25, 7, 0, TAU); g.moveTo(13, -25); g.arc(6, -25, 7, 0, TAU); g.stroke(); }
+    g.beginPath(); g.moveTo(-5, -17); g.lineTo(0, -11); g.lineTo(5, -17); g.closePath(); fs(g, P.yolk);
+    line(g, 2.4, out === 'moustache_or' ? P.yolk : P.ink); g.beginPath(); g.moveTo(-1, -15); g.quadraticCurveTo(-8, -12, -12, -16); g.moveTo(1, -15); g.quadraticCurveTo(8, -12, 12, -16); g.stroke();
+    if (out === 'noeud') { g.beginPath(); g.moveTo(0, -6); g.lineTo(-8, -10); g.lineTo(-8, -2); g.closePath(); g.moveTo(0, -6); g.lineTo(8, -10); g.lineTo(8, -2); g.closePath(); fs(g, P.red); }
+    // the toque that leans (too tall), or the outfit's hat
+    g.save(); g.translate(0, -38); g.rotate(-.18 + Math.sin(t * 2) * .04);
+    if (out === 'beret') { g.beginPath(); g.ellipse(2, -2, 17, 7, -.1, 0, TAU); fs(g, P.red); }
+    else if (out === 'noel') { g.beginPath(); g.moveTo(-15, 0); g.lineTo(14, -30); g.lineTo(15, 0); g.closePath(); fs(g, P.red); g.beginPath(); g.arc(14, -30, 5, 0, TAU); fs(g, '#FFFFFF'); rr(g, -17, -4, 34, 7, 3); fs(g, '#FFFFFF'); }
+    else { const tall = out === 'toque_geante' ? 62 : 38, col = out === 'tq_rouge' ? P.red : out === 'etoile' ? P.yolk : P.cream;
+      rr(g, -12, -tall + 6, 24, tall - 4, 6); fs(g, col); g.beginPath(); g.arc(-8, -tall + 6, 9, 0, TAU); g.arc(0, -tall + 1, 10, 0, TAU); g.arc(8, -tall + 6, 9, 0, TAU); fs(g, col);
+      if (out === 'tq_rayee') { g.fillStyle = P.blue; for (let i = -10; i < 12; i += 7) g.fillRect(i, -tall + 10, 3, tall - 10); }
+      if (out === 'etoile') { g.fillStyle = P.red; star(g, 0, -tall / 2 + 4, 6); }
+      rr(g, -14, -4, 28, 8, 3); fs(g, P.creamD); }
+    g.restore();
+    g.restore();
+  }
+  function star(g, x, y, r) { g.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr2 = i % 2 ? r * .45 : r; g.lineTo(x + Math.cos(a) * rr2, y + Math.sin(a) * rr2); } g.closePath(); g.fill(); }
+  // the egg (or tomato) that missed: a flat star splat
+  function splat(g, x, y, kind, k) {
+    const col = kind === 'tomato' ? P.red : kind === 'crepe' ? P.yolk : kind === 'olive' ? '#5E7A2E' : P.yolk;
+    g.save(); g.translate(x, y); g.scale(k, k); g.fillStyle = kind === 'egg' ? '#FFFFFF' : col;
+    g.beginPath(); for (let i = 0; i < 14; i++) { const a = i / 14 * TAU, rr2 = i % 2 ? 9 : 18 + (i % 3) * 3; g.lineTo(Math.cos(a) * rr2, Math.sin(a) * rr2 * .8); } g.closePath(); g.fill(); line(g, 2.5); g.stroke();
+    if (kind === 'egg') { g.fillStyle = P.yolk; g.beginPath(); g.arc(2, 0, 7, 0, TAU); g.fill(); line(g, 2); g.stroke(); }
+    g.restore();
+  }
+  root.TBART = { P, kitchen, dining, customer, utensil, target, ingredient, momo, splat, star, rr, fs, line };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>// Toss Bistro — Momo the penguin cooks by throwing: pull back like a slingshot, let go once, the ingredient bounces off the
+// utensils hung on the walls and must land in the dish. Fail = instant retry (0.5 s). Success = automatic slow motion on the
+// last 1.5 s (longer for a TRICK SHOT, 3 bounces or more), the dining room claps, stars and coins.
+// Canvas for the kitchen, DOM for the interface. The rules live in core.js (deterministic), the numbers in econ.js.
+(() => {
+'use strict';
+const C = window.TBC, E = window.TBE, I = window.I18N, t = I.t, ART = window.TBART, P = ART.P, LV = window.TB_LEVELS || [];
+const TAU = Math.PI * 2, clamp = (v, a, b) => Math.max(a, Math.min(b, v)), lerp = (a, b, k) => a + (b - a) * k, rnd = (a, b) => a + Math.random() * (b - a);
+const $ = s => document.querySelector(s), today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+function div(cls, html) { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
+
+// ---------- save ----------
+const KEY = 'tossbistro.save.v1';
+function fresh() {
+  return { v: 1, lang: I.detect(), sound: true, music: true, vib: true, consent: null, gold: 0, truffles: 0, xp: 0, plv: 1, unl: 1, best: {}, tries: {},
+    owned: {}, bistro: {}, outfit: 'none', outfits: { none: 1 }, decos: {}, book: {}, plots: [null, null, null], oven: 0, login: { last: '', streak: 0, pending: false },
+    boxDay: '', plays: 0, lastAdAt: 0, said: {}, hintsUsed: {}, totals: { served: 0, tricks: 0, throws: 0, stars: 0, bestBounces: 0 } };
+}
+let S; try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+for (const k of ['totals', 'login']) S[k] = Object.assign(fresh()[k], S[k]);
+I.set(S.lang);
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+const track = (ev, data) => { try { if (window.ZV && ZV.available) ZV.event(ev, data); else console.debug('[ga]', ev, data || ''); } catch (e) {} };   // ZV = ios/Shared/NativeKit.swift (Firebase Analytics)
+const ZVK = () => window.ZV && ZV.available ? ZV : null;
+
+// ---------- audio: one sound per surface (a row of bounces makes a little tune), the slingshot creak, applause ----------
+const AU = { ctx: null, master: null, music: null, noise: null, next: 0, step: 0, creak: null };
+function audioInit() {
+  if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+  try { AU.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+  AU.master = AU.ctx.createGain(); AU.master.gain.value = .55; AU.master.connect(AU.ctx.destination);
+  AU.music = AU.ctx.createGain(); AU.music.gain.value = .13; AU.music.connect(AU.master);
+  const len = AU.ctx.sampleRate * .8, b = AU.ctx.createBuffer(1, len, AU.ctx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; AU.noise = b;
+}
+function tone(f, dur, type = 'sine', vol = .2, when = 0, dest, slide) {
+  if (!AU.ctx) return; const c = AU.ctx, o = c.createOscillator(), g = c.createGain(), t0 = c.currentTime + when;
+  o.type = type; o.frequency.setValueAtTime(f, t0); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t0 + dur);
+  g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + .005); g.gain.exponentialRampToValueAtTime(.0008, t0 + dur);
+  o.connect(g); g.connect(dest || AU.master); o.start(t0); o.stop(t0 + dur + .05);
+}
+function noise(dur, freq, q, vol, when = 0, type = 'bandpass', dest) {
+  if (!AU.ctx) return; const c = AU.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(), t0 = c.currentTime + when;
+  s.buffer = AU.noise; f.type = type; f.frequency.value = freq; f.Q.value = q; g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + dur);
+  s.connect(f); f.connect(g); g.connect(dest || AU.master); s.start(t0, Math.random() * .3); s.stop(t0 + dur + .02);
+}
+const SCALE = [0, 2, 4, 7, 9, 12, 14, 16];   // each bounce of a throw climbs the scale: a row of bounces is a tune
+const SFX = {
+  hit(m, v, n, slow) { if (!S.sound) return; const k = clamp(v / 900, .25, 1), up = Math.pow(2, SCALE[Math.min(7, n)] / 12), sl = slow ? .7 : 1;
+    if (m === 'pan') { tone(330 * up * sl, .45, 'triangle', .22 * k); tone(660 * up * sl, .25, 'sine', .1 * k); noise(.05, 2400, 3, .12 * k); }
+    else if (m === 'hood') { tone(196 * up * sl, .5, 'square', .05 * k); noise(.12, 1800, 2, .18 * k); }
+    else if (m === 'ladle') { tone(1320 * up * sl, .35, 'sine', .16 * k); tone(1980 * up * sl, .2, 'sine', .06 * k); }
+    else if (m === 'bell') { [1, 1.5, 2].forEach((h, i) => tone(988 * up * h * sl, .9, 'sine', .1 * k / (i + 1))); }
+    else if (m === 'towel') { noise(.12, 500, .8, .3 * k, 0, 'lowpass'); tone(140, .1, 'sine', .1 * k); }
+    else if (m === 'sieve') { noise(.05, 4200, 4, .18 * k); tone(2200 * up, .06, 'square', .03 * k); }
+    else if (m === 'ice') { noise(.25, 6000, .7, .1 * k, 0, 'highpass'); tone(1760 * up, .15, 'sine', .05 * k); }
+    else if (m === 'cheese') { noise(.15, 300, 1.2, .3 * k, 0, 'lowpass'); tone(110, .2, 'sine', .14 * k, 0, null, 70); }
+    else if (m === 'pot') { tone(220 * sl, .3, 'triangle', .12 * k); noise(.04, 1400, 2, .1 * k); }
+    else { noise(.04, 900, 2, .2 * k); tone(260, .05, 'triangle', .06 * k); } },
+  creak(p) { if (!S.sound || !AU.ctx) return; const n = performance.now(); if (n - (AU.cr || 0) < 60) return; AU.cr = n; tone(120 + p * 260, .07, 'sawtooth', .02 + p * .03, 0, null, 140 + p * 300); },
+  release() { if (S.sound) { noise(.12, 2600, 1.4, .2); tone(520, .12, 'triangle', .07, 0, null, 900); } },
+  plop() { if (S.sound) { tone(480, .14, 'sine', .22, 0, null, 160); noise(.06, 900, 2, .1); } },
+  sizzle() { if (S.sound) noise(.8, 5200, .6, .07, .05, 'highpass'); },
+  splat() { if (S.sound) { noise(.18, 700, .8, .3, 0, 'lowpass'); tone(160, .2, 'sine', .12, 0, null, 70); } },
+  whoosh() { if (S.sound) noise(.35, 900, .6, .12, 0, 'bandpass'); },
+  applause(n = 1) { if (!S.sound) return; for (let i = 0; i < 26 * n; i++) noise(.03, rnd(1500, 3500), 3, rnd(.05, .14), rnd(0, 1.6 * n)); },
+  perfect() { if (S.sound) [784, 988, 1175, 1568].forEach((f, i) => tone(f, .3, 'triangle', .12, i * .07)); },
+  trick() { if (S.sound) [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(f, i > 3 ? .7 : .22, 'triangle', .14, i * .09)); },
+  star(n = 0) { if (S.sound) { noise(.05, 2400, 2, .2); tone([784, 988, 1319][n] || 784, .3, 'triangle', .13, .02); } },
+  coins() { if (S.sound) for (let i = 0; i < 6; i++) tone(1200 + i * 140, .1, 'square', .03, i * .05); },
+  fanfare() { if (S.sound) [392, 523, 659, 784, 659, 784, 1047].forEach((f, i) => tone(f, i > 4 ? .7 : .26, 'triangle', .13, i * .12)); },
+  momo() { if (S.sound) for (let i = 0; i < 3; i++) tone(rnd(500, 760), .07, 'square', .025, i * .07, null, rnd(400, 800)); },
+  click() { if (S.sound) tone(720, .04, 'square', .04); },
+  box() { if (S.sound) { noise(.2, 1200, 1, .2); [523, 659, 784, 1047].forEach((f, i) => tone(f, .25, 'triangle', .1, .2 + i * .08)); } },
+};
+// a light bistro waltz (accordion-ish chords), only at home and between throws
+function musicTick() {
+  if (!AU.ctx || !S.music) return; const c = AU.ctx; if (AU.next < c.currentTime) AU.next = c.currentTime + .05;
+  const CH = [[262, 330, 392], [294, 349, 440], [247, 294, 392], [262, 330, 392]];
+  while (AU.next < c.currentTime + .3) { const s = AU.step++, w = AU.next - c.currentTime, bar = Math.floor(s / 3) % 4, b = s % 3, ch = CH[bar];
+    if (b === 0) tone(ch[0] / 2, .5, 'triangle', .5, w, AU.music); else ch.slice(1).forEach(f => tone(f, .18, 'square', .06, w, AU.music));
+    AU.next += 60 / 132; }
+}
+const buzz = ms => { if (S.vib && navigator.vibrate) try { navigator.vibrate(ms); } catch (e) {} };
+
+// ---------- ads & purchases (same native bridges as the other games: ios/Ads/NativeAds.swift, ios/Shared/NativeStore.swift) ----------
+const NADS = () => window.webkit?.messageHandlers?.ads;
+const nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
+const Ads = {
+  async init() { if (NADS()) await nads('init'); },
+  async rewarded(kind) { track('ad_rewarded', { kind }); if (NADS()) return (await nads('rewarded')) === true; return testAd(); },
+  // between two levels only, from level 10, at most every 3 minutes, never right after a failure, never with "No ads"
+  async interstitial() { if (S.owned.noads || S.totals.served < E.ads.interFromLevel) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); track('ad_interstitial'); if (NADS()) { if (!(await nads('interstitial')) && ZVK()) await ZVK().houseAd(); return; } await testAd(); },   // no AdMob ad ready: one of our other games instead
+};
+function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 1000); }); }
+const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.tossbistro.' + id;
+const iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
+const Store = {
+  prices: {}, price(it) { return this.prices[it.id] || it.price; },
+  async init() {
+    if (!IAP || this.ready) return; this.ready = true; window.nativeStoreUpdate = pid => this.deliver(pid, true);
+    try { for (const p of await iap('products', { ids: E.store.map(x => PID(x.id)) })) this.prices[p.id.split('.').pop()] = p.price; } catch (e) {}
+    try { this.own(await iap('owned')); for (const pid of await iap('drain')) this.deliver(pid, true); } catch (e) {}
+  },
+  deliver(pid, loud) { const it = E.store.find(x => PID(x.id) === pid); if (!it || (it.once && S.owned[it.id])) return; grant(it, loud); },
+  own(pids) { for (const pid of pids || []) { const it = E.store.find(x => PID(x.id) === pid); if (it && it.once && !S.owned[it.id]) grant(it, false); } },
+  async buy(it) {
+    track('iap_start', { id: it.id });
+    if (!IAP) { const okk = await confirmBox(t('testBuy') + `<br><b>${t('s_' + it.id)} — ${it.price}</b>`); if (okk) grant(it); return okk; }
+    try { const r = await iap('buy', { id: PID(it.id) }); if (r.ok) { track('iap_done', { id: it.id }); grant(it); return true; } if (r.err === 'pending') toast(t('buyPending')); else if (r.err !== 'cancel') toast(t('buyFail')); } catch (e) { toast(t('buyFail')); }
+    return false;
+  },
+  async restore() { if (IAP) { try { this.own(await iap('restore')); } catch (e) { toast(t('buyFail')); return; } } toast(t('restored')); },
+};
+// nothing random and no level skip for real money; no paid pack contains coins (the coins open the mystery box)
+function grant(it, loud = true) {
+  if (it.n) S.truffles += it.n;
+  else { S.owned[it.id] = true;
+    if (it.id === 'starter') { S.outfits.etoile = 1; S.outfit = 'etoile'; S.bistro.terrasse = 1; S.truffles += E.starterTruffles; }
+    if (it.id === 'pass_saison_2026') { S.outfits.noel = 1; S.decos.buche = 1; } }
+  save(); if (loud) { SFX.fanfare(); JUICE.confetti(70); } if (G.mode === 'home') renderHome();
+}
+
+// ---------- the canvas and the view ----------
+const cv = $('#cv'), g = cv.getContext('2d');
+const V = { w: 0, h: 0, d: 1, sc: 1, ox: 0, oy: 0 };
+let BG = {};   // baked kitchen backgrounds, one per kitchen
+function resize() {
+  V.d = Math.min(2, devicePixelRatio || 1); V.w = innerWidth; V.h = innerHeight; cv.width = Math.round(V.w * V.d); cv.height = Math.round(V.h * V.d);
+  V.sc = Math.min(V.w / C.W, V.h / C.H); V.ox = (V.w - C.W * V.sc) / 2; V.oy = (V.h - C.H * V.sc) / 2; BG = {};
+}
+addEventListener('resize', resize); resize();
+function bg(k) {
+  if (BG[k]) return BG[k]; const c = document.createElement('canvas'), s = V.sc * V.d; c.width = Math.ceil(C.W * s); c.height = Math.ceil(C.FLOOR * s);
+  const q = c.getContext('2d'); q.scale(s, s); ART.kitchen(q, k, C.W, C.H, C.FLOOR, C.CEIL); return BG[k] = c;
+}
+const toWorld = (cx, cy) => [(cx - V.ox) / V.sc, (cy - V.oy) / V.sc];
+const toScreen = (x, y) => [V.ox + x * V.sc, V.oy + y * V.sc];
+
+// ---------- game state ----------
+const G = { mode: 'title', li: 0, L: null, step: 0, spec: null, B: null, phase: 'aim', tries: 0, pull: null, drag: null, preview: null, rec: null, pt: 0, ev: 0, slow: 0, zoom: 1, cam: [180, 320],
+  flash: {}, sq: 0, parts: [], splat: null, clap: 0, momoPose: 'idle', momoT: 0, resT: 0, nb: 0, hint: false, tut: null, ghost: 0, time: 0, shake: 0, last: 0, endAt: 0, banner: null };
+const SPEC = () => G.L.chef ? G.L.steps[G.step] : G.L;
+function startLevel(i, fromHome = true) {
+  G.li = clamp(i, 0, LV.length - 1); G.L = LV[G.li]; G.step = 0; G.tries = 0; G.hint = false; G.nb = 0; S.plays++; save();
+  G.mode = 'play'; showHome(false); setupThrow(); renderHud();
+  if (G.L.id === 1 && !S.said.l1) { say('l1', 3200); setTimeout(() => G.mode === 'play' && G.phase === 'aim' && say('l1b', 3400), 3300); S.said.l1 = 1; }
+  else if (G.L.id === 2 && !S.said.l2) { say('l2', 3000); S.said.l2 = 1; }
+  else if (G.L.id === 3 && !S.said.l3) { say('l3', 3200); S.said.l3 = 1; }
+  else if (G.L.chef && !S.said['chef' + G.L.id]) { say('chef', 3400); S.said['chef' + G.L.id] = 1; }
+  else if (G.L.id === 21 && !S.said.k2) { say('k2', 3600); S.said.k2 = 1; }
+  track('level_start', { id: G.L.id });
+}
+function setupThrow() {
+  G.spec = SPEC(); G.B = C.build(G.spec); G.phase = 'aim'; G.pull = null; G.drag = null; G.preview = null; G.rec = null; G.pt = 0; G.ev = 0; G.slow = 0; G.zoom = 1; G.cam = [C.W / 2, C.H / 2];
+  G.flash = {}; G.sq = 0; G.splat = null; G.momoPose = 'idle'; G.bounceN = 0; G.ghost = G.L.id === 1 && G.tries === 0 ? 1 : 0;
+}
+
+// ---------- input: the slingshot ----------
+let ptr = null;
+cv.addEventListener('pointerdown', e => {
+  audioInit(); if (G.mode !== 'play') return;
+  if (G.phase === 'fail') { retry(); return; }
+  if (G.phase !== 'aim') return; ptr = e.pointerId; try { cv.setPointerCapture(e.pointerId); } catch (er) {}
+  G.drag = toWorld(e.clientX, e.clientY); G.pull = [0, 0]; G.ghost = 0; G.momoPose = 'pull';
+});
+cv.addEventListener('pointermove', e => {
+  if (e.pointerId !== ptr || !G.drag) return; const [x, y] = toWorld(e.clientX, e.clientY);
+  let px = x - G.drag[0], py = y - G.drag[1]; const l = Math.hypot(px, py); if (l > C.MAXPULL) { px *= C.MAXPULL / l; py *= C.MAXPULL / l; }
+  G.pull = [px, py]; SFX.creak(Math.min(1, l / C.MAXPULL)); if (l >= C.MAXPULL && !G.maxBuzz) { buzz(12); G.maxBuzz = true; } if (l < C.MAXPULL * .95) G.maxBuzz = false;
+  G.preview = l > 12 ? C.simulate(G.B, G.pull, { stopAtFirst: !G.hint, magnet: G.spec.magnet, previewTwo: G.hint }) : null;
+  if (G.hint && l > 12) G.preview = previewTwo(G.pull);
+});
+function previewTwo(pull) {   // the hint: the dotted path goes on to the 2nd bounce
+  const r = C.simulate(G.B, pull, { magnet: G.spec.magnet }), hits = r.events.filter(e => e.k === 'hit'); const tEnd = hits[1] ? hits[1].t : hits[0] ? Math.min(r.t, hits[0].t + .8) : r.t;
+  const n = Math.ceil(tEnd / (C.DT * r.every)) * 3; return { frames: r.frames.slice(0, n + 3), every: r.every };
+}
+const endDrag = e => {
+  if (e.pointerId !== ptr || !G.drag) return; ptr = null; const p = G.pull; G.drag = null; G.preview = null;
+  if (!p || Math.hypot(p[0], p[1]) < 14) { G.momoPose = 'idle'; return; }
+  throwIt(p);
+};
+cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag);
+
+function throwIt(pull) {
+  G.tries++; S.totals.throws++; G.rec = C.simulate(G.B, pull, { magnet: G.spec.magnet }); G.phase = 'fly'; G.pt = 0; G.ev = 0; G.lastPull = pull; G.momoPose = 'throw'; G.momoT = 0;
+  const R = G.rec; G.trick = R.result === 'win' && R.bounces >= 3; G.slowFrom = R.result === 'win' ? Math.max(0, R.t - (G.trick ? .9 : .6)) : 99;
+  SFX.release(); buzz(8); hideSay(); renderHud(); track('throw', { id: G.L.id, r: R.result, b: R.bounces });
+}
+function retry() { G.parts.length = 0; setupThrow(); renderHud(); if (G.tries >= E.hintAfter && !G.hint && !G.hintOffered) { G.hintOffered = true; say('hint', 3000); renderHud(); } }
+
+// ---------- the playback of the recorded throw ----------
+function sample(R, tt) { const n = R.frames.length / 3 - 1, f = clamp(tt / (C.DT * R.every), 0, n), i = Math.floor(f), k = f - i, j = Math.min(n, i + 1);
+  return [lerp(R.frames[i * 3], R.frames[j * 3], k), lerp(R.frames[i * 3 + 1], R.frames[j * 3 + 1], k), lerp(R.frames[i * 3 + 2], R.frames[j * 3 + 2], k)]; }
+function tick(dt) {
+  G.time += dt; G.momoT += dt; G.clap = Math.max(0, G.clap - dt * .5); G.sq = Math.max(0, G.sq - dt * 7); G.shake = Math.max(0, G.shake - dt * 3);
+  for (const k in G.flash) { G.flash[k] -= dt * 4; if (G.flash[k] <= 0) delete G.flash[k]; }
+  for (let i = G.parts.length - 1; i >= 0; i--) { const p = G.parts[i]; p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += (p.g ?? 600) * dt; if (p.t > p.life) G.parts.splice(i, 1); }
+  if (G.mode !== 'play') return;
+  if (G.phase === 'fly') {
+    const R = G.rec, inSlow = G.pt >= G.slowFrom, ts = inSlow ? (G.trick ? .33 : .4) : 1;
+    G.slow = lerp(G.slow, inSlow ? 1 : 0, Math.min(1, dt * 6));
+    G.pt += dt * ts;
+    while (G.ev < R.events.length && R.events[G.ev].t <= G.pt) fire(R.events[G.ev++]);
+    const [x, y] = sample(R, G.pt); G.cam = [lerp(G.cam[0], inSlow ? x : C.W / 2, Math.min(1, dt * 4)), lerp(G.cam[1], inSlow ? y : C.H / 2, Math.min(1, dt * 4))];
+    G.zoom = lerp(G.zoom, inSlow ? 1.45 : 1, Math.min(1, dt * 3));
+    if (G.pt >= R.t && G.ev >= R.events.length) end();
+  } else { G.zoom = lerp(G.zoom, 1, Math.min(1, dt * 3)); G.cam = [lerp(G.cam[0], C.W / 2, Math.min(1, dt * 3)), lerp(G.cam[1], C.H / 2, Math.min(1, dt * 3))]; G.slow = lerp(G.slow, 0, Math.min(1, dt * 4)); }
+  if (G.phase === 'fail' && G.time > G.endAt) retry();
+}
+function fire(e) {
+  if (e.k === 'hit') {
+    const ut = C.MAT[e.m] && C.MAT[e.m].ut && e.v > 140; SFX.hit(e.m, e.v, G.bounceN, G.pt >= G.slowFrom); if (ut) { G.bounceN++; G.flash[e.id] = 1; } G.sq = clamp(e.v / 900, .25, 1);
+    if (e.v > 220) { buzz(e.v > 600 ? 18 : 8); for (let i = 0; i < 6; i++) G.parts.push({ x: e.x, y: e.y, vx: rnd(-90, 90), vy: rnd(-160, -40), t: 0, life: .4, r: rnd(1.5, 3), c: P.cream }); }
+  } else if (e.k === 'win') { SFX.plop(); SFX.sizzle(); for (let i = 0; i < 14; i++) G.parts.push({ x: e.x, y: e.y - 10, vx: rnd(-40, 40), vy: rnd(-120, -40), t: 0, life: 1.2, r: rnd(3, 6), c: 'rgba(255,255,255,.8)', g: -40 }); }
+  else { SFX.splat(); G.splat = { x: e.x, y: Math.min(e.y, C.FLOOR - 4), k: e.k, t: 0 }; buzz(25); G.shake = .4; }
+}
+function end() {
+  const R = G.rec;
+  if (R.result === 'win') return win(R);
+  G.phase = 'fail'; G.momoPose = 'wince'; G.momoT = 0; G.endAt = G.time + .55;
+  const line = R.result === 'upside' ? 'upside' : ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'][Math.min(5, (G.tries - 1) % 6)];
+  if (G.tries <= 2 || G.tries % 3 === 0 || R.result === 'upside') say(line, 1100);
+  if (G.L.id === 3 && G.tries === 1 && !S.said.l3b) { S.said.l3b = 1; setTimeout(() => say('l3b', 3200), 600); G.endAt = G.time + 1.2; }
+}
+function win(R) {
+  G.phase = 'win'; G.momoPose = 'dance'; G.momoT = 0; G.clap = G.trick ? 3 : 1.6; buzz(G.trick ? 60 : 30);
+  banner(G.trick ? t('trick') : t('perfect'), G.trick ? 'y' : 'g'); if (G.trick) { SFX.trick(); SFX.applause(2); S.totals.tricks++; } else { SFX.perfect(); SFX.applause(1); }
+  S.totals.bestBounces = Math.max(S.totals.bestBounces, R.bounces);
+  if (G.L.chef && G.step < 2) { G.step++; say(G.step === 1 ? 'win2' : 'win3', 1400); setTimeout(() => { if (G.mode === 'play') { setupThrow(); renderHud(); } }, 1700); return; }
+  setTimeout(() => G.mode === 'play' && result(R), G.trick ? 1900 : 1300);
+}
+
+// ---------- drawing ----------
+function draw() {
+  const s = V.sc * V.d; g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = G.L && G.L.kitchen === 2 ? '#8E5F35' : P.blue; g.fillRect(0, 0, cv.width, cv.height);
+  if (G.mode === 'title' || !G.L) return;
+  const sh = G.shake > 0 ? (Math.random() - .5) * G.shake * 10 : 0;
+  // world transform with the slow-motion camera (zoom around the ingredient)
+  const z = G.zoom, cx = G.cam[0], cy = G.cam[1];
+  g.setTransform(s * z, 0, 0, s * z, V.ox * V.d + (C.W / 2 - cx * z + cx * 0) * 0 + s * (C.W / 2 - cx * z + sh), V.oy * V.d + s * (C.H / 2 - cy * z));
+  g.save(); g.beginPath(); g.rect(0, 0, C.W, C.H); g.clip();
+  g.drawImage(bg(G.L.kitchen), 0, 0, C.W, C.FLOOR);
+  const B = G.B, sp = G.spec;
+  // utensils, the dish
+  for (const d of B.deco) ART.utensil(g, d, G.time, G.flash[d.id] || 0);
+  ART.target(g, sp.target, G.phase === 'aim' && G.tries === 0 && G.L.id <= 3 ? (Math.sin(G.time * 4) + 1) / 2 : 0);
+  // the dining room
+  const seats = 3 + E.bistro.reduce((n, b) => n + (S.bistro[b.id] ? b.seats : 0), 0);
+  ART.dining(g, C.W, C.FLOOR, C.H, seats, G.clap, G.time, G.L.chef || G.L.id > 5);
+  // Momo by the start point
+  const st = sp.start, left = st[0] < C.W / 2;
+  ART.momo(g, st[0] + (left ? -30 : 30), st[1] + 44, { pose: G.momoPose, t: G.momoT + G.time, outfit: S.outfit, flip: !left, s: .82, k: G.pull ? Math.hypot(G.pull[0], G.pull[1]) / C.MAXPULL : 0 });
+  // the slingshot, the preview dots, the ingredient
+  const kind = sp.ing, r = B.ing.r;
+  if (G.phase === 'aim') {
+    const p = G.pull || [0, 0], ix = st[0] + p[0] * .45, iy = st[1] + p[1] * .45;
+    if (G.preview) { const F = G.preview.frames; g.fillStyle = 'rgba(34,32,46,.55)'; for (let i = 0; i < F.length; i += 3 * 4) { g.beginPath(); g.arc(F[i], F[i + 1], 2.4, 0, TAU); g.fill(); } }
+    if (G.pull) { ART.line(g, 3, P.red); g.beginPath(); g.moveTo(st[0] - 14, st[1] - 6); g.lineTo(ix, iy); g.lineTo(st[0] + 14, st[1] - 6); g.stroke(); }
+    ART.ingredient(g, kind, ix, iy, 0, 0, r);
+    if (G.ghost) ghostHand(st);
+  } else if (G.phase === 'fly' || G.phase === 'win') {
+    const [x, y, a] = sample(G.rec, G.pt); if (G.phase === 'fly' || G.rec.result === 'win') ART.ingredient(g, kind, x, y, a, G.sq, r);
+  }
+  if (G.splat) { G.splat.t += 1 / 60; ART.splat(g, G.splat.x, G.splat.y, kind, Math.min(1, G.splat.t * 8)); }
+  for (const p of G.parts) { g.globalAlpha = 1 - p.t / p.life; g.fillStyle = p.c; g.beginPath(); g.arc(p.x, p.y, p.r, 0, TAU); g.fill(); } g.globalAlpha = 1;
+  g.restore();
+  // slow-motion bars
+  if (G.slow > .02) { g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = 'rgba(34,32,46,' + (.85 * G.slow) + ')'; const bh = cv.height * .07 * G.slow; g.fillRect(0, 0, cv.width, bh); g.fillRect(0, cv.height - bh, cv.width, bh); }
+}
+function ghostHand(st) {   // the tutorial's ghost hand: press on the egg, pull back down-left, let go
+  const ph = (G.time % 2.2) / 2.2, k = ph < .15 ? 0 : ph < .7 ? (ph - .15) / .55 : 1, x = st[0] - 40 * k, y = st[1] + 70 * k;
+  g.save(); g.globalAlpha = ph > .85 ? 1 - (ph - .85) / .15 : .9; g.fillStyle = '#FFFFFF'; ART.line(g, 3);
+  g.beginPath(); g.ellipse(x + 8, y + 16, 11, 14, -.3, 0, TAU); g.fill(); g.stroke(); g.beginPath(); g.rect(x - 2, y - 8, 9, 22); g.fill(); g.stroke(); g.restore();
+}
+
+// ---------- interface: HUD, Momo's bubble, banners, toasts ----------
+function renderHud() {
+  const h = $('#hud'); if (G.mode !== 'play') { h.classList.remove('on'); return; } h.classList.add('on');
+  const lab = G.L.chef ? t('chefStep', G.step + 1) : t('level', G.L.id);
+  const hintBtn = G.tries >= E.hintAfter && !G.hint ? `<button class="chip hint" data-hint>${(S.hintsUsed[svc()] || 0) < E.hintFreePerService ? t('hintFree') : t('hintAd')}</button>` : '';
+  h.innerHTML = `<div class="hrow"><button class="rb" data-home aria-label="${t('home')}">⌂</button><div class="chip">${lab}</div><div class="chip sm">${t('tries', Math.max(1, G.tries + (G.phase === 'aim' ? 1 : 0)))}</div><span style="flex:1"></span><div class="chip" id="hgold"><i class="coin"></i>${S.gold}</div></div><div class="hrow">${hintBtn}</div>`;
+  h.querySelector('[data-home]').onclick = () => { SFX.click(); goHome(); };
+  const hb = h.querySelector('[data-hint]'); if (hb) hb.onclick = async () => { const k = svc(); if ((S.hintsUsed[k] || 0) >= E.hintFreePerService && !await Ads.rewarded('hint')) return; S.hintsUsed[k] = (S.hintsUsed[k] || 0) + 1; save(); G.hint = true; toast(t('hintShown')); renderHud(); };
+}
+const svc = () => 'k' + G.L.kitchen + 's' + Math.ceil(G.L.id / 10);
+let sayT = 0;
+function say(key, ms = 2500) { const el = $('#momo'), txt = I.momo(key); if (!txt) return; el.querySelector('.lt').textContent = txt; el.classList.add('on'); SFX.momo(); clearTimeout(sayT); sayT = setTimeout(hideSay, ms); }
+function hideSay() { $('#momo').classList.remove('on'); }
+function banner(txt, cls) { const b = div('banner ' + (cls || ''), txt); document.body.appendChild(b); setTimeout(() => b.remove(), 1900); }
+function toast(txt) { const el = div('toast', txt); $('#toasts').appendChild(el); setTimeout(() => el.classList.add('out'), 2200); setTimeout(() => el.remove(), 2700); }
+function confirmBox(html) { return new Promise(res => { const el = div('confirm', `<div class="card"><p>${html}</p><div class="row2"><button class="b2" data-n>✕</button><button class="b1" data-y>OK</button></div></div>`); document.body.appendChild(el); el.querySelector('[data-y]').onclick = () => { el.remove(); res(true); }; el.querySelector('[data-n]').onclick = () => { el.remove(); res(false); }; }); }
+const modal = $('#modal'); function openModal(html, cls = '') { modal.innerHTML = `<div class="card ${cls}">${html}</div>`; modal.classList.add('on'); const x = modal.querySelector('[data-close]'); if (x) x.onclick = closeModal; return modal; }
+function closeModal() { modal.classList.remove('on'); modal.innerHTML = ''; }
+
+// ---------- the result card: stars, coins, XP, a new dish, the share button ----------
+function result(R) {
+  const L = G.L, id = L.id, first = !S.best[id], spec = L.chef ? L.steps[2] : L;
+  const s = [true, G.tries <= (L.chef ? 5 : 3), L.chef ? G.tries <= 3 : spec.bonus ? C.bonusOk(spec, R) : G.tries === 1];   // no bonus objective: the 3rd star is "first try"
+  const old = S.best[id] || [false, false, false], best = old.map((v, i) => v || s[i]); S.best[id] = best;
+  const nStars = s.filter(Boolean).length, gold = (L.chef ? E.coinsChef : E.coinsWin(nStars)) * (first ? 1 : .5) | 0;
+  S.gold += gold; S.totals.served++; S.totals.stars += Math.max(0, best.filter(Boolean).length - old.filter(Boolean).length);
+  S.unl = Math.max(S.unl, Math.min(LV.length, G.li + 2)); S.tries[id] = Math.min(S.tries[id] || 99, G.tries);
+  const dish = E.dishes[id - 1], newDish = dish && !S.book[dish]; if (newDish) S.book[dish] = 1;
+  const lvBefore = S.plv; addXp(E.xpWin(nStars)); save();
+  const bonusTxt = spec.bonus ? (spec.bonus.k === 'touch' ? t('star3b', t('bTouch_' + spec.bonus.id)) : spec.bonus.k === 'bounces' ? t('star3b', t('bBounces', spec.bonus.n)) : t('star3b', t('bSurfaces', spec.bonus.n))) : t('firstTry');
+  const labels = [t('star1'), L.chef ? t('tries', '≤ 5') : t('star2'), L.chef ? t('tries', '≤ 3') : bonusTxt];
+  const critic = G.L.chef || id > 5 ? `<p class="sub">${t('critic')} : ${t('critic' + nStars)}</p>` : '';
+  const m = openModal(`<h2>${G.trick ? t('trick') : t('served')}</h2>
+    <div class="stars">${labels.map((l, i) => `<div class="st ${s[i] ? '' : 'miss'}"><i class="sti"></i><small>${l}</small></div>`).join('')}</div>
+    <div class="gain"><i class="coin"></i> +<span data-g>${gold}</span></div>${critic}
+    ${newDish ? `<div class="near">${t('newDish')} <b>${I.dish(dish)}</b></div>` : ''}
+    ${G.trick ? `<button class="b2" data-share>🎬 ${t('share')}</button>` : ''}
+    ${id > 3 ? `<button class="b2 bad" data-x2>▶ ${t('x2')}</button>` : ''}
+    <div class="row2"><button class="b2" data-again>${t('replay')}</button><button class="b1 big" data-next>${t('next')}</button></div>`);
+  m.querySelectorAll('.st').forEach((el, i) => s[i] && setTimeout(() => { el.classList.add('on'); SFX.star(i); }, 250 + i * 280));
+  const x2 = m.querySelector('[data-x2]'); if (x2) x2.onclick = async () => { if (await Ads.rewarded('x2')) { S.gold += gold; save(); x2.remove(); m.querySelector('[data-g]').textContent = gold * 2; SFX.coins(); toast(t('x2Done')); } };
+  const sb = m.querySelector('[data-share]'); if (sb) sb.onclick = () => shareClip(sb);
+  m.querySelector('[data-again]').onclick = () => { closeModal(); startLevel(G.li); };
+  m.querySelector('[data-next]').onclick = async () => { closeModal(); if (G.li + 1 >= LV.length) { goHome(); return; } await Ads.interstitial(); startLevel(G.li + 1); };
+  if (S.plv > lvBefore) setTimeout(() => { banner(t('lvUp', S.plv), 'y'); toast(t('lvGift', E.levelGift(S.plv))); }, 1200);
+  SFX.coins(); track('level_done', { id, stars: nStars, tries: G.tries, trick: G.trick });
+  if (ZVK() && (G.trick || (nStars === 3 && id > 3))) ZVK().joy(G.trick ? 'trick' : 'stars3');   // the iOS rating prompt may follow a moment of joy, never a failure
+}
+function addXp(n) { S.xp += n; while (S.xp >= E.xpLevel(S.plv)) { S.xp -= E.xpLevel(S.plv); S.plv++; S.gold += E.levelGift(S.plv); } }
+
+// ---------- "Share the slow-mo": a vertical 6-8 s clip of the last throw, through the native share sheet ----------
+// The clip is re-drawn from the recording into a 720 × 1280 canvas and recorded with MediaRecorder; the iOS shell hands it to
+// UIActivityViewController (message handler `share`). The game never posts anything by itself: the player picks where.
+async function shareClip(btn) {
+  const R = G.rec; if (!R || !window.MediaRecorder) { toast(t('shareNone')); return; }
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    const blob = await recordClip(R);
+    if (ZVK()) { const b64 = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); }); await ZVK().shareFile('toss-bistro.' + (blob.type.includes('mp4') ? 'mp4' : 'webm'), b64, t('shareClipText')); }
+    else { const f = new File([blob], 'toss-bistro.' + (blob.type.includes('mp4') ? 'mp4' : 'webm'), { type: blob.type }); if (navigator.canShare && navigator.canShare({ files: [f] })) await navigator.share({ files: [f] }); else toast(t('shareNone')); }
+  } catch (e) { toast(t('shareNone')); }
+  btn.disabled = false; btn.textContent = '🎬 ' + t('share');
+}
+function recordClip(R) {
+  return new Promise((res, rej) => {
+    const W = 720, H = 1280, c = document.createElement('canvas'); c.width = W; c.height = H; const q = c.getContext('2d');
+    const type = ['video/mp4', 'video/webm;codecs=vp9', 'video/webm'].find(x => MediaRecorder.isTypeSupported(x)); if (!type) return rej();
+    const mr = new MediaRecorder(c.captureStream(30), { mimeType: type, videoBitsPerSecond: 4e6 }), chunks = []; mr.ondataavailable = e => chunks.push(e.data); mr.onstop = () => res(new Blob(chunks, { type }));
+    const spec = G.spec, B = G.B, s = W / C.W, slowFrom = Math.max(0, R.t - (R.bounces >= 3 ? .9 : .6)); let pt = 0, real = 0, clap = 0; const flash = {}; let ev = 0, n = 0;
+    mr.start(); const t0 = performance.now(); let lt = t0;
+    const frame = () => {
+      const now = performance.now(), dt = Math.min(.05, (now - lt) / 1000); lt = now; real += dt;
+      const inSlow = pt >= slowFrom && pt < R.t; if (pt < R.t) pt += dt * (inSlow ? .33 : 1); else clap = Math.max(clap, 1);
+      while (ev < R.events.length && R.events[ev].t <= pt) { const e = R.events[ev++]; if (e.k === 'hit' && C.MAT[e.m].ut) flash[e.id] = 1; }
+      for (const k in flash) flash[k] -= dt * 4;
+      const [x, y, a] = sample(R, Math.min(pt, R.t)), z = inSlow ? 1.4 : 1;
+      q.setTransform(1, 0, 0, 1, 0, 0); q.fillStyle = P.blue; q.fillRect(0, 0, W, H);
+      q.setTransform(s * z, 0, 0, s * z, s * (C.W / 2 - (inSlow ? x : C.W / 2) * z), s * (C.H / 2 - (inSlow ? y : C.H / 2) * z));
+      const k1 = document.createElement('canvas'); void k1;
+      ART.kitchen(q, G.L.kitchen, C.W, C.H, C.FLOOR, C.CEIL); for (const d of B.deco) ART.utensil(q, d, real, Math.max(0, flash[d.id] || 0)); ART.target(q, spec.target, 0);
+      ART.dining(q, C.W, C.FLOOR, C.H, 8, clap, real, true); ART.momo(q, spec.start[0] + (spec.start[0] < C.W / 2 ? -30 : 30), spec.start[1] + 44, { pose: pt >= R.t ? 'dance' : 'throw', t: real, outfit: S.outfit, s: .82, flip: spec.start[0] > C.W / 2 });
+      ART.ingredient(q, spec.ing, x, y, a, 0, B.ing.r);
+      q.setTransform(1, 0, 0, 1, 0, 0);
+      if (pt >= R.t) { q.font = '900 84px ui-rounded,system-ui,sans-serif'; q.textAlign = 'center'; q.lineWidth = 10; q.strokeStyle = P.ink; q.fillStyle = P.yolk; q.strokeText(t('trick'), W / 2, H * .3); q.fillText(t('trick'), W / 2, H * .3); }
+      if (real > 6.2) { q.fillStyle = 'rgba(34,32,46,.86)'; q.fillRect(0, 0, W, H); q.font = '900 92px ui-rounded,system-ui,sans-serif'; q.textAlign = 'center'; q.fillStyle = P.cream; q.fillText('Toss Bistro', W / 2, H / 2); q.font = '800 40px ui-rounded,system-ui,sans-serif'; q.fillStyle = P.yolk; q.fillText(I.lang === 'en' ? 'Free on the App Store' : 'Gratuit sur l’App Store', W / 2, H / 2 + 70); }
+      if (real < 7.2) { n++; requestAnimationFrame(frame); } else mr.stop();
+    }; requestAnimationFrame(frame);
+  });
+}
+
+// ---------- home: the bistro, the services, and everything between two throws ----------
+function showHome(on) { $('#home').classList.toggle('on', on); }
+function goHome() { G.mode = 'home'; closeModal(); hideSay(); renderHud(); renderHome(); showHome(true); }
+function renderHome() {
+  checkLogin();
+  const seats = 3 + E.bistro.reduce((n, b) => n + (S.bistro[b.id] ? b.seats : 0), 0), served = Object.keys(S.book).length;
+  $('#hhead').innerHTML = `<div class="mrow"><div id="plv">Nv ${S.plv}</div><div id="xpbar"><i style="width:${(S.xp / E.xpLevel(S.plv) * 100).toFixed(0)}%"></i></div><div class="chip" id="hgold"><i class="coin"></i>${S.gold}</div><div class="chip"><i class="truf"></i>${S.truffles}</div></div>`;
+  let map = '';
+  for (const k of [1, 2]) { const ls = LV.filter(l => l.kitchen === k); if (!ls.length) continue;
+    map += `<div class="map"><h3>${t('kitchen' + k)}</h3><div class="lvls">${ls.map(l => { const i = LV.indexOf(l), lock = i >= S.unl, b = S.best[l.id], n = b ? b.filter(Boolean).length : 0;
+      return `<button class="lv ${lock ? 'lock' : ''} ${i === S.unl - 1 ? 'cur' : ''} ${l.chef ? 'chef' : ''}" data-lv="${i}" ${lock ? 'disabled' : ''}>${l.chef ? '★' : l.id}<small>${'★'.repeat(n)}${'☆'.repeat(b ? 3 - n : 0)}</small></button>`; }).join('')}</div></div>`; }
+  map += `<p class="note">${t('soon')}</p>`;
+  const plotsReady = S.plots.some(p => p && p.end <= Date.now()), ovenReady = S.oven && S.oven <= Date.now();
+  $('#hmid').innerHTML = `<canvas id="hbistro" width="720" height="300"></canvas>
+    <div class="hcard"><div class="tx"><b>${t('bistro')}</b>${t('seats', seats)} · ${t('dishes', served, E.dishes.length)}</div><button class="buy gm" data-bistro>＋</button></div>
+    <button class="b1 huge" data-play>▶ ${t('level', LV[Math.min(S.unl, LV.length) - 1].id)}</button>${map}`;
+  $('#hfoot').innerHTML = [['recipes', '📖'], ['garden', '🌱', plotsReady], ['oven', '🥖', ovenReady], ['box', '🎁', S.boxDay !== today()], ['shop', '🛒'], ['settings', '⚙️']]
+    .map(([k, ic, dot]) => `<div><button class="rb ${dot ? 'dot' : ''}" data-f="${k}">${ic}</button><small>${t(k)}</small></div>`).join('');
+  $('#hmid [data-play]').onclick = () => { SFX.click(); startLevel(Math.min(S.unl, LV.length) - 1); };
+  $('#hmid [data-bistro]').onclick = bistroModal;
+  $('#hmid').querySelectorAll('[data-lv]').forEach(b => b.onclick = () => { SFX.click(); startLevel(+b.dataset.lv); });
+  $('#hfoot').querySelectorAll('[data-f]').forEach(b => b.onclick = () => { SFX.click(); ({ recipes: recipesModal, garden: gardenModal, oven: ovenModal, box: boxModal, shop: shopModal, settings: settingsModal })[b.dataset.f](); });
+  drawBistro();
+  if (S.login.pending) setTimeout(giftModal, 400);
+}
+function drawBistro() { const c = $('#hbistro'); if (!c) return; const q = c.getContext('2d'), s = c.width / C.W; q.setTransform(s, 0, 0, s, 0, -s * (C.FLOOR - 70)); ART.kitchen(q, 1, C.W, C.H, C.FLOOR, C.CEIL);
+  const seats = 3 + E.bistro.reduce((n, b) => n + (S.bistro[b.id] ? b.seats : 0), 0); ART.dining(q, C.W, C.FLOOR, C.H, seats, 0, performance.now() / 1000, false);
+  ART.momo(q, C.W / 2, C.FLOOR - 20, { t: performance.now() / 1000, outfit: S.outfit, s: .8 }); }
+
+function checkLogin() { const d = today(); if (S.login.last === d) return; const y = new Date(Date.now() - 864e5), yd = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); S.login.streak = S.login.last === yd ? (S.login.streak % 7) + 1 : 1; S.login.last = d; S.login.pending = true; save(); }
+function giftModal() {
+  const n = S.login.streak; const m = openModal(`<h2>${t('giftTitle')}</h2><div class="login">${E.login.map((c, i) => `<div class="lg ${i < n - 1 ? 'got' : i === n - 1 ? 'now' : ''}"><small>${t('giftDay', i + 1)}</small><b>${c}</b></div>`).join('')}</div><button class="b1 big" data-claim>${t('giftTake')}</button>`);
+  m.querySelector('[data-claim]').onclick = () => { S.gold += E.login[n - 1]; if (n === 7) S.truffles += E.loginTruffles; S.login.pending = false; save(); SFX.coins(); closeModal(); toast(t('giftBack', n % 7 + 1)); renderHome(); };
+}
+function bistroModal() {
+  const m = openModal(`<h2>${t('bistro')}</h2>${E.bistro.map(b => `<div class="it"><div class="tx"><b>${t('b_' + b.id)}</b><small>${t('seats', b.seats)}</small></div>${S.bistro[b.id] ? `<span class="own">${t('own')}</span>` : `<button class="buy ${b.truffles ? 'gm' : ''}" data-b="${b.id}">${b.gold ? b.gold + ' 🪙' : b.truffles + ' 🍄'}</button>`}</div>`).join('')}<button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-b]').forEach(x => x.onclick = () => { const b = E.bistro.find(y => y.id === x.dataset.b); if (b.gold ? S.gold < b.gold : S.truffles < b.truffles) return SFX.click(); if (b.gold) S.gold -= b.gold; else S.truffles -= b.truffles; S.bistro[b.id] = 1; save(); SFX.fanfare(); JUICE.confetti(40); if (!S.said.bistro) { S.said.bistro = 1; say('bistro', 3000); } bistroModal(); renderHome(); });
+}
+function recipesModal() { openModal(`<h2>${t('recipes')}</h2><p class="sub">${t('dishes', Object.keys(S.book).length, E.dishes.length)}</p><div class="grid3">${E.dishes.map(d => `<div class="gi rec ${S.book[d] ? '' : 'lock'}"><b>${S.book[d] ? '🍽️' : '?'}</b><small>${S.book[d] ? I.dish(d) : t('locked')}</small></div>`).join('')}</div><button class="b2" data-close>OK</button>`, 'wide'); }
+const left = end => { const m = Math.max(0, Math.ceil((end - Date.now()) / 60000)); return m >= 60 ? Math.floor(m / 60) + ' h ' + (m % 60) + ' min' : m + ' min'; };
+function gardenModal() {
+  if (!S.said.garden) { S.said.garden = 1; say('garden', 3000); }
+  const m = openModal(`<h2>${t('garden')}</h2>${S.plots.map((p, i) => { if (!p) return `<div class="it"><div class="tx"><b>—</b></div>${E.crops.map(c => `<button class="buy" data-plant="${i}:${c.id}">${t('c_' + c.id)} ${c.gold}🪙</button>`).join('')}</div>`;
+      const c = E.crops.find(x => x.id === p.id), ready = p.end <= Date.now(), min = Math.ceil((p.end - Date.now()) / 60000);
+      return `<div class="it"><div class="tx"><b>${t('c_' + c.id)}</b><small>${ready ? t('ready') : t('growing', left(p.end))}</small></div>${ready ? `<button class="buy" data-h="${i}">${t('harvest')} +${c.coins}</button>` : `<button class="buy gm" data-fin="${i}">${E.finishTruffles(min)} 🍄</button><button class="buy ad" data-fad="${i}">▶</button>`}</div>`; }).join('')}
+    <p class="note">${t('truffleNote')}</p><button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-plant]').forEach(b => b.onclick = () => { const [i, id] = b.dataset.plant.split(':'), c = E.crops.find(x => x.id === id); if (S.gold < c.gold) return; S.gold -= c.gold; S.plots[+i] = { id, end: Date.now() + c.min * 60000 }; save(); gardenModal(); renderHome(); });
+  m.querySelectorAll('[data-h]').forEach(b => b.onclick = () => { const i = +b.dataset.h, c = E.crops.find(x => x.id === S.plots[i].id); S.gold += c.coins; S.plots[i] = null; save(); SFX.coins(); gardenModal(); renderHome(); });
+  m.querySelectorAll('[data-fin]').forEach(b => b.onclick = () => { const i = +b.dataset.fin, cost = E.finishTruffles(Math.ceil((S.plots[i].end - Date.now()) / 60000)); if (S.truffles < cost) return; S.truffles -= cost; S.plots[i].end = Date.now(); save(); gardenModal(); });
+  m.querySelectorAll('[data-fad]').forEach(b => b.onclick = async () => { if (await Ads.rewarded('garden')) { S.plots[+b.dataset.fad].end = Date.now(); save(); gardenModal(); } });
+}
+function ovenModal() {
+  const ready = S.oven && S.oven <= Date.now();
+  const m = openModal(`<h2>${t('oven')}</h2><p>${!S.oven ? '' : ready ? t('ready') : t('ovenFill', left(S.oven))}</p>${!S.oven ? `<button class="b1" data-start>${t('plant')} 🥖</button>` : ready ? `<button class="b1" data-take>${t('ovenTake', E.oven.coins)}</button>` : `<button class="b2 bad" data-ad>▶ ${t('finish')}</button>`}<button class="b2" data-close>OK</button>`);
+  const st = m.querySelector('[data-start]'); if (st) st.onclick = () => { S.oven = Date.now() + E.oven.min * 60000; save(); ovenModal(); renderHome(); };
+  const tk = m.querySelector('[data-take]'); if (tk) tk.onclick = () => { S.gold += E.oven.coins; S.oven = Date.now() + E.oven.min * 60000; save(); SFX.coins(); ovenModal(); renderHome(); };
+  const ad = m.querySelector('[data-ad]'); if (ad) ad.onclick = async () => { if (await Ads.rewarded('oven')) { S.oven = Date.now(); save(); ovenModal(); } };
+}
+// the supplier's mystery box: opened with coins only (earned by playing), odds shown before opening
+function boxModal() {
+  if (!S.said.box) { S.said.box = 1; say('box', 3000); }
+  const O = E.box.odds, free = S.boxDay !== today();
+  const m = openModal(`<h2>${t('box')}</h2><div class="big-ico">🎁</div><p class="sub">${t('boxOdds', O[0].p, O[1].p, O[2].p, E.box.dupCoins)}</p>
+    <button class="b1 big" data-open ${S.gold < E.box.gold ? 'disabled' : ''}>${t('boxOpen', E.box.gold)}</button>${free ? `<button class="b2 bad" data-free>▶ ${t('boxAd')}</button>` : ''}<button class="b2" data-close>OK</button>`);
+  m.querySelector('[data-open]').onclick = () => { if (S.gold < E.box.gold) return; S.gold -= E.box.gold; openBox(); };
+  const f = m.querySelector('[data-free]'); if (f) f.onclick = async () => { if (await Ads.rewarded('box')) { S.boxDay = today(); openBox(); } };
+}
+function openBox() {
+  let roll = Math.random() * 100, r = E.box.odds[E.box.odds.length - 1].r; for (const o of E.box.odds) { if (roll < o.p) { r = o.r; break; } roll -= o.p; }
+  const pool = E.loot.filter(x => x.r === r), it = pool[(Math.random() * pool.length) | 0], dup = it.k === 'outfit' ? S.outfits[it.id] : S.decos[it.id];
+  if (dup) S.gold += E.box.dupCoins; else if (it.k === 'outfit') S.outfits[it.id] = 1; else S.decos[it.id] = 1;
+  save(); SFX.box(); JUICE.confetti(r === 'epique' ? 90 : 40); track('box_open', { r, id: it.id, dup: !!dup });
+  const m = openModal(`<h2>${t('r_' + r)}</h2><div class="big-ico">${it.k === 'outfit' ? '🎩' : '🖼️'}</div><p><b>${t((it.k === 'outfit' ? 'o_' : 'd_') + it.id)}</b></p><p class="sub">${dup ? t('boxDup', E.box.dupCoins) : t('boxGot')}</p>${it.k === 'outfit' && !dup ? `<button class="b1" data-wear>${t('outfits')} ✓</button>` : ''}<button class="b2" data-close>OK</button>`);
+  const w = m.querySelector('[data-wear]'); if (w) w.onclick = () => { S.outfit = it.id; save(); closeModal(); renderHome(); };
+  renderHome();
+}
+function shopModal() {
+  Store.init();
+  const outfits = [...E.outfits.map(o => o.id), ...E.loot.filter(x => x.k === 'outfit').map(x => x.id)];
+  const m = openModal(`<h2>${t('shop')}</h2>${E.store.map(it => `<div class="it"><div class="tx"><b>${t('s_' + it.id)}</b><small>${t('s_' + it.id + 'Sub')}</small></div>${it.once && S.owned[it.id] ? `<span class="own">${t('own')}</span>` : `<button class="buy price" data-buy="${it.id}">${Store.price(it)}</button>`}</div>`).join('')}
+    <p class="note">${t('truffleNote')}</p><h3>${t('outfits')}</h3><div class="grid3">${outfits.map(id => { const o = E.outfits.find(x => x.id === id), own = S.outfits[id];
+      return `<button class="gi ${S.outfit === id ? 'on' : ''} ${own ? '' : 'lock'}" data-o="${id}"><b>🎩</b><small>${t('o_' + id)}</small><small>${own ? '' : o && o.truffles ? o.truffles + ' 🍄' : o && o.how === 'starter' ? t('s_starter') : o && o.how === 'pass' ? t('s_pass_saison_2026') : t('box')}</small></button>`; }).join('')}</div>
+    <button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { SFX.click(); if (await Store.buy(E.store.find(x => x.id === b.dataset.buy))) shopModal(); });
+  m.querySelectorAll('[data-o]').forEach(b => b.onclick = () => { const id = b.dataset.o, o = E.outfits.find(x => x.id === id);
+    if (S.outfits[id]) { S.outfit = id; save(); shopModal(); renderHome(); return; }
+    if (o && o.truffles && S.truffles >= o.truffles) { S.truffles -= o.truffles; S.outfits[id] = 1; S.outfit = id; save(); SFX.fanfare(); shopModal(); renderHome(); } });
+}
+function settingsModal() {
+  const sw = (k, l) => `<label class="sw">${l}<input type="checkbox" data-s="${k}" ${S[k] ? 'checked' : ''}></label>`;
+  const m = openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vib'))}
+    <label class="sw">${t('lang')}<select data-lang>${I.langs.map(l => `<option value="${l}" ${l === I.lang ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('')}</select></label>
+    ${ZVK() ? `<div class="row2">${ZVK().others ? `<button class="b2" data-more>${t('moreGames')}</button>` : ''}<button class="b2" data-sharegame>${t('shareGame')}</button></div>` : ''}
+    <button class="b2" data-restore>${t('restore')}</button>${NADS() ? `<button class="b2" data-ump>${t('privacyChoices')}</button>` : ''}<button class="b2" data-priv>${t('privacy')}</button>
+    <div class="ver">Toss Bistro ${window.TB_VERSION || ''}</div><button class="b2" data-close>OK</button>`, 'wide');
+  m.querySelectorAll('[data-s]').forEach(c => c.onchange = () => { S[c.dataset.s] = c.checked; save(); });
+  m.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); settingsModal(); renderHome(); };
+  m.querySelector('[data-restore]').onclick = () => Store.restore();
+  const u = m.querySelector('[data-ump]'); if (u) u.onclick = () => nads('consentForm');
+  const mg = m.querySelector('[data-more]'); if (mg) mg.onclick = () => ZVK().moreGames().then(ok => ok || toast(I.lang === 'en' ? 'Coming soon!' : 'Bientôt !'));
+  const sg = m.querySelector('[data-sharegame]'); if (sg) sg.onclick = () => ZVK().share(t('shareGameText'));
+  m.querySelector('[data-priv]').onclick = () => openModal(`<div class="legal">${window.TB_PRIVACY || ''}</div><button class="b2" data-close>OK</button>`, 'wide');
+}
+
+// ---------- title ----------
+function showTitle() {
+  G.mode = 'title'; const el = $('#title'); el.classList.add('on');
+  el.innerHTML = `<div class="logo"><h1>Toss<br>Bistro</h1></div><canvas id="tmomo" width="300" height="360"></canvas><div style="width:100%;display:flex;flex-direction:column;align-items:center"><p>${t('tapToStart')}</p><button class="b1 huge" data-play>${t('play')}</button></div>`;
+  el.querySelector('[data-play]').onclick = async () => {
+    audioInit(); SFX.click(); el.classList.remove('on'); await Ads.init(); Store.init();
+    if (S.plays === 0 && !S.best[1]) startLevel(0); else goHome();
+  };
+}
+function drawTitle() { const c = $('#tmomo'); if (!c || G.mode !== 'title') return; const q = c.getContext('2d'); q.setTransform(1, 0, 0, 1, 0, 0); q.clearRect(0, 0, 300, 360); q.setTransform(2.4, 0, 0, 2.4, 150, 220); ART.momo(q, 0, 0, { pose: 'dance', t: performance.now() / 1000, outfit: S.outfit }); }
+
+// ---------- main loop ----------
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  try { tick(dt); draw(); drawTitle(); if (G.mode === 'home' && ((now / 250) | 0) % 2 === 0) drawBistro(); if (G.mode !== 'play' || G.phase === 'aim') musicTick(); } catch (e) { console.error(e); }
+  requestAnimationFrame(loop);
+}
+showTitle(); requestAnimationFrame(loop);
+document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+
+// for the BETA IA robot (beta-game.js) and the tests: what a finger needs to know, nothing more
+window.TB = { G, S: () => S, SFX, C, LV, save, startLevel, goHome, say, toScreen, closeModal, resetSave: () => { S = fresh(); I.set(S.lang); save(); },
+  startScreen: () => toScreen(G.spec.start[0], G.spec.start[1]), scale: () => V.sc, events: () => {} };
+})();
+</script>
+<script>// Toss Bistro scenes for the BETA IA simulated player (shared core: beta.js, spec: ZVisionAI/partage/spec-mode-beta-ia.md).
+// Every throw is a real gesture: the finger presses on the ingredient, pulls back by the solver's pull vector (levels.js: sol, solB,
+// solT) and lets go. A missed throw is a real pull too, just a little off. The 5 scenes of the plan:
+// trick (TRICK SHOT, App Store preview n° 1), crepe, echec (the funny failure and the instant retry), montagne (fans and ice),
+// bistro (the bistro grown, the terrace, Momo's outfits); plus onboarding, boucle, progression and idle.
+(() => {
+  if (!window.BETA || !BETA.on) return;
+  const D = window.TB, G = D.G, S = () => D.S(), LV = D.LV;
+  if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}[data-x2]{display:none!important}.price{visibility:hidden!important}'; document.head.appendChild(st); }
+  const visible = sel => { const e = document.querySelector(sel); return e && e.offsetParent ? e : null; };
+  const LI = id => LV.findIndex(l => l.id === id);
+  async function until(A, cond, sec) { const t0 = performance.now(); while (A.running() && !cond() && (performance.now() - t0) / 1000 < sec) await A.wait(120); }
+  async function start(A) {
+    if (A.opts.ui === 'propre') { if (S().consent == null) S().consent = false; S().owned.noads = true; }
+    if (G.mode !== 'title') return; await A.wait(1000); await A.tapEl('#title [data-play]', 'jouer'); await A.wait(900);
+  }
+  // the throw: press on the ingredient, pull back along `pull` (world units), let go
+  async function fling(A, pull, label = 'lancer', off = 0) {
+    await until(A, () => G.mode === 'play' && G.phase === 'aim', 6); if (!A.running()) return;
+    const [x, y] = D.startScreen(), k = D.scale(), a = off ? A.jitter(-off, off) : 0, c = Math.cos(a), s = Math.sin(a), m = off ? 1 + A.jitter(-.08, .08) : 1;
+    const px = (pull[0] * c - pull[1] * s) * m, py = (pull[0] * s + pull[1] * c) * m;
+    await A.think(); await A.drag(x + A.jitter(-2, 2), y + A.jitter(-2, 2), x + px * k, y + py * k, label, A.opts.style === 'rapide' ? 420 : 720);
+    A.mark(label);
+    await until(A, () => G.phase !== 'fly', 9);
+  }
+  function watch(A) {
+    let ph = '', stars = 0, b = 0;
+    const iv = setInterval(() => { if (!A.running()) return clearInterval(iv);
+      if (G.phase !== ph) { if (G.phase === 'win') A.mark(G.trick ? 'TRICK SHOT ! la salle est debout' : 'PARFAIT ! servi'); if (G.phase === 'fail') A.mark('raté drôle : ' + (G.rec ? G.rec.result : '')); ph = G.phase; }
+      if (G.phase === 'fly' && G.slow > .5 && b !== -1) { A.mark('ralenti automatique'); b = -1; } if (G.phase !== 'fly') b = 0;
+      const st = document.querySelectorAll('#modal .st.on').length; if (st > stars) { stars = st; if (st === 3) A.mark('3 étoiles'); } if (!document.querySelector('#modal .st')) stars = 0;
+    }, 100);
+  }
+  function makeSave(kind) {
+    const s = S(); s.consent = s.consent == null ? false : s.consent; s.login = { last: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(), streak: 3, pending: false };
+    const upto = kind === 'avance' ? LV.length : 12; s.unl = upto; s.plays = 30; s.said = { l1: 1, l2: 1, l3: 1, l3b: 1, chef10: 1, chef20: 1, k2: 1, bistro: 1, garden: 1, box: 1 };
+    for (let i = 0; i < upto - 1; i++) s.best[LV[i].id] = [true, i % 3 !== 1, i % 2 === 0];
+    s.gold = kind === 'avance' ? 2400 : 520; s.plv = kind === 'avance' ? 9 : 4; s.xp = 30;
+    for (const d of (kind === 'avance' ? ['tables', 'nappes', 'lampes', 'piano', 'enseigne', 'terrasse'] : ['tables', 'nappes'])) s.bistro[d] = 1;
+    if (kind === 'avance') { s.outfits.beret = 1; s.outfits.lunettes = 1; s.outfit = 'lunettes'; }
+    for (let i = 0; i < upto - 1; i++) s.book[window.TBE.dishes[i]] = 1; D.save();
+  }
+  const trickLevel = () => { let best = null; for (const l of LV) { if (l.chef || !l.solT) continue; if (!best || l.trickB > best.trickB) best = l; } return best; };
+  const progress = () => [G.mode, G.L && G.L.id, G.tries, G.phase];
+
+  async function onboarding(A) {   // the first 30 seconds: the egg that can't miss, one pan bounce, the crepe
+    watch(A); await start(A); await A.wait(3500);
+    await fling(A, LV[0].sol, 'premier lancer : l’œuf dans la casserole'); await until(A, () => visible('#modal [data-next]'), 4); await A.wait(1800);
+    await A.tapEl('#modal [data-next]', 'niveau suivant'); await A.wait(2600); await fling(A, LV[1].sol, 'un rebond sur la poêle'); await until(A, () => visible('#modal [data-next]'), 5); await A.wait(1600);
+    await A.tapEl('#modal [data-next]', 'niveau suivant'); await A.wait(3000); await fling(A, LV[2].sol, 'la crêpe : premier essai', .12); await A.wait(1500);
+    if (G.phase !== 'win') { await fling(A, LV[2].sol, 'la crêpe : deuxième essai'); } await A.wait(4000);
+  }
+  async function trick(A) { watch(A); const L = trickLevel(); await A.wait(1500); await fling(A, L.solT, 'TRICK SHOT : ' + L.trickB + ' rebonds'); await A.wait(4500); }
+  async function crepe(A) { watch(A); const L = G.L; await A.wait(1400); await fling(A, L.sol, 'la crêpe : le salto au ralenti'); await A.wait(4200); }
+  async function echec(A) { watch(A); const L = G.L; await A.wait(1300); await fling(A, L.sol, 'raté : l’œuf s’écrase', .35); await A.wait(900); await fling(A, L.sol, 'rejouer instantané', .25); await A.wait(900); await fling(A, L.sol, 'encore un… servi !'); await A.wait(3800); }
+  async function montagne(A) { watch(A); const L = G.L; await A.wait(1500); await fling(A, L.solB || L.sol, 'la montagne : ventilateur et glace'); await A.wait(4200); }
+  async function bistro(A) { watch(A); await A.wait(1500); await A.tapEl('#hmid [data-bistro]', 'le bistro'); await A.wait(2400); await A.tapEl('#modal [data-close]', 'fermer'); await A.wait(800); await A.tapEl('#hfoot [data-f="shop"]', 'tenues de Momo'); await A.wait(2600); D.closeModal(); await A.wait(1500); }
+  async function boucle(A) { watch(A); for (let n = 0; n < 3 && A.running(); n++) { const L = G.L; await A.wait(1200); await fling(A, L.sol, 'lancer', n === 0 ? .2 : 0); await A.wait(1500); if (G.phase === 'fail') await fling(A, L.sol, 'rejouer'); await until(A, () => visible('#modal [data-next]'), 5); await A.wait(1500); const b = visible('#modal [data-next]'); if (b) await A.tapEl(b, 'niveau suivant'); await A.wait(1600); } }
+  async function idle(A) { watch(A);
+    while (A.running()) {
+      if (G.mode === 'home') { const b = visible('#hmid [data-play]'); if (b) await A.tapEl(b, 'jouer'); await A.wait(1500); continue; }
+      const n = visible('#modal [data-next]'); if (n) { await A.wait(1500); await A.tapEl(n, 'niveau suivant'); await A.wait(1500); continue; }
+      if (G.mode === 'play' && G.phase === 'aim') { const L = G.spec; await fling(A, L.sol || [-40, 90], 'lancer', G.tries ? 0 : .15); }
+      await A.wait(700);
+    } }
+
+  BETA.game({
+    sfx: D.SFX, endText: () => document.documentElement.lang === 'en' ? 'Play free' : 'Joue gratuitement', progress,
+    async prepare(save, A) {
+      const sc = A.opts.scene;
+      if (sc === 'onboarding') { D.resetSave(); return; }
+      makeSave(save === 'neuf' ? 'milieu' : save === 'avance' || sc === 'bistro' ? 'avance' : save);
+      await start(A); await A.wait(400); D.closeModal();
+      const crepeL = LV.find(l => !l.chef && l.ing === 'crepe' && l.id > 3) || LV[2], k2 = LV.find(l => l.kitchen === 2 && !l.chef && l.shapes.some(s => s.k === 'fan')) || LV[0];
+      const pick = { trick: trickLevel(), moment: trickLevel(), crepe: crepeL, echec: LV[LI(6)] || LV[5], montagne: k2, progression: k2, boucle: LV[LI(7)] || LV[6] }[sc];
+      if (pick) { D.startLevel(LV.indexOf(pick)); await A.wait(300); }
+      if (sc === 'bistro') D.goHome();
+      document.getElementById('momo').classList.remove('on'); await A.wait(300);
+    },
+    scenes: { onboarding, trick, moment: trick, crepe, echec, montagne, progression: montagne, bistro, boucle, idle },
+  });
+})();
+</script>
+
+</body>
+</html>
