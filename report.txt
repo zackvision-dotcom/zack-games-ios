@@ -1,1 +1,2 @@
-SETBUILD clockpawsquad build 1011 not found
+BUILD clockpawsquad v1008 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:10
+BUILD clockpawsquad v1007 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:00
