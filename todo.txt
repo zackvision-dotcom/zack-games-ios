@@ -1,6 +1,3 @@
 setbuild 1017
-circuitcaper
-crumblecrew
-pulsepost
 coralstack
 lanternhold
