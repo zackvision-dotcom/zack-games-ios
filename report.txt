@@ -1,3 +1,1 @@
-REVIEW clockpawsquad ok
-REVIEW dungeondash ok
-REVIEW vanvoyage ok
+SETBUILD clockpawsquad build 1011 not found
