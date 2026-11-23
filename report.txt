@@ -1,9 +1,4 @@
-SUBMIT clockpawsquad content rights: no third-party content
-SUBMIT clockpawsquad version item added
-SUBMIT clockpawsquad draft only, items: [dict_keys([])]
-SUBMIT dungeondash content rights: no third-party content
-SUBMIT dungeondash version item added
-SUBMIT dungeondash draft only, items: [dict_keys([])]
-SUBMIT vanvoyage content rights: no third-party content
-SUBMIT vanvoyage version item added
-SUBMIT vanvoyage draft only, items: [dict_keys([])]
+STATUS braise 1.0 WAITING_FOR_REVIEW release MANUAL (set now) created 2026-11-16
+STATUS clockpawsquad 1.0 WAITING_FOR_REVIEW release MANUAL (set now) created 2026-11-22
+STATUS dungeondash 1.0 WAITING_FOR_REVIEW release MANUAL (set now) created 2026-11-22
+STATUS vanvoyage 1.0 WAITING_FOR_REVIEW release MANUAL (set now) created 2026-11-21
