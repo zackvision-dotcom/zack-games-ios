@@ -61,6 +61,9 @@
   }
   // the pack stays in the frame: an enemy that drifted away comes back in front of the hero (south, the camera side)
   function regroup(r) { const h = H(); let k = 0; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d > r) { for (let t = 0; t < 8; t++) { const a = ((k + t * .37) / 4 - .5) * 1.8, rr = 2.8 + Math.random() * 1.2, x = h.x + Math.sin(a) * rr, y = h.y + Math.cos(a) * rr * .75 + .6; if (E.free(x, y, .8)) { e.x = x; e.y = y; break; } } k++; e.home = [h.x, h.y]; e.state = 'chase'; e.show = 3; } } }
+  let farN = 0;   // a pack stuck out of reach for a while is replaced by a fresh one close to the hero (no dead time on camera)
+  function keepClose(kinds, weak) { const [e, d] = nearest(); if (e && d <= 5) { farN = 0; return; } if (++farN < 5) return; farN = 0;
+    for (const o of pack()) if (Math.hypot(o.x - H().x, o.y - H().y) > 5) o.dead = 1e9; wave(5, 2.6, 4, kinds, weak); }
   const nearest = () => { const h = H(); let b = null, bd = 1e9; for (const e of pack()) { const d = Math.hypot(e.x - h.x, e.y - h.y); if (d < bd) { bd = d; b = e; } } return [b, bd]; };
 
   // ---- the pack at the gate of Aozora: wolves from the southern woods and bandits, all around the hero ----
@@ -98,16 +101,24 @@
       for (let i = 0; i < 1200 && !($('#k-new') && !$('#k-new').disabled); i++) await A.wait(100);
       const S = D().S; Object.assign(S, midSave()); K.intro.heal(); K.intro.setNoDeath(true);   // a take never ends on a knock-out
       K.intro.begin(); hideToast();
+      { const z = +new URLSearchParams(location.search).get('zoom'); if (z && KMAP.betaZoom) { KMAP.betaZoom(z); __k.snap(); } }   // ?zoom=1.8 (beta-record --zoom): the camera closer on Kaze
       dispatchEvent(new Event('pointerdown'));   // the sound starts with the take (ambience.js unlocks on the first touch)
-      // the road just outside the great gate, the gate behind the hero
-      const h = H(); h.x = 0.5; h.y = 160; h.z = 0; h.yaw = 0; __k.snap();
-      // the village's own wolves and bandits stay where they are; the pack for the take comes out of the woods around the gate
+      // every take is far from the great gate (never on camera): each scene has its own place, the first free one of its list
+      const sc = A.opts.scene, GATE = [0, 150];
+      const SPOTS = { boucle: [[58, 178], [-58, 178], [72, 166], [-72, 166], [40, 196]],   // the southern pine forest
+        moment: [[-64, 188], [64, 190], [0, 205], [86, 160]],                               // a clearing deeper in the woods: the wolf pack
+        boss: [[-118, -72], [-125, -80], [-108, -62], [-132, -66]],                          // the bandits' camp in the north-west
+        technique: [[-58, 178], [-72, 166], [-40, 192]],                                     // the west side of the pine forest: one big technique
+        village: [[0.5, 112], [1.5, 104], [0, 96]] };                                         // the avenue, well inside the walls
+      const h = H(), list = SPOTS[sc] || SPOTS.boucle;
+      const at = list.find(([x, y]) => E.free(x, y, 1.2) && Math.hypot(x - GATE[0], y - GATE[1]) > 38) || list[0];
+      h.x = at[0]; h.y = at[1]; h.z = 0; h.yaw = sc === 'village' ? 180 : 0; __k.snap();
+      // whoever lives there stays out of the take; the pack for the take comes in around the hero
       for (const e of live()) if (Math.hypot(e.x - h.x, e.y - h.y) < 30) e.dead = 1e9;
-      const sc = A.opts.scene;
       if (sc === 'boss') { boss = E.spawn('boss', h.x + .4, h.y + 4.2); boss.beta = true; boss.home = [boss.x, boss.y]; boss.state = 'chase'; boss.show = 4; boss.dmg = Math.min(boss.dmg, 8); }
-      else if (sc === 'village') { h.x = 0.5; h.y = 142; h.yaw = 180; __k.snap(); }
-      else if (sc === 'moment') { h.y = 158; __k.snap(); await A.wait(400); wave(6, 2.6, 4.2, ['bandit', 'wolf'], .3); }
-      else if (sc !== 'boss' && sc !== 'village') wave(5, 3.2, 5, ['wolf', 'bandit', 'wolf']);
+      else if (sc === 'moment') { await A.wait(400); wave(6, 2.6, 4.2, ['wolf', 'wolf', 'bandit'], .3); }
+      else if (sc === 'technique') { await A.wait(400); wave(7, 2.4, 3.6, ['bandit', 'wolf'], .25); }
+      else if (sc !== 'village') wave(5, 3.2, 5, ['wolf', 'bandit', 'wolf']);
       // let the frames of every actor be painted before filming, then hide the hint that pops up after the start
       for (let i = 0; i < 30; i++) { await A.wait(100); }
       await A.wait(4600); hideToast();
@@ -140,7 +151,7 @@
         for (let k = 0; k < 4 && A.running() && live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 6); k++) { await slash(A); await A.wait(A.jitter(200, 320)); }
         if (live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 5)) { await sign(A, 'sphere'); A.mark('sphère de souffle'); }
         await A.wait(1200);
-        while (A.running()) { if (pack().length < 3) wave(4, 2.8, 4.2, ['bandit', 'wolf'], .4); regroup(4.5); if (!(await slash(A))) { const [e, d] = nearest(); if (e && d < 5.5 && A.rnd() < .5) await sign(A, ['fire', 'chidori'][(A.rnd() * 2) | 0]); else await A.wait(300); } await A.wait(250); } },
+        while (A.running()) { if (pack().length < 3) wave(4, 2.8, 4.2, ['wolf', 'bandit'], .4); regroup(4.5); keepClose(['wolf', 'bandit', 'wolf'], .4); if (!(await slash(A))) { const [e, d] = nearest(); if (e && d < 5.5 && A.rnd() < .5) await sign(A, ['fire', 'chidori'][(A.rnd() * 2) | 0]); else await A.wait(300); } await A.wait(250); } },
       // the boss: Kurogane the deserter comes out of the woods at the gate; katana swipes and the four signs until he falls (about 16 s)
       async boss(A) { watch(A); const e = boss; if (!e) return; const t0 = performance.now(); let i = 0, fell = false;
         E.hooks.kill.push(k => { if (k === e && !fell) { fell = true; A.mark('boss vaincu'); } });
@@ -155,9 +166,15 @@
         await A.wait(1500); while (A.running()) await A.wait(500); },
       // the living village: Kaze runs down the market street past the stalls and the villagers (no techniques, no enemies)
       async village(A) { watch(A); try { if (window.KMAP && KMAP.sprintOn && !KMAP.sprintOn()) KMAP.toggleSprint(); } catch (e) {} await A.wait(200);
-        const route = [[0.5, 128], [1.5, 112], [0, 96], [2, 82], [6, 70], [8, 60]].filter(([x, y]) => E.free(x, y, .6));   // the avenue from the great gate up to Aiko's market
+        const route = [[1.5, 100], [0, 90], [2, 80], [6, 70], [8, 60], [14, 52]].filter(([x, y]) => E.free(x, y, .6));   // the avenue from the great gate up to Aiko's market
         for (const [x, y] of route) { for (let k = 0; k < 5 && A.running() && Math.hypot(H().x - x, H().y - y) > 2.5; k++) await run(A, x, y, 2200); A.mark('rue du village'); }
         while (A.running()) await A.wait(500); },
+      // one big technique, centred: seven weakened enemies close around Kaze, the thunder blade then the breath sphere sweep them away
+      async technique(A) { watch(A); await A.wait(400);
+        if (await sign(A, 'chidori')) A.mark('lame-tonnerre'); await A.wait(1100);
+        if (await sign(A, 'sphere')) A.mark('sphère de souffle'); await A.wait(1300);
+        while (A.running()) { if (pack().length < 3) wave(5, 2.6, 3.8, ['bandit', 'wolf'], .3); regroup(4); keepClose(['bandit', 'wolf'], .3); const [e, d] = nearest();
+          if (e && d < 5 && A.rnd() < .45) { const id = ['wind', 'fire', 'chidori', 'sphere'][(A.rnd() * 4) | 0]; if (await sign(A, id)) A.mark(NAME[id]); await A.wait(900); } else if (!(await slash(A))) await A.wait(250); await A.wait(200); } },
       // plays on until stopped (long tests): the same fight, the pack coming back
       async idle(A) { watch(A); while (A.running()) { const [e, d] = nearest(); if (!e) { wave(4, 6, 9, ['wolf', 'bandit']); await A.wait(1000); continue; }
         if (d > 6) await run(A, e.x, e.y, 700); else if (A.rnd() < .25) await sign(A, ['fire', 'chidori', 'sphere', 'wind'][(A.rnd() * 4) | 0]); else await slash(A); await A.think(); } },

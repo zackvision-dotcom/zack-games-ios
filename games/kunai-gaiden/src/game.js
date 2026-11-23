@@ -761,7 +761,8 @@ window.KGAME = (() => {
     if (h.act === 'attack' || h.act === 'kick') sfx('swing'); if (h.act === 'throw') sfx('throw'); refresh(); return true; }
   function useItem(id) { if (!started || H().dead) return; const it = ITEMUSE[id]; if (!it || !(S.inv[id] > 0)) return; S.inv[id]--; it.use(); sfx('coin2'); refresh(); }
   function fx(k, x, y, d, s, z) { fxs.push({ k, x, y, t: 0, d: d || .5, s: s || 1, z: z || .5 }); }
-  function addText(x, y, s, c, sz) { texts.push({ x: x + (rnd() - .5) * .6, y, s, c, t: 0, sz: sz || 1 }); }
+  // floating numbers never pile on each other: a new one rises above the ones still fresh at the same spot
+  function addText(x, y, s, c, sz) { const near = texts.filter(T => T.t < .6 && Math.abs(T.x - x) < 1.6 && Math.abs(T.y0 - y) < 1.2).length; texts.push({ x: x + (rnd() - .5) * .6, y: y - near * .9, y0: y, s, c, t: 0, sz: sz || 1 }); }
   const rkOf = id => S.rk[id === 'kick' ? 'fist' : id] || 1;
   const dmgOf = id => Math.round(({ fist: 9 + S.lvl * 3, kick: 14 + S.lvl * 4, kunai: 13 + S.lvl * 2, fire: 34 + S.lvl * 6, sphere: 60 + S.lvl * 9, chidori: 72 + S.lvl * 11, water: 40 + S.lvl * 7, wind: 34 + S.lvl * 7, clone: 26 + S.lvl * 5 })[id] * (1 + gear().atk / 100) * (1 + (rkOf(id) - 1) * .2));
   function hitEnemy(e, dmg, fromX, fromY, kb) { if (e.dead) return; const crit = rnd() < .12 + gear().crit / 100; if (crit) dmg = Math.round(dmg * 1.7);
