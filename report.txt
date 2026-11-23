@@ -1,5 +1,7 @@
-SETBUILD vanvoyage version 1.0 DEVELOPER_REJECTED -> build 1013 VALID
-  notes 1231 chars, UMP/ATT sentence: True | attachments ['gameplay-vanvoyage.mp4']
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
+SUBMIT vanvoyage version item added
+SUBMIT vanvoyage iap starter ERR ENTITY_ERROR.RELATIONSHIP.INVALID | InAppPurchase 6837778079 has no pending version for submission
+SUBMIT vanvoyage iap paint ERR ENTITY_ERROR.RELATIONSHIP.INVALID | InAppPurchase 6837774597 has no pending version for submission
+SUBMIT vanvoyage iap noads ERR ENTITY_ERROR.RELATIONSHIP.INVALID | InAppPurchase 6837776666 has no pending version for submission
+SUBMIT vanvoyage iap coins ERR ENTITY_ERROR.RELATIONSHIP.INVALID | InAppPurchase 6837778090 has no pending version for submission
+SUBMIT vanvoyage submission WAITING_FOR_REVIEW
+SUBMIT vanvoyage version 1.0 WAITING_FOR_REVIEW
