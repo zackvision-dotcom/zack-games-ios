@@ -9,7 +9,7 @@ Copyright : 2026 Zack Vision
 - Sous-titre (30 car.) : Le village d’Aozora
 - Catégorie : Jeux > Action (secondaire : Aventure)
 - Âge : violence de dessin animé / fantastique peu fréquente → 9+
-- Mots-clés (100 car.) : ninja,kunai,shinobi,jutsu,village,rpg,action,aventure,combat,quête,samouraï,japon,anime
+- Mots-clés (100 car.) : ninja,kunai,shinobi,jutsu,village,rpg,action,aventure,combat,quête,samouraï,japon,dessin
 - Texte promotionnel : Dessine une lettre, forme les signes, lance ta technique : deviens le ninja d’Aozora.
 - Description :
 Deviens le ninja du village d’Aozora !
