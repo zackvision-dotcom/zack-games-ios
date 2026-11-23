@@ -1381,7 +1381,7 @@ window.TB = { G, S: () => S, SFX, C, LV, save, startLevel, goHome, say, toScreen
 // bistro (the bistro grown, the terrace, Momo's outfits); plus onboarding, boucle, progression and idle.
 (() => {
   if (!window.BETA || !BETA.on) return;
-  const D = window.TB, G = D.G, S = () => D.S(), LV = D.LV;
+  const D = window.TB, cv = document.getElementById('cv'), G = D.G, S = () => D.S(), LV = D.LV;
   if (BETA.opts.ui === 'propre') { const st = document.createElement('style'); st.textContent = '.adov{display:none!important}[data-x2]{display:none!important}.price{visibility:hidden!important}'; document.head.appendChild(st); }
   const visible = sel => { const e = document.querySelector(sel); return e && e.offsetParent ? e : null; };
   const LI = id => LV.findIndex(l => l.id === id);
@@ -1393,9 +1393,17 @@ window.TB = { G, S: () => S, SFX, C, LV, save, startLevel, goHome, say, toScreen
   // the throw: press on the ingredient, pull back along `pull` (world units), let go
   async function fling(A, pull, label = 'lancer', off = 0) {
     await until(A, () => G.mode === 'play' && G.phase === 'aim', 6); if (!A.running()) return;
-    const [x, y] = D.startScreen(), k = D.scale(), a = off ? A.jitter(-off, off) : 0, c = Math.cos(a), s = Math.sin(a), m = off ? 1 + A.jitter(-.08, .08) : 1;
-    const px = (pull[0] * c - pull[1] * s) * m, py = (pull[0] * s + pull[1] * c) * m;
-    await A.think(); await A.drag(x + A.jitter(-2, 2), y + A.jitter(-2, 2), x + px * k, y + py * k, label, A.opts.style === 'rapide' ? 420 : 720);
+    const [x, y] = D.startScreen(), k = D.scale(), C = D.C;
+    let tp = pull;
+    if (off) {   // a miss is a real pull a little off; checked with the game's own physics so it really misses (never a lucky win)
+      for (let i = 0; i < 60; i++) { const a = A.jitter(-off, off) * (1 + i / 30), c = Math.cos(a), sn = Math.sin(a), m = 1 + A.jitter(-.08, .08);
+        const q = [(pull[0] * c - pull[1] * sn) * m, (pull[0] * sn + pull[1] * c) * m]; tp = q; if (C.simulate(G.B, q, { magnet: G.spec.magnet }).result !== 'win') break; } }
+    // the finger lands within a pixel of the aim; on release the pull is the planned one exactly (a 10-bounce trick shot is chaotic:
+    // half a pixel of rounding in the drag would turn it into a miss)
+    const snap = () => { if (G.drag) G.pull = [tp[0], tp[1]]; };
+    cv.addEventListener('pointerup', snap, { capture: true, once: true });
+    await A.think(); await A.drag(x, y, x + tp[0] * k, y + tp[1] * k, label, A.opts.style === 'rapide' ? 420 : 720);
+    cv.removeEventListener('pointerup', snap, { capture: true });
     A.mark(label);
     await until(A, () => G.phase !== 'fly', 9);
   }

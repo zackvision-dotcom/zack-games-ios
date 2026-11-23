@@ -1,1 +1,5 @@
-SceneExpress
+CircuitCaper ADS_TEST=0
+CrumbleCrew ADS_TEST=0
+PulsePost ADS_TEST=0
+CoralStack ADS_TEST=0
+LanternHold ADS_TEST=0
