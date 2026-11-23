@@ -260,7 +260,7 @@ body.tuto #tskip{display:block}body.tuto #hgold{visibility:hidden}
   let offCtx = null, audioOrigin = null;
   const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
-    const RATE = 32000;
+    const RATE = 48000;   // the App Store previews are 48 kHz
     offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
     const realDest = offCtx.destination, master = offCtx.createGain();
     master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
@@ -271,6 +271,13 @@ body.tuto #tskip{display:block}body.tuto #hgold{visibility:hidden}
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
@@ -957,7 +964,7 @@ body.tuto #tskip{display:block}body.tuto #hgold{visibility:hidden}
   function botEvent(R) { const h = R.h; if (!R.evt) return null; if (R.evt.k === 'chest') return h.hp < h.max * 0.5 ? 'potion' : 'relic'; return h.hp < h.max * 0.75 ? 'drink' : 'vigor'; }
 
   const C = { W, H, DT, BX0, BX1, BY0, BY1, CTRL, HERO, HEROES, EN, BOSS, SPR, UP, UPS, RAR, rarity, COMBOS, LAYOUTS, FLOORS, ROOMS, EVENT_ROOMS, hyp, clamp,
-    stick, newRun, step, setInput, release, skipTut, pickCard, moreCard, chooseEvent, revive, blocked, pack, unpack, progress, calc, lv, has, isBossRoom, think, botPick, botEvent, rng, draw, nearest };
+    stick, spawn: spawnEnemy, newRun, step, setInput, release, skipTut, pickCard, moreCard, chooseEvent, revive, blocked, pack, unpack, progress, calc, lv, has, isBossRoom, think, botPick, botEvent, rng, draw, nearest };
   root.DDC = C; if (typeof module !== 'undefined') module.exports = C;
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
@@ -2089,7 +2096,7 @@ function draw() {
   cx.restore();
   // the room fades in; the stick under the thumb
   if (G.fade > 0) { cx.fillStyle = `rgba(42,32,66,${G.fade})`; cx.fillRect(0, 0, W, H); }
-  const s = G.stick; if (s) { const dx = s.x - s.ox, dy = s.y - s.oy, d = hyp(dx, dy), lim = C.CTRL.full, k = d > lim ? lim / d : 1;
+  const s = G.stick; if (s && !G.noStick) { const dx = s.x - s.ox, dy = s.y - s.oy, d = hyp(dx, dy), lim = C.CTRL.full, k = d > lim ? lim / d : 1;
     cx.globalAlpha = 0.35; cx.lineWidth = 4; cx.strokeStyle = PAL.cream; cx.beginPath(); cx.arc(s.ox, s.oy, lim, 0, TAU); cx.stroke(); cx.globalAlpha = 0.22; cx.fillStyle = PAL.cream; cx.beginPath(); cx.arc(s.ox, s.oy, C.CTRL.dead, 0, TAU); cx.fill();
     cx.globalAlpha = 0.6; cx.beginPath(); cx.arc(s.ox + dx * k, s.oy + dy * k, 22, 0, TAU); cx.fill(); cx.globalAlpha = 1; }
   // tutorial hints (the hand itself is CSS, see handFrame): a halo on the hero, then a ring on the first enemy
@@ -2231,6 +2238,9 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     r.ev.length = 0; C.setInput(r, { m: 0 }); G.parts.length = 0; G.floats.length = 0; G.bolts.length = 0;
   }
 
+  function horde(r, n) { const ks = ['slime', 'slime', 'bat', 'shroom', 'slime', 'skel', 'bat', 'slime']; for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2 + Math.random() * .4, d = 95 + Math.random() * 55;
+    const x = Math.max(C.BX0 + 20, Math.min(C.BX1 - 20, r.h.x + Math.cos(a) * d)), y = Math.max(C.BY0 + 20, Math.min(C.BY1 - 20, r.h.y + Math.sin(a) * d)); C.spawn(r, ks[i % ks.length], x, y); } }
+  if (BETA.opts.ui === 'propre') D.G.noStick = true;   // clean takes: the thumb's joystick ring is not drawn
   BETA.game({
     sfx: D.SFX,
     logo: () => D.src('logo'),
@@ -2238,10 +2248,14 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     progress: () => { const r = R(); return r ? [r.floor, r.room, r.phase, r.stats.kills, Math.round(r.h.x / 20), Math.round(r.h.y / 20), r.stats.rolls] : [G.mode]; },
     async prepare(save, A) {
       if (A.opts.scene === 'onboarding') return;            // onboarding starts from the title screen of a new game
-      makeSave(save === 'neuf' ? 'milieu' : save);
-      await start(A); await A.wait(500); await clean(A);
       const sc = A.opts.scene;
+      makeSave(['taverne', 'tenues'].includes(sc) ? 'avance' : save === 'neuf' ? 'milieu' : save);
+      await start(A); await A.wait(500); await clean(A);
+      if (sc === 'taverne' || sc === 'tenues') { D.showHome(); await A.wait(800); await clean(A); return; }   // the tavern: Gus, the heroes, the wardrobe
       D.startRun(false, { hero: 'knight' }); await A.wait(300); await clean(A);
+      if (sc === 'horde') {   // a crowded room: the knight in the middle, a ring of slimes, bats and mushrooms
+        simTo(r => r.room >= 3 && r.phase === 'room', ['multi', 'fire', 'bounce', 'rapid']); const r = R(); r.e.length = 0; r.h.x = (C.BX0 + C.BX1) / 2; r.h.y = (C.BY0 + C.BY1) / 2 + 40; r.h.hp = r.h.max; horde(r, 7); }
+      if (sc === 'cartes') { simTo(r => r.phase === 'cards' && r.room >= 2, ['multi', 'fire', 'bounce']); }
       if (sc === 'boucle' || sc === 'idle') { simTo(r => r.room >= 2 && r.phase === 'room', ['multi', 'fire', 'bounce']); }
       if (sc === 'moment') {   // the Mushroom King, weakened, with a hero who has fire + bounce: the fatal blow comes on camera every take
         simTo(r => r.floor === 1 && r.room === 8 && r.phase === 'room', ['fire', 'bounce', 'multi', 'power', 'rapid']);
@@ -2262,6 +2276,16 @@ resize(); titleScreen(); requestAnimationFrame(frame);
       // the wow moment: the Mushroom King's fatal blow (slow motion, big shake, confetti)
       async moment(A) { watch(A); await fight(A, 25); await A.wait(2500); },
       // plays on until stopped (long tests): whole runs one after the other
+      // the 3 cards after a room: they flip face up (picture + text), then one is picked
+      async cartes(A) { watch(A); await A.wait(2600); const cs = [...document.querySelectorAll('[data-card]')].filter(e => e.offsetParent); if (cs.length) { await A.tapEl(cs[1] || cs[0], 'choisir une carte'); A.mark('carte choisie'); } await A.wait(1200); await room(A); },
+      // the tavern: Gus behind the counter, the heroes, the gold of a played game
+      async taverne(A) { watch(A); await A.wait(1200); if (await A.tapEl('#h_heroes', 'héros')) { await A.wait(2600); const b = document.querySelector('#modal [data-close]'); if (b) await A.tapEl(b, 'fermer'); } while (A.running()) await A.wait(400); },
+      // the wardrobe: outfits and dyes, one tried on
+      async tenues(A) { watch(A); await A.wait(800); if (await A.tapEl('#h_ward', 'garde-robe')) { await A.wait(1500); for (const sel of ['[data-out="outfit_0"]', '[data-out="none"]', '[data-out="outfit_0"]']) { const b = document.querySelector('#modal ' + sel + ':not(.lock)'); if (b) { await A.tapEl(b, 'essayer une tenue'); await A.wait(1500); } } } while (A.running()) await A.wait(400); },
+      // a crowded room: five enemies or more around the knight in the middle, shots and damage numbers all the way
+      async horde(A) { watch(A); const t0 = performance.now();
+        const keep = setInterval(() => { const r = R(); if (!A.running()) return clearInterval(keep); if (r && r.phase === 'room' && r.e.filter(e => !e.dead && e.hp > 0).length < 4) horde(r, 4); }, 400);
+        await fight(A, 60); },
       async idle(A) { watch(A);
         while (A.running()) { const r = R(); if (!r) { D.startRun(false); await A.wait(500); continue; }
           if (r.phase === 'room' || r.phase === 'clear') { await room(A); } else if (r.phase === 'cards') await cards(A); else if (r.phase === 'event') await event(A);

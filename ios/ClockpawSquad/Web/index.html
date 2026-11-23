@@ -235,7 +235,7 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
   let offCtx = null, audioOrigin = null;
   const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
-    const RATE = 32000;
+    const RATE = 48000;   // the App Store previews are 48 kHz
     offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
     const realDest = offCtx.destination, master = offCtx.createGain();
     master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
@@ -246,6 +246,13 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
@@ -1983,7 +1990,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     if (kind === 'avance') { s.up = { cat: 2, rabbit: 2, turtle: 1, bolts: 2 }; s.costumes = { 0: 1, 1: 1, 4: 1 }; s.costume = 1; }
     H.save();
   }
-  const SCENE_ROOM = { boucle: 10, moment: 3, idle: 0 };
+  const SCENE_ROOM = { boucle: 10, moment: 3, idle: 0, coucou: 24, salle: 17 };
   BETA.game({
     sfx: H.SFX,
     logo: () => H.src('logo'),
@@ -1991,7 +1998,8 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     progress: () => G.S ? [G.L && G.L.id, G.ph, G.S.phase, G.S.acts, G.S.u.length, G.hist.length, !!G.rw] : [G.mode],
     async prepare(save, A) {
       if (A.opts.scene === 'onboarding') return;            // onboarding starts from the title screen of a new game
-      makeSave(A.opts.scene === 'progression' ? 'neuf' : save === 'neuf' ? 'milieu' : save);
+      makeSave(A.opts.scene === 'progression' ? 'neuf' : ['coucou', 'costumes'].includes(A.opts.scene) ? 'avance' : save === 'neuf' ? 'milieu' : save);
+      if (A.opts.scene === 'costumes') { await start(A); await A.wait(500); await clean(A); H.showHome(); await A.wait(600); return; }
       await start(A); await A.wait(500); await clean(A);
       const room = SCENE_ROOM[A.opts.scene] || S().cur; H.startRoom(Math.min(24, room));
       document.querySelectorAll('.bub').forEach(b => b.remove()); await A.wait(500); document.getElementById('tic').classList.remove('on');
@@ -2007,6 +2015,14 @@ resize(); titleScreen(); requestAnimationFrame(frame);
         for (let n = 0; n < 6 && A.running(); n++) { const ok = await solveRoom(A, { look: 0 }); if (!ok) break; await next(A); } },
       // the wow moment: three robots lined up, the turtle's charge pushes them one by one into the gear, in slow motion
       async moment(A) { watch(A); await A.wait(500); await solveRoom(A); await A.wait(2500); },
+      // the Grand Coucou, last room of the tower: the clock-bird boss pushed back phase after phase
+      async coucou(A) { watch(A); await A.wait(600); for (let k = 0; k < 3 && A.running(); k++) { const ph = G.ph; if (!(await solveRoom(A))) break; await A.wait(1800); if (G.ph === ph || G.mode !== 'room') break; } await A.wait(2500); },
+      // another room of the tower (17): a different layout for the screenshots
+      async salle(A) { watch(A); await A.wait(600); await solveRoom(A, { mistake: 1 }); await A.wait(2500); },
+      // the wardrobe: the costumes of the squad, one tried on
+      async costumes(A) { watch(A); await A.wait(500); if (await A.tapEl('#h_co', 'costumes')) { await A.wait(1500);
+          for (const id of [4, 0, 1]) { const c = document.querySelector(`#modal [data-co="${id}"]:not(.lock)`); if (c) { await A.tapEl(c, 'essayer un costume'); await A.wait(1500); } } }
+        while (A.running()) await A.wait(400); },
       // plays on until stopped (long tests): room after room, then the tower again
       async idle(A) { watch(A);
         while (A.running()) { if (G.mode !== 'room') { H.startRoom(Math.min(24, S().cur)); await A.wait(800); continue; }

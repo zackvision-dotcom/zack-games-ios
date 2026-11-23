@@ -1,3 +1,5 @@
 # one game per line (project.yml target), optionally "Game ADS_TEST=0" for a release build: pushing this file builds and uploads to TestFlight
-Braise
-KunaiGaiden
+Braise ADS_TEST=0
+ClockpawSquad ADS_TEST=0
+DungeonDash ADS_TEST=0
+VanVoyage ADS_TEST=0

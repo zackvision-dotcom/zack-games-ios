@@ -177,7 +177,7 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
   let offCtx = null, audioOrigin = null;
   const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
-    const RATE = 32000;
+    const RATE = 48000;   // the App Store previews are 48 kHz
     offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
     const realDest = offCtx.destination, master = offCtx.createGain();
     master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
@@ -188,6 +188,13 @@ button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
@@ -599,7 +606,7 @@ function cardFound() {
   const missing = []; for (let i = 0; i < D.postcards; i++) if (!S.cards.includes(i)) missing.push(i);
   SFX.card(); buzz(15);
   if (!missing.length) { S.coins += 20; return; }
-  const c = missing[Math.random() * missing.length | 0]; S.cards.push(c); G.newCard = c; revealCard(c);
+  const c = missing[0]; S.cards.push(c);   // always the next missing postcard, in order: nothing random (coins can be bought) G.newCard = c; revealCard(c);
 }
 // a postcard flips in, gets stamped, then flies to the corner (never blocks the drive)
 function revealCard(c) {
@@ -1093,6 +1100,7 @@ resize(); titleScreen(); requestAnimationFrame(frame);
     progress: () => [G.mode, S().stage, S().trips, Math.floor(G.dist / 200)],
     async prepare(save, A) {
       if (A.opts.ui === 'propre') S().owned.noads = true;
+      if (A.opts.ui === 'propre') { for (const id of ['police', 'picnic']) { const i = D.events.findIndex(e => e.id === id); if (i >= 0) D.events.splice(i, 1); } }   // store media: no 'Contrôle' (uniformed officer) or 'Pique-nique' card in screens or previews
       if (A.opts.scene === 'onboarding') return;            // onboarding always starts on the title screen of a new game (and plays the tutorial)
       S().tutoDone = true;                                    // the other scenes skip the first-run tutorial
       setSave(A.opts.scene === 'moment' && save === 'neuf' ? 'milieu' : save, A);
