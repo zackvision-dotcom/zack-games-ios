@@ -1,1 +1,5 @@
-CANCELSUB vanvoyage WAITING_FOR_REVIEW -> CANCELING
+SETBUILD vanvoyage version 1.0 DEVELOPER_REJECTED -> build 1013 VALID
+  notes 1231 chars, UMP/ATT sentence: True | attachments ['gameplay-vanvoyage.mp4']
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
