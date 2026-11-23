@@ -1,5 +1,1 @@
-SETBUILD clockpawsquad version 1.0 PREPARE_FOR_SUBMISSION -> build 1012 VALID
-  notes 1230 chars, UMP/ATT sentence: True | attachments ['gameplay-clockpawsquad.mp4']
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+ATTACH braise gameplay-braise.mp4 41365 KB {'errors': [], 'warnings': None, 'state': 'UPLOAD_COMPLETE'}
