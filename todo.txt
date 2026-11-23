@@ -1,4 +1,2 @@
-attach
+setbuild 1012
 clockpawsquad
-dungeondash
-vanvoyage
