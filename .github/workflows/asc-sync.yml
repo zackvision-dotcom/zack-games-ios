@@ -25,7 +25,7 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           ASC_KEY_PATH: /home/runner/keys/key.p8
         run: |
-          GAMES=$(grep -v '^#' todo.txt | grep -v '^check' | grep -v '^builds' | grep -v '^lootbox' | grep -v '^refdata' | grep -v '^previews' | grep -v '^iapshot' | grep -v '^review' | grep -v '^iapstate' | grep -v '^textonly' | grep -v '^addkw' | grep -v '^rmkw' | grep -v '^setkw' | grep -v '^iapdesc' | grep -v '^lootboxoff' | grep -v '^copyright' | grep -v '^cleanold' | grep -v '^attach' | grep -v '^setbuild' | grep -v '^adsrating' | grep -v '^submit' | grep -v '^cancelsub' | grep -v '^draftver' | grep -v '^draftiap' | grep -v '^prep' | grep -v '^manual' | grep -v '^status' | tr '\n' ' ')
+          GAMES=$(grep -v '^#' todo.txt | grep -v '^check' | grep -v '^builds' | grep -v '^lootbox' | grep -v '^refdata' | grep -v '^previews' | grep -v '^iapshot' | grep -v '^review' | grep -v '^iapstate' | grep -v '^textonly' | grep -v '^addkw' | grep -v '^rmkw' | grep -v '^setkw' | grep -v '^iapdesc' | grep -v '^lootboxoff' | grep -v '^copyright' | grep -v '^cleanold' | grep -v '^attach' | grep -v '^setbuild' | grep -v '^adsrating' | grep -v '^submit' | grep -v '^cancelsub' | grep -v '^draftver' | grep -v '^draftiap' | grep -v '^prep' | grep -v '^manual' | grep -v '^status' | grep -v '^newver' | tr '\n' ' ')
           if grep -q '^check' todo.txt; then export CHECK_ONLY=1; fi
           if grep -q '^builds' todo.txt; then export BUILDS=1; fi
           if grep -q '^lootbox' todo.txt; then export LOOTBOX=1; fi
@@ -43,6 +43,7 @@ jobs:
           if grep -q '^prep' todo.txt; then export PREP=1; fi
           if grep -q '^manual' todo.txt; then export MANUAL=1; fi
           if grep -q '^status' todo.txt; then export STATUS=1; fi
+          if grep -q '^newver' todo.txt; then export NEWVER=$(grep '^newver' todo.txt | cut -d' ' -f2); fi
           if grep -q '^prepfix' todo.txt; then export PREP=1; export FIX=1; fi
           if grep -q '^textonly' todo.txt; then export ONLY_TEXT=1; fi
           if grep -q '^copyright' todo.txt; then export COPYRIGHT="$(grep '^copyright' todo.txt | cut -d' ' -f2-)"; fi

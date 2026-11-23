@@ -253,6 +253,25 @@ if __name__ == '__main__':
                 else:
                     print('CANCELSUB', g, 'keep', st)
         sys.exit(0)
+    if os.environ.get('NEWVER'):
+        # NEWVER 1.0.1: creates the next App Store version (after the previous one is live), manual release;
+        # whatsNew per locale from whatsnew.json {"<game>|_default": {"fr-FR": ..., "en-US": ...}}. Never submits.
+        want = os.environ['NEWVER']
+        wn_all = json.load(open(os.path.join(HERE, 'whatsnew.json'), encoding='utf-8'))
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            vs = call('GET', f"/apps/{app['id']}/appStoreVersions?filter[platform]=IOS&limit=10")['data']
+            ver = next((v for v in vs if v['attributes']['versionString'] == want), None)
+            if not ver:
+                ver = call('POST', '/appStoreVersions', {'data': {'type': 'appStoreVersions', 'attributes': {'platform': 'IOS', 'versionString': want, 'releaseType': 'MANUAL'},
+                           'relationships': {'app': {'data': {'type': 'apps', 'id': app['id']}}}}})['data']
+                print('NEWVER', g, want, 'created', ver['attributes']['appStoreState'])
+            wn = wn_all.get(g) or wn_all['_default']
+            for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
+                txt = wn.get(l['attributes']['locale']) or wn.get('en-US')
+                call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'whatsNew': txt}}})
+                print('NEWVER', g, want, l['attributes']['locale'], 'whatsNew set')
+        sys.exit(0)
     if os.environ.get('MANUAL') or os.environ.get('STATUS'):
         # MANUAL: "Publication manuelle" on the current version (we pick the release day, marketing calendar), allowed while in review.
         # STATUS: review state of every version + the release type, to watch Apple's answers.
