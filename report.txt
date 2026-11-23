@@ -1,2 +1,6 @@
-SETBUILD coralstack build 1017 not found
-SETBUILD lanternhold build 1017 not found
+BUILD coralstack v1017 VALID internal=IN_BETA_TESTING uploaded=2026-11-23T13:00
+BUILD coralstack v1008 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:16
+BUILD lanternhold v1017 VALID internal=IN_BETA_TESTING uploaded=2026-11-23T12:59
+BUILD lanternhold v1008 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:10
+BUILD pulsepost v1017 VALID internal=IN_BETA_TESTING uploaded=2026-11-23T12:51
+BUILD pulsepost v1007 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T06:59
