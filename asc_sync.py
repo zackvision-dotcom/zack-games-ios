@@ -479,7 +479,11 @@ if __name__ == '__main__':
             try:
                 av = call('GET', f"/apps/{aid}/appAvailabilityV2", ok=(200, 404)).get('data')
                 if av:
-                    ta = call('GET', f"/appAvailabilities/{av['id']}/territoryAvailabilities?limit=200&include=territory")['data']
+                    ta = call('GET', f"https://api.appstoreconnect.apple.com/v2/appAvailabilities/{av['id']}/territoryAvailabilities?limit=200&include=territory")['data']
+                    chn0 = [x for x in ta if x['relationships']['territory']['data']['id'] == 'CHN']
+                    if os.environ.get('FIX') and chn0 and chn0[0]['attributes'].get('available'):   # games need a China licence: remove mainland China
+                        call('PATCH', f"/territoryAvailabilities/{chn0[0]['id']}", {'data': {'type': 'territoryAvailabilities', 'id': chn0[0]['id'], 'attributes': {'available': False}}}); print('PREP', g, 'CHN removed')
+                        ta = call('GET', f"https://api.appstoreconnect.apple.com/v2/appAvailabilities/{av['id']}/territoryAvailabilities?limit=200&include=territory")['data']
                     chn = [x for x in ta if x['relationships']['territory']['data']['id'] == 'CHN']
                     print('PREP', g, 'territories', sum(1 for x in ta if x['attributes'].get('available')), 'CHN', chn and chn[0]['attributes'].get('available'), chn and chn[0]['id'])
                 else: print('PREP', g, 'availability NOT SET')
@@ -487,6 +491,13 @@ if __name__ == '__main__':
             infos = call('GET', f"/apps/{aid}/appInfos?include=ageRatingDeclaration")['data']
             info = next((i for i in infos if i['attributes'].get('appStoreState') not in ('READY_FOR_SALE', 'READY_FOR_DISTRIBUTION')), infos[0])
             ar = call('GET', f"/appInfos/{info['id']}/ageRatingDeclaration")['data']
+            if os.environ.get('FIX'):   # the new age questions: no location sharing, no dating, no social media (answered honestly for our games)
+                for k in ('sharedLocation', 'datingAndRelationships', 'socialMediaAgeRestricted'):
+                    if ar['attributes'].get(k) is not None: continue
+                    for v in (False, 'NONE'):
+                        try: call('PATCH', f"/ageRatingDeclarations/{ar['id']}", {'data': {'type': 'ageRatingDeclarations', 'id': ar['id'], 'attributes': {k: v}}}); print('PREP', g, 'age', k, '=', v); break
+                        except Exception as e: print('PREP', g, 'age', k, v, 'ERR', ' | '.join(__import__('re').findall(r'"detail" : "([^"]+)"', str(e)))[:300])
+                ar = call('GET', f"/appInfos/{info['id']}/ageRatingDeclaration")['data']
             print('PREP', g, 'age nulls', [k for k, v in ar['attributes'].items() if v is None], 'id', ar['id'])
             ps = call('GET', f"/apps/{aid}/appPriceSchedule", ok=(200, 404)).get('data'); print('PREP', g, 'price schedule', bool(ps))
             for iap in call('GET', f"/apps/{aid}/inAppPurchasesV2?limit=50")['data']:

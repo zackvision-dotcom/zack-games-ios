@@ -41,6 +41,7 @@ jobs:
           if grep -q '^setbuild' todo.txt; then export SETBUILD=$(grep '^setbuild' todo.txt | cut -d' ' -f2); fi
           if grep -q '^iapstate' todo.txt; then export IAPSTATE=1; fi
           if grep -q '^prep' todo.txt; then export PREP=1; fi
+          if grep -q '^prepfix' todo.txt; then export PREP=1; export FIX=1; fi
           if grep -q '^textonly' todo.txt; then export ONLY_TEXT=1; fi
           if grep -q '^copyright' todo.txt; then export COPYRIGHT="$(grep '^copyright' todo.txt | cut -d' ' -f2-)"; fi
           if grep -q '^iapdesc' todo.txt; then export IAPDESC=1; GAMES=x; fi
