@@ -20,6 +20,8 @@ settings:
     # The CI sets it per build: workflow input ads_test, or "Game ADS_TEST=0" in ios/build-queue.txt. Leave 1 here.
     # A Debug build always uses the test units (ios/Ads/NativeAds.swift). Never tap real ads yourself (account ban).
     ADS_TEST: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: NO          # the Crashlytics dSYM upload script reads the build folder
+    DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
 
 packages:
   GoogleMobileAds:
@@ -28,6 +30,9 @@ packages:
   GoogleUserMessagingPlatform:
     url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git
     majorVersion: 3.1.0
+  Firebase:   # Analytics (no advertising id: GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED = NO) + Crashlytics, project "zack-vision-jeux"
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    majorVersion: 12.0.0
 
 targets:
   KunaiGaiden:
@@ -39,13 +44,20 @@ targets:
       - path: KunaiGaiden/Assets.xcassets
       - path: KunaiGaiden/Web
         type: folder
+      - path: KunaiGaiden/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: KunaiGaiden/Info.plist
       properties:
         CFBundleDisplayName: Kunai Gaiden
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -119,6 +131,12 @@ targets:
           - SKAdNetworkIdentifier: 3rd42ekr43.skadnetwork
           - SKAdNetworkIdentifier: 97r2b46745.skadnetwork
           - SKAdNetworkIdentifier: 3qcr597p9d.skadnetwork
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.kunaigaiden
@@ -135,13 +153,20 @@ targets:
       - path: Braise/Assets.xcassets
       - path: Braise/Web
         type: folder
+      - path: Braise/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: Braise/Info.plist
       properties:
         CFBundleDisplayName: Braise
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -165,6 +190,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/2542321598
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.braise
@@ -181,13 +212,20 @@ targets:
       - path: GullStreet/Assets.xcassets
       - path: GullStreet/Web
         type: folder
+      - path: GullStreet/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: GullStreet/Info.plist
       properties:
         CFBundleDisplayName: Gull Street
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -209,6 +247,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/3564805407
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.gullstreet
@@ -225,13 +269,20 @@ targets:
       - path: CoralStack/Assets.xcassets
       - path: CoralStack/Web
         type: folder
+      - path: CoralStack/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: CoralStack/Info.plist
       properties:
         CFBundleDisplayName: Coral Stack
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -253,6 +304,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/2251723737
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.coralstack
@@ -268,13 +325,20 @@ targets:
       - path: CrumbleCrew/Assets.xcassets
       - path: CrumbleCrew/Web
         type: folder
+      - path: CrumbleCrew/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: CrumbleCrew/Info.plist
       properties:
         CFBundleDisplayName: Crumble Crew
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -296,6 +360,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/2606946958
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.crumblecrew
@@ -311,13 +381,20 @@ targets:
       - path: CircuitCaper/Assets.xcassets
       - path: CircuitCaper/Web
         type: folder
+      - path: CircuitCaper/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: CircuitCaper/Info.plist
       properties:
         CFBundleDisplayName: Circuit Caper
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -339,6 +416,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/4356424157
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.circuitcaper
@@ -354,13 +437,20 @@ targets:
       - path: VanVoyage/Assets.xcassets
       - path: VanVoyage/Web
         type: folder
+      - path: VanVoyage/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: VanVoyage/Info.plist
       properties:
         CFBundleDisplayName: Van Voyage
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -382,6 +472,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/3855403268
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.vanvoyage
@@ -396,10 +492,18 @@ targets:
       - path: SceneExpress/Assets.xcassets
       - path: SceneExpress/Web
         type: folder
+      - path: SceneExpress/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
+    dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
     info:
       path: SceneExpress/Info.plist
       properties:
         CFBundleDisplayName: Scène Express
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -415,6 +519,12 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.lifestyle
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.sceneexpress
@@ -429,13 +539,20 @@ targets:
       - path: SilkHop/Assets.xcassets
       - path: SilkHop/Web
         type: folder
+      - path: SilkHop/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: SilkHop/Info.plist
       properties:
         CFBundleDisplayName: Silk Hop
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -457,6 +574,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/9473019463
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.silkhop
@@ -472,13 +595,20 @@ targets:
       - path: LanternHold/Assets.xcassets
       - path: LanternHold/Web
         type: folder
+      - path: LanternHold/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: LanternHold/Info.plist
       properties:
         CFBundleDisplayName: Lantern Hold
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -500,6 +630,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/6617297977
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.lanternhold
@@ -515,13 +651,20 @@ targets:
       - path: ClockpawSquad/Assets.xcassets
       - path: ClockpawSquad/Web
         type: folder
+      - path: ClockpawSquad/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: ClockpawSquad/Info.plist
       properties:
         CFBundleDisplayName: Clockpaw Squad
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -543,6 +686,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/8487240852
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.clockpawsquad
@@ -558,13 +707,20 @@ targets:
       - path: PulsePost/Assets.xcassets
       - path: PulsePost/Web
         type: folder
+      - path: PulsePost/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: PulsePost/Info.plist
       properties:
         CFBundleDisplayName: Pulse Post
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -586,6 +742,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/8564804468
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.pulsepost
@@ -601,13 +763,20 @@ targets:
       - path: DungeonDash/Assets.xcassets
       - path: DungeonDash/Web
         type: folder
+      - path: DungeonDash/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: DungeonDash/Info.plist
       properties:
         CFBundleDisplayName: Dungeon Dash
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -629,6 +798,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3447270747554208/4496024958
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.dungeondash
@@ -644,13 +819,20 @@ targets:
       - path: TossBistro/Assets.xcassets
       - path: TossBistro/Web
         type: folder
+      - path: TossBistro/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
+      - package: Firebase
+        product: FirebaseAnalytics
+      - package: Firebase
+        product: FirebaseCrashlytics
       - package: GoogleMobileAds
       - package: GoogleUserMessagingPlatform
     info:
       path: TossBistro/Info.plist
       properties:
         CFBundleDisplayName: Toss Bistro
+        GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED: false
+        GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS: false
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -672,6 +854,12 @@ targets:
         GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
+    postBuildScripts:
+      - name: Crashlytics dSYM upload
+        basedOnDependencyAnalysis: false
+        script: |
+          RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.tossbistro
