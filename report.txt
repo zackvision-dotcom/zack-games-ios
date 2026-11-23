@@ -1,2 +1,50 @@
-BUILD clockpawsquad v1008 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:10
-BUILD clockpawsquad v1007 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:00
+PREP braise availability ERR GET /appAvailabilities/6835577779/territoryAvailabilities?limit=200&include=territory -> 404 {
+  "errors" : [ {
+    "id" : "d4f7684a-32f2-41af-abd0-cfcee2aac06e",
+    "status" : "404",
+    "code" : "PATH_ERROR",
+    "title" : "The URL path is not valid",
+    "detail" : "The relationship 'territoryAv
+PREP braise age nulls ['datingAndRelationships', 'kidsAgeBand', 'sharedLocation', 'socialMediaAgeRestricted', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 14f1e453-cd6d-468f-9424-f76d8ee34f26
+PREP braise price schedule True
+PREP clockpawsquad availability ERR GET /appAvailabilities/6837923176/territoryAvailabilities?limit=200&include=territory -> 404 {
+  "errors" : [ {
+    "id" : "2958c50b-b171-45c5-8b93-1e1d710c8e6f",
+    "status" : "404",
+    "code" : "PATH_ERROR",
+    "title" : "The URL path is not valid",
+    "detail" : "The relationship 'territoryAv
+PREP clockpawsquad age nulls ['datingAndRelationships', 'kidsAgeBand', 'sharedLocation', 'socialMediaAgeRestricted', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id e0afc41a-fdae-4b41-80f4-822b43554cec
+PREP clockpawsquad price schedule True
+PREP clockpawsquad iap keys READY_TO_SUBMIT
+PREP clockpawsquad iap hints READY_TO_SUBMIT
+PREP clockpawsquad iap starter READY_TO_SUBMIT
+PREP clockpawsquad iap pass_hiver_2026 READY_TO_SUBMIT
+PREP clockpawsquad iap noads READY_TO_SUBMIT
+PREP dungeondash availability ERR GET /appAvailabilities/6837923148/territoryAvailabilities?limit=200&include=territory -> 404 {
+  "errors" : [ {
+    "id" : "91417096-6e4a-40ee-8e63-42362954bf92",
+    "status" : "404",
+    "code" : "PATH_ERROR",
+    "title" : "The URL path is not valid",
+    "detail" : "The relationship 'territoryAv
+PREP dungeondash age nulls ['datingAndRelationships', 'kidsAgeBand', 'sharedLocation', 'socialMediaAgeRestricted', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 6e2d3637-4666-40e3-a87b-2548a81879bd
+PREP dungeondash price schedule True
+PREP dungeondash iap gems READY_TO_SUBMIT
+PREP dungeondash iap cite_engloutie READY_TO_SUBMIT
+PREP dungeondash iap starter READY_TO_SUBMIT
+PREP dungeondash iap pass_hiver_2026 READY_TO_SUBMIT
+PREP dungeondash iap noads READY_TO_SUBMIT
+PREP vanvoyage availability ERR GET /appAvailabilities/6837698858/territoryAvailabilities?limit=200&include=territory -> 404 {
+  "errors" : [ {
+    "id" : "d36304cf-245d-4416-8a59-b93513bbff33",
+    "status" : "404",
+    "code" : "PATH_ERROR",
+    "title" : "The URL path is not valid",
+    "detail" : "The relationship 'territoryAv
+PREP vanvoyage age nulls ['datingAndRelationships', 'kidsAgeBand', 'sharedLocation', 'socialMediaAgeRestricted', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 6c030290-09bb-42da-bc28-edad13054e54
+PREP vanvoyage price schedule True
+PREP vanvoyage iap starter READY_TO_SUBMIT
+PREP vanvoyage iap paint READY_TO_SUBMIT
+PREP vanvoyage iap noads READY_TO_SUBMIT
+PREP vanvoyage iap coins READY_TO_SUBMIT
