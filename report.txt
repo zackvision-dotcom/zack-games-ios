@@ -1,10 +1,1 @@
-SETBUILD coralstack version 1.0 PREPARE_FOR_SUBMISSION -> build 1017 VALID
-  notes 1403 chars, UMP/ATT sentence: True | attachments []
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-SETBUILD lanternhold version 1.0 PREPARE_FOR_SUBMISSION -> build 1017 VALID
-  notes 1346 chars, UMP/ATT sentence: True | attachments []
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+ATTACH coralstack gameplay-coralstack.mp4 9384 KB {'errors': [], 'warnings': None, 'state': 'UPLOAD_COMPLETE'}
