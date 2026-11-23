@@ -1,5 +1,3 @@
-manual
-braise
-clockpawsquad
-dungeondash
-vanvoyage
+status
+gullstreet
+silkhop
