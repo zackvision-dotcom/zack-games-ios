@@ -1,6 +1,10 @@
-BUILD coralstack v1017 VALID internal=IN_BETA_TESTING uploaded=2026-11-23T13:00
-BUILD coralstack v1008 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:16
-BUILD lanternhold v1017 VALID internal=IN_BETA_TESTING uploaded=2026-11-23T12:59
-BUILD lanternhold v1008 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T07:10
-BUILD pulsepost v1017 VALID internal=IN_BETA_TESTING uploaded=2026-11-23T12:51
-BUILD pulsepost v1007 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T06:59
+SETBUILD coralstack version 1.0 PREPARE_FOR_SUBMISSION -> build 1017 VALID
+  notes 1403 chars, UMP/ATT sentence: True | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
+SETBUILD lanternhold version 1.0 PREPARE_FOR_SUBMISSION -> build 1017 VALID
+  notes 1346 chars, UMP/ATT sentence: True | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
