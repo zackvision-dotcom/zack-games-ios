@@ -472,6 +472,26 @@ if __name__ == '__main__':
             r = call('PATCH', f'/ageRatingDeclarations/{aid}', {'data': {'type': 'ageRatingDeclarations', 'id': aid, 'attributes': {'lootBox': True}}})
             print('LOOTBOX', g, r['data']['attributes'].get('lootBox'))
         sys.exit(0)
+    if os.environ.get('PREP'):
+        # read-only pre-submission check: China availability, unanswered age-rating questions, app price, in-app purchase states
+        for g in sys.argv[1:]:
+            app = find_app(g); aid = app['id']
+            try:
+                av = call('GET', f"/apps/{aid}/appAvailabilityV2", ok=(200, 404)).get('data')
+                if av:
+                    ta = call('GET', f"/appAvailabilities/{av['id']}/territoryAvailabilities?limit=200&include=territory")['data']
+                    chn = [x for x in ta if x['relationships']['territory']['data']['id'] == 'CHN']
+                    print('PREP', g, 'territories', sum(1 for x in ta if x['attributes'].get('available')), 'CHN', chn and chn[0]['attributes'].get('available'), chn and chn[0]['id'])
+                else: print('PREP', g, 'availability NOT SET')
+            except Exception as e: print('PREP', g, 'availability ERR', str(e)[:300])
+            infos = call('GET', f"/apps/{aid}/appInfos?include=ageRatingDeclaration")['data']
+            info = next((i for i in infos if i['attributes'].get('appStoreState') not in ('READY_FOR_SALE', 'READY_FOR_DISTRIBUTION')), infos[0])
+            ar = call('GET', f"/appInfos/{info['id']}/ageRatingDeclaration")['data']
+            print('PREP', g, 'age nulls', [k for k, v in ar['attributes'].items() if v is None], 'id', ar['id'])
+            ps = call('GET', f"/apps/{aid}/appPriceSchedule", ok=(200, 404)).get('data'); print('PREP', g, 'price schedule', bool(ps))
+            for iap in call('GET', f"/apps/{aid}/inAppPurchasesV2?limit=50")['data']:
+                print('PREP', g, 'iap', iap['attributes']['productId'].split('.')[-1], iap['attributes']['state'])
+        sys.exit(0)
     if os.environ.get('BUILDS'):
         for g in sys.argv[1:]:
             app = find_app(g)
