@@ -1,1 +1,9 @@
-SUBMIT braise ITEM ERR STATE_ERROR.ENTITY_STATE_INVALID | appStoreVersions with id '895434075' is not in valid state. | This resource cannot be reviewed, please check associated errors to see why. | STATE_ERROR.ITEM_PART_OF_ANOTHER_SUBMISSION | Item is already present in another reviewSubmission | appStoreVersions with id 895434075 was already added to another reviewSubmission with id 50a917db-0d7c-4f50-ad09-381bfe1dad8d
+SUBMIT clockpawsquad content rights: no third-party content
+SUBMIT clockpawsquad version item added
+SUBMIT clockpawsquad draft only, items: [dict_keys([])]
+SUBMIT dungeondash content rights: no third-party content
+SUBMIT dungeondash version item added
+SUBMIT dungeondash draft only, items: [dict_keys([])]
+SUBMIT vanvoyage content rights: no third-party content
+SUBMIT vanvoyage version item added
+SUBMIT vanvoyage draft only, items: [dict_keys([])]
