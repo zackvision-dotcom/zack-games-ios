@@ -1,3 +1,2 @@
-setbuild 1017
+attach
 coralstack
-lanternhold
