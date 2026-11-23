@@ -24,7 +24,7 @@
   "fr": "Les boutiques du port",
   "en": "Cozy Harbor Shops",
   "color": "#1c7ed6",
-  "live": false
+  "live": true
  },
  {
   "bundle": "com.zvisionclub.coralstack",
@@ -78,7 +78,7 @@
   "fr": "Balance-toi de fil en fil",
   "en": "Swing from thread to thread",
   "color": "#37b24d",
-  "live": false
+  "live": true
  },
  {
   "bundle": "com.zvisionclub.lanternhold",
