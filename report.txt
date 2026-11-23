@@ -1,1 +1,6 @@
-ATTACH coralstack gameplay-coralstack.mp4 9384 KB {'errors': [], 'warnings': None, 'state': 'UPLOAD_COMPLETE'}
+NEWVER gullstreet 1.0.1 created PREPARE_FOR_SUBMISSION
+NEWVER gullstreet 1.0.1 en-US whatsNew set
+NEWVER gullstreet 1.0.1 fr-FR whatsNew set
+NEWVER silkhop 1.0.1 created PREPARE_FOR_SUBMISSION
+NEWVER silkhop 1.0.1 fr-FR whatsNew set
+NEWVER silkhop 1.0.1 en-US whatsNew set
