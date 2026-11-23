@@ -88,6 +88,7 @@
     const iv = setInterval(() => { if (!A.running()) return clearInterval(iv); const S = D().S; if (S.lvl > lv) { lv = S.lvl; A.mark('niveau ' + lv); } }, 200);
     return h0;
   }
+  let boss = null;
   const hideToast = () => { const t = $('#k-toast'); if (t) t.classList.remove('on'); };
 
   BETA.game({
@@ -97,13 +98,16 @@
       for (let i = 0; i < 1200 && !($('#k-new') && !$('#k-new').disabled); i++) await A.wait(100);
       const S = D().S; Object.assign(S, midSave()); K.intro.heal(); K.intro.setNoDeath(true);   // a take never ends on a knock-out
       K.intro.begin(); hideToast();
+      dispatchEvent(new Event('pointerdown'));   // the sound starts with the take (ambience.js unlocks on the first touch)
       // the road just outside the great gate, the gate behind the hero
       const h = H(); h.x = 0.5; h.y = 160; h.z = 0; h.yaw = 0; __k.snap();
       // the village's own wolves and bandits stay where they are; the pack for the take comes out of the woods around the gate
       for (const e of live()) if (Math.hypot(e.x - h.x, e.y - h.y) < 30) e.dead = 1e9;
       const sc = A.opts.scene;
-      if (sc === 'moment') { h.y = 158; __k.snap(); await A.wait(400); wave(6, 2.6, 4.2, ['bandit', 'wolf'], .3); }
-      else wave(5, 3.2, 5, ['wolf', 'bandit', 'wolf']);
+      if (sc === 'boss') { boss = E.spawn('boss', h.x + .4, h.y + 4.2); boss.beta = true; boss.home = [boss.x, boss.y]; boss.state = 'chase'; boss.show = 4; boss.dmg = Math.min(boss.dmg, 8); }
+      else if (sc === 'village') { h.x = 0.5; h.y = 142; h.yaw = 180; __k.snap(); }
+      else if (sc === 'moment') { h.y = 158; __k.snap(); await A.wait(400); wave(6, 2.6, 4.2, ['bandit', 'wolf'], .3); }
+      else if (sc !== 'boss' && sc !== 'village') wave(5, 3.2, 5, ['wolf', 'bandit', 'wolf']);
       // let the frames of every actor be painted before filming, then hide the hint that pops up after the start
       for (let i = 0; i < 30; i++) { await A.wait(100); }
       await A.wait(4600); hideToast();
@@ -137,6 +141,23 @@
         if (live().some(e => Math.hypot(e.x - H().x, e.y - H().y) < 5)) { await sign(A, 'sphere'); A.mark('sphère de souffle'); }
         await A.wait(1200);
         while (A.running()) { if (pack().length < 3) wave(4, 2.8, 4.2, ['bandit', 'wolf'], .4); regroup(4.5); if (!(await slash(A))) { const [e, d] = nearest(); if (e && d < 5.5 && A.rnd() < .5) await sign(A, ['fire', 'chidori'][(A.rnd() * 2) | 0]); else await A.wait(300); } await A.wait(250); } },
+      // the boss: Kurogane the deserter comes out of the woods at the gate; katana swipes and the four signs until he falls (about 16 s)
+      async boss(A) { watch(A); const e = boss; if (!e) return; const t0 = performance.now(); let i = 0, fell = false;
+        E.hooks.kill.push(k => { if (k === e && !fell) { fell = true; A.mark('boss vaincu'); } });
+        A.mark('le boss surgit'); await A.wait(700); const plan = ['fire', null, 'chidori', null, null, 'wind', null, 'sphere', null, 'fire', null, 'chidori'];
+        while (A.running() && !e.dead) {
+          const el = (performance.now() - t0) / 1000; if (el > 13 && e.hp > e.max * .08) e.hp = Math.round(e.max * .08);   // the last blows land around 14-16 s
+          if (D().S.hp < 60) K.intro.heal();
+          const d = Math.hypot(e.x - H().x, e.y - H().y); if (d > 3.8) { e.x = H().x + .3; e.y = H().y + 2.8; e.state = 'chase'; await A.wait(200); continue; }
+          const id = plan[i++ % plan.length]; if (id && (await sign(A, id))) { A.mark(NAME[id]); await A.wait(A.jitter(450, 700)); continue; }
+          if (!(await slash(A))) await A.wait(200); await A.wait(A.jitter(160, 300));
+        }
+        await A.wait(1500); while (A.running()) await A.wait(500); },
+      // the living village: Kaze runs down the market street past the stalls and the villagers (no techniques, no enemies)
+      async village(A) { watch(A); await A.wait(400);
+        const route = [[0.5, 128], [1.5, 112], [0, 96], [2, 82], [6, 70], [8, 60]].filter(([x, y]) => E.free(x, y, .6));   // the avenue from the great gate up to Aiko's market
+        for (const [x, y] of route) { for (let k = 0; k < 5 && A.running() && Math.hypot(H().x - x, H().y - y) > 2.5; k++) await run(A, x, y, 1400); A.mark('rue du village'); }
+        while (A.running()) await A.wait(500); },
       // plays on until stopped (long tests): the same fight, the pack coming back
       async idle(A) { watch(A); while (A.running()) { const [e, d] = nearest(); if (!e) { wave(4, 6, 9, ['wolf', 'bandit']); await A.wait(1000); continue; }
         if (d > 6) await run(A, e.x, e.y, 700); else if (A.rnd() < .25) await sign(A, ['fire', 'chidori', 'sphere', 'wind'][(A.rnd() * 4) | 0]); else await slash(A); await A.think(); } },

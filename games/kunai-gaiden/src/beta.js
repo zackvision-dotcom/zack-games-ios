@@ -93,7 +93,7 @@
   let offCtx = null, audioOrigin = null;
   const LEAD = 1;
   if (AUDIO_LEN > 0 && window.OfflineAudioContext) {
-    const RATE = 32000;
+    const RATE = 48000;   // the App Store previews are 48 kHz
     offCtx = new OfflineAudioContext(1, Math.ceil((AUDIO_LEN + LEAD) * RATE), RATE);   // mono keeps memory low on an 8 GB PC
     const realDest = offCtx.destination, master = offCtx.createGain();
     master.gain.setValueAtTime(0, 0); master.gain.setValueAtTime(1, LEAD); master.connect(realDest);
@@ -104,6 +104,13 @@
     Object.defineProperty(offCtx, 'state', { get: () => 'running' });
     offCtx.resume = () => Promise.resolve(); offCtx.suspend = () => Promise.resolve(); offCtx.close = () => Promise.resolve();
     offCtx.outputLatency = 0; offCtx.baseLatency = 0;
+    // a source started or stopped "now" (no time, or a time already past on the video clock) would play from the very start of the
+    // offline buffer: the game's sound would sit at full level under the whole clip. Clamp those times to the video clock.
+    for (const P of [AudioScheduledSourceNode.prototype, AudioBufferSourceNode.prototype]) {
+      if (!Object.prototype.hasOwnProperty.call(P, 'start')) continue; const st = P.start, sp = P.stop;
+      P.start = function (when, ...a) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return st.call(this, when, ...a); };
+      if (Object.prototype.hasOwnProperty.call(P, 'stop')) P.stop = function (when) { if (this.context === offCtx) { const now = offCtx.currentTime; if (!(when > now)) when = now; } return sp.call(this, when); };
+    }
     const Fake = function () { return offCtx; };
     window.AudioContext = Fake; window.webkitAudioContext = Fake;
   }
