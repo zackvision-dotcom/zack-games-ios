@@ -253,6 +253,21 @@ if __name__ == '__main__':
                 else:
                     print('CANCELSUB', g, 'keep', st)
         sys.exit(0)
+    if os.environ.get('MANUAL') or os.environ.get('STATUS'):
+        # MANUAL: "Publication manuelle" on the current version (we pick the release day, marketing calendar), allowed while in review.
+        # STATUS: review state of every version + the release type, to watch Apple's answers.
+        import re as _re
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            for v in call('GET', f"/apps/{app['id']}/appStoreVersions?filter[platform]=IOS&limit=3")['data']:
+                a = v['attributes']; st = a['appStoreState']
+                if os.environ.get('MANUAL') and st not in ('READY_FOR_SALE', 'REPLACED_WITH_NEW_VERSION', 'REMOVED_FROM_SALE') and a.get('releaseType') != 'MANUAL':
+                    try:
+                        call('PATCH', f"/appStoreVersions/{v['id']}", {'data': {'type': 'appStoreVersions', 'id': v['id'], 'attributes': {'releaseType': 'MANUAL'}}}); a['releaseType'] = 'MANUAL (set now)'
+                    except Exception as e:
+                        a['releaseType'] = str(a.get('releaseType')) + ' ERR ' + ' | '.join(_re.findall(r'"(?:code|detail)" : "([^"]+)"', str(e)))[:400]
+                print('STATUS', g, a['versionString'], st, 'release', a.get('releaseType'), 'created', (a.get('createdDate') or '')[:10])
+        sys.exit(0)
     if os.environ.get('SUBMIT'):
         # App Review submission, ONLY on Zack's written go in the Developer session ("Oui soumet", 22/11/2026 for Gull Street + Silk Hop)
         import re as _re
@@ -260,6 +275,8 @@ if __name__ == '__main__':
             app = find_app(g); ver = edit_version(app['id'])
             if not app['attributes'].get('contentRightsDeclaration'):
                 call('PATCH', f"/apps/{app['id']}", {'data': {'type': 'apps', 'id': app['id'], 'attributes': {'contentRightsDeclaration': 'DOES_NOT_USE_THIRD_PARTY_CONTENT'}}}); print('SUBMIT', g, 'content rights: no third-party content')
+            if ver['attributes'].get('releaseType') != 'MANUAL':   # Publication manuelle: Zack's marketing calendar picks the release day
+                call('PATCH', f"/appStoreVersions/{ver['id']}", {'data': {'type': 'appStoreVersions', 'id': ver['id'], 'attributes': {'releaseType': 'MANUAL'}}}); print('SUBMIT', g, 'release type MANUAL')
             subs = call('GET', f"/reviewSubmissions?filter[app]={app['id']}&filter[platform]=IOS&limit=10")['data']
             sub = next((x for x in subs if x['attributes'].get('state') == 'READY_FOR_REVIEW'), None)
             if not sub:

@@ -1,4 +1,5 @@
-draftver
+manual
+braise
 clockpawsquad
 dungeondash
 vanvoyage
