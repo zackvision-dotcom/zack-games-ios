@@ -1,2 +1,2 @@
-CANCELSUB vanvoyage WAITING_FOR_REVIEW -> CANCELING
-CANCELSUB vanvoyage keep COMPLETE
+SUBMIT vanvoyage version item added
+SUBMIT vanvoyage draft only, items: [dict_keys([])]
