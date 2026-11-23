@@ -136,7 +136,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.kunaigaiden
@@ -195,7 +195,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.braise
@@ -252,7 +252,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.gullstreet
@@ -309,7 +309,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.coralstack
@@ -365,7 +365,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.crumblecrew
@@ -421,7 +421,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.circuitcaper
@@ -477,7 +477,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.vanvoyage
@@ -565,7 +565,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.silkhop
@@ -621,7 +621,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.lanternhold
@@ -677,7 +677,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.clockpawsquad
@@ -733,7 +733,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.pulsepost
@@ -789,7 +789,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.dungeondash
@@ -845,7 +845,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.tossbistro
@@ -900,7 +900,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.nimbuscatch
@@ -955,7 +955,7 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           RUN="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
+          if [ "$CONFIGURATION" = "Release" ] && [ -x "$RUN" ] && [ -f "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist" ]; then "$RUN" || echo "warning: Crashlytics dSYM upload failed"; fi
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.jamline
