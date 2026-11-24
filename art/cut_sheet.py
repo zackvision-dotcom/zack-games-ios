@@ -4,6 +4,7 @@ from every border and every grid line, then keeps each blob of remaining pixels 
 or sparkles stay with their object). Objects are named in reading order (rows top to bottom, then left to right).
 
 Usage: python cut_sheet.py sheet.png outdir name1,name2,...   ('-' as a name skips that object)
+       python cut_sheet.py sheet.png outdir name1,... --grid=4x4   (regular grid whose cells touch: one object per cell)
        python cut_sheet.py sheet.png outdir --list               (only prints the blobs found, to check the order)"""
 import sys, os
 from collections import deque
@@ -48,7 +49,7 @@ def grid_lines(a):
     return m2
 
 
-def clear(a, bg, lines, tol=48):
+def clear(a, bg, lines, tol=int(os.environ.get("CUT_TOL", 48))):
     H, W = a.shape[:2]
     near = np.abs(a[..., :3] - bg).sum(2) < tol
     gone = lines.copy(); seen = lines.copy(); q = deque()
@@ -98,8 +99,31 @@ def blobs(keep):
     return [b for _, r in rows for b in sorted(r, key=lambda b: b[2])], lab, c
 
 
+def grid_cut(src, outdir, cols, rows, names):
+    """Regular grid: each cell is cleared on its own (cream flooded from the cell border), then trimmed."""
+    im, a, bg = load(src); H, W = a.shape[:2]; os.makedirs(outdir, exist_ok=True); k = 0
+    for r in range(rows):
+        for c in range(cols):
+            nm = names[k] if k < len(names) else '-'; k += 1
+            if nm == '-': continue
+            x0, x1, y0, y1 = int(c * W / cols), int((c + 1) * W / cols), int(r * H / rows), int((r + 1) * H / rows)
+            cell = a[y0:y1, x0:x1]; gone = clear(cell, bg, np.zeros(cell.shape[:2], bool))   # no grid lines here: a black jacket is not a line
+            rgba = np.array(im)[y0:y1, x0:x1].copy()
+            bl, lab, cc = blobs(~gone)   # keep the biggest blob only: slivers of the neighbouring cells are dropped
+            if bl:
+                big = max(bl, key=lambda b: (b[1] - b[0]) * (b[3] - b[2]))[4]
+                own = np.kron(lab == big, np.ones((cc, cc), bool))[:gone.shape[0], :gone.shape[1]]; gone |= ~own
+            rgba[gone] = (0, 0, 0, 0)
+            ys, xs = np.nonzero(~gone)
+            if not len(ys): continue
+            crop = rgba[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+            Image.fromarray(crop).save(os.path.join(outdir, nm + '.png')); print('saved', nm, crop.shape[1], 'x', crop.shape[0])
+
+
 def main():
     src, outdir = sys.argv[1], sys.argv[2]; names = sys.argv[3] if len(sys.argv) > 3 else '--list'
+    if len(sys.argv) > 4 and sys.argv[4].startswith('--grid'):
+        cols, rows = map(int, sys.argv[4].split('=')[1].split('x')); return grid_cut(src, outdir, cols, rows, names.split(','))
     im, a, bg = load(src); lines = grid_lines(a); gone = clear(a, bg, lines)
     rgba = np.array(im); rgba[gone] = (0, 0, 0, 0); keep = ~gone
     bl, lab, c = blobs(keep)
