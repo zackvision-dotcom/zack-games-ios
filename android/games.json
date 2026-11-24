@@ -1,0 +1,16 @@
+[
+  {"flavor": "gullstreet", "web": "GullStreet", "label": "Gull Street", "landscape": false, "consumables": ["shells20", "shells120", "shells260", "shells600"]},
+  {"flavor": "silkhop", "web": "SilkHop", "label": "Silk Hop", "landscape": false, "consumables": ["pearls"]},
+  {"flavor": "braise", "web": "Braise", "label": "Braise", "landscape": true, "consumables": []},
+  {"flavor": "clockpawsquad", "web": "ClockpawSquad", "label": "Clockpaw Squad", "landscape": false, "consumables": ["keys"]},
+  {"flavor": "dungeondash", "web": "DungeonDash", "label": "Dungeon Dash", "landscape": false, "consumables": ["gems"]},
+  {"flavor": "vanvoyage", "web": "VanVoyage", "label": "Van Voyage", "landscape": false, "consumables": ["coins"]},
+  {"flavor": "circuitcaper", "web": "CircuitCaper", "label": "Circuit Caper", "landscape": false, "consumables": ["loot"]},
+  {"flavor": "crumblecrew", "web": "CrumbleCrew", "label": "Crumble Crew", "landscape": false, "consumables": ["gold"]},
+  {"flavor": "pulsepost", "web": "PulsePost", "label": "Pulse Post", "landscape": false, "consumables": ["plumes"]},
+  {"flavor": "coralstack", "web": "CoralStack", "label": "Coral Stack", "landscape": false, "consumables": ["shells"]},
+  {"flavor": "lanternhold", "web": "LanternHold", "label": "Lantern Hold", "landscape": false, "consumables": ["acorns"]},
+  {"flavor": "tossbistro", "web": "TossBistro", "label": "Toss Bistro", "landscape": false, "consumables": ["truffes_100", "truffes_300"]},
+  {"flavor": "nimbuscatch", "web": "NimbusCatch", "label": "Nimbus Catch", "landscape": false, "consumables": ["perles_100", "perles_300"]},
+  {"flavor": "jamline", "web": "JamLine", "label": "Jam Line", "landscape": false, "consumables": ["miel_100"]}
+]
