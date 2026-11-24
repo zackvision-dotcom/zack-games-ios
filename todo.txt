@@ -1,3 +1,3 @@
-setbuild 1018
-gullstreet
-silkhop
+# try 1
+setbuild 1022
+pulsepost
