@@ -1,0 +1,1 @@
+    topResumedActivity=ActivityRecord{47a4ced u0 com.zvisionclub.coralstack/com.zvisionclub.shell.MainActivity t8}

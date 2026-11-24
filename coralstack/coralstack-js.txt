@@ -1,0 +1,80 @@
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{fe91cb6 com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{7c4ddb7 com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{cea5924 com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{cc91c8d com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{a624e42 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{8bf9e53 com.google.android.settings.intelligence/10119} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{d58ad11 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{305e390 com.google.android.uwb.resources/10171} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{fa30e76 com.android.cts.ctsshim/10190} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{637f489 com.google.android.wifi.resources/10181} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{d4b0c8e com.google.android.wifi.dialog/10182} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{a9bccaf com.google.android.apps.wallpaper/10160} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{b0da8bc com.google.android.odad/10122} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{ba25045 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{2ef639a com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{36284cb com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{56a94a8 com.android.bluetoothmidiservice/10108} BLOCKED
+11-24 11:30:36.625   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{99cabc1 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:30:36.626   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{c501f66 com.google.android.cellbroadcastreceiver/10184} BLOCKED
+11-24 11:30:36.626   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{692a2a7 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:30:36.626   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{e285354 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:30:36.626   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{78742fd com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:30:36.626   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{7aecbf2 com.google.android.inputmethod.latin/10141} BLOCKED
+11-24 11:30:36.626   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{6bcc243 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:30:36.626   517   890 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{46150c0 com.google.android.apps.restore/10120} BLOCKED
+11-24 11:30:36.720  3161  3288 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.coralstack/app_webview/variations_seed_new"
+11-24 11:30:36.720  3161  3288 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.coralstack/app_webview/variations_seed"
+11-24 11:30:36.875  1047  1047 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.coralstack
+11-24 11:30:37.177   517   547 I ActivityManager: Start proc 3338:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.coralstack/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:30:37.323   829   829 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.zvisionclub.coralstack, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
+11-24 11:30:37.387  1047  1331 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.coralstack
+11-24 11:30:37.691   517   530 D ConnectivityService: requestNetwork for uid/pid:10192/3161 activeRequest: null callbackRequest: 85 [NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.coralstack UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:30:37.693   517   753 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.coralstack UnderlyingNetworks: Null] ]
+11-24 11:30:37.694   517   753 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.coralstack UnderlyingNetworks: Null] ]
+11-24 11:30:37.694   517   753 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.coralstack UnderlyingNetworks: Null] ]
+11-24 11:30:37.694   517   753 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.coralstack UnderlyingNetworks: Null] ]
+11-24 11:30:38.435   517  2744 D CoreBackPreview: Window{e183c90 u0 com.zvisionclub.coralstack/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@6475399, mPriority=0, mIsAnimationCallback=false}
+11-24 11:30:38.856   517   536 W ziparchive: Unable to open '/data/app/~~eCt07MJzK9Rf9ZElgRgWrw==/com.zvisionclub.coralstack-wGAVZm3UXXgk8qRk9ExEkw==/base.dm': No such file or directory
+11-24 11:30:38.892   517   536 I ActivityTaskManager: Displayed com.zvisionclub.coralstack/com.zvisionclub.shell.MainActivity for user 0: +4s88ms
+11-24 11:30:38.897   517   882 D CoreBackPreview: Window{9f0a478 u0 Splash Screen com.zvisionclub.coralstack EXITING}: Setting back callback null
+11-24 11:30:38.900   517   882 W InputManager-JNI: Input channel object '9f0a478 Splash Screen com.zvisionclub.coralstack (client)' was disposed without first being removed with the input manager!
+11-24 11:30:38.986   517  2363 I ImeTracker: com.zvisionclub.coralstack:b7c5d77b: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:30:38.986   517  2363 I ImeTracker: com.zvisionclub.coralstack:b7c5d77b: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:30:39.016  1461  1461 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.coralstack fieldId=0 fieldName=null extras=null}, false)
+11-24 11:30:41.342  1545  1545 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.coralstack], userId:[0], reason:[package is added.].
+11-24 11:30:42.629  1545  1545 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.coralstack.
+11-24 11:30:42.644  1545  3458 I AiAiEcho: AppIndexer Package:[com.zvisionclub.coralstack] UserProfile:[0] Enabled:[true].
+11-24 11:30:42.645  1545  3458 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.coralstack], userId:[0], reason:[package is updated.].
+11-24 11:30:42.890   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{18cfd6c com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:30:42.897   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{78aa53b com.android.camera2/10147} BLOCKED
+11-24 11:30:42.899   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{b028458 com.google.android.gm/10142} BLOCKED
+11-24 11:30:42.900   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{87559b1 com.google.android.rkpdapp/10173} BLOCKED
+11-24 11:30:42.932   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{62bbe22 com.google.android.contacts/10155} BLOCKED
+11-24 11:30:42.932   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{1b18670 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:30:43.392  1047  1047 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.coralstack
+11-24 11:30:43.412  1047  1331 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.coralstack
+11-24 11:30:44.524  3161  3902 D ProfileInstaller: Installing profile for com.zvisionclub.coralstack
+11-24 11:30:44.596   517  2737 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{39af9ad com.google.android.gm/10142} BLOCKED
+11-24 11:30:46.310  1545  1545 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.coralstack.
+11-24 11:30:46.311  1545  3459 I AiAiEcho: AppIndexer Package:[com.zvisionclub.coralstack] UserProfile:[0] Enabled:[true].
+11-24 11:30:46.311  1545  3459 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.coralstack], userId:[0], reason:[package is updated.].
+11-24 11:30:47.283   517   590 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{5449496 com.google.android.settings.intelligence/10119} BLOCKED
+11-24 11:30:47.319   517   590 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{35e9c5d com.google.android.settings.intelligence/10119} BLOCKED
+11-24 11:30:51.260  1501  2928 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.coralstack [CONTEXT service_id=258 ]
+11-24 11:30:53.682   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{39b11d7 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:30:53.682   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{bc04ac4 com.google.android.gm/10142} BLOCKED
+11-24 11:30:53.682   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{f3fbdad com.google.android.devicelockcontroller/10172} BLOCKED
+11-24 11:30:53.682   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{abca8e2 com.google.android.rkpdapp/10173} BLOCKED
+11-24 11:30:53.682   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{e94f473 com.google.android.settings.intelligence/10119} BLOCKED
+11-24 11:30:53.683   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{6c8de6 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:31:03.729   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{64c2676 com.google.android.youtube/10139} BLOCKED
+11-24 11:31:03.729   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{b6bc7e7 com.google.android.apps.maps/10154} BLOCKED
+11-24 11:31:03.729   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{7688477 com.google.android.contacts/10155} BLOCKED
+11-24 11:31:16.779   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{63201b4 com.google.android.as/10124} BLOCKED
+11-24 11:31:16.779   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{507c1dd com.google.android.gm/10142} BLOCKED
+11-24 11:31:16.779   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{f4d1152 com.google.android.contacts/10155} BLOCKED
+11-24 11:31:21.502  1461  1461 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.coralstack fieldId=0 fieldName=null extras=null}, false)
+11-24 11:31:25.110   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{a371f22 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:30.025   517   814 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{f7deb44 com.google.android.settings.intelligence/10119} BLOCKED
+11-24 11:31:33.226   517   570 I AppsFilter: interaction: PackageSetting{559e6 com.zvisionclub.coralstack/10192} -> PackageSetting{cc411e0 com.google.android.as/10124} BLOCKED
