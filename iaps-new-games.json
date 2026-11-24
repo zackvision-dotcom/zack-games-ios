@@ -1,0 +1,203 @@
+{
+ "tossbistro": [
+  {
+   "productId": "com.zvisionclub.tossbistro.noads",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 3.99,
+   "fr-FR": {
+    "name": "Sans publicité",
+    "description": "Plus aucune publicité entre les niveaux. Les vidéos bonus restent au choix."
+   },
+   "en-US": {
+    "name": "No ads",
+    "description": "No more adverts between levels. Bonus videos stay optional."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.tossbistro.starter",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 1.99,
+   "fr-FR": {
+    "name": "Pack de démarrage",
+    "description": "La tenue « chef étoilé », la terrasse du bistro et 200 truffes."
+   },
+   "en-US": {
+    "name": "Starter pack",
+    "description": "The “star chef” outfit, the bistro terrace and 200 truffles."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.tossbistro.truffes_100",
+   "type": "CONSUMABLE",
+   "priceEUR": 1.99,
+   "fr-FR": {
+    "name": "100 truffes",
+    "description": "Pour les tenues, les décos et finir une minuterie (prix fixes)."
+   },
+   "en-US": {
+    "name": "100 truffles",
+    "description": "For outfits, decorations and finishing a timer (fixed prices)."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.tossbistro.truffes_300",
+   "type": "CONSUMABLE",
+   "priceEUR": 4.99,
+   "fr-FR": {
+    "name": "300 truffes",
+    "description": "Pour les tenues, les décos et finir une minuterie (prix fixes)."
+   },
+   "en-US": {
+    "name": "300 truffles",
+    "description": "For outfits, decorations and finishing a timer (fixed prices)."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.tossbistro.pass_saison_2026",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 2.99,
+   "fr-FR": {
+    "name": "Passe de saison : Noël",
+    "description": "Achat unique : la tenue de Noël et la bûche du bistro."
+   },
+   "en-US": {
+    "name": "Season pass: Christmas",
+    "description": "One-time purchase: the Christmas outfit and the bistro’s yule log."
+   }
+  }
+ ],
+ "nimbuscatch": [
+  {
+   "productId": "com.zvisionclub.nimbuscatch.noads",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 3.99,
+   "fr-FR": {
+    "name": "Sans publicité",
+    "description": "Plus aucune publicité entre les sorties. Les vidéos bonus restent au choix."
+   },
+   "en-US": {
+    "name": "No ads",
+    "description": "No more adverts between outings. Bonus videos stay optional."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.nimbuscatch.starter",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 1.99,
+   "fr-FR": {
+    "name": "Pack de démarrage",
+    "description": "La peinture « dirigeable rouge », le moulinet n° 2 tout de suite et 200 perles."
+   },
+   "en-US": {
+    "name": "Starter pack",
+    "description": "The “red airship” paint, reel n° 2 right away and 200 pearls."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.nimbuscatch.perles_100",
+   "type": "CONSUMABLE",
+   "priceEUR": 1.99,
+   "fr-FR": {
+    "name": "100 perles de rosée",
+    "description": "Pour les tenues, les peintures, les décos et finir un casier (prix fixes)."
+   },
+   "en-US": {
+    "name": "100 dew pearls",
+    "description": "For outfits, paints, decorations and finishing a trap (fixed prices)."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.nimbuscatch.perles_300",
+   "type": "CONSUMABLE",
+   "priceEUR": 4.99,
+   "fr-FR": {
+    "name": "300 perles de rosée",
+    "description": "Pour les tenues, les peintures, les décos et finir un casier (prix fixes)."
+   },
+   "en-US": {
+    "name": "300 dew pearls",
+    "description": "For outfits, paints, decorations and finishing a trap (fixed prices)."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.nimbuscatch.pass_saison_2026",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 2.99,
+   "fr-FR": {
+    "name": "Passe de saison : Noël",
+    "description": "Achat unique : le bonnet de Noël de Firmin et les décos d’hiver de la volière."
+   },
+   "en-US": {
+    "name": "Season pass: Christmas",
+    "description": "One-time purchase: Firmin’s Christmas hat and the aviary’s winter decorations."
+   }
+  }
+ ],
+ "jamline": [
+  {
+   "productId": "com.zvisionclub.jamline.noads",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 3.99,
+   "fr-FR": {
+    "name": "Sans pub",
+    "description": "Plus aucune publicité entre les ateliers. Les bonus par vidéo restent au choix."
+   },
+   "en-US": {
+    "name": "No ads",
+    "description": "No more ads between workshops. Video bonuses stay optional."
+   }
+  },
+  {
+   "productId": "com.zvisionclub.jamline.starter",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 1.99,
+   "fr-FR": {
+    "name": "Pack de démarrage",
+    "description": "La tenue « chef étoilée », un cerisier prêt à cueillir et 500 pièces"
+   },
+   "en-US": {
+    "name": "Starter pack",
+    "description": "The “star chef” outfit, a cherry tree ready to pick and 500 coins"
+   }
+  },
+  {
+   "productId": "com.zvisionclub.jamline.atelier_libre",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 2.99,
+   "fr-FR": {
+    "name": "Atelier libre",
+    "description": "Le bac à sable : toutes les machines, sans commande, pour construire l’usine de tes rêves"
+   },
+   "en-US": {
+    "name": "Free workshop",
+    "description": "The sandbox: every machine, no orders, to build the factory of your dreams"
+   }
+  },
+  {
+   "productId": "com.zvisionclub.jamline.miel_100",
+   "type": "CONSUMABLE",
+   "priceEUR": 1.99,
+   "fr-FR": {
+    "name": "100 pots de miel",
+    "description": "Pour les décos et les tenues à prix fixe, ou finir un arbre"
+   },
+   "en-US": {
+    "name": "100 honey jars",
+    "description": "For fixed-price decorations and outfits, or to finish a tree"
+   }
+  },
+  {
+   "productId": "com.zvisionclub.jamline.pass_saison_2026",
+   "type": "NON_CONSUMABLE",
+   "priceEUR": 2.99,
+   "fr-FR": {
+    "name": "Passe de saison hiver 2026",
+    "description": "Le sapin d’hiver, le bonnet de Noël et le cadeau du jour doublé"
+   },
+   "en-US": {
+    "name": "Winter 2026 season pass",
+    "description": "The winter tree, the Christmas hat and a doubled daily gift"
+   }
+  }
+ ]
+}
