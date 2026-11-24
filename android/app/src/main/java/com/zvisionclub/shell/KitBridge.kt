@@ -40,7 +40,7 @@ class KitBridge(private val act: MainActivity) {
         if (prefs.getInt("launches", 0) < 3 || joys < 2 || now - prefs.getLong("asked", 0) < 60L * 24 * 3600 * 1000) return false
         prefs.edit().putLong("asked", now).apply()
         val m = ReviewManagerFactory.create(act)
-        val info = suspendCancellableCoroutine { c -> m.requestReviewFlow().addOnCompleteListener { t -> if (c.isActive) c.resume(if (t.isSuccessful) t.result else null) } } ?: return false
+        val info = suspendCancellableCoroutine<com.google.android.play.core.review.ReviewInfo?> { c -> m.requestReviewFlow().addOnCompleteListener { t -> if (c.isActive) c.resume(if (t.isSuccessful) t.result else null) } } ?: return false
         return suspendCancellableCoroutine { c -> m.launchReviewFlow(act, info).addOnCompleteListener { if (c.isActive) c.resume(true) } }
     }
 
