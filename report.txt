@@ -1,3 +1,3 @@
-BUILD tossbistro v1023 VALID internal=READY_FOR_BETA_TESTING uploaded=2026-11-24T00:13
-BUILD nimbuscatch v1023 VALID internal=READY_FOR_BETA_TESTING uploaded=2026-11-24T00:14
-BUILD jamline v1023 VALID internal=READY_FOR_BETA_TESTING uploaded=2026-11-24T00:12
+REVIEW tossbistro ok
+REVIEW nimbuscatch ok
+REVIEW jamline ok
