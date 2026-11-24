@@ -1,0 +1,80 @@
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{6049963 com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{c43a960 com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{6aa8e19 com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{e404ede com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{71d68bf com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{29fb8c com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{98e38b7 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{6ccf2d5 com.google.android.uwb.resources/10180} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{b601824 com.android.cts.ctsshim/10171} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{cfe7aea com.google.android.wifi.resources/10182} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{cc9d1db com.google.android.wifi.dialog/10183} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{a414478 com.google.android.apps.wallpaper/10161} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{d76e751 com.google.android.odad/10122} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{fc15bb6 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{409b0b7 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{823024 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{1f1a78d com.android.bluetoothmidiservice/10107} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{8ff7d42 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{ffea153 com.google.android.cellbroadcastreceiver/10190} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{dc42a90 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{cde2f89 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{a0c2b8e com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{a47ffaf com.google.android.inputmethod.latin/10143} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{e95fbc android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:25:00.464   521  1398 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{5f13b45 com.google.android.apps.restore/10120} BLOCKED
+11-24 11:25:00.520  3228  3395 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.crumblecrew/app_webview/variations_seed_new"
+11-24 11:25:00.520  3228  3395 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.crumblecrew/app_webview/variations_seed"
+11-24 11:25:00.726   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{223baf8 com.google.android.youtube/10139} BLOCKED
+11-24 11:25:00.727   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{2ad7937 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:25:00.729   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{18955b3 com.google.android.as/10125} BLOCKED
+11-24 11:25:00.729   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{b083770 com.google.android.gm/10141} BLOCKED
+11-24 11:25:00.729   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{ff06059 com.google.android.devicelockcontroller/10181} BLOCKED
+11-24 11:25:00.729   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{9e67e82 com.google.android.contacts/10155} BLOCKED
+11-24 11:25:00.729   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{21c0185 com.google.android.partnersetup/10124} BLOCKED
+11-24 11:25:00.729   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{823024 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:25:00.729   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{ffea153 com.google.android.cellbroadcastreceiver/10190} BLOCKED
+11-24 11:25:00.875   521   550 I ActivityManager: Start proc 3422:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.crumblecrew/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:25:01.300  1041  1346 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.crumblecrew
+11-24 11:25:01.372   521  2282 D ConnectivityService: requestNetwork for uid/pid:10192/3228 activeRequest: null callbackRequest: 87 [NetworkRequest [ REQUEST id=88, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.crumblecrew UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:25:01.372   521   754 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=88, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.crumblecrew UnderlyingNetworks: Null] ]
+11-24 11:25:01.372   521   754 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=88, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.crumblecrew UnderlyingNetworks: Null] ]
+11-24 11:25:01.372   521   754 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=88, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.crumblecrew UnderlyingNetworks: Null] ]
+11-24 11:25:01.372   521   754 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=88, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.crumblecrew UnderlyingNetworks: Null] ]
+11-24 11:25:02.017  1041  1041 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.crumblecrew
+11-24 11:25:02.036  1041  1346 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.crumblecrew
+11-24 11:25:02.058  1581  1581 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.crumblecrew], userId:[0], reason:[package is added.].
+11-24 11:25:02.451   521  2386 D CoreBackPreview: Window{53ec873 u0 com.zvisionclub.crumblecrew/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@7a7e03c, mPriority=0, mIsAnimationCallback=false}
+11-24 11:25:02.782   521  3003 W InputManager-JNI: Input channel object '956885d Splash Screen com.zvisionclub.crumblecrew (client)' was disposed without first being removed with the input manager!
+11-24 11:25:02.794   521   538 W ziparchive: Unable to open '/data/app/~~_xvzYEkLpxQsgm9cp2zaWA==/com.zvisionclub.crumblecrew-_2xMmRtcTjHpiiosKriI-A==/base.dm': No such file or directory
+11-24 11:25:02.810   521   538 I ActivityTaskManager: Displayed com.zvisionclub.crumblecrew/com.zvisionclub.shell.MainActivity for user 0: +3s593ms
+11-24 11:25:02.949   521  2283 I ImeTracker: com.zvisionclub.crumblecrew:9a3c561a: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:25:02.949   521  2283 I ImeTracker: com.zvisionclub.crumblecrew:9a3c561a: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:25:02.965  1506  1506 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.crumblecrew fieldId=0 fieldName=null extras=null}, false)
+11-24 11:25:03.792  1581  1581 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.crumblecrew.
+11-24 11:25:03.794  1581  3133 I AiAiEcho: AppIndexer Package:[com.zvisionclub.crumblecrew] UserProfile:[0] Enabled:[true].
+11-24 11:25:03.794  1581  3133 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.crumblecrew], userId:[0], reason:[package is updated.].
+11-24 11:25:05.361   521  3037 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{78857d com.google.android.gm/10141} BLOCKED
+11-24 11:25:05.632  1581  1581 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.crumblecrew.
+11-24 11:25:05.646  1581  3133 I AiAiEcho: AppIndexer Package:[com.zvisionclub.crumblecrew] UserProfile:[0] Enabled:[true].
+11-24 11:25:05.646  1581  3133 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.crumblecrew], userId:[0], reason:[package is updated.].
+11-24 11:25:06.530   521   936 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{64d908d com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:08.483  3228  4185 D ProfileInstaller: Installing profile for com.zvisionclub.crumblecrew
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{49c2224 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{4b9b18d com.android.camera2/10146} BLOCKED
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{737bf42 com.google.android.gm/10141} BLOCKED
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{e0ebb53 com.google.android.devicelockcontroller/10181} BLOCKED
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{e8b3c90 com.google.android.rkpdapp/10174} BLOCKED
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{51cd989 com.google.android.contacts/10155} BLOCKED
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{868d8e com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:10.899   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{ba69b3c com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:25:13.291  1439  3698 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.crumblecrew [CONTEXT service_id=258 ]
+11-24 11:25:31.524   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{3f7dd93 com.google.android.youtube/10139} BLOCKED
+11-24 11:25:31.526   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{8be51d0 com.google.android.as/10125} BLOCKED
+11-24 11:25:31.526   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{21f8c4d com.google.android.apps.maps/10154} BLOCKED
+11-24 11:25:31.526   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{cd665c9 com.google.android.contacts/10155} BLOCKED
+11-24 11:25:37.328   521  3037 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{4f0c0dd com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:41.710   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{95a9fc6 com.google.android.as/10125} BLOCKED
+11-24 11:25:41.710   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{1688b87 com.google.android.gm/10141} BLOCKED
+11-24 11:25:45.721  1506  1506 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.crumblecrew fieldId=0 fieldName=null extras=null}, false)
+11-24 11:25:56.898   521   572 I AppsFilter: interaction: PackageSetting{8ed6d6a com.zvisionclub.crumblecrew/10192} -> PackageSetting{b115381 com.google.android.contacts/10155} BLOCKED
