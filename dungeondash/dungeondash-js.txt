@@ -1,0 +1,80 @@
+11-24 11:24:41.765   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{7317bc2 com.android.cts.ctsshim/10191} BLOCKED
+11-24 11:24:41.765   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{cb403b6 com.google.android.wifi.resources/10172} BLOCKED
+11-24 11:24:41.765   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{68b38b7 com.google.android.wifi.dialog/10173} BLOCKED
+11-24 11:24:41.765   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{9191824 com.google.android.apps.wallpaper/10161} BLOCKED
+11-24 11:24:41.765   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{4e26f8d com.google.android.odad/10121} BLOCKED
+11-24 11:24:41.765   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{d10a953 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:24:41.766   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{ce19290 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:24:41.776   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{2137789 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:24:41.777   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{969efcb com.android.bluetoothmidiservice/10106} BLOCKED
+11-24 11:24:41.777   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{b2d23a8 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:24:41.777   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{f058ec1 com.google.android.cellbroadcastreceiver/10170} BLOCKED
+11-24 11:24:41.777   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{122c666 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:24:41.777   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{d25bda7 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:24:41.778   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{f04d254 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:24:41.778   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{e1b55fd com.google.android.inputmethod.latin/10145} BLOCKED
+11-24 11:24:41.778   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{484e2f2 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:24:41.778   522  1727 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{2e68d43 com.google.android.apps.restore/10119} BLOCKED
+11-24 11:24:41.806  2314  2542 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.dungeondash/app_webview/variations_seed_new"
+11-24 11:24:41.806  2314  2542 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.dungeondash/app_webview/variations_seed"
+11-24 11:24:41.966   522  1716 W ProcessStats: Tracking association SourceState{d89f10f com.zvisionclub.dungeondash/10192 BTop #547} whose proc state 2 is better than process ProcessState{c1ec314 com.google.android.gms/10131 pkg=com.google.android.gms} proc state 4 (0 skipped)
+11-24 11:24:43.007   522   553 I ActivityManager: Start proc 2626:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.dungeondash/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:24:43.174  1032  1032 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.dungeondash
+11-24 11:24:43.451   522   594 D ConnectivityService: requestNetwork for uid/pid:10192/2314 activeRequest: null callbackRequest: 66 [NetworkRequest [ REQUEST id=67, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.dungeondash UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:24:43.664  1032  1322 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.dungeondash
+11-24 11:24:43.764   522   756 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=67, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.dungeondash UnderlyingNetworks: Null] ]
+11-24 11:24:43.764   522   756 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=67, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.dungeondash UnderlyingNetworks: Null] ]
+11-24 11:24:43.764   522   756 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=67, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.dungeondash UnderlyingNetworks: Null] ]
+11-24 11:24:43.764   522   756 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=67, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.dungeondash UnderlyingNetworks: Null] ]
+11-24 11:24:44.210   522  2690 D CoreBackPreview: Window{c67d7e4 u0 com.zvisionclub.dungeondash/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b55ba6b, mPriority=0, mIsAnimationCallback=false}
+11-24 11:24:44.985  1561  1561 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.dungeondash], userId:[0], reason:[package is added.].
+11-24 11:24:45.184   522   541 W ziparchive: Unable to open '/data/app/~~FOm13VYuXPq-yXYIxRZBTw==/com.zvisionclub.dungeondash-C3trnArs6ydcnICckn8bsg==/base.dm': No such file or directory
+11-24 11:24:45.189   522   541 I ActivityTaskManager: Displayed com.zvisionclub.dungeondash/com.zvisionclub.shell.MainActivity for user 0: +4s727ms
+11-24 11:24:45.218   522  2555 W InputManager-JNI: Input channel object 'e123442 Splash Screen com.zvisionclub.dungeondash (client)' was disposed without first being removed with the input manager!
+11-24 11:24:45.219   522  1776 D CoreBackPreview: Window{e123442 u0 Splash Screen com.zvisionclub.dungeondash EXITING}: Setting back callback null
+11-24 11:24:45.221   522  1665 I ImeTracker: com.zvisionclub.dungeondash:1c0eb100: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:24:45.222   522  1665 I ImeTracker: com.zvisionclub.dungeondash:1c0eb100: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:24:45.260  1487  1487 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.dungeondash fieldId=0 fieldName=null extras=null}, false)
+11-24 11:24:47.985   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{8df1916 com.google.android.youtube/10138} BLOCKED
+11-24 11:24:47.985   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{da69297 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:24:47.985   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{594934 com.google.android.as/10125} BLOCKED
+11-24 11:24:47.985   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{8609c84 com.google.android.gm/10141} BLOCKED
+11-24 11:24:47.986   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{1f3a682 com.google.android.devicelockcontroller/10188} BLOCKED
+11-24 11:24:47.986   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{2eb0c6d com.google.android.contacts/10154} BLOCKED
+11-24 11:24:47.986   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{4c7e17e com.google.android.partnersetup/10124} BLOCKED
+11-24 11:24:47.986   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{52bb0a2 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:24:47.986   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{2b7c133 com.google.android.cellbroadcastreceiver/10170} BLOCKED
+11-24 11:24:47.987   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{e1b55fd com.google.android.inputmethod.latin/10145} BLOCKED
+11-24 11:24:48.581  1086  1151 I Launcher.IconCache: Database bulk icon loading failed, using fallback bulk icon loading for: ComponentInfo{com.zvisionclub.dungeondash/com.zvisionclub.shell.MainActivity}
+11-24 11:24:49.734  2314  3400 D ProfileInstaller: Installing profile for com.zvisionclub.dungeondash
+11-24 11:24:50.518  1032  1032 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.dungeondash
+11-24 11:24:50.529  1032  1322 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.dungeondash
+11-24 11:24:50.769  1561  1561 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.dungeondash.
+11-24 11:24:50.769  1561  2933 I AiAiEcho: AppIndexer Package:[com.zvisionclub.dungeondash] UserProfile:[0] Enabled:[true].
+11-24 11:24:50.769  1561  2933 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.dungeondash], userId:[0], reason:[package is updated.].
+11-24 11:24:57.665   522  1729 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{6a4ff20 com.google.android.gm/10141} BLOCKED
+11-24 11:24:58.053  1434  3202 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.dungeondash [CONTEXT service_id=258 ]
+11-24 11:24:58.720   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{390740a com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:24:58.720   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{198a47b com.android.camera2/10146} BLOCKED
+11-24 11:24:58.720   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{23db298 com.google.android.devicelockcontroller/10188} BLOCKED
+11-24 11:24:58.720   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{a3f8af1 com.google.android.rkpdapp/10176} BLOCKED
+11-24 11:24:58.720   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{c9c6d6 com.google.android.contacts/10154} BLOCKED
+11-24 11:24:58.720   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{b36515f com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:25:01.804  1561  1561 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.dungeondash.
+11-24 11:25:01.805  1561  2434 I AiAiEcho: AppIndexer Package:[com.zvisionclub.dungeondash] UserProfile:[0] Enabled:[true].
+11-24 11:25:01.806  1561  2434 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.dungeondash], userId:[0], reason:[package is updated.].
+11-24 11:25:02.117   522  1775 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{eea718a com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:02.118   522  1775 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{32693fb com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:08.723   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{4f3e3fa com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:25:08.724   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{8aa6dab com.google.android.gm/10141} BLOCKED
+11-24 11:25:08.725   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{b3cfc08 com.google.android.rkpdapp/10176} BLOCKED
+11-24 11:25:08.725   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{3f1efa1 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:19.866   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{75cab6b com.google.android.youtube/10138} BLOCKED
+11-24 11:25:19.866   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{e71c6c8 com.google.android.as/10125} BLOCKED
+11-24 11:25:19.866   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{3865330 com.google.android.apps.maps/10155} BLOCKED
+11-24 11:25:19.866   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{7b2c361 com.google.android.contacts/10154} BLOCKED
+11-24 11:25:27.043  1487  1487 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.dungeondash fieldId=0 fieldName=null extras=null}, false)
+11-24 11:25:32.154   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{7d86029 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:25:32.154   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{78f2d5b com.google.android.contacts/10154} BLOCKED
+11-24 11:25:35.251   522  1776 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{4584ae8 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:37.634   522   576 I AppsFilter: interaction: PackageSetting{426e02f com.zvisionclub.dungeondash/10192} -> PackageSetting{66e2792 com.google.android.as/10125} BLOCKED
