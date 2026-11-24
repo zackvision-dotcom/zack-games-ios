@@ -1,0 +1,200 @@
+11-24 11:31:01.335   514   533 V WindowManager:     info={id=5 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{249c816 Task{e72fbd4 #8 type=standard A=10192:com.zvisionclub.tossbistro}}} m=OPEN f=NONE leash=Surface(name=Task=8)/@0xef6e14a sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0},{WCT{RemoteToken{686384 Task{746c560 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xb341da5 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0}]}
+11-24 11:31:01.566  3121  3121 I AndroidRuntime: VM exiting with result code 0.
+11-24 11:31:02.010  3184  3184 W ziparchive: Unable to open '/data/app/~~Mt4bZkQolEurGSxkZdchMQ==/com.zvisionclub.tossbistro-SeMQNurnqoxrqAy_csLjPA==/base.dm': No such file or directory
+11-24 11:31:02.013  3184  3184 W ziparchive: Unable to open '/data/app/~~Mt4bZkQolEurGSxkZdchMQ==/com.zvisionclub.tossbistro-SeMQNurnqoxrqAy_csLjPA==/base.dm': No such file or directory
+11-24 11:31:02.771  3184  3184 D nativeloader: Configuring clns-6 for other apk /data/app/~~Mt4bZkQolEurGSxkZdchMQ==/com.zvisionclub.tossbistro-SeMQNurnqoxrqAy_csLjPA==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~Mt4bZkQolEurGSxkZdchMQ==/com.zvisionclub.tossbistro-SeMQNurnqoxrqAy_csLjPA==/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.zvisionclub.tossbistro
+11-24 11:31:02.850   514   587 I AppsFilter: interaction: PackageSetting{4211265 com.zvisionclub.tossbistro/10192} -> PackageSetting{4cdcb3a com.google.android.gm/10143} BLOCKED
+11-24 11:31:02.981  3184  3184 V GraphicsEnvironment: ANGLE GameManagerService for com.zvisionclub.tossbistro: false
+11-24 11:31:02.981  3184  3184 V GraphicsEnvironment: com.zvisionclub.tossbistro is not listed in per-application setting
+11-24 11:31:03.269  1041  1041 D CarrierSvcBindHelper: onPackageAdded: com.zvisionclub.tossbistro
+11-24 11:31:03.443  1041  1355 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.tossbistro
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{65c7a8c com.android.cts.priv.ctsshim/10185} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{6ff05d5 com.google.android.youtube/10139} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{61a91ea com.android.internal.display.cutout.emulation.corner/10025} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{6c19cdb com.android.internal.display.cutout.emulation.double/10048} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{a9cb378 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{a372a51 com.google.android.onetimeinitializer/10126} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{407e2b6 com.google.android.ext.shared/10100} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d332bb7 com.android.internal.systemui.navbar.gestural_wide_back/10007} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{ca58f24 com.android.virtualmachine.res/10173} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{df31a8d com.google.android.federatedcompute/10183} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{8a77442 com.android.managedprovisioning.auto_generated_rro_product__/10024} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1c4cc53 com.android.carrierconfig.auto_generated_rro_vendor__/10078} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{23e7990 com.android.systemui.emulation.pixel_3_xl/10034} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{303d289 com.android.systemui.emulation.pixel_4_xl/10059} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1bc928e com.android.systemui.emulation.pixel_fold/10009} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{9c5daaf com.android.simappdialog.auto_generated_rro_product__/10030} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{4399ebc com.android.htmlviewer/10115} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{c4e0e45 com.google.android.health.connect.backuprestore/10171} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{3f3499a com.android.systemui.auto_generated_rro_product__/10031} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{61f72cb com.google.android.soundpicker/10137} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{45feaa8 com.google.android.marvin.talkbackoverlay/10077} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{c4649c1 com.google.android.configupdater/10129} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{ac6566 com.android.internal.emulation.pixel_3a_xl/10044} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{33070a7 com.android.internal.emulation.pixel_6_pro/10018} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{61d0954 com.android.internal.emulation.pixel_7_pro/10004} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e2cc0fd com.android.internal.emulation.pixel_8_pro/10058} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{c8971f2 com.android.internal.emulation.pixel_3a/10053} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{a697043 com.android.internal.emulation.pixel_4a/10011} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{5eb66c0 com.android.internal.emulation.pixel_6a/10023} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{7096ff9 com.android.internal.emulation.pixel_7a/10033} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{2b8bb3e com.google.android.overlay.googlewebview/10049} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1a8cd9f com.google.android.hotspot2.osulogin/10182} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b802eec com.android.simappdialog/10112} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{a6812b5 com.android.internal.display.cutout.emulation.hole/10073} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1014d4a com.android.internal.display.cutout.emulation.tall/10065} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{456a4bb com.android.internal.systemui.navbar.threebutton/10068} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{2b74dd8 com.android.camera2/10147} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{ed42531 com.android.systemui.auto_generated_rro_vendor__/10076} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{88ef416 com.google.android.deskclock/10151} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{240d197 com.android.internal.systemui.navbar.twobutton/10020} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{73f6f84 com.google.android.as/10125} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{4cdcb3a com.google.android.gm/10143} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e14e36d com.android.internal.systemui.navbar.gestural_extra_wide_back/10045} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{f7e3ba2 com.android.systemui.emulation.pixel_3/10015} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{36f033 com.android.systemui.emulation.pixel_4/10037} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{f05fff0 com.android.systemui.emulation.pixel_5/10071} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d294969 com.android.systemui.emulation.pixel_6/10074} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{f286fee com.android.systemui.emulation.pixel_7/10072} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{6665c8f com.android.systemui.emulation.pixel_8/10070} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{f632b1c com.android.nfc.auto_generated_rro_product__/10027} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{8041325 com.android.printspooler/10104} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b2f9cfa com.android.emergency.auto_generated_rro_product__/10041} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{87632ab com.google.android.connectivity.resources.goldfish.overlay/10079} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{905dd08 com.android.dreams.basic/10103} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d07bca1 com.google.android.networkstack.tethering.emulator/10022} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d4a8ec6 com.android.providers.settings.auto_generated_rro_product__/10002} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{3634e87 com.google.android.as.oss/10122} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{69fc1b4 com.android.traceur.auto_generated_rro_product__/10005} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{44281dd com.google.android.devicelockcontroller/10176} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1d0d152 com.android.internal.emulation.pixel_3/10046} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d1c4c23 com.android.internal.emulation.pixel_4/10060} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{a514520 com.android.internal.emulation.pixel_5/10012} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e6a5ed9 com.android.internal.emulation.pixel_6/10038} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{106b09e com.android.internal.emulation.pixel_7/10067} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1dd877f com.android.internal.emulation.pixel_8/10039} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{5d5934c com.google.android.captiveportallogin/10113} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{7990f95 com.android.musicfx/10088} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{eef87d2 com.google.android.apps.maps/10154} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{12938aa com.google.android.modulemetadata/10146} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b4d1c9b com.google.android.markup/10135} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{96e9838 com.android.providers.settings.auto_generated_rro_vendor__/10080} BLOCKED
+11-24 11:31:03.517   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{9c81011 com.google.android.rkpdapp/10175} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d3a3576 com.google.android.contacts/10156} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d56e777 com.android.server.telecom.auto_generated_rro_product__/10032} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{590ffe4 com.google.android.overlay.googleconfig/10055} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b0c9c4d com.android.bips.auto_generated_rro_product__/10035} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{c8c3302 com.google.android.apps.customization.pixel/10145} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{4c88413 com.google.android.tag/10082} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b503650 com.google.android.overlay.permissioncontroller/10003} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{393b049 com.google.android.partnersetup/10124} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{70e7d4e com.google.android.apps.wallpaper.nexus/10142} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{3ad4e6f com.google.android.apps.nexuslauncher/10169} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{78a677c com.google.android.nearby.halfsheet/10191} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{75e0805 com.android.theme.font.notoserifsource/10066} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{259205a com.google.android.safetycenter.resources/10187} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{76a628b com.android.internal.display.cutout.emulation.waterfall/10040} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{4d47f68 com.android.internal.systemui.navbar.transparent/10029} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{fbc1f81 com.google.android.connectivity.resources/10190} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{378e826 com.android.providers.contacts.auto_generated_rro_product__/10019} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{49a9c67 com.google.android.feedback/10162} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{262a14 com.google.android.printservice.recommendation/10110} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{8a32bd com.google.android.apps.photos/10141} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{17b60b2 com.google.android.documentsui/10099} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{4aa9803 com.android.systemui.emulation.pixel_3a_xl/10021} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{c45d380 com.android.systemui.emulation.pixel_6_pro/10063} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{52c3db9 com.android.systemui.emulation.pixel_7_pro/10054} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{4bad5fe com.android.systemui.emulation.pixel_8_pro/10001} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{134b15f com.google.mainline.telemetry/10152} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{ff4a7ac com.android.carrierconfig.auto_generated_rro_product__/10064} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{149fc75 com.android.providers.partnerbookmarks/10101} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{eea540a com.android.wallpaper.livepicker/10089} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{91d047b com.android.providers.telephony.auto_generated_rro_product__/10062} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{ada9298 com.android.phone.auto_generated_rro_vendor__/10081} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{14aeaf1 com.google.mainline.adservices/10136} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{7e1a6d6 com.android.imsserviceentitlement/10118} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b6d6d57 com.google.android.healthconnect.controller/10170} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d324044 com.android.internal.emulation.pixel_2_xl/10016} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{692452d com.android.internal.emulation.pixel_3_xl/10056} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b295a62 com.android.internal.emulation.pixel_4_xl/10047} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{3f187f3 com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e351cb0 com.android.bookmarkprovider/10114} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b7b0729 com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{246baae com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{592b04f com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d4753dc com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{b13ece5 com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{7c7d3ba com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e74026b com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{c58d801 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{9e3d1c8 com.google.android.uwb.resources/10189} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{56a76a6 com.android.cts.ctsshim/10186} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{89b7261 com.google.android.wifi.resources/10180} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{f0f7186 com.google.android.wifi.dialog/10181} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1ce5a47 com.google.android.apps.wallpaper/10161} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e484274 com.google.android.odad/10121} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{2bbd39d com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{ce12012 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{38c53e3 com.google.android.apps.youtube.music/10155} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{8e111e0 com.android.bluetoothmidiservice/10108} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e870c99 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{cad2b5e com.google.android.cellbroadcastreceiver/10174} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{1a64b3f com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{756c0c android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{632d955 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{e9c9f6a com.google.android.inputmethod.latin/10140} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{73e5c5b android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:31:03.518   514   989 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{f133cf8 com.google.android.apps.restore/10120} BLOCKED
+11-24 11:31:03.733  3184  3448 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.tossbistro/app_webview/variations_seed_new"
+11-24 11:31:03.734  3184  3448 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.tossbistro/app_webview/variations_seed"
+11-24 11:31:03.943  1393  1454 W .gms.persistent: Verification of void org.chromium.net.impl.CronetUrlRequestContext.g() took 119.691ms (133.68 bytecodes/s) (1592B approximate peak alloc)
+11-24 11:31:03.988   514   544 I ActivityManager: Start proc 3477:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.tossbistro/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:31:04.103  2891  3456 W id.gms.unstable: Verification of void org.chromium.base.ApplicationStatus.registerThreadSafeNativeApplicationStateListener() took 128.345ms (179.20 bytecodes/s) (1712B approximate peak alloc)
+11-24 11:31:04.299   514   586 D ConnectivityService: requestNetwork for uid/pid:10192/3184 activeRequest: null callbackRequest: 90 [NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.tossbistro UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:31:04.320   514   544 I ActivityManager: Start proc 3555:com.google.android.webview:webview_apk/u0a133 for service {com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}
+11-24 11:31:04.415  3477  3477 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-24 11:31:04.420   514   751 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.tossbistro UnderlyingNetworks: Null] ]
+11-24 11:31:04.420   514   751 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.tossbistro UnderlyingNetworks: Null] ]
+11-24 11:31:04.420   514   751 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.tossbistro UnderlyingNetworks: Null] ]
+11-24 11:31:04.446   514   751 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.tossbistro UnderlyingNetworks: Null] ]
+11-24 11:31:04.668   514  1641 D CoreBackPreview: Window{df010d4 u0 com.zvisionclub.tossbistro/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@8dc735d, mPriority=0, mIsAnimationCallback=false}
+11-24 11:31:04.747  1041  1041 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.tossbistro
+11-24 11:31:04.776  1041  1355 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.tossbistro
+11-24 11:31:05.102   514  3060 D CoreBackPreview: Window{4243a70 u0 Splash Screen com.zvisionclub.tossbistro EXITING}: Setting back callback null
+11-24 11:31:05.103   514   941 W InputManager-JNI: Input channel object '4243a70 Splash Screen com.zvisionclub.tossbistro (client)' was disposed without first being removed with the input manager!
+11-24 11:31:05.147   514   902 I ImeTracker: com.zvisionclub.tossbistro:339b8b52: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:31:05.147   514   902 I ImeTracker: com.zvisionclub.tossbistro:339b8b52: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:31:05.153  1514  1514 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.tossbistro fieldId=0 fieldName=null extras=null}, false)
+11-24 11:31:05.233   514   533 W ziparchive: Unable to open '/data/app/~~Mt4bZkQolEurGSxkZdchMQ==/com.zvisionclub.tossbistro-SeMQNurnqoxrqAy_csLjPA==/base.dm': No such file or directory
+11-24 11:31:05.233   514   533 I ActivityTaskManager: Displayed com.zvisionclub.tossbistro/com.zvisionclub.shell.MainActivity for user 0: +4s54ms
+11-24 11:31:06.382  3555  3719 W cr_AWNetworkFetcherTask: 	at org.chromium.android_webview.nonembedded.NetworkFetcherTask.download(chromium-TrichromeWebViewGoogle6432.apk-stable-567263637:48)
+11-24 11:31:08.988   827   827 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.zvisionclub.tossbistro, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
+11-24 11:31:09.104   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{72296ce com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:09.104   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{2b74dd8 com.android.camera2/10147} BLOCKED
+11-24 11:31:09.104   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{50129ef com.google.android.gm/10143} BLOCKED
+11-24 11:31:09.104   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{a1fdcfc com.google.android.devicelockcontroller/10176} BLOCKED
+11-24 11:31:09.104   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{bce0f85 com.google.android.rkpdapp/10175} BLOCKED
+11-24 11:31:09.104   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{d3a3576 com.google.android.contacts/10156} BLOCKED
+11-24 11:31:09.104   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{7f5afe2 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:31:09.105   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{38c53e3 com.google.android.apps.youtube.music/10155} BLOCKED
+11-24 11:31:09.839  3184  4008 D ProfileInstaller: Installing profile for com.zvisionclub.tossbistro
+11-24 11:31:10.049  1041  1041 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.tossbistro
+11-24 11:31:10.062  1041  1355 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.tossbistro
+11-24 11:31:10.682   514  1563 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{8b5538c com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:31:10.684   514   587 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{11592ea com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:31:12.822  1585  1585 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.tossbistro], userId:[0], reason:[package is added.].
+11-24 11:31:14.020  1585  1585 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.tossbistro.
+11-24 11:31:14.021  1585  3716 I AiAiEcho: AppIndexer Package:[com.zvisionclub.tossbistro] UserProfile:[0] Enabled:[true].
+11-24 11:31:14.021  1585  3716 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.tossbistro], userId:[0], reason:[package is updated.].
+11-24 11:31:16.803  1440  4179 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.tossbistro [CONTEXT service_id=258 ]
+11-24 11:31:19.218   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{59ee530 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:20.244  1585  1585 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.tossbistro.
+11-24 11:31:20.247  1585  2657 I AiAiEcho: AppIndexer Package:[com.zvisionclub.tossbistro] UserProfile:[0] Enabled:[true].
+11-24 11:31:20.247  1585  2657 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.tossbistro], userId:[0], reason:[package is updated.].
+11-24 11:31:30.498   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{9e5b1a9 com.google.android.youtube/10139} BLOCKED
+11-24 11:31:30.499   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{292d379 com.google.android.apps.maps/10154} BLOCKED
+11-24 11:31:30.499   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{ee39ecf com.google.android.contacts/10156} BLOCKED
+11-24 11:31:33.767  4240  4724 I cr_CronetUrlRequestContext: destroyNativeStreamLocked org.chromium.net.impl.CronetBidirectionalStream@728f652
+11-24 11:31:41.123   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{369e16e com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:41.123   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{fd8b00f com.google.android.as/10125} BLOCKED
+11-24 11:31:41.123   514   566 I AppsFilter: interaction: PackageSetting{a9e83bf com.zvisionclub.tossbistro/10192} -> PackageSetting{f81b89c com.google.android.contacts/10156} BLOCKED
