@@ -453,6 +453,47 @@ if __name__ == '__main__':
                 a = iap['attributes']
                 print('IAPSTATE', g, a['productId'].split('.')[-1], a['state'])
         sys.exit(0)
+    if os.environ.get('IAPNEW'):
+        # Creates the in-app purchases of iaps-new-games.json (name, FR/EN texts, price from the FRA price point, every territory but CHN).
+        spec = json.load(open(os.path.join(HERE, 'iaps-new-games.json'), encoding='utf-8'))
+        terr = [t['id'] for t in call('GET', '/territories?limit=200')['data'] if t['id'] != 'CHN']
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            have = {i['attributes']['productId']: i for i in call('GET', f"/apps/{app['id']}/inAppPurchasesV2?limit=50")['data']}
+            for p in spec.get(g, []):
+                pid = p['productId']
+                if pid in have:
+                    iid = have[pid]['id']; print('IAPNEW', pid, 'exists', have[pid]['attributes'].get('state'))
+                else:
+                    iid = call('POST', 'https://api.appstoreconnect.apple.com/v2/inAppPurchases', {'data': {'type': 'inAppPurchases',
+                        'attributes': {'name': p['fr-FR']['name'][:64], 'productId': pid, 'inAppPurchaseType': p['type'], 'familySharable': False},
+                        'relationships': {'app': {'data': {'type': 'apps', 'id': app['id']}}}}})['data']['id']
+                    print('IAPNEW', pid, 'created', iid)
+                locs = {l['attributes']['locale'] for l in call('GET', f"https://api.appstoreconnect.apple.com/v2/inAppPurchases/{iid}/inAppPurchaseLocalizations?limit=50")['data']}
+                for loc in LOCALES:
+                    if loc not in locs:
+                        call('POST', '/inAppPurchaseLocalizations', {'data': {'type': 'inAppPurchaseLocalizations',
+                            'attributes': {'locale': loc, 'name': p[loc]['name'][:35], 'description': p[loc]['description'][:55]},
+                            'relationships': {'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iid}}}}})
+                sched = call('GET', f"https://api.appstoreconnect.apple.com/v2/inAppPurchases/{iid}/iapPriceSchedule", ok=(200, 404))
+                if not sched.get('data'):
+                    pts = call('GET', f"https://api.appstoreconnect.apple.com/v2/inAppPurchases/{iid}/pricePoints?filter[territory]=FRA&limit=8000")['data']
+                    pp = next((x for x in pts if abs(float(x['attributes']['customerPrice']) - p['priceEUR']) < 0.001), None)
+                    if not pp:
+                        print('IAPNEW', pid, 'NO PRICE POINT', p['priceEUR']); continue
+                    call('POST', '/inAppPurchasePriceSchedules', {'data': {'type': 'inAppPurchasePriceSchedules', 'relationships': {
+                        'inAppPurchase': {'data': {'type': 'inAppPurchases', 'id': iid}}, 'baseTerritory': {'data': {'type': 'territories', 'id': 'FRA'}},
+                        'manualPrices': {'data': [{'type': 'inAppPurchasePrices', 'id': '${p1}'}]}}},
+                        'included': [{'type': 'inAppPurchasePrices', 'id': '${p1}', 'attributes': {'startDate': None},
+                                      'relationships': {'inAppPurchasePricePoint': {'data': {'type': 'inAppPurchasePricePoints', 'id': pp['id']}}}}]})
+                    print('IAPNEW', pid, 'price', p['priceEUR'])
+                av = call('GET', f"https://api.appstoreconnect.apple.com/v2/inAppPurchases/{iid}/inAppPurchaseAvailability", ok=(200, 404))
+                if not av.get('data'):
+                    call('POST', '/inAppPurchaseAvailabilities', {'data': {'type': 'inAppPurchaseAvailabilities', 'attributes': {'availableInNewTerritories': False},
+                        'relationships': {'inAppPurchase': {'data': {'type': 'inAppPurchases', 'id': iid}},
+                                          'availableTerritories': {'data': [{'type': 'territories', 'id': t} for t in terr]}}}})
+                    print('IAPNEW', pid, 'availability', len(terr))
+        sys.exit(0)
     if os.environ.get('IAPSHOT'):
         # App Review screenshot of every in-app purchase: media/<suffix>/iap-review.jpg (the shop screen)
         for g in sys.argv[1:]:
