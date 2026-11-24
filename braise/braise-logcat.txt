@@ -1,0 +1,200 @@
+11-24 09:42:47.869   518   535 V WindowManager:     info={id=6 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{342b3a1 Task{460fc8f #8 type=standard A=10192:com.zvisionclub.braise}}} m=OPEN f=NONE leash=Surface(name=Task=8)/@0x63491ab sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0 endFixedRotation=1},{WCT{RemoteToken{8289d87 Task{c0c21a7 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0xac294ef sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0}]}
+11-24 09:42:48.000  1595  1595 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.braise], userId:[0], reason:[package is added.].
+11-24 09:42:48.064  1595  1595 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.braise.
+11-24 09:42:48.077  1595  2433 I AiAiEcho: AppIndexer Package:[com.zvisionclub.braise] UserProfile:[0] Enabled:[true].
+11-24 09:42:48.077  1595  2433 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.braise], userId:[0], reason:[package is updated.].
+11-24 09:42:48.153  3257  3257 W ziparchive: Unable to open '/data/app/~~t5rzAKyZI0PWz6EqZQBNxg==/com.zvisionclub.braise-i9fPFStecyaIEOZTLa18wA==/base.dm': No such file or directory
+11-24 09:42:48.167  3257  3257 W ziparchive: Unable to open '/data/app/~~t5rzAKyZI0PWz6EqZQBNxg==/com.zvisionclub.braise-i9fPFStecyaIEOZTLa18wA==/base.dm': No such file or directory
+11-24 09:42:48.347  1047  1318 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.braise
+11-24 09:42:48.455   518   535 V WindowManager:     info={id=7 t=CHANGE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{342b3a1 Task{460fc8f #8 type=standard A=10192:com.zvisionclub.braise}}} m=CHANGE f=NONE p=WCT{RemoteToken{f270341 DefaultTaskDisplayArea@190274492}} leash=Surface(name=Task=8)/@0x63491ab sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 640, 320) d=0 r=0->1:-1},{WCT{RemoteToken{f270341 DefaultTaskDisplayArea@190274492}} m=CHANGE f=NONE p=WCT{RemoteToken{be060e6 Display{#0 state=ON size=640x320 ROTATION_90}}} leash=Surface(name=DefaultTaskDisplayArea)/@0xcaacdce sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 640, 320) d=0 r=0->1:-1},{WCT{RemoteToken{be060e6 Display{#0 state=ON size=640x320 ROTATION_90}}} m=CHANGE f=IS_DISPLAY leash=Surface(name=WindowedMagnification:0:31)/@0xc691973 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 640, 320) d=0 r=0->1:3}]}
+11-24 09:42:48.561  3257  3257 D nativeloader: Configuring clns-6 for other apk /data/app/~~t5rzAKyZI0PWz6EqZQBNxg==/com.zvisionclub.braise-i9fPFStecyaIEOZTLa18wA==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~t5rzAKyZI0PWz6EqZQBNxg==/com.zvisionclub.braise-i9fPFStecyaIEOZTLa18wA==/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.zvisionclub.braise
+11-24 09:42:48.700  3257  3257 V GraphicsEnvironment: ANGLE GameManagerService for com.zvisionclub.braise: false
+11-24 09:42:48.700  3257  3257 V GraphicsEnvironment: com.zvisionclub.braise is not listed in per-application setting
+11-24 09:42:48.726  1047  1047 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.braise
+11-24 09:42:48.727  1047  1318 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.braise
+11-24 09:42:49.159   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{fd84f32 com.android.cts.priv.ctsshim/10170} BLOCKED
+11-24 09:42:49.163   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{9e72483 com.google.android.youtube/10139} BLOCKED
+11-24 09:42:49.163   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4dca600 com.android.internal.display.cutout.emulation.corner/10025} BLOCKED
+11-24 09:42:49.163   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{86de39 com.android.internal.display.cutout.emulation.double/10048} BLOCKED
+11-24 09:42:49.163   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a382c7e com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 09:42:49.163   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{eed85df com.google.android.onetimeinitializer/10126} BLOCKED
+11-24 09:42:49.163   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{366222c com.google.android.ext.shared/10100} BLOCKED
+11-24 09:42:49.163   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{aee24f5 com.android.internal.systemui.navbar.gestural_wide_back/10007} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{ecea0fb com.android.virtualmachine.res/10188} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{293518 com.google.android.federatedcompute/10180} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{8491b71 com.android.managedprovisioning.auto_generated_rro_product__/10024} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{7e34d56 com.android.carrierconfig.auto_generated_rro_vendor__/10078} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{3dc51d7 com.android.systemui.emulation.pixel_3_xl/10034} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{9088ac4 com.android.systemui.emulation.pixel_4_xl/10059} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a82fdad com.android.systemui.emulation.pixel_fold/10009} BLOCKED
+11-24 09:42:49.164   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{3dee8e2 com.android.simappdialog.auto_generated_rro_product__/10030} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1aa3473 com.android.htmlviewer/10114} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{5658f30 com.google.android.health.connect.backuprestore/10187} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{cfec7a9 com.android.systemui.auto_generated_rro_product__/10031} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{f06b12e com.google.android.soundpicker/10137} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{769a4cf com.google.android.marvin.talkbackoverlay/10077} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{f4c6e5c com.google.android.configupdater/10130} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4533565 com.android.internal.emulation.pixel_3a_xl/10044} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{2d0b23a com.android.internal.emulation.pixel_6_pro/10018} BLOCKED
+11-24 09:42:49.165   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c05beeb com.android.internal.emulation.pixel_7_pro/10004} BLOCKED
+11-24 09:42:49.171   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{788bb24 com.android.internal.emulation.pixel_8_pro/10058} BLOCKED
+11-24 09:42:49.171   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{14d68d com.android.internal.emulation.pixel_3a/10053} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4c8042 com.android.internal.emulation.pixel_4a/10011} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4b2e853 com.android.internal.emulation.pixel_6a/10023} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{6286590 com.android.internal.emulation.pixel_7a/10033} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{b854e89 com.google.android.overlay.googlewebview/10049} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{379b6af com.google.android.hotspot2.osulogin/10191} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{ad64abc com.android.simappdialog/10111} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{16b4a45 com.android.internal.display.cutout.emulation.hole/10073} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1add59a com.android.internal.display.cutout.emulation.tall/10065} BLOCKED
+11-24 09:42:49.172   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d350ecb com.android.internal.systemui.navbar.threebutton/10068} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{61b56a8 com.android.camera2/10144} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d83b166 com.android.systemui.auto_generated_rro_vendor__/10076} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c03cca7 com.google.android.deskclock/10152} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{6233554 com.android.internal.systemui.navbar.twobutton/10020} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e2852c0 com.google.android.as/10125} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e1ebf9 com.google.android.gm/10142} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1ad873e com.android.internal.systemui.navbar.gestural_extra_wide_back/10045} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e0ba99f com.android.systemui.emulation.pixel_3/10015} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{89fdaec com.android.systemui.emulation.pixel_4/10037} BLOCKED
+11-24 09:42:49.173   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{f4c4eb5 com.android.systemui.emulation.pixel_5/10071} BLOCKED
+11-24 09:42:49.174   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{876d94a com.android.systemui.emulation.pixel_6/10074} BLOCKED
+11-24 09:42:49.174   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a0b40bb com.android.systemui.emulation.pixel_7/10072} BLOCKED
+11-24 09:42:49.174   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{25b9d8 com.android.systemui.emulation.pixel_8/10070} BLOCKED
+11-24 09:42:49.174   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{3c02131 com.android.nfc.auto_generated_rro_product__/10027} BLOCKED
+11-24 09:42:49.175   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{fd14016 com.android.printspooler/10104} BLOCKED
+11-24 09:42:49.175   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4a32d97 com.android.emergency.auto_generated_rro_product__/10041} BLOCKED
+11-24 09:42:49.175   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{b289b84 com.google.android.connectivity.resources.goldfish.overlay/10079} BLOCKED
+11-24 09:42:49.176   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{bc49f6d com.android.dreams.basic/10103} BLOCKED
+11-24 09:42:49.176   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{69947a2 com.google.android.networkstack.tethering.emulator/10022} BLOCKED
+11-24 09:42:49.176   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c630c33 com.android.providers.settings.auto_generated_rro_product__/10002} BLOCKED
+11-24 09:42:49.179   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{655ebf0 com.google.android.as.oss/10121} BLOCKED
+11-24 09:42:49.179   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c18c569 com.android.traceur.auto_generated_rro_product__/10005} BLOCKED
+11-24 09:42:49.179   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{ae83bee com.google.android.devicelockcontroller/10185} BLOCKED
+11-24 09:42:49.179   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c6f4f25 com.android.internal.emulation.pixel_3/10046} BLOCKED
+11-24 09:42:49.179   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{12028fa com.android.internal.emulation.pixel_4/10060} BLOCKED
+11-24 09:42:49.182   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{8174377 com.android.internal.emulation.pixel_5/10012} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d802be4 com.android.internal.emulation.pixel_6/10038} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{34a584d com.android.internal.emulation.pixel_7/10067} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{61d3f02 com.android.internal.emulation.pixel_8/10039} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{132a013 com.google.android.captiveportallogin/10116} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1062250 com.android.musicfx/10088} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{5fc9d34 com.google.android.apps.maps/10154} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{7f12c49 com.google.android.modulemetadata/10147} BLOCKED
+11-24 09:42:49.183   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{6a4494e com.google.android.markup/10135} BLOCKED
+11-24 09:42:49.186   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{29d2a6f com.android.providers.settings.auto_generated_rro_vendor__/10080} BLOCKED
+11-24 09:42:49.187   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{b3137c com.google.android.rkpdapp/10184} BLOCKED
+11-24 09:42:49.187   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a174405 com.google.android.contacts/10155} BLOCKED
+11-24 09:42:49.188   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{37fac5a com.android.server.telecom.auto_generated_rro_product__/10032} BLOCKED
+11-24 09:42:49.188   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{b7bfe8b com.google.android.overlay.googleconfig/10055} BLOCKED
+11-24 09:42:49.188   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{5dbeb68 com.android.bips.auto_generated_rro_product__/10035} BLOCKED
+11-24 09:42:49.188   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{acd1b81 com.google.android.apps.customization.pixel/10143} BLOCKED
+11-24 09:42:49.188   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e7c3426 com.google.android.tag/10082} BLOCKED
+11-24 09:42:49.189   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e29f867 com.google.android.overlay.permissioncontroller/10003} BLOCKED
+11-24 09:42:49.189   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{8385614 com.google.android.partnersetup/10124} BLOCKED
+11-24 09:42:49.191   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{dd3b403 com.google.android.apps.wallpaper.nexus/10141} BLOCKED
+11-24 09:42:49.194   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{14ebf80 com.google.android.apps.nexuslauncher/10169} BLOCKED
+11-24 09:42:49.194   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{9e0b9b9 com.google.android.nearby.halfsheet/10183} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{2cda07b com.android.theme.font.notoserifsource/10066} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{294fe98 com.google.android.safetycenter.resources/10178} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{92e6f1 com.android.internal.display.cutout.emulation.waterfall/10040} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4ff2d6 com.android.internal.systemui.navbar.transparent/10029} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{58bc957 com.google.android.connectivity.resources/10182} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4276c44 com.android.providers.contacts.auto_generated_rro_product__/10019} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{85e012d com.google.android.feedback/10162} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a306662 com.google.android.printservice.recommendation/10109} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{799a3f3 com.google.android.apps.photos/10140} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d5108b0 com.google.android.documentsui/10098} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4468329 com.android.systemui.emulation.pixel_3a_xl/10021} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{8b286ae com.android.systemui.emulation.pixel_6_pro/10063} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1a08c4f com.android.systemui.emulation.pixel_7_pro/10054} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{35ffdc com.android.systemui.emulation.pixel_8_pro/10001} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{b1b28e5 com.google.mainline.telemetry/10151} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{7245fba com.android.carrierconfig.auto_generated_rro_product__/10064} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{3839e6b com.android.providers.partnerbookmarks/10101} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{b113dc8 com.android.wallpaper.livepicker/10090} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{7da6e61 com.android.providers.telephony.auto_generated_rro_product__/10062} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{5a8bd86 com.android.phone.auto_generated_rro_vendor__/10081} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e3bb647 com.google.mainline.adservices/10136} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{2e06e74 com.android.imsserviceentitlement/10117} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{cee8f9d com.google.android.healthconnect.controller/10186} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1c32c12 com.android.internal.emulation.pixel_2_xl/10016} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{f736fe3 com.android.internal.emulation.pixel_3_xl/10056} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{ccffde0 com.android.internal.emulation.pixel_4_xl/10047} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{f298899 com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{ba3f75e com.android.bookmarkprovider/10113} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{ae3273f com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{267180c com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4811555 com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4342b6a com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d6cf85b com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c73a8f8 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{28ab1d1 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d83a40b com.google.android.projection.gearhead/10123} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{fe19436 com.google.android.uwb.resources/10177} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{88a62e8 com.android.cts.ctsshim/10171} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{5f8bf37 com.google.android.wifi.resources/10189} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{b65ca4 com.google.android.wifi.dialog/10190} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{8b79a0d com.google.android.apps.wallpaper/10161} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a2abdc2 com.google.android.odad/10122} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1017d3 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e4e9f10 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{250ca09 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{5eaf40e com.android.bluetoothmidiservice/10106} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c3a5e2f com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4e69c3c com.google.android.cellbroadcastreceiver/10176} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c32fdc5 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{666431a android.auto_generated_rro_product__/10069} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{218ae4b com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{29f4028 com.google.android.inputmethod.latin/10146} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a4ab141 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 09:42:49.224   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d1576e6 com.google.android.apps.restore/10119} BLOCKED
+11-24 09:42:49.233  3257  3474 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.braise/app_webview/variations_seed_new"
+11-24 09:42:49.233  3257  3474 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.braise/app_webview/variations_seed"
+11-24 09:42:49.451   518  2886 W ProcessStats: Tracking association SourceState{117379b com.zvisionclub.braise/10192 BTop #1433} whose proc state 2 is better than process ProcessState{4f4883d com.google.android.gms/10132 pkg=com.google.android.gms} proc state 6 (18019 skipped)
+11-24 09:42:49.454   518   546 I ActivityManager: Start proc 3487:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.braise/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 09:42:49.627  3487  3487 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-24 09:42:49.986   518  2070 D ConnectivityService: requestNetwork for uid/pid:10192/3257 activeRequest: null callbackRequest: 90 [NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.braise UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 09:42:49.995   518   751 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.braise UnderlyingNetworks: Null] ]
+11-24 09:42:49.995   518   751 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.braise UnderlyingNetworks: Null] ]
+11-24 09:42:49.995   518   751 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.braise UnderlyingNetworks: Null] ]
+11-24 09:42:49.996   518   751 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=91, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.braise UnderlyingNetworks: Null] ]
+11-24 09:42:50.039   518   546 I ActivityManager: Start proc 3574:com.google.android.webview:webview_apk/u0a134 for service {com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}
+11-24 09:42:50.322   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{9e72483 com.google.android.youtube/10139} BLOCKED
+11-24 09:42:50.329   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{786d475 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 09:42:50.381   518   810 D CoreBackPreview: Window{328f54e u0 com.zvisionclub.braise/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@ce85262, mPriority=0, mIsAnimationCallback=false}
+11-24 09:42:50.384   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e2852c0 com.google.android.as/10125} BLOCKED
+11-24 09:42:50.411   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e1ebf9 com.google.android.gm/10142} BLOCKED
+11-24 09:42:50.424   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{a174405 com.google.android.contacts/10155} BLOCKED
+11-24 09:42:50.466   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{8385614 com.google.android.partnersetup/10124} BLOCKED
+11-24 09:42:50.572   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{250ca09 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 09:42:50.573   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{4e69c3c com.google.android.cellbroadcastreceiver/10176} BLOCKED
+11-24 09:42:50.663   518  2886 D CoreBackPreview: Window{83ec6d6 u0 Splash Screen com.zvisionclub.braise EXITING}: Setting back callback null
+11-24 09:42:50.663   518   817 W InputManager-JNI: Input channel object '83ec6d6 Splash Screen com.zvisionclub.braise (client)' was disposed without first being removed with the input manager!
+11-24 09:42:50.761   518   535 W ziparchive: Unable to open '/data/app/~~t5rzAKyZI0PWz6EqZQBNxg==/com.zvisionclub.braise-i9fPFStecyaIEOZTLa18wA==/base.dm': No such file or directory
+11-24 09:42:50.763   518   535 I ActivityTaskManager: Displayed com.zvisionclub.braise/com.zvisionclub.shell.MainActivity for user 0: +3s136ms
+11-24 09:42:50.806   518  3078 I ImeTracker: com.zvisionclub.braise:49e9bcd1: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 09:42:50.806   518  3078 I ImeTracker: com.zvisionclub.braise:49e9bcd1: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 09:42:50.819  1504  1504 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.braise fieldId=0 fieldName=null extras=null}, false)
+11-24 09:42:51.259  3574  3680 W cr_AWNetworkFetcherTask: 	at org.chromium.android_webview.nonembedded.NetworkFetcherTask.download(chromium-TrichromeWebViewGoogle6432.apk-stable-567263637:48)
+11-24 09:42:52.618  1595  1595 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.braise.
+11-24 09:42:52.619  1595  2481 I AiAiEcho: AppIndexer Package:[com.zvisionclub.braise] UserProfile:[0] Enabled:[true].
+11-24 09:42:52.620  1595  2481 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.braise], userId:[0], reason:[package is updated.].
+11-24 09:42:53.349  1047  1047 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.braise
+11-24 09:42:53.450  1047  1318 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.braise
+11-24 09:42:54.221   518  1673 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{f0f6ef4 com.google.android.gm/10142} BLOCKED
+11-24 09:42:55.140   518  1673 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{445887b com.google.android.settings.intelligence/10118} BLOCKED
+11-24 09:42:55.155   518   896 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{d13f44f com.google.android.settings.intelligence/10118} BLOCKED
+11-24 09:42:55.978  3257  4215 D ProfileInstaller: Installing profile for com.zvisionclub.braise
+11-24 09:42:56.871  1435  1480 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.braise [CONTEXT service_id=258 ]
+11-24 09:43:00.893   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{43771dd com.android.camera2/10144} BLOCKED
+11-24 09:43:00.894   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e3b0152 com.google.android.gm/10142} BLOCKED
+11-24 09:43:00.894   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{f2bc23 com.google.android.devicelockcontroller/10185} BLOCKED
+11-24 09:43:00.894   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{2bef520 com.google.android.rkpdapp/10184} BLOCKED
+11-24 09:43:00.894   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{be4ed9 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 09:43:00.894   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{1ca44c com.google.android.projection.gearhead/10123} BLOCKED
+11-24 09:43:13.357   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{9b6968d com.google.android.youtube/10139} BLOCKED
+11-24 09:43:13.362   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{2ab4042 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 09:43:13.362   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{58aa853 com.google.android.as/10125} BLOCKED
+11-24 09:43:13.362   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{c192e com.google.android.apps.maps/10154} BLOCKED
+11-24 09:43:13.362   518   569 I AppsFilter: interaction: PackageSetting{4a3cb3d com.zvisionclub.braise/10192} -> PackageSetting{e852590 com.google.android.contacts/10155} BLOCKED
