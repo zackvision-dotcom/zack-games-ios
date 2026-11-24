@@ -1,0 +1,80 @@
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{fec3b19 com.android.cts.ctsshim/10191} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{6eabfaf com.google.android.wifi.resources/10187} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{8b51fbc com.google.android.wifi.dialog/10188} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{c31fb45 com.google.android.apps.wallpaper/10161} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{835329a com.google.android.odad/10122} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{12da7cb com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{b927ba8 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{afc06c1 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{1a3de66 com.android.bluetoothmidiservice/10108} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{96cf5a7 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{c67aa54 com.google.android.cellbroadcastreceiver/10177} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{f014dfd com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{7ff7af2 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{8694543 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{cbf17c0 com.google.android.inputmethod.latin/10140} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{519ccf9 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:25:13.987   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{a06543e com.google.android.apps.restore/10119} BLOCKED
+11-24 11:25:14.022   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{985c51a com.google.android.youtube/10139} BLOCKED
+11-24 11:25:14.023   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{d099b41 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:25:14.023   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{2352059 com.google.android.as/10126} BLOCKED
+11-24 11:25:14.023   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{e50141e com.google.android.gm/10143} BLOCKED
+11-24 11:25:14.023   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{c931bda com.google.android.devicelockcontroller/10175} BLOCKED
+11-24 11:25:14.023   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{387372c com.google.android.contacts/10155} BLOCKED
+11-24 11:25:14.023   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{750bad7 com.google.android.partnersetup/10124} BLOCKED
+11-24 11:25:14.023   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{afc06c1 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:25:14.024   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{c67aa54 com.google.android.cellbroadcastreceiver/10177} BLOCKED
+11-24 11:25:14.024   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{cbf17c0 com.google.android.inputmethod.latin/10140} BLOCKED
+11-24 11:25:14.255  2597  2986 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.vanvoyage/app_webview/variations_seed_new"
+11-24 11:25:14.257  2597  2986 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.vanvoyage/app_webview/variations_seed"
+11-24 11:25:14.785  1048  1048 D CarrierSvcBindHelper: onPackageAdded: com.zvisionclub.vanvoyage
+11-24 11:25:15.607   521   551 I ActivityManager: Start proc 3123:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.vanvoyage/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:25:17.143  1048  1335 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.vanvoyage
+11-24 11:25:17.161  1048  1048 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.vanvoyage
+11-24 11:25:17.219  1048  1335 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.vanvoyage
+11-24 11:25:17.235  1048  1048 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.vanvoyage
+11-24 11:25:17.248   521  1925 D ConnectivityService: requestNetwork for uid/pid:10192/2597 activeRequest: null callbackRequest: 79 [NetworkRequest [ REQUEST id=80, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.vanvoyage UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:25:17.248  1048  1335 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.vanvoyage
+11-24 11:25:17.253   521   755 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=80, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.vanvoyage UnderlyingNetworks: Null] ]
+11-24 11:25:17.253   521   755 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=80, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.vanvoyage UnderlyingNetworks: Null] ]
+11-24 11:25:17.253   521   755 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=80, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.vanvoyage UnderlyingNetworks: Null] ]
+11-24 11:25:17.253   521   755 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=80, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.vanvoyage UnderlyingNetworks: Null] ]
+11-24 11:25:18.682   521  1786 D CoreBackPreview: Window{f5a1992 u0 com.zvisionclub.vanvoyage/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@d0652a2, mPriority=0, mIsAnimationCallback=false}
+11-24 11:25:19.079   521   535 D CoreBackPreview: Window{1db0767 u0 Splash Screen com.zvisionclub.vanvoyage EXITING}: Setting back callback null
+11-24 11:25:19.079   521  1096 W InputManager-JNI: Input channel object '1db0767 Splash Screen com.zvisionclub.vanvoyage (client)' was disposed without first being removed with the input manager!
+11-24 11:25:19.261   521   540 W ziparchive: Unable to open '/data/app/~~QOoTXtv4A68g7NED5ebgcQ==/com.zvisionclub.vanvoyage-YcyD7W_BVuaiFZVYAFH3XQ==/base.dm': No such file or directory
+11-24 11:25:19.302   521   540 I ActivityTaskManager: Displayed com.zvisionclub.vanvoyage/com.zvisionclub.shell.MainActivity for user 0: +7s883ms
+11-24 11:25:19.482   521   594 I ImeTracker: com.zvisionclub.vanvoyage:89b157bb: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:25:19.483   521   594 I ImeTracker: com.zvisionclub.vanvoyage:89b157bb: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:25:19.549  1533  1533 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.vanvoyage fieldId=0 fieldName=null extras=null}, false)
+11-24 11:25:19.974  1687  1687 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.vanvoyage], userId:[0], reason:[package is added.].
+11-24 11:25:20.336  1687  1687 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.vanvoyage.
+11-24 11:25:20.337  1687  2894 I AiAiEcho: AppIndexer Package:[com.zvisionclub.vanvoyage] UserProfile:[0] Enabled:[true].
+11-24 11:25:20.337  1687  2894 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.vanvoyage], userId:[0], reason:[package is updated.].
+11-24 11:25:24.009  1687  1687 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.vanvoyage.
+11-24 11:25:24.034  2597  3763 D ProfileInstaller: Installing profile for com.zvisionclub.vanvoyage
+11-24 11:25:24.040   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{90b870e com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:25:24.043  1687  2546 I AiAiEcho: AppIndexer Package:[com.zvisionclub.vanvoyage] UserProfile:[0] Enabled:[true].
+11-24 11:25:24.043  1687  2546 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.vanvoyage], userId:[0], reason:[package is updated.].
+11-24 11:25:24.047   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{fe2f52f com.android.camera2/10146} BLOCKED
+11-24 11:25:24.047   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{bb0e73c com.google.android.gm/10143} BLOCKED
+11-24 11:25:24.047   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{52eecc5 com.google.android.contacts/10155} BLOCKED
+11-24 11:25:24.047   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{67d061a com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:25:26.854   521   594 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{425fc71 com.google.android.gm/10143} BLOCKED
+11-24 11:25:29.911   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{c8fa0ae com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:29.911   521  1932 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{b09e4f com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:35.788   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{59a0b79 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:25:35.788   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{aabf0be com.google.android.gm/10143} BLOCKED
+11-24 11:25:35.788   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{f83951f com.google.android.devicelockcontroller/10175} BLOCKED
+11-24 11:25:35.788   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{770206c com.google.android.rkpdapp/10185} BLOCKED
+11-24 11:25:35.788   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{426e635 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:25:35.788   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{6cd562a com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:25:36.682  1457  4283 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.vanvoyage [CONTEXT service_id=258 ]
+11-24 11:25:48.660   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{b87e60a com.google.android.contacts/10155} BLOCKED
+11-24 11:25:57.887  1533  1533 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.vanvoyage fieldId=0 fieldName=null extras=null}, false)
+11-24 11:26:01.901   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{8f32463 com.google.android.as/10126} BLOCKED
+11-24 11:26:01.901   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{c2ed860 com.google.android.gm/10143} BLOCKED
+11-24 11:26:01.901   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{1f9119 com.google.android.contacts/10155} BLOCKED
+11-24 11:26:07.420   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{407cd2 com.google.android.youtube/10139} BLOCKED
+11-24 11:26:07.420   521   574 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{1d27555 com.google.android.apps.maps/10154} BLOCKED
+11-24 11:26:08.587   521   594 I AppsFilter: interaction: PackageSetting{945ce3c com.zvisionclub.vanvoyage/10192} -> PackageSetting{f4cc295 com.google.android.settings.intelligence/10118} BLOCKED
