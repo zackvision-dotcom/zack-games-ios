@@ -1,0 +1,80 @@
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{8a40dd1 com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{ab5c036 com.android.bookmarkprovider/10114} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{fb77b37 com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{c3468a4 com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{d0ab60d com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{c15a9c2 com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{cfe93d3 com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{1a16b10 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{eb9a609 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{da45c31 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{998a00e com.google.android.uwb.resources/10188} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{1f85f16 com.android.cts.ctsshim/10180} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{f949a2f com.google.android.wifi.resources/10182} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{89a283c com.google.android.wifi.dialog/10183} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{c4d99c5 com.google.android.apps.wallpaper/10159} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{542af1a com.google.android.odad/10122} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{6daaa4b com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{bff8c28 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{7730d41 com.google.android.apps.youtube.music/10155} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{b4ca2e6 com.android.bluetoothmidiservice/10108} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{d27a027 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{1d542d4 com.google.android.cellbroadcastreceiver/10173} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{6223c7d com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{b00772 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{16417c3 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{aadb840 com.google.android.inputmethod.latin/10141} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{b9b2379 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:35:50.909   522  1992 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{e7328be com.google.android.apps.restore/10119} BLOCKED
+11-24 11:35:50.995  3238  3550 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.nimbuscatch/app_webview/variations_seed_new"
+11-24 11:35:51.010  3238  3550 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.nimbuscatch/app_webview/variations_seed"
+11-24 11:35:52.172   522   551 I ActivityManager: Start proc 3622:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.nimbuscatch/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:35:52.528   522  2715 D ConnectivityService: requestNetwork for uid/pid:10192/3238 activeRequest: null callbackRequest: 92 [NetworkRequest [ REQUEST id=93, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.nimbuscatch UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:35:52.534   522   760 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=93, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.nimbuscatch UnderlyingNetworks: Null] ]
+11-24 11:35:52.547   522   760 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=93, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.nimbuscatch UnderlyingNetworks: Null] ]
+11-24 11:35:52.548   522   760 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=93, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.nimbuscatch UnderlyingNetworks: Null] ]
+11-24 11:35:52.550   522   760 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=93, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.nimbuscatch UnderlyingNetworks: Null] ]
+11-24 11:35:53.650   522  2368 D CoreBackPreview: Window{db56eb7 u0 com.zvisionclub.nimbuscatch/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@7eca05d, mPriority=0, mIsAnimationCallback=false}
+11-24 11:35:53.965   522   539 W ziparchive: Unable to open '/data/app/~~i5iRvCFhu8kB_hI4_ntygw==/com.zvisionclub.nimbuscatch-XHZSX0P6w5Rzjqw3x_jNgQ==/base.dm': No such file or directory
+11-24 11:35:53.967   522   539 I ActivityTaskManager: Displayed com.zvisionclub.nimbuscatch/com.zvisionclub.shell.MainActivity for user 0: +6s925ms
+11-24 11:35:53.988   522  2720 D CoreBackPreview: Window{da94a58 u0 Splash Screen com.zvisionclub.nimbuscatch EXITING}: Setting back callback null
+11-24 11:35:54.034   522  1988 W InputManager-JNI: Input channel object 'da94a58 Splash Screen com.zvisionclub.nimbuscatch (client)' was disposed without first being removed with the input manager!
+11-24 11:35:54.138   522  1963 I ImeTracker: com.zvisionclub.nimbuscatch:16dba54a: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:35:54.138   522  1963 I ImeTracker: com.zvisionclub.nimbuscatch:16dba54a: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:35:54.250  1548  1548 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.nimbuscatch fieldId=0 fieldName=null extras=null}, false)
+11-24 11:35:54.709  1052  1052 D CarrierSvcBindHelper: onPackageAdded: com.zvisionclub.nimbuscatch
+11-24 11:35:54.721  1052  1052 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.nimbuscatch
+11-24 11:35:54.726  1052  1344 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.nimbuscatch
+11-24 11:35:54.969   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{ddf2cdb com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:35:54.969   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{8ffd20 com.android.camera2/10145} BLOCKED
+11-24 11:35:54.970   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{4ae795 com.google.android.gm/10143} BLOCKED
+11-24 11:35:54.970   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{610185a com.google.android.devicelockcontroller/10170} BLOCKED
+11-24 11:35:54.970   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{4130378 com.google.android.rkpdapp/10191} BLOCKED
+11-24 11:35:54.970   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{df73a51 com.google.android.contacts/10154} BLOCKED
+11-24 11:35:54.970   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{1aeb2b6 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:35:54.971   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{ac4099 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:35:54.971   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{7730d41 com.google.android.apps.youtube.music/10155} BLOCKED
+11-24 11:35:55.134  1052  1344 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.nimbuscatch
+11-24 11:35:55.918   522  2717 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{4e10a0d com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:35:55.925   522   596 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{7ef6dc2 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:35:57.314  1690  1690 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.nimbuscatch], userId:[0], reason:[package is added.].
+11-24 11:35:58.073  1690  1690 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.nimbuscatch.
+11-24 11:35:58.079  1690  3662 I AiAiEcho: AppIndexer Package:[com.zvisionclub.nimbuscatch] UserProfile:[0] Enabled:[true].
+11-24 11:35:58.079  1690  3662 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.nimbuscatch], userId:[0], reason:[package is updated.].
+11-24 11:35:58.452  1052  1052 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.nimbuscatch
+11-24 11:35:58.468  1052  1344 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.nimbuscatch
+11-24 11:35:58.640   841   841 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.zvisionclub.nimbuscatch, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
+11-24 11:35:59.403  3238  4032 D ProfileInstaller: Installing profile for com.zvisionclub.nimbuscatch
+11-24 11:36:03.582  1690  1690 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.nimbuscatch.
+11-24 11:36:03.585  1690  3067 I AiAiEcho: AppIndexer Package:[com.zvisionclub.nimbuscatch] UserProfile:[0] Enabled:[true].
+11-24 11:36:03.585  1690  3067 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.nimbuscatch], userId:[0], reason:[package is updated.].
+11-24 11:36:08.685  1460  4330 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.nimbuscatch [CONTEXT service_id=258 ]
+11-24 11:36:16.663   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{a04886f com.google.android.contacts/10154} BLOCKED
+11-24 11:36:27.624   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{312eb91 com.google.android.youtube/10139} BLOCKED
+11-24 11:36:27.624   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{5faaaf6 com.google.android.as/10125} BLOCKED
+11-24 11:36:27.624   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{792ec22 com.google.android.apps.maps/10153} BLOCKED
+11-24 11:36:27.624   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{c15eef7 com.google.android.contacts/10154} BLOCKED
+11-24 11:36:28.844   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{a183d8 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:36:34.052  1548  1548 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.nimbuscatch fieldId=0 fieldName=null extras=null}, false)
+11-24 11:36:42.199   522  2715 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{5592edc com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:36:44.145   522   574 I AppsFilter: interaction: PackageSetting{b188a7 com.zvisionclub.nimbuscatch/10192} -> PackageSetting{618ed5b com.google.android.as/10125} BLOCKED
