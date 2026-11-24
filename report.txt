@@ -1,45 +1,97 @@
-IAPNEW com.zvisionclub.tossbistro.noads created 6838633820
-IAPNEW com.zvisionclub.tossbistro.noads price 3.99
-IAPNEW com.zvisionclub.tossbistro.noads availability 174
-IAPNEW com.zvisionclub.tossbistro.starter created 6838633752
-IAPNEW com.zvisionclub.tossbistro.starter price 1.99
-IAPNEW com.zvisionclub.tossbistro.starter availability 174
-IAPNEW com.zvisionclub.tossbistro.truffes_100 created 6838633777
-IAPNEW com.zvisionclub.tossbistro.truffes_100 price 1.99
-IAPNEW com.zvisionclub.tossbistro.truffes_100 availability 174
-IAPNEW com.zvisionclub.tossbistro.truffes_300 created 6838633783
-IAPNEW com.zvisionclub.tossbistro.truffes_300 price 4.99
-IAPNEW com.zvisionclub.tossbistro.truffes_300 availability 174
-IAPNEW com.zvisionclub.tossbistro.pass_saison_2026 created 6838634062
-IAPNEW com.zvisionclub.tossbistro.pass_saison_2026 price 2.99
-IAPNEW com.zvisionclub.tossbistro.pass_saison_2026 availability 174
-IAPNEW com.zvisionclub.nimbuscatch.noads created 6838633935
-IAPNEW com.zvisionclub.nimbuscatch.noads price 3.99
-IAPNEW com.zvisionclub.nimbuscatch.noads availability 174
-IAPNEW com.zvisionclub.nimbuscatch.starter created 6838634077
-IAPNEW com.zvisionclub.nimbuscatch.starter price 1.99
-IAPNEW com.zvisionclub.nimbuscatch.starter availability 174
-IAPNEW com.zvisionclub.nimbuscatch.perles_100 created 6838633905
-IAPNEW com.zvisionclub.nimbuscatch.perles_100 price 1.99
-IAPNEW com.zvisionclub.nimbuscatch.perles_100 availability 174
-IAPNEW com.zvisionclub.nimbuscatch.perles_300 created 6838634195
-IAPNEW com.zvisionclub.nimbuscatch.perles_300 price 4.99
-IAPNEW com.zvisionclub.nimbuscatch.perles_300 availability 174
-IAPNEW com.zvisionclub.nimbuscatch.pass_saison_2026 created 6838634284
-IAPNEW com.zvisionclub.nimbuscatch.pass_saison_2026 price 2.99
-IAPNEW com.zvisionclub.nimbuscatch.pass_saison_2026 availability 174
-IAPNEW com.zvisionclub.jamline.noads created 6838634136
-IAPNEW com.zvisionclub.jamline.noads price 3.99
-IAPNEW com.zvisionclub.jamline.noads availability 174
-IAPNEW com.zvisionclub.jamline.starter created 6838634254
-IAPNEW com.zvisionclub.jamline.starter price 1.99
-IAPNEW com.zvisionclub.jamline.starter availability 174
-IAPNEW com.zvisionclub.jamline.atelier_libre created 6838634392
-IAPNEW com.zvisionclub.jamline.atelier_libre price 2.99
-IAPNEW com.zvisionclub.jamline.atelier_libre availability 174
-IAPNEW com.zvisionclub.jamline.miel_100 created 6838634264
-IAPNEW com.zvisionclub.jamline.miel_100 price 1.99
-IAPNEW com.zvisionclub.jamline.miel_100 availability 174
-IAPNEW com.zvisionclub.jamline.pass_saison_2026 created 6838634432
-IAPNEW com.zvisionclub.jamline.pass_saison_2026 price 2.99
-IAPNEW com.zvisionclub.jamline.pass_saison_2026 availability 174
+== tossbistro
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 595791)]
+    shot 01.jpg 581 KB
+    ops 1 [(0, 563769)]
+    shot 02.jpg 550 KB
+    ops 1 [(0, 655168)]
+    shot 03.jpg 639 KB
+    ops 1 [(0, 391571)]
+    shot 04.jpg 382 KB
+    ops 1 [(0, 464000)]
+    shot 05.jpg 453 KB
+    ops 1 [(0, 545800)]
+    shot 06.jpg 533 KB
+  media fr-FR 6 screens, 2 previews
+    ops 1 [(0, 595791)]
+    shot 01.jpg 581 KB
+    ops 1 [(0, 563769)]
+    shot 02.jpg 550 KB
+    ops 1 [(0, 655168)]
+    shot 03.jpg 639 KB
+    ops 1 [(0, 391571)]
+    shot 04.jpg 382 KB
+    ops 1 [(0, 464000)]
+    shot 05.jpg 453 KB
+    ops 1 [(0, 545800)]
+    shot 06.jpg 533 KB
+  media en-US 6 screens, 2 previews
+== previews tossbistro
+  uploaded 1.mp4 16889 KB -> a2400019-79d4-82d8-8104-2fa774c991b2
+  uploaded 2.mp4 10317 KB -> ff000019-79d4-82d8-8138-29f26bd6c124
+  video a2400019-79d4-82d8-8104-2fa774c991b2 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video ff000019-79d4-82d8-8138-29f26bd6c124 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+== nimbuscatch
+  version text fr-FR ok
+  version text en-US ok
+  app info fr-FR ok
+  app info en-US ok
+    ops 1 [(0, 563802)]
+    shot 01.jpg 550 KB
+    ops 1 [(0, 632392)]
+    shot 02.jpg 617 KB
+    ops 1 [(0, 639975)]
+    shot 03.jpg 624 KB
+    ops 1 [(0, 400794)]
+    shot 04.jpg 391 KB
+    ops 1 [(0, 651947)]
+    shot 05.jpg 636 KB
+    ops 1 [(0, 446271)]
+    shot 06.jpg 435 KB
+  media fr-FR 6 screens, 2 previews
+    ops 1 [(0, 563802)]
+    shot 01.jpg 550 KB
+    ops 1 [(0, 632392)]
+    shot 02.jpg 617 KB
+    ops 1 [(0, 639975)]
+    shot 03.jpg 624 KB
+    ops 1 [(0, 400794)]
+    shot 04.jpg 391 KB
+    ops 1 [(0, 651947)]
+    shot 05.jpg 636 KB
+    ops 1 [(0, 446271)]
+    shot 06.jpg 435 KB
+  media en-US 6 screens, 2 previews
+== previews nimbuscatch
+  uploaded 1.mp4 14859 KB -> 25000019-79d4-8197-8101-9460cad2aac2
+  uploaded 2.mp4 13068 KB -> 6e000019-79d4-8197-813f-848a2b4d10aa
+  video 25000019-79d4-8197-8101-9460cad2aac2 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  video 6e000019-79d4-8197-813f-848a2b4d10aa PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
+  placement en-US ACTIVE
+  placement en-US ACTIVE
+  placement fr-FR ACTIVE
+  placement fr-FR ACTIVE
+== jamline
+  version text fr-FR ok
+  FAILED jamline POST /appStoreVersionLocalizations -> 409 {
+  "errors" : [ {
+    "id" : "4f08a616-d0dd-42a5-ae7b-90e66b579885",
+    "status" : "409",
+    "code" : "STATE_ERROR.DUPLICATE_NAME.DIFFERENT_ACCOUNT",
+    "title" : "Cannot add localization due to app name.",
+    "detail" : "You cannot add this localization because the app name is already being used by another app. If you have trademark rights to this name and would like it released for your use, submit a claim."
+  } ]
+}
+CHECK tossbistro fr-FR desc=745 kw=99 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17295013, 'fileName': '1.mp4', 'sourceFileChecksum': 'fe446e90e8a2ea0d5eaf25ab0349ee3b', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 10564994, 'fileName': '2.mp4', 'sourceFileChecksum': '33913230e6979f772eaa9291ea99614a', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK tossbistro en-US desc=663 kw=99 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17295013, 'fileName': '1.mp4', 'sourceFileChecksum': 'fe446e90e8a2ea0d5eaf25ab0349ee3b', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 10564994, 'fileName': '2.mp4', 'sourceFileChecksum': '33913230e6979f772eaa9291ea99614a', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK nimbuscatch en-US desc=700 kw=99 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 15215912, 'fileName': '1.mp4', 'sourceFileChecksum': 'd1828f059c24afbefd55835fe325d280', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 13382378, 'fileName': '2.mp4', 'sourceFileChecksum': 'e2a53986fb1ef0aad9eb29343137a1f6', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK nimbuscatch fr-FR desc=800 kw=96 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 15215912, 'fileName': '1.mp4', 'sourceFileChecksum': 'd1828f059c24afbefd55835fe325d280', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 13382378, 'fileName': '2.mp4', 'sourceFileChecksum': 'e2a53986fb1ef0aad9eb29343137a1f6', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
+CHECK jamline fr-FR desc=747 kw=95 screens=[] previews=[]
+done; failed: ['jamline']
