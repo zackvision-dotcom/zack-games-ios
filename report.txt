@@ -10,7 +10,7 @@ Traceback (most recent call last):
     raise RuntimeError(f'{method} {path} -> {r.status_code} {r.text[:2500]}')
 RuntimeError: POST /inAppPurchaseAppStoreReviewScreenshots -> 409 {
   "errors" : [ {
-    "id" : "fe107ffd-a4db-44a8-ad22-80e410b50e13",
+    "id" : "6e7243bc-22e2-464f-9116-dc6fd7fca57d",
     "status" : "409",
     "code" : "ENTITY_ERROR.MEDIA_ASSET_CREATION_NOT_ALLOWED",
     "title" : "You are not allowed to create asset.",
