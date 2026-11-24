@@ -1,9 +1,6 @@
-SUBMIT tossbistro content rights: no third-party content
-SUBMIT tossbistro release type MANUAL
-SUBMIT tossbistro ITEM ERR STATE_ERROR.ENTITY_STATE_INVALID | appStoreVersions with id '585c08f0-aa1f-4b93-8110-98fc293dc944' is not in valid state. | This resource cannot be reviewed, please check associated errors to see why. | STATE_ERROR.APP_PRICING_REQUIRED | App is missing required pricing. | App is not eligible for submission until pricing has been set.
-SUBMIT nimbuscatch content rights: no third-party content
-SUBMIT nimbuscatch release type MANUAL
-SUBMIT nimbuscatch ITEM ERR STATE_ERROR.ENTITY_STATE_INVALID | appStoreVersions with id '84b7cf7c-e275-4846-b6c7-d19b33d75533' is not in valid state. | This resource cannot be reviewed, please check associated errors to see why. | STATE_ERROR.APP_PRICING_REQUIRED | App is missing required pricing. | App is not eligible for submission until pricing has been set.
-SUBMIT jamline content rights: no third-party content
-SUBMIT jamline release type MANUAL
-SUBMIT jamline ITEM ERR STATE_ERROR.ENTITY_STATE_INVALID | appStoreVersions with id 'a4eb362a-a10d-480b-b2a8-21c7b1997eaf' is not in valid state. | This resource cannot be reviewed, please check associated errors to see why. | STATE_ERROR.APP_PRICING_REQUIRED | App is missing required pricing. | App is not eligible for submission until pricing has been set.
+SUBMIT tossbistro version item added
+SUBMIT tossbistro draft only, items: [dict_keys([])]
+SUBMIT nimbuscatch version item added
+SUBMIT nimbuscatch draft only, items: [dict_keys([])]
+SUBMIT jamline version item added
+SUBMIT jamline draft only, items: [dict_keys([])]
