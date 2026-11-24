@@ -1,3 +1,15 @@
-REVIEW tossbistro ok
-REVIEW nimbuscatch ok
-REVIEW jamline ok
+SETBUILD tossbistro version 1.0 PREPARE_FOR_SUBMISSION -> build 1023 VALID
+  notes 1291 chars, UMP/ATT sentence: True | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+SETBUILD nimbuscatch version 1.0 PREPARE_FOR_SUBMISSION -> build 1023 VALID
+  notes 1352 chars, UMP/ATT sentence: True | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
+SETBUILD jamline version 1.0 PREPARE_FOR_SUBMISSION -> build 1023 VALID
+  notes 1279 chars, UMP/ATT sentence: True | attachments []
+  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
+  privacy en-US https://zackvision.fr/jeux/confidentialite/
+  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
