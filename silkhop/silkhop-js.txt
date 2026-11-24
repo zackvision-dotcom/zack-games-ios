@@ -1,0 +1,80 @@
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{dd58cd0 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{db484c9 com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{c9049ab com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{2c7f7ce com.google.android.uwb.resources/10181} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{523a808 com.android.cts.ctsshim/10183} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{3f976ef com.google.android.wifi.resources/10189} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{f4ea5fc com.google.android.wifi.dialog/10190} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{7f7a485 com.google.android.apps.wallpaper/10160} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{c6fc2da com.google.android.odad/10122} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{790930b com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{ade25e8 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{9930401 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{89732a6 com.android.bluetoothmidiservice/10107} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{c3354e7 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{763b894 com.google.android.cellbroadcastreceiver/10186} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{e2adf3d com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{e73d332 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{c565883 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{80dca00 com.google.android.inputmethod.latin/10142} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{d6b3239 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:18:51.876   517   912 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{107f07e com.google.android.apps.restore/10121} BLOCKED
+11-24 11:18:52.128  3018  3259 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.silkhop/app_webview/variations_seed_new"
+11-24 11:18:52.128  3018  3259 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.silkhop/app_webview/variations_seed"
+11-24 11:18:52.966   517  1821 D ConnectivityService: requestNetwork for uid/pid:10192/3018 activeRequest: null callbackRequest: 85 [NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.silkhop UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:18:52.995   517   749 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.silkhop UnderlyingNetworks: Null] ]
+11-24 11:18:53.003   517   749 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.silkhop UnderlyingNetworks: Null] ]
+11-24 11:18:53.003   517   749 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.silkhop UnderlyingNetworks: Null] ]
+11-24 11:18:53.004   517   749 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.silkhop UnderlyingNetworks: Null] ]
+11-24 11:18:53.159  1537  1537 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.silkhop], userId:[0], reason:[package is added.].
+11-24 11:18:53.347   517   545 I ActivityManager: Start proc 3339:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.silkhop/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:18:53.397  1537  1537 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.silkhop.
+11-24 11:18:53.399  1537  2602 I AiAiEcho: AppIndexer Package:[com.zvisionclub.silkhop] UserProfile:[0] Enabled:[true].
+11-24 11:18:53.399  1537  2602 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.silkhop], userId:[0], reason:[package is updated.].
+11-24 11:18:53.607   517  1823 D CoreBackPreview: Window{cd13dfa u0 com.zvisionclub.silkhop/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@c448e4e, mPriority=0, mIsAnimationCallback=false}
+11-24 11:18:53.630   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{f56bbbd com.google.android.youtube/10139} BLOCKED
+11-24 11:18:53.631   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{1726fe com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{439990c com.google.android.as/10124} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{e312e5f com.google.android.gm/10140} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{fe36c1a com.google.android.devicelockcontroller/10171} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{f53961f com.google.android.contacts/10153} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{e665e96 com.google.android.partnersetup/10126} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{9930401 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{763b894 com.google.android.cellbroadcastreceiver/10186} BLOCKED
+11-24 11:18:53.632   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{80dca00 com.google.android.inputmethod.latin/10142} BLOCKED
+11-24 11:18:53.864   517   534 W ziparchive: Unable to open '/data/app/~~Fzn4fsp5tFK7qEVWJyZ7WQ==/com.zvisionclub.silkhop-AXRpv07CHfH8d9Z_wHRqxA==/base.dm': No such file or directory
+11-24 11:18:53.865   517   534 I ActivityTaskManager: Displayed com.zvisionclub.silkhop/com.zvisionclub.shell.MainActivity for user 0: +3s163ms
+11-24 11:18:53.907   517   815 W InputManager-JNI: Input channel object '1645698 Splash Screen com.zvisionclub.silkhop (client)' was disposed without first being removed with the input manager!
+11-24 11:18:53.913   517  2233 D CoreBackPreview: Window{1645698 u0 Splash Screen com.zvisionclub.silkhop EXITING}: Setting back callback null
+11-24 11:18:54.077  1045  1045 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.silkhop
+11-24 11:18:54.107   517   912 I ImeTracker: com.zvisionclub.silkhop:b728a354: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:18:54.107   517   912 I ImeTracker: com.zvisionclub.silkhop:b728a354: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:18:54.116  1453  1453 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.silkhop fieldId=0 fieldName=null extras=null}, false)
+11-24 11:18:54.165  1045  1310 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.silkhop
+11-24 11:18:55.843  1537  1537 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.silkhop.
+11-24 11:18:55.843  1537  3346 I AiAiEcho: AppIndexer Package:[com.zvisionclub.silkhop] UserProfile:[0] Enabled:[true].
+11-24 11:18:55.843  1537  3346 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.silkhop], userId:[0], reason:[package is updated.].
+11-24 11:18:59.328  3018  3871 D ProfileInstaller: Installing profile for com.zvisionclub.silkhop
+11-24 11:19:00.094   517  2227 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{7b86d62 com.google.android.gm/10140} BLOCKED
+11-24 11:19:03.010   517  1906 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{f4dc011 com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:19:03.018   517  1637 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{2a0b413 com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{9a1f4ef com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{2704bfc com.android.camera2/10144} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{1df5285 com.google.android.gm/10140} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{f18d8da com.google.android.devicelockcontroller/10171} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{242f10b com.google.android.rkpdapp/10170} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{5742be8 com.google.android.contacts/10153} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{60c0ed3 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:19:03.636   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{5479201 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:19:06.134  1474  3517 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.silkhop [CONTEXT service_id=258 ]
+11-24 11:19:14.261   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{516485 com.google.android.youtube/10139} BLOCKED
+11-24 11:19:14.261   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{60ca222 com.google.android.apps.maps/10155} BLOCKED
+11-24 11:19:14.261   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{32682da com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:19:24.665   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{1b4baa3 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-24 11:19:24.665   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{7e351a0 com.google.android.as/10124} BLOCKED
+11-24 11:19:24.665   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{68b159 com.google.android.contacts/10153} BLOCKED
+11-24 11:19:29.983   517  1959 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{4ef89b5 com.google.android.settings.intelligence/10117} BLOCKED
+11-24 11:19:36.781   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{f793920 com.google.android.gm/10140} BLOCKED
+11-24 11:19:36.781   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{4c542d9 com.google.android.contacts/10153} BLOCKED
+11-24 11:19:37.469  1453  1453 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.silkhop fieldId=0 fieldName=null extras=null}, false)
+11-24 11:19:49.426   517   567 I AppsFilter: interaction: PackageSetting{7b7bd67 com.zvisionclub.silkhop/10192} -> PackageSetting{d99d9d7 com.google.android.contacts/10153} BLOCKED
