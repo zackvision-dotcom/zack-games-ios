@@ -1,0 +1,200 @@
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{ce1d9d0 com.android.internal.display.cutout.emulation.double/10048} BLOCKED
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{3674dc9 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f258cce com.google.android.onetimeinitializer/10125} BLOCKED
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{937e7ef com.google.android.ext.shared/10100} BLOCKED
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{752c2fc com.android.internal.systemui.navbar.gestural_wide_back/10007} BLOCKED
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{8dfd85 com.android.virtualmachine.res/10170} BLOCKED
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{991a7da com.google.android.federatedcompute/10188} BLOCKED
+11-24 11:20:01.555   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c5140b com.android.managedprovisioning.auto_generated_rro_product__/10024} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b8712e8 com.android.carrierconfig.auto_generated_rro_vendor__/10078} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{7b5ed01 com.android.systemui.emulation.pixel_3_xl/10034} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{67267a6 com.android.systemui.emulation.pixel_4_xl/10059} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{aaee5e7 com.android.systemui.emulation.pixel_fold/10009} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e2e7594 com.android.simappdialog.auto_generated_rro_product__/10030} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{613583d com.android.htmlviewer/10115} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{74d5832 com.google.android.health.connect.backuprestore/10181} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{579f983 com.android.systemui.auto_generated_rro_product__/10031} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{d475700 com.google.android.soundpicker/10137} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{de23b39 com.google.android.marvin.talkbackoverlay/10077} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e74c57e com.google.android.configupdater/10129} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{958aadf com.android.internal.emulation.pixel_3a_xl/10044} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{64ae32c com.android.internal.emulation.pixel_6_pro/10018} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f2251f5 com.android.internal.emulation.pixel_7_pro/10004} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f13bb8a com.android.internal.emulation.pixel_8_pro/10058} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{54715fb com.android.internal.emulation.pixel_3a/10053} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{3190618 com.android.internal.emulation.pixel_4a/10011} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{131871 com.android.internal.emulation.pixel_6a/10023} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{1fa0656 com.android.internal.emulation.pixel_7a/10033} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{1e716d7 com.google.android.overlay.googlewebview/10049} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{9a46bc4 com.google.android.hotspot2.osulogin/10187} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{16fcaad com.android.simappdialog/10112} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b2831e2 com.android.internal.display.cutout.emulation.hole/10073} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{61c4973 com.android.internal.display.cutout.emulation.tall/10065} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a5e8030 com.android.internal.systemui.navbar.threebutton/10068} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a6b64a9 com.android.camera2/10147} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c1b8a2e com.android.systemui.auto_generated_rro_vendor__/10076} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{96809cf com.google.android.deskclock/10151} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{9636f5c com.android.internal.systemui.navbar.twobutton/10020} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{86ca265 com.google.android.as/10126} BLOCKED
+11-24 11:20:01.556   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{eda1b3a com.google.android.gm/10142} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{573eb com.android.internal.systemui.navbar.gestural_extra_wide_back/10045} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e662548 com.android.systemui.emulation.pixel_3/10015} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e89ffe1 com.android.systemui.emulation.pixel_4/10037} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{5beb106 com.android.systemui.emulation.pixel_5/10071} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{cc563c7 com.android.systemui.emulation.pixel_6/10074} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{75c4df4 com.android.systemui.emulation.pixel_7/10072} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c5b91d com.android.systemui.emulation.pixel_8/10070} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c04d792 com.android.nfc.auto_generated_rro_product__/10027} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{4aa7563 com.android.printspooler/10103} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{9ea5560 com.android.emergency.auto_generated_rro_product__/10041} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{709ca19 com.google.android.connectivity.resources.goldfish.overlay/10079} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{314dade com.android.dreams.basic/10104} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{4504bf com.google.android.networkstack.tethering.emulator/10022} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f8f678c com.android.providers.settings.auto_generated_rro_product__/10002} BLOCKED
+11-24 11:20:01.560   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{3e3eed5 com.google.android.as.oss/10122} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{88fc6ea com.android.traceur.auto_generated_rro_product__/10005} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{6cf2ddb com.google.android.devicelockcontroller/10171} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{8917078 com.android.internal.emulation.pixel_3/10046} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b01a351 com.android.internal.emulation.pixel_4/10060} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{11b67b6 com.android.internal.emulation.pixel_5/10012} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f08ccb7 com.android.internal.emulation.pixel_6/10038} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{1a91c24 com.android.internal.emulation.pixel_7/10067} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{36c238d com.android.internal.emulation.pixel_8/10039} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{3ee4942 com.google.android.captiveportallogin/10113} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{1d37d53 com.android.musicfx/10088} BLOCKED
+11-24 11:20:01.561   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{efd34bd com.google.android.apps.maps/10154} BLOCKED
+11-24 11:20:01.562   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{86dd690 com.google.android.modulemetadata/10146} BLOCKED
+11-24 11:20:01.562   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{1846b89 com.google.android.markup/10135} BLOCKED
+11-24 11:20:01.562   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{31bb78e com.android.providers.settings.auto_generated_rro_vendor__/10080} BLOCKED
+11-24 11:20:01.562   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a8e9baf com.google.android.rkpdapp/10175} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a81cbbc com.google.android.contacts/10155} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{4bf3745 com.android.server.telecom.auto_generated_rro_product__/10032} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c9fbe9a com.google.android.overlay.googleconfig/10055} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{13343cb com.android.bips.auto_generated_rro_product__/10035} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b7de7a8 com.google.android.apps.customization.pixel/10145} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{52102c1 com.google.android.tag/10082} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{2b2a66 com.google.android.overlay.permissioncontroller/10003} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a3051a7 com.google.android.partnersetup/10124} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{d9dd654 com.google.android.apps.wallpaper.nexus/10141} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c7a09fd com.google.android.apps.nexuslauncher/10169} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{5af86f2 com.google.android.nearby.halfsheet/10179} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{8066143 com.android.theme.font.notoserifsource/10066} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{92c03c0 com.google.android.safetycenter.resources/10182} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{76248f9 com.android.internal.display.cutout.emulation.waterfall/10040} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{ab203e com.android.internal.systemui.navbar.transparent/10029} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{aa3ce9f com.google.android.connectivity.resources/10178} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{ead9bec com.android.providers.contacts.auto_generated_rro_product__/10019} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{9f57bb5 com.google.android.feedback/10162} BLOCKED
+11-24 11:20:01.563   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c35024a com.google.android.printservice.recommendation/10110} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{880b5bb com.google.android.apps.photos/10140} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{fce8ad8 com.google.android.documentsui/10098} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{44f1e31 com.android.systemui.emulation.pixel_3a_xl/10021} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{bc8f916 com.android.systemui.emulation.pixel_6_pro/10063} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{d7af297 com.android.systemui.emulation.pixel_7_pro/10054} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b0d7c84 com.android.systemui.emulation.pixel_8_pro/10001} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{2c66c6d com.google.mainline.telemetry/10152} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{cd390a2 com.android.carrierconfig.auto_generated_rro_product__/10064} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b722133 com.android.providers.partnerbookmarks/10101} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{627dcf0 com.android.wallpaper.livepicker/10090} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{5ea6269 com.android.providers.telephony.auto_generated_rro_product__/10062} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{4fe14ee com.android.phone.auto_generated_rro_vendor__/10081} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{8a39d8f com.google.mainline.adservices/10136} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e3dbc25 com.android.imsserviceentitlement/10117} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{93a91fa com.google.android.healthconnect.controller/10180} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{7c683ab com.android.internal.emulation.pixel_2_xl/10016} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{98fd3c6 com.android.internal.emulation.pixel_3_xl/10056} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{5e7af87 com.android.internal.emulation.pixel_4_xl/10047} BLOCKED
+11-24 11:20:01.564   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{48b0eb4 com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-24 11:20:01.568   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{da56652 com.android.bookmarkprovider/10114} BLOCKED
+11-24 11:20:01.568   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a05bd23 com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-24 11:20:01.568   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{246220 com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-24 11:20:01.568   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a23b7d9 com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-24 11:20:01.568   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e0f959e com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 11:20:01.576   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{65b6daa com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 11:20:01.591   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{bdaba76 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 11:20:01.639  3121  3324 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.gullstreet/app_webview/variations_seed_new"
+11-24 11:20:01.641  3121  3324 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.gullstreet/app_webview/variations_seed"
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e358877 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f4dfbc8 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{1a08ba2 com.google.android.uwb.resources/10172} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b9b5461 com.android.cts.ctsshim/10191} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{d330033 com.google.android.wifi.resources/10185} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{338cff0 com.google.android.wifi.dialog/10186} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{22bd969 com.google.android.apps.wallpaper/10160} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{91fbfee com.google.android.odad/10121} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f136c8f com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{bf2fb1c com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{29fa325 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{54becfa com.android.bluetoothmidiservice/10107} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{6e442ab com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{6c2ad08 com.google.android.cellbroadcastreceiver/10177} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{dcc4ca1 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{4dbdec6 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{2a25e87 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b5991b4 com.google.android.inputmethod.latin/10143} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{4c011dd android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:20:01.770   518   990 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{9272152 com.google.android.apps.restore/10119} BLOCKED
+11-24 11:20:02.041   518   547 I ActivityManager: Start proc 3382:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.gullstreet/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:20:03.254   518   547 I ActivityManager: Start proc 3515:com.google.android.webview:webview_apk/u0a134 for service {com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}
+11-24 11:20:03.286   518   905 D ConnectivityService: requestNetwork for uid/pid:10192/3121 activeRequest: null callbackRequest: 85 [NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.gullstreet UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:20:03.311  3382  3382 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-24 11:20:03.319   518   755 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.gullstreet UnderlyingNetworks: Null] ]
+11-24 11:20:03.319   518   755 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.gullstreet UnderlyingNetworks: Null] ]
+11-24 11:20:03.320   518   755 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.gullstreet UnderlyingNetworks: Null] ]
+11-24 11:20:03.320   518   755 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=86, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.gullstreet UnderlyingNetworks: Null] ]
+11-24 11:20:04.007   518   533 D CoreBackPreview: Window{83fa4e u0 com.zvisionclub.gullstreet/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@73f694f, mPriority=0, mIsAnimationCallback=false}
+11-24 11:20:04.131  3515  3591 W cr_AWNetworkFetcherTask: 	at org.chromium.android_webview.nonembedded.NetworkFetcherTask.download(chromium-TrichromeWebViewGoogle6432.apk-stable-567263637:48)
+11-24 11:20:04.346   518  2311 I WindowManager: finishDrawing of relaunch: Window{83fa4e u0 com.zvisionclub.gullstreet/com.zvisionclub.shell.MainActivity} 2861ms
+11-24 11:20:04.354  1043  1043 D CarrierSvcBindHelper: onPackageAdded: com.zvisionclub.gullstreet
+11-24 11:20:04.366   518   536 W ziparchive: Unable to open '/data/app/~~9jny0i5KgKl7zrUJmbKO_Q==/com.zvisionclub.gullstreet-V-17YulvCk_I6yKY7KZ04w==/base.dm': No such file or directory
+11-24 11:20:04.367   518   536 I ActivityTaskManager: Displayed com.zvisionclub.gullstreet/com.zvisionclub.shell.MainActivity for user 0: +5s300ms
+11-24 11:20:04.373   518  2677 W InputManager-JNI: Input channel object '83fa4e com.zvisionclub.gullstreet/com.zvisionclub.shell.MainActivity (client)' was disposed without first being removed with the input manager!
+11-24 11:20:04.393   518  1881 I WindowManager: setOnBackInvokedCallback(): No window state for package:com.zvisionclub.gullstreet
+11-24 11:20:04.539   518   533 E JobScheduler.JobStatus: App com.zvisionclub.gullstreet became active but still in NEVER bucket
+11-24 11:20:04.567   518  1881 W InputManager-JNI: Input channel object '4a670b6 Splash Screen com.zvisionclub.gullstreet (client)' was disposed without first being removed with the input manager!
+11-24 11:20:04.691   518  2760 D CoreBackPreview: Window{e5a6a8b u0 com.zvisionclub.gullstreet/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@6ea4a63, mPriority=0, mIsAnimationCallback=false}
+11-24 11:20:04.907   518   532 I ImeTracker: com.zvisionclub.gullstreet:4f27da79: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:20:04.907   518   532 I ImeTracker: com.zvisionclub.gullstreet:4f27da79: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:20:04.920  1535  1535 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.gullstreet fieldId=0 fieldName=null extras=null}, false)
+11-24 11:20:05.356  1043  1362 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.gullstreet
+11-24 11:20:05.357  1043  1043 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.gullstreet
+11-24 11:20:05.396  1043  1362 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.gullstreet
+11-24 11:20:06.356  1628  1628 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.gullstreet], userId:[0], reason:[package is added.].
+11-24 11:20:06.356  1628  1628 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.gullstreet.
+11-24 11:20:06.367  1628  3481 I AiAiEcho: AppIndexer Package:[com.zvisionclub.gullstreet] UserProfile:[0] Enabled:[true].
+11-24 11:20:06.367  1628  3481 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.gullstreet], userId:[0], reason:[package is updated.].
+11-24 11:20:07.227   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{2d63c8a com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:20:07.227   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a6b64a9 com.android.camera2/10147} BLOCKED
+11-24 11:20:07.227   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{86602fb com.google.android.gm/10142} BLOCKED
+11-24 11:20:07.227   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{179ef18 com.google.android.devicelockcontroller/10171} BLOCKED
+11-24 11:20:07.227   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c544d71 com.google.android.rkpdapp/10175} BLOCKED
+11-24 11:20:07.227   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{5e39756 com.google.android.contacts/10155} BLOCKED
+11-24 11:20:07.228   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c87d3d7 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:20:07.228   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{a14762c com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:20:07.228   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{7aae4c4 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:20:07.228   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b5991b4 com.google.android.inputmethod.latin/10143} BLOCKED
+11-24 11:20:07.288   518  2760 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{339a0eb com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:20:07.288   518  2760 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{f534e48 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:20:09.559  3121  4031 D ProfileInstaller: Installing profile for com.zvisionclub.gullstreet
+11-24 11:20:10.503  1043  1043 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.gullstreet
+11-24 11:20:10.825  1043  1362 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.gullstreet
+11-24 11:20:11.911   836   836 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.zvisionclub.gullstreet, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
+11-24 11:20:12.053  1628  1628 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.gullstreet.
+11-24 11:20:12.053  1628  3481 I AiAiEcho: AppIndexer Package:[com.zvisionclub.gullstreet] UserProfile:[0] Enabled:[true].
+11-24 11:20:12.053  1628  3481 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.gullstreet], userId:[0], reason:[package is updated.].
+11-24 11:20:16.399  1479  3362 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.gullstreet [CONTEXT service_id=258 ]
+11-24 11:20:17.238   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{e687854 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:20:17.238   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{c1d03fd com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:20:27.631   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{2b7a12e com.google.android.as/10126} BLOCKED
+11-24 11:20:27.632   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{2dfd4cf com.google.android.gm/10142} BLOCKED
+11-24 11:20:27.632   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{33ede5c com.google.android.contacts/10155} BLOCKED
+11-24 11:20:36.622   518  2665 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{216ac52 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:20:40.853   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{6fa0689 com.google.android.youtube/10139} BLOCKED
+11-24 11:20:40.855   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{d68b68e com.google.android.as/10126} BLOCKED
+11-24 11:20:40.855   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{d092eaf com.google.android.gm/10142} BLOCKED
+11-24 11:20:40.855   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b587ee2 com.google.android.apps.maps/10154} BLOCKED
+11-24 11:20:40.855   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{37c62bc com.google.android.contacts/10155} BLOCKED
+11-24 11:20:40.884  4369  4964 I cr_CronetUrlRequestContext: destroyNativeStreamLocked org.chromium.net.impl.CronetBidirectionalStream@3028d20
+11-24 11:20:42.130   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{49e0529 com.google.android.gm/10142} BLOCKED
+11-24 11:20:42.134   518  1955 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{b8ce9dc com.google.android.gm/10142} BLOCKED
+11-24 11:20:44.848   518   572 I AppsFilter: interaction: PackageSetting{5676b64 com.zvisionclub.gullstreet/10192} -> PackageSetting{dee6afe com.google.android.gm/10142} BLOCKED
