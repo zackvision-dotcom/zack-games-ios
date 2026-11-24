@@ -861,6 +861,7 @@ targets:
       - path: NimbusCatch/Assets.xcassets
       - path: NimbusCatch/Web
         type: folder
+      - path: NimbusCatch/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
       - package: Firebase
         product: FirebaseAnalytics
@@ -916,6 +917,7 @@ targets:
       - path: JamLine/Assets.xcassets
       - path: JamLine/Web
         type: folder
+      - path: JamLine/GoogleService-Info.plist   # Firebase app of this game (ios/Shared/NativeKit.swift configures it)
     dependencies:
       - package: Firebase
         product: FirebaseAnalytics
