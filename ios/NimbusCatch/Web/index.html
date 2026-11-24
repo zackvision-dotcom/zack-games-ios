@@ -421,7 +421,7 @@ h3{margin:10px 0 6px;font-size:16px}
     giftTitle: 'Cadeau du jour', giftDay: 'Jour {0}', giftTake: 'Récupérer', giftBack: 'Reviens demain pour le jour {0} !',
     challenge: 'Défi du jour', challengeTxt: 'Attrape {0} de plus de {1} cm', challengeDone: 'Défi réussi ! +1 appât doré',
     weather: 'Météo : {0}', w_clair: 'ciel clair', w_vent: 'grand vent', w_pluie: 'pluie fine', w_arc: 'arc-en-ciel', nextWeather: 'change dans {0}',
-    sound: 'Sons', music: 'Musique', vib: 'Vibrations', lang: 'Langue', privacy: 'Confidentialité', privacyChoices: 'Choix de confidentialité', restore: 'Restaurer les achats', restored: 'Achats restaurés.',
+    sound: 'Sons', music: 'Musique', vib: 'Vibrations', lang: 'Langue', privacy: 'Confidentialité', privacyChoices: 'Choix de confidentialité', restore: 'Restaurer les achats', restored: 'Achats restaurés.', moreGames: 'Nos autres jeux', shareGame: 'Partager le jeu', shareGameText: 'Je pêche des créatures dans les nuages depuis un dirigeable dans Nimbus Catch ! Viens essayer.',
     testAd: 'Publicité de test', testBuy: 'Achat de test (rien n’est facturé)', buyFail: 'L’achat n’a pas abouti.', buyPending: 'Achat en attente de validation.', x2: 'Coquilles ×2', x2Done: 'Doublé !', bonusCast: 'Lancer bonus (vidéo)', relink: 'Remettre la ligne (vidéo)',
     s_noads: 'Sans publicité', s_noadsSub: 'Plus aucune publicité entre les sorties. Les vidéos bonus restent au choix.',
     s_starter: 'Pack de démarrage', s_starterSub: 'La peinture « dirigeable rouge », le moulinet n° 2 tout de suite et 200 perles.',
@@ -458,7 +458,7 @@ h3{margin:10px 0 6px;font-size:16px}
     giftTitle: 'Daily gift', giftDay: 'Day {0}', giftTake: 'Collect', giftBack: 'Come back tomorrow for day {0}!',
     challenge: 'Daily challenge', challengeTxt: 'Catch a {0} over {1} cm', challengeDone: 'Challenge done! +1 golden bait',
     weather: 'Weather: {0}', w_clair: 'clear sky', w_vent: 'strong wind', w_pluie: 'light rain', w_arc: 'rainbow', nextWeather: 'changes in {0}',
-    sound: 'Sounds', music: 'Music', vib: 'Vibration', lang: 'Language', privacy: 'Privacy', privacyChoices: 'Privacy choices', restore: 'Restore purchases', restored: 'Purchases restored.',
+    sound: 'Sounds', music: 'Music', vib: 'Vibration', lang: 'Language', privacy: 'Privacy', privacyChoices: 'Privacy choices', restore: 'Restore purchases', restored: 'Purchases restored.', moreGames: 'Our other games', shareGame: 'Share the game', shareGameText: 'I fish cloud creatures from an airship in Nimbus Catch! Come and try.',
     testAd: 'Test advert', testBuy: 'Test purchase (nothing is charged)', buyFail: 'The purchase didn’t go through.', buyPending: 'Purchase awaiting approval.', x2: 'Shells ×2', x2Done: 'Doubled!', bonusCast: 'Bonus cast (video)', relink: 'Fix the line (video)',
     s_noads: 'No ads', s_noadsSub: 'No more adverts between outings. Bonus videos stay optional.',
     s_starter: 'Starter pack', s_starterSub: 'The “red airship” paint, reel n° 2 right away and 200 pearls.',
@@ -664,7 +664,8 @@ let S; try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 
 for (const k of ['ups', 'login', 'chal']) S[k] = Object.assign(fresh()[k], S[k]);
 I.set(S.lang);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
-const track = (ev, d) => { try { (window.GSAnalytics || console.debug)('[ga]', ev, d || ''); } catch (e) {} };
+const track = (ev, d) => { try { if (window.ZV && ZV.available) ZV.event(ev, d); else console.debug('[ga]', ev, d || ''); } catch (e) {} };   // ZV = ios/Shared/NativeKit.swift (Firebase Analytics)
+const ZVK = () => window.ZV && ZV.available ? ZV : null;
 const shipLvl = () => 1 + S.ups.moulinet + S.ups.ligne + S.ups.appat;
 
 // ---------- audio ----------
@@ -704,7 +705,7 @@ const buzz = p => { if (S.vib && navigator.vibrate) try { navigator.vibrate(p); 
 // ---------- ads & purchases (native bridges of the iOS shell; test stand-ins on the web) ----------
 const NADS = () => window.webkit?.messageHandlers?.ads, nads = op => NADS() ? NADS().postMessage({ op }).catch(() => false) : Promise.resolve(false);
 const Ads = { async init() { if (NADS()) await nads('init'); }, async rewarded(kind) { track('ad_rewarded', { kind }); if (NADS()) return (await nads('rewarded')) === true; return testAd(); },
-  async interstitial() { if (S.owned.noads || S.outings < E.ads.interFromOuting) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); if (NADS()) { await nads('interstitial'); return; } await testAd(); } };
+  async interstitial() { if (S.owned.noads || S.outings < E.ads.interFromOuting) return; const now = Date.now(); if (now - S.lastAdAt < E.ads.gapSec * 1000) return; S.lastAdAt = now; save(); if (NADS()) { if (!(await nads('interstitial')) && ZVK()) await ZVK().houseAd(I.lang === 'en' ? 'en' : 'fr'); return; } await testAd(); } };
 function testAd() { return new Promise(res => { const el = div('adov', `<div class="adbox"><div class="adtag">${t('testAd')}</div><div class="adcount">3</div></div>`); document.body.appendChild(el); let n = 3; const iv = setInterval(() => { n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓'; if (n <= 0) { clearInterval(iv); setTimeout(() => { el.remove(); res(true); }, 300); } }, 1000); }); }
 const IAP = window.webkit?.messageHandlers?.store, PID = id => 'com.zvisionclub.nimbuscatch.' + id, iap = (op, a) => IAP.postMessage(Object.assign({ op }, a));
 const Store = { prices: {}, price(it) { return this.prices[it.id] || it.price; },
@@ -971,10 +972,12 @@ function shopModal() { Store.init();
   m.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => { SFX.ui(); if (await Store.buy(E.store.find(x => x.id === b.dataset.buy))) shopModal(); }); }
 function settingsModal() { const sw = (k, l) => `<label class="sw">${l}<input type="checkbox" data-s="${k}" ${S[k] ? 'checked' : ''}></label>`;
   const m = openModal(`<h2>${t('settings')}</h2>${sw('sound', t('sound'))}${sw('music', t('music'))}${sw('vib', t('vib'))}<label class="sw">${t('lang')}<select data-lang>${I.langs.map(l => `<option value="${l}" ${l === I.lang ? 'selected' : ''}>${l.toUpperCase()}</option>`).join('')}</select></label>
-    <button class="b2" data-restore>${t('restore')}</button>${NADS() ? `<button class="b2" data-ump>${t('privacyChoices')}</button>` : ''}<button class="b2" data-priv>${t('privacy')}</button><div class="ver">Nimbus Catch ${window.NC_VERSION || ''}</div><button class="b2" data-close>OK</button>`, 'wide');
+    <button class="b2" data-restore>${t('restore')}</button>${NADS() ? `<button class="b2" data-ump>${t('privacyChoices')}</button>` : ''}${ZVK() ? `${ZVK().others ? `<button class="b2" data-more>${t('moreGames')}</button>` : ''}<button class="b2" data-sharegame>${t('shareGame')}</button>` : ''}<button class="b2" data-priv>${t('privacy')}</button><div class="ver">Nimbus Catch ${window.NC_VERSION || ''}</div><button class="b2" data-close>OK</button>`, 'wide');
   m.querySelectorAll('[data-s]').forEach(c => c.onchange = () => { S[c.dataset.s] = c.checked; save(); });
   m.querySelector('[data-lang]').onchange = e => { S.lang = e.target.value; I.set(S.lang); save(); settingsModal(); renderHome(); };
   m.querySelector('[data-restore]').onclick = () => Store.restore(); const u = m.querySelector('[data-ump]'); if (u) u.onclick = () => nads('consentForm');
+  const mg = m.querySelector('[data-more]'); if (mg) mg.onclick = () => ZVK().moreGames(I.lang === 'en' ? 'en' : 'fr').then(ok => ok || toast(I.lang === 'en' ? 'Coming soon!' : 'Bientôt !'));
+  const sg = m.querySelector('[data-sharegame]'); if (sg) sg.onclick = () => ZVK().share(t('shareGameText'));
   m.querySelector('[data-priv]').onclick = () => openModal(`<div class="legal">${window.NC_PRIVACY || ''}</div><button class="b2" data-close>OK</button>`, 'wide'); }
 
 // ---------- title & loop ----------
