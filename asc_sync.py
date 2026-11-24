@@ -506,7 +506,7 @@ if __name__ == '__main__':
                     st = (cur['data']['attributes'].get('assetDeliveryState') or {}).get('state')
                     if st == 'COMPLETE':
                         print('IAPSHOT', pid, 'already'); continue
-                    call('DELETE', f"/inAppPurchaseAppStoreReviewScreenshots/{cur['data']['id']}")
+                    call('DELETE', f"/inAppPurchaseAppStoreReviewScreenshots/{cur['data']['id']}"); time.sleep(8)   # a failed shot must be gone before the new POST
                 if not os.path.exists(path):
                     print('IAPSHOT', pid, 'MISSING file'); continue
                 data = open(path, 'rb').read()
