@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="fr">
-<head><meta name="robots" content="noindex,nofollow"><style>#mfoot div:has(> #m_shop){display:none!important}.adov{display:none!important}</style>
+<head><meta name="robots" content="noindex,nofollow"><style>#mfoot div:has(> #m_shop){display:none!important}.adov{display:none!important}[data-restore],[data-consent],[data-ump]{display:none!important}</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#2B2238">
@@ -1795,5 +1795,5 @@ resize(); titleScreen(); requestAnimationFrame(frame);
 })();
 </script>
 
-<script>/* web demo: no ads, no in-app purchases (portal SDK goes here) */window.testAd=function(){return Promise.resolve(true)};</script></body>
+<script>/* web demo: no ads, no in-app purchases (portal SDK goes here) */window.testAd=function(){return Promise.resolve(true)};if(typeof consentModal==='function'){window.consentModal=function(f){if(f)return;S.consent=false;save();closeModal();afterConsent();};}</script></body>
 </html>
