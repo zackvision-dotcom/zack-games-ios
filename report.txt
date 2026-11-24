@@ -1,15 +1,5 @@
-SUBMIT circuitcaper content rights: no third-party content
-SUBMIT circuitcaper version item added
-SUBMIT circuitcaper draft only, items: [dict_keys([])]
-SUBMIT crumblecrew content rights: no third-party content
-SUBMIT crumblecrew version item added
-SUBMIT crumblecrew draft only, items: [dict_keys([])]
-SUBMIT pulsepost content rights: no third-party content
-SUBMIT pulsepost version item added
-SUBMIT pulsepost draft only, items: [dict_keys([])]
-SUBMIT coralstack content rights: no third-party content
-SUBMIT coralstack version item added
-SUBMIT coralstack draft only, items: [dict_keys([])]
-SUBMIT lanternhold content rights: no third-party content
-SUBMIT lanternhold version item added
-SUBMIT lanternhold draft only, items: [dict_keys([])]
+STATUS circuitcaper 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-20
+STATUS crumblecrew 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-20
+STATUS pulsepost 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-22
+STATUS coralstack 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-20
+STATUS lanternhold 1.0 WAITING_FOR_REVIEW release MANUAL created 2026-11-22
