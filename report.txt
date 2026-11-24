@@ -1,3 +1,24 @@
-COPYRIGHT tossbistro ok
-COPYRIGHT nimbuscatch ok
-COPYRIGHT jamline ok
+PREP tossbistro territories 174 CHN False eyJzIjoiNjgzODYzMzE3NiIsInQiOiJDSE4ifQ
+PREP tossbistro age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 98ef1c4b-eb4a-48b5-b826-57570a5d1c61
+PREP tossbistro price schedule True
+PREP tossbistro iap truffes_100 READY_TO_SUBMIT
+PREP tossbistro iap truffes_300 READY_TO_SUBMIT
+PREP tossbistro iap starter READY_TO_SUBMIT
+PREP tossbistro iap pass_saison_2026 READY_TO_SUBMIT
+PREP tossbistro iap noads READY_TO_SUBMIT
+PREP nimbuscatch territories 174 CHN False eyJzIjoiNjgzODYzMjg1NSIsInQiOiJDSE4ifQ
+PREP nimbuscatch age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id e33e83c1-eb12-4409-a551-3c9940e0b3e0
+PREP nimbuscatch price schedule True
+PREP nimbuscatch iap perles_100 MISSING_METADATA
+PREP nimbuscatch iap perles_300 MISSING_METADATA
+PREP nimbuscatch iap starter MISSING_METADATA
+PREP nimbuscatch iap pass_saison_2026 MISSING_METADATA
+PREP nimbuscatch iap noads MISSING_METADATA
+PREP jamline territories 174 CHN False eyJzIjoiNjgzODYzMzMzOSIsInQiOiJDSE4ifQ
+PREP jamline age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id b4e24a62-e098-43d3-b109-d050123f896b
+PREP jamline price schedule True
+PREP jamline iap miel_100 READY_TO_SUBMIT
+PREP jamline iap atelier_libre READY_TO_SUBMIT
+PREP jamline iap starter READY_TO_SUBMIT
+PREP jamline iap pass_saison_2026 READY_TO_SUBMIT
+PREP jamline iap noads READY_TO_SUBMIT
