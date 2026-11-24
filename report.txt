@@ -1,16 +1,1 @@
-SETBUILD gullstreet version 1.0.1 PREPARE_FOR_SUBMISSION -> build 1018 VALID
-  notes 1320 chars, UMP/ATT sentence: True | attachments []
-  appInfo READY_FOR_SALE lootBox False advertising True
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
-SETBUILD silkhop version 1.0.1 PREPARE_FOR_SUBMISSION -> build 1018 VALID
-  notes 1320 chars, UMP/ATT sentence: True | attachments []
-  appInfo READY_FOR_SALE lootBox False advertising True
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
-  appInfo PREPARE_FOR_SUBMISSION lootBox False advertising True
-  privacy en-US https://zackvision.fr/jeux/confidentialite/
-  privacy fr-FR https://zackvision.fr/jeux/confidentialite/
+SETBUILD pulsepost build 1022 not found
