@@ -6,11 +6,11 @@
    "priceEUR": 3.99,
    "fr-FR": {
     "name": "Sans publicité",
-    "description": "Plus aucune publicité entre les niveaux. Les vidéos bonus restent au choix."
+    "description": "Plus de pub entre les niveaux."
    },
    "en-US": {
     "name": "No ads",
-    "description": "No more adverts between levels. Bonus videos stay optional."
+    "description": "No more ads between levels."
    }
   },
   {
@@ -19,11 +19,11 @@
    "priceEUR": 1.99,
    "fr-FR": {
     "name": "Pack de démarrage",
-    "description": "La tenue « chef étoilé », la terrasse du bistro et 200 truffes."
+    "description": "Tenue chef étoilé, terrasse et 200 truffes."
    },
    "en-US": {
     "name": "Starter pack",
-    "description": "The “star chef” outfit, the bistro terrace and 200 truffles."
+    "description": "Star chef outfit, terrace and 200 truffles."
    }
   },
   {
@@ -32,11 +32,11 @@
    "priceEUR": 1.99,
    "fr-FR": {
     "name": "100 truffes",
-    "description": "Pour les tenues, les décos et finir une minuterie (prix fixes)."
+    "description": "100 truffes pour tenues et décos."
    },
    "en-US": {
     "name": "100 truffles",
-    "description": "For outfits, decorations and finishing a timer (fixed prices)."
+    "description": "100 truffles for outfits and decorations."
    }
   },
   {
@@ -45,11 +45,11 @@
    "priceEUR": 4.99,
    "fr-FR": {
     "name": "300 truffes",
-    "description": "Pour les tenues, les décos et finir une minuterie (prix fixes)."
+    "description": "300 truffes pour tenues et décos."
    },
    "en-US": {
     "name": "300 truffles",
-    "description": "For outfits, decorations and finishing a timer (fixed prices)."
+    "description": "300 truffles for outfits and decorations."
    }
   },
   {
@@ -58,11 +58,11 @@
    "priceEUR": 2.99,
    "fr-FR": {
     "name": "Passe de saison : Noël",
-    "description": "Achat unique : la tenue de Noël et la bûche du bistro."
+    "description": "Tenue de Noël et bûche du bistro."
    },
    "en-US": {
     "name": "Season pass: Christmas",
-    "description": "One-time purchase: the Christmas outfit and the bistro’s yule log."
+    "description": "Christmas outfit and the bistro's yule log."
    }
   }
  ],
@@ -73,11 +73,11 @@
    "priceEUR": 3.99,
    "fr-FR": {
     "name": "Sans publicité",
-    "description": "Plus aucune publicité entre les sorties. Les vidéos bonus restent au choix."
+    "description": "Plus de pub entre les sorties."
    },
    "en-US": {
     "name": "No ads",
-    "description": "No more adverts between outings. Bonus videos stay optional."
+    "description": "No more ads between outings."
    }
   },
   {
@@ -86,11 +86,11 @@
    "priceEUR": 1.99,
    "fr-FR": {
     "name": "Pack de démarrage",
-    "description": "La peinture « dirigeable rouge », le moulinet n° 2 tout de suite et 200 perles."
+    "description": "Dirigeable rouge, moulinet n° 2, 200 perles."
    },
    "en-US": {
     "name": "Starter pack",
-    "description": "The “red airship” paint, reel n° 2 right away and 200 pearls."
+    "description": "Red airship, reel no. 2 and 200 pearls."
    }
   },
   {
@@ -99,11 +99,11 @@
    "priceEUR": 1.99,
    "fr-FR": {
     "name": "100 perles de rosée",
-    "description": "Pour les tenues, les peintures, les décos et finir un casier (prix fixes)."
+    "description": "100 perles pour tenues et peintures."
    },
    "en-US": {
     "name": "100 dew pearls",
-    "description": "For outfits, paints, decorations and finishing a trap (fixed prices)."
+    "description": "100 pearls for outfits and paints."
    }
   },
   {
@@ -112,11 +112,11 @@
    "priceEUR": 4.99,
    "fr-FR": {
     "name": "300 perles de rosée",
-    "description": "Pour les tenues, les peintures, les décos et finir un casier (prix fixes)."
+    "description": "300 perles pour tenues et peintures."
    },
    "en-US": {
     "name": "300 dew pearls",
-    "description": "For outfits, paints, decorations and finishing a trap (fixed prices)."
+    "description": "300 pearls for outfits and paints."
    }
   },
   {
@@ -125,11 +125,11 @@
    "priceEUR": 2.99,
    "fr-FR": {
     "name": "Passe de saison : Noël",
-    "description": "Achat unique : le bonnet de Noël de Firmin et les décos d’hiver de la volière."
+    "description": "Bonnet de Noël de Firmin et décor d'hiver."
    },
    "en-US": {
     "name": "Season pass: Christmas",
-    "description": "One-time purchase: Firmin’s Christmas hat and the aviary’s winter decorations."
+    "description": "Firmin's Christmas hat and winter decor."
    }
   }
  ],
@@ -140,11 +140,11 @@
    "priceEUR": 3.99,
    "fr-FR": {
     "name": "Sans pub",
-    "description": "Plus aucune publicité entre les ateliers. Les bonus par vidéo restent au choix."
+    "description": "Plus de pub entre les ateliers."
    },
    "en-US": {
     "name": "No ads",
-    "description": "No more ads between workshops. Video bonuses stay optional."
+    "description": "No more ads between workshops."
    }
   },
   {
@@ -153,11 +153,11 @@
    "priceEUR": 1.99,
    "fr-FR": {
     "name": "Pack de démarrage",
-    "description": "La tenue « chef étoilée », un cerisier prêt à cueillir et 500 pièces"
+    "description": "Tenue chef étoilée et un cerisier prêt."
    },
    "en-US": {
     "name": "Starter pack",
-    "description": "The “star chef” outfit, a cherry tree ready to pick and 500 coins"
+    "description": "Star chef outfit and a ready cherry tree."
    }
   },
   {
@@ -166,11 +166,11 @@
    "priceEUR": 2.99,
    "fr-FR": {
     "name": "Atelier libre",
-    "description": "Le bac à sable : toutes les machines, sans commande, pour construire l’usine de tes rêves"
+    "description": "Le bac à sable : toutes les machines."
    },
    "en-US": {
     "name": "Free workshop",
-    "description": "The sandbox: every machine, no orders, to build the factory of your dreams"
+    "description": "The sandbox: every machine, no orders."
    }
   },
   {
@@ -179,11 +179,11 @@
    "priceEUR": 1.99,
    "fr-FR": {
     "name": "100 pots de miel",
-    "description": "Pour les décos et les tenues à prix fixe, ou finir un arbre"
+    "description": "100 pots de miel pour décos et tenues."
    },
    "en-US": {
     "name": "100 honey jars",
-    "description": "For fixed-price decorations and outfits, or to finish a tree"
+    "description": "100 honey jars for decorations and outfits."
    }
   },
   {
@@ -192,11 +192,11 @@
    "priceEUR": 2.99,
    "fr-FR": {
     "name": "Passe de saison hiver 2026",
-    "description": "Le sapin d’hiver, le bonnet de Noël et le cadeau du jour doublé"
+    "description": "Sapin d'hiver, bonnet de Noël, cadeau."
    },
    "en-US": {
     "name": "Winter 2026 season pass",
-    "description": "The winter tree, the Christmas hat and a doubled daily gift"
+    "description": "Winter tree, Christmas hat and a gift."
    }
   }
  ]
