@@ -1,3 +1,3 @@
-# draftver 5
-draftver
+# status after submit
+status
 circuitcaper crumblecrew pulsepost coralstack lanternhold
