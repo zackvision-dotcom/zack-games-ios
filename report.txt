@@ -1,43 +1,15 @@
-== jamline
-  version text fr-FR ok
-  version text en-US ok
-  app info fr-FR ok
-  app info en-US ok
-    ops 1 [(0, 425956)]
-    shot 01.jpg 415 KB
-    ops 1 [(0, 344572)]
-    shot 02.jpg 336 KB
-    ops 1 [(0, 415176)]
-    shot 03.jpg 405 KB
-    ops 1 [(0, 391139)]
-    shot 04.jpg 381 KB
-    ops 1 [(0, 369043)]
-    shot 05.jpg 360 KB
-    ops 1 [(0, 363590)]
-    shot 06.jpg 355 KB
-  media fr-FR 6 screens, 2 previews
-    ops 1 [(0, 425956)]
-    shot 01.jpg 415 KB
-    ops 1 [(0, 344572)]
-    shot 02.jpg 336 KB
-    ops 1 [(0, 415176)]
-    shot 03.jpg 405 KB
-    ops 1 [(0, 391139)]
-    shot 04.jpg 381 KB
-    ops 1 [(0, 369043)]
-    shot 05.jpg 360 KB
-    ops 1 [(0, 363590)]
-    shot 06.jpg 355 KB
-  media en-US 6 screens, 2 previews
-== previews jamline
-  uploaded 1.mp4 17560 KB -> 1e400019-79d4-837b-8118-0224b613a52e
-  uploaded 2.mp4 5744 KB -> ea000019-79d4-837b-8110-6724ebab56d5
-  video 1e400019-79d4-837b-8118-0224b613a52e PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
-  video ea000019-79d4-837b-8110-6724ebab56d5 PREPARE_FOR_SUBMISSION null spec a7adff12-330a-5fa5-97d4-c5c7953edb0c
-  placement en-US ACTIVE
-  placement en-US ACTIVE
-  placement fr-FR ACTIVE
-  placement fr-FR ACTIVE
-CHECK jamline en-US desc=694 kw=92 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17981507, 'fileName': '1.mp4', 'sourceFileChecksum': '87d6463088509c7507792324bc14c2dd', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 5882287, 'fileName': '2.mp4', 'sourceFileChecksum': '3d70fbb82e3b1548909085aca501bf41', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-CHECK jamline fr-FR desc=747 kw=95 screens=['COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE', 'COMPLETE'] previews=[{'fileSize': 17981507, 'fileName': '1.mp4', 'sourceFileChecksum': '87d6463088509c7507792324bc14c2dd', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}, {'fileSize': 5882287, 'fileName': '2.mp4', 'sourceFileChecksum': '3d70fbb82e3b1548909085aca501bf41', 'previewFrameTimeCode': '00:00:05:00', 'mimeType': 'video/mp4', 'videoUrl': '', 'previewFrameImage': {'image': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'state': {'errors': None, 'warnings': None, 'state': 'COMPLETE'}}, 'previewImage': {'templateUrl': 'https://is1-ssl.mzstatic.com/image/thumb//{w}x{h}bb.{f}', 'width': 0, 'height': 0}, 'assetDeliveryState': {'errors': [], 'warnings': None, 'state': 'COMPLETE'}, 'videoDeliveryState': {'errors': [], 'warnings': None, 'state': 'PROCESSING'}}]
-done; failed: []
+IAPSHOT com.zvisionclub.tossbistro.truffes_100 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.tossbistro.truffes_300 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.tossbistro.starter uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.tossbistro.pass_saison_2026 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.tossbistro.noads uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.nimbuscatch.perles_100 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.nimbuscatch.perles_300 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.nimbuscatch.starter uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.nimbuscatch.pass_saison_2026 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.nimbuscatch.noads uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.jamline.miel_100 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.jamline.atelier_libre uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.jamline.starter uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.jamline.pass_saison_2026 uploaded MISSING_METADATA
+IAPSHOT com.zvisionclub.jamline.noads uploaded MISSING_METADATA
