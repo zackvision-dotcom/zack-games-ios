@@ -63,6 +63,16 @@ jobs:
           path: |
             android/app/build/outputs/apk/**/*.apk
             android/app/build/outputs/bundle/**/*.aab
+      - name: Publish the release AAB (branch aab-<game>; signed later with the upload key kept off GitHub)
+        run: |
+          set +e
+          mkdir -p "$RUNNER_TEMP/aab"; cp $(ls android/app/build/outputs/bundle/*/*.aab | head -1) "$RUNNER_TEMP/aab/${{ matrix.game }}.aab"
+          echo "${{ needs.plan.outputs.vc }}" > "$RUNNER_TEMP/aab/versionCode.txt"
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git stash -u -q; git checkout -q --orphan aab-tmp; git rm -rqf --cached . >/dev/null
+          git --work-tree="$RUNNER_TEMP/aab" add -A; git --work-tree="$RUNNER_TEMP/aab" commit -qm "aab ${{ matrix.game }} ${{ needs.plan.outputs.vc }}"
+          git push -qf origin HEAD:refs/heads/aab-${{ matrix.game }}
+          git checkout -q -f ${{ github.sha }}
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules

@@ -1,5 +1,15 @@
 # One game per line (flavor of android/games.json). ADS_TEST=0 = real AdMob units (release for Google Play). VERSION=1.0.1 sets versionName.
 gullstreet
+silkhop
+braise
 clockpawsquad
 dungeondash
+vanvoyage
+circuitcaper
+crumblecrew
+pulsepost
+coralstack
+lanternhold
+tossbistro
 nimbuscatch
+jamline
