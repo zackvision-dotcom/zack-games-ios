@@ -985,12 +985,14 @@ window.PPAUDIO = (() => {
   // ---- voices (w = AudioContext time) ----
   function env(g, w, a, peak, dur) { g.gain.setValueAtTime(0.0001, w); g.gain.linearRampToValueAtTime(peak, w + a); g.gain.exponentialRampToValueAtTime(0.0008, w + dur); }
   function osc(type, f, w, dur, peak, dest, o = {}) {
+    w = Math.max(0, w);   // a note scheduled a hair before the clock started must not throw (RangeError on setValueAtTime)
     const c = AU.ctx, n = c.createOscillator(), g = c.createGain(); n.type = type; n.frequency.setValueAtTime(f, w);
     if (o.slide) n.frequency.exponentialRampToValueAtTime(o.slide, w + (o.slideT || dur)); if (o.detune) n.detune.value = o.detune;
     let last = n; if (o.lp) { const fl = c.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.setValueAtTime(o.lp, w); if (o.lpTo) fl.frequency.exponentialRampToValueAtTime(o.lpTo, w + dur); fl.Q.value = o.q || 1; n.connect(fl); last = fl; } else last = n;
     last.connect(g); env(g, w, o.a || 0.005, peak, dur); g.connect(dest); n.start(w); n.stop(w + dur + 0.05);
   }
   function hiss(w, dur, f, q, peak, dest, type = 'bandpass', o = {}) {
+    w = Math.max(0, w);
     const c = AU.ctx, s = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain(); s.buffer = AU.noise; fl.type = type; fl.frequency.setValueAtTime(f, w);
     if (o.to) fl.frequency.exponentialRampToValueAtTime(o.to, w + dur); fl.Q.value = q; s.connect(fl); fl.connect(g); env(g, w, o.a || 0.002, peak, dur); g.connect(dest); s.start(w, Math.random() * 0.5); s.stop(w + dur + 0.05);
   }

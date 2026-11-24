@@ -1,3 +1,1 @@
-TossBistro
-NimbusCatch
-JamLine
+PulsePost ADS_TEST=0
