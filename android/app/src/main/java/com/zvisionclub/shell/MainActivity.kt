@@ -72,6 +72,10 @@ class MainActivity : ComponentActivity() {
             }
         }
         web.webChromeClient = object : WebChromeClient() {
+            override fun onConsoleMessage(m: android.webkit.ConsoleMessage): Boolean {
+                if (BuildConfig.DEBUG) android.util.Log.i("ZVJS", "${m.messageLevel()} ${m.message()} @${m.sourceId()?.substringAfterLast('/')}:${m.lineNumber()}")
+                return true
+            }
             override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message): Boolean {
                 val href = view.hitTestResult.extra
                 if (href != null) openOutside(Uri.parse(href))
