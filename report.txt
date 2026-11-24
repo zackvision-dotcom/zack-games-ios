@@ -1,5 +1,37 @@
-STATUS circuitcaper 1.0 PREPARE_FOR_SUBMISSION release MANUAL (set now) created 2026-11-20
-STATUS crumblecrew 1.0 PREPARE_FOR_SUBMISSION release MANUAL (set now) created 2026-11-20
-STATUS pulsepost 1.0 PREPARE_FOR_SUBMISSION release MANUAL (set now) created 2026-11-22
-STATUS coralstack 1.0 PREPARE_FOR_SUBMISSION release MANUAL (set now) created 2026-11-20
-STATUS lanternhold 1.0 PREPARE_FOR_SUBMISSION release MANUAL (set now) created 2026-11-22
+PREP circuitcaper territories 174 CHN False eyJzIjoiNjgzNzYxMDA4NCIsInQiOiJDSE4ifQ
+PREP circuitcaper age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 8632b978-13d4-427f-ba96-fb11e0f32b18
+PREP circuitcaper price schedule True
+PREP circuitcaper iap costume READY_TO_SUBMIT
+PREP circuitcaper iap starter READY_TO_SUBMIT
+PREP circuitcaper iap loot READY_TO_SUBMIT
+PREP circuitcaper iap noads READY_TO_SUBMIT
+PREP crumblecrew territories 174 CHN False eyJzIjoiNjgzNzYwOTM0NSIsInQiOiJDSE4ifQ
+PREP crumblecrew age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 55480e48-dae2-4d19-8d3c-8d2b263de351
+PREP crumblecrew price schedule True
+PREP crumblecrew iap starter READY_TO_SUBMIT
+PREP crumblecrew iap gold READY_TO_SUBMIT
+PREP crumblecrew iap noads READY_TO_SUBMIT
+PREP crumblecrew iap theme READY_TO_SUBMIT
+PREP pulsepost territories 174 CHN False eyJzIjoiNjgzNzkyMzE3OSIsInQiOiJDSE4ifQ
+PREP pulsepost age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 00b1b32e-c903-4f94-9334-e3b319f5afdf
+PREP pulsepost price schedule True
+PREP pulsepost iap plumes READY_TO_SUBMIT
+PREP pulsepost iap album_nuit_electro READY_TO_SUBMIT
+PREP pulsepost iap starter READY_TO_SUBMIT
+PREP pulsepost iap pass_hiver_2026 READY_TO_SUBMIT
+PREP pulsepost iap noads READY_TO_SUBMIT
+PREP coralstack territories 174 CHN False eyJzIjoiNjgzNzI4ODY2NiIsInQiOiJDSE4ifQ
+PREP coralstack age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 5d9b406e-af8e-4b1b-8724-f544a4350958
+PREP coralstack price schedule True
+PREP coralstack iap shells READY_TO_SUBMIT
+PREP coralstack iap starter READY_TO_SUBMIT
+PREP coralstack iap noads READY_TO_SUBMIT
+PREP coralstack iap theme READY_TO_SUBMIT
+PREP lanternhold territories 174 CHN False eyJzIjoiNjgzNzkyMjkxNSIsInQiOiJDSE4ifQ
+PREP lanternhold age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id 38e50db8-90cc-4eaf-89fa-36cc5ab52ac4
+PREP lanternhold price schedule True
+PREP lanternhold iap acorns READY_TO_SUBMIT
+PREP lanternhold iap festival READY_TO_SUBMIT
+PREP lanternhold iap starter READY_TO_SUBMIT
+PREP lanternhold iap pass_hiver_2026 READY_TO_SUBMIT
+PREP lanternhold iap noads READY_TO_SUBMIT
