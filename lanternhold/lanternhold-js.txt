@@ -1,0 +1,80 @@
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{2cfa386 com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{5dfa447 com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{a30c474 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{8572d9d com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{97d5c5e com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{1727212 com.google.android.uwb.resources/10190} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{b39283f com.android.cts.ctsshim/10172} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{8683de3 com.google.android.wifi.resources/10174} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{7cfb3e0 com.google.android.wifi.dialog/10175} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{b7e0699 com.google.android.apps.wallpaper/10160} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{e019d5e com.google.android.odad/10122} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{956d53f com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{cac2e0c com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{49f7355 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{5c6316a com.android.bluetoothmidiservice/10108} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{a6d865b com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{4f41ef8 com.google.android.cellbroadcastreceiver/10185} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{930efd1 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{f8dfa36 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{d742d37 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{fc832a4 com.google.android.inputmethod.latin/10140} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{683b80d android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:30:50.234   517  1742 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{f3783c2 com.google.android.apps.restore/10119} BLOCKED
+11-24 11:30:51.108  2511  2825 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.lanternhold/app_webview/variations_seed_new"
+11-24 11:30:51.108  2511  2825 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.lanternhold/app_webview/variations_seed"
+11-24 11:30:51.878   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{d3494b6 com.google.android.youtube/10139} BLOCKED
+11-24 11:30:51.878   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{348a8b com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:30:51.878   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{b178768 com.google.android.as/10125} BLOCKED
+11-24 11:30:51.878   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{6b68781 com.google.android.gm/10142} BLOCKED
+11-24 11:30:51.878   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{af4117f com.google.android.devicelockcontroller/10191} BLOCKED
+11-24 11:30:51.878   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{7c73026 com.google.android.contacts/10153} BLOCKED
+11-24 11:30:51.879   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{3df4467 com.google.android.partnersetup/10124} BLOCKED
+11-24 11:30:51.879   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{b91b214 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:30:51.879   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{4f41ef8 com.google.android.cellbroadcastreceiver/10185} BLOCKED
+11-24 11:30:51.879   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{fc832a4 com.google.android.inputmethod.latin/10140} BLOCKED
+11-24 11:30:52.623  1089  1128 I Launcher.IconCache: Database bulk icon loading failed, using fallback bulk icon loading for: ComponentInfo{com.zvisionclub.lanternhold/com.zvisionclub.shell.MainActivity}
+11-24 11:30:52.870   517   546 I ActivityManager: Start proc 2921:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.lanternhold/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:30:52.992   517  1742 D ConnectivityService: requestNetwork for uid/pid:10192/2511 activeRequest: null callbackRequest: 71 [NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.lanternhold UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:30:52.992   517   752 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.lanternhold UnderlyingNetworks: Null] ]
+11-24 11:30:52.992   517   752 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.lanternhold UnderlyingNetworks: Null] ]
+11-24 11:30:52.992   517   752 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.lanternhold UnderlyingNetworks: Null] ]
+11-24 11:30:52.992   517   752 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.lanternhold UnderlyingNetworks: Null] ]
+11-24 11:30:53.738   517  1803 D CoreBackPreview: Window{a8f4318 u0 com.zvisionclub.lanternhold/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@106fe16, mPriority=0, mIsAnimationCallback=false}
+11-24 11:30:54.046   517   594 W InputManager-JNI: Input channel object '3dfc058 Splash Screen com.zvisionclub.lanternhold (client)' was disposed without first being removed with the input manager!
+11-24 11:30:54.116   517   534 W ziparchive: Unable to open '/data/app/~~ov7iXbw4JdhBbaml8ewEAA==/com.zvisionclub.lanternhold-PuakI7xFwlWthNxTMlSOGQ==/base.dm': No such file or directory
+11-24 11:30:54.230   517   534 I ActivityTaskManager: Displayed com.zvisionclub.lanternhold/com.zvisionclub.shell.MainActivity for user 0: +5s415ms
+11-24 11:30:55.131   517   594 I ImeTracker: com.zvisionclub.lanternhold:d451b2ae: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:30:55.131   517   594 I ImeTracker: com.zvisionclub.lanternhold:d451b2ae: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:30:55.139  1541  1541 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.lanternhold fieldId=0 fieldName=null extras=null}, false)
+11-24 11:30:55.272  1048  1048 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.lanternhold
+11-24 11:30:55.554  1048  1350 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.lanternhold
+11-24 11:30:57.543  1720  1720 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.lanternhold], userId:[0], reason:[package is added.].
+11-24 11:30:58.223  1720  1720 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.lanternhold.
+11-24 11:30:58.231  1720  3077 I AiAiEcho: AppIndexer Package:[com.zvisionclub.lanternhold] UserProfile:[0] Enabled:[true].
+11-24 11:30:58.231  1720  3077 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.lanternhold], userId:[0], reason:[package is updated.].
+11-24 11:30:59.618  2511  3690 D ProfileInstaller: Installing profile for com.zvisionclub.lanternhold
+11-24 11:31:02.071   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{2ef9bdf com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:02.072   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{efd802c com.android.camera2/10145} BLOCKED
+11-24 11:31:02.072   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{d052af5 com.google.android.gm/10142} BLOCKED
+11-24 11:31:02.073   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{cc8208a com.google.android.devicelockcontroller/10191} BLOCKED
+11-24 11:31:02.075   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{fdc16fb com.google.android.contacts/10153} BLOCKED
+11-24 11:31:02.076   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{d87318 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:31:03.451  1471  3834 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.lanternhold [CONTEXT service_id=258 ]
+11-24 11:31:04.323  1720  1720 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.lanternhold.
+11-24 11:31:04.324  1720  3077 I AiAiEcho: AppIndexer Package:[com.zvisionclub.lanternhold] UserProfile:[0] Enabled:[true].
+11-24 11:31:04.324  1720  3077 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.lanternhold], userId:[0], reason:[package is updated.].
+11-24 11:31:06.214   517  2358 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{157c613 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:31:06.289   517  2080 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{cbfae75 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:31:12.112   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{3526914 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:12.112   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{f9305bd com.google.android.rkpdapp/10173} BLOCKED
+11-24 11:31:12.112   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{c43bf03 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:31:22.656   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{d35088d com.google.android.youtube/10139} BLOCKED
+11-24 11:31:22.656   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{13e83bb com.google.android.apps.maps/10155} BLOCKED
+11-24 11:31:22.656   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{23dca42 com.google.android.contacts/10153} BLOCKED
+11-24 11:31:35.730  1541  1541 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.lanternhold fieldId=0 fieldName=null extras=null}, false)
+11-24 11:31:37.164   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{dcb9a7c com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:31:37.164   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{aabf05 com.google.android.as/10125} BLOCKED
+11-24 11:31:37.164   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{1c50b5a com.google.android.contacts/10153} BLOCKED
+11-24 11:31:46.742   517  2353 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{e06677a com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:31:48.797   517   569 I AppsFilter: interaction: PackageSetting{d199578 com.zvisionclub.lanternhold/10192} -> PackageSetting{ebd997b com.google.android.as/10125} BLOCKED
