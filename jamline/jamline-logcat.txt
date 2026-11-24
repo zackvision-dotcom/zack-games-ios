@@ -1,0 +1,200 @@
+11-24 09:59:00.506   840   840 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.zvisionclub.jamline, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{745b29a com.android.cts.priv.ctsshim/10178} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{23427cb com.google.android.youtube/10139} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{656fba8 com.android.internal.display.cutout.emulation.corner/10025} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{fa686c1 com.android.internal.display.cutout.emulation.double/10048} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{13c5e66 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{45b75a7 com.google.android.onetimeinitializer/10126} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ef42a54 com.google.android.ext.shared/10100} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{3d3cdfd com.android.internal.systemui.navbar.gestural_wide_back/10007} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{89ffaf2 com.android.virtualmachine.res/10187} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{3bfc543 com.google.android.federatedcompute/10170} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{b9397c0 com.android.managedprovisioning.auto_generated_rro_product__/10024} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{4944cf9 com.android.carrierconfig.auto_generated_rro_vendor__/10078} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{42ed43e com.android.systemui.emulation.pixel_3_xl/10034} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{28f729f com.android.systemui.emulation.pixel_4_xl/10059} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1fa6fec com.android.systemui.emulation.pixel_fold/10009} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{243bfb5 com.android.simappdialog.auto_generated_rro_product__/10030} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{63ff64a com.android.htmlviewer/10115} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{d8299bb com.google.android.health.connect.backuprestore/10184} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{d149ed8 com.android.systemui.auto_generated_rro_product__/10031} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{d3da231 com.google.android.soundpicker/10137} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{d8f2d16 com.google.android.marvin.talkbackoverlay/10077} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ab71697 com.google.android.configupdater/10130} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{8a0d084 com.android.internal.emulation.pixel_3a_xl/10044} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{619306d com.android.internal.emulation.pixel_6_pro/10018} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6c904a2 com.android.internal.emulation.pixel_7_pro/10004} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{a4c8533 com.android.internal.emulation.pixel_8_pro/10058} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{b9c70f0 com.android.internal.emulation.pixel_3a/10053} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{5a56669 com.android.internal.emulation.pixel_4a/10011} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ad6c8ee com.android.internal.emulation.pixel_6a/10023} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{4c0418f com.android.internal.emulation.pixel_7a/10033} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{d6fac1c com.google.android.overlay.googlewebview/10049} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{8a50025 com.google.android.hotspot2.osulogin/10191} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{5ea85fa com.android.simappdialog/10112} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{30967ab com.android.internal.display.cutout.emulation.hole/10073} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1d96e08 com.android.internal.display.cutout.emulation.tall/10065} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{b4a79a1 com.android.internal.systemui.navbar.threebutton/10068} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{34b07c6 com.android.camera2/10146} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c74d387 com.android.systemui.auto_generated_rro_vendor__/10076} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{79b62b4 com.google.android.deskclock/10152} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{740edd com.android.internal.systemui.navbar.twobutton/10020} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{9dfda52 com.google.android.as/10125} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6412123 com.google.android.gm/10140} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{5e5f620 com.android.internal.systemui.navbar.gestural_extra_wide_back/10045} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{a7bbd9 com.android.systemui.emulation.pixel_3/10015} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{57d499e com.android.systemui.emulation.pixel_4/10037} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{faac7f com.android.systemui.emulation.pixel_5/10071} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{484544c com.android.systemui.emulation.pixel_6/10074} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ccf3c95 com.android.systemui.emulation.pixel_7/10072} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{8f061aa com.android.systemui.emulation.pixel_8/10070} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{f97919b com.android.nfc.auto_generated_rro_product__/10027} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ac86938 com.android.printspooler/10104} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{b40d11 com.android.emergency.auto_generated_rro_product__/10041} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{4caee76 com.google.android.connectivity.resources.goldfish.overlay/10079} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{453ac77 com.android.dreams.basic/10103} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{136e0e4 com.google.android.networkstack.tethering.emulator/10022} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{13b694d com.android.providers.settings.auto_generated_rro_product__/10002} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{eef7c02 com.google.android.as.oss/10121} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{f4c9913 com.android.traceur.auto_generated_rro_product__/10005} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1f32750 com.google.android.devicelockcontroller/10186} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{2624d49 com.android.internal.emulation.pixel_3/10046} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6dd564e com.android.internal.emulation.pixel_4/10060} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{addb36f com.android.internal.emulation.pixel_5/10012} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{3eb687c com.android.internal.emulation.pixel_6/10038} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{f97505 com.android.internal.emulation.pixel_7/10067} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{2bc895a com.android.internal.emulation.pixel_8/10039} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1bc178b com.google.android.captiveportallogin/10114} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{cc49068 com.android.musicfx/10088} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{e8b156f com.google.android.apps.maps/10153} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c215c81 com.google.android.modulemetadata/10147} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{129e126 com.google.android.markup/10135} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ad2a167 com.android.providers.settings.auto_generated_rro_vendor__/10080} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{5864b14 com.google.android.rkpdapp/10185} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{a863fbd com.google.android.contacts/10154} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{bc2e9b2 com.android.server.telecom.auto_generated_rro_product__/10032} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6dded03 com.google.android.overlay.googleconfig/10055} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{e070480 com.android.bips.auto_generated_rro_product__/10035} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{75c1ab9 com.google.android.apps.customization.pixel/10144} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{671eefe com.google.android.tag/10083} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{bc8565f com.google.android.overlay.permissioncontroller/10003} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{b17e8ac com.google.android.partnersetup/10124} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{31aa975 com.google.android.apps.wallpaper.nexus/10143} BLOCKED
+11-24 09:59:01.026   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{779fd0a com.google.android.apps.nexuslauncher/10169} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{9c5f97b com.google.android.nearby.halfsheet/10173} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{b70e398 com.android.theme.font.notoserifsource/10066} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{3f967f1 com.google.android.safetycenter.resources/10181} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{442dfd6 com.android.internal.display.cutout.emulation.waterfall/10040} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{630b257 com.android.internal.systemui.navbar.transparent/10029} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{f5ca144 com.google.android.connectivity.resources/10172} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{22b922d com.android.providers.contacts.auto_generated_rro_product__/10019} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ee52362 com.google.android.feedback/10162} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{8241cf3 com.google.android.printservice.recommendation/10110} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{f248db0 com.google.android.apps.photos/10145} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{bdc2429 com.google.android.documentsui/10098} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{7613ae com.android.systemui.emulation.pixel_3a_xl/10021} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{2d9954f com.android.systemui.emulation.pixel_6_pro/10063} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c3cd4dc com.android.systemui.emulation.pixel_7_pro/10054} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ce9d9e5 com.android.systemui.emulation.pixel_8_pro/10001} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c13bcba com.google.mainline.telemetry/10151} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{9c4376b com.android.carrierconfig.auto_generated_rro_product__/10064} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{93062c8 com.android.providers.partnerbookmarks/10101} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6632f61 com.android.wallpaper.livepicker/10090} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6b0ea86 com.android.providers.telephony.auto_generated_rro_product__/10062} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{a6cdf47 com.android.phone.auto_generated_rro_vendor__/10081} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{44ce374 com.google.mainline.adservices/10136} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1c2609d com.android.imsserviceentitlement/10117} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{fa12912 com.google.android.healthconnect.controller/10183} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{80e28e3 com.android.internal.emulation.pixel_2_xl/10016} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{10ec2e0 com.android.internal.emulation.pixel_3_xl/10056} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{be96999 com.android.internal.emulation.pixel_4_xl/10047} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{5e4c45e com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{4f0703f com.android.bookmarkprovider/10113} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c4d2d0c com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{3de0655 com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{634c86a com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{585d15b com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{7260df8 com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{945b2d1 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{dcf0136 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{8292d62 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{9462837 com.google.android.uwb.resources/10176} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1285ef3 com.android.cts.ctsshim/10179} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{4aa11a4 com.google.android.wifi.resources/10189} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6a1ab0d com.google.android.wifi.dialog/10190} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{e01fac2 com.google.android.apps.wallpaper/10159} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{54b10d3 com.google.android.odad/10122} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{648a410 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{34aeb09 com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c79010e com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{cabe72f com.android.bluetoothmidiservice/10106} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{2fbf13c com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{92e2ec5 com.google.android.cellbroadcastreceiver/10188} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c48201a com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{299c74b android.auto_generated_rro_product__/10069} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{534e528 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{a47f241 com.google.android.inputmethod.latin/10141} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{bb823e6 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 09:59:01.027   522   907 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{23b8d27 com.google.android.apps.restore/10120} BLOCKED
+11-24 09:59:01.387  2571  2822 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.jamline/app_webview/variations_seed_new"
+11-24 09:59:01.388  2571  2822 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.jamline/app_webview/variations_seed"
+11-24 09:59:01.682   522   552 I ActivityManager: Start proc 2859:com.google.android.webview:webview_service/u0a134 for service {com.google.android.webview/org.chromium.android_webview.services.VariationsSeedServer}
+11-24 09:59:01.698  1053  1053 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.jamline
+11-24 09:59:01.724  1053  1359 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.jamline
+11-24 09:59:02.503   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{23427cb com.google.android.youtube/10139} BLOCKED
+11-24 09:59:02.503   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{13c5e66 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 09:59:02.503   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{9dfda52 com.google.android.as/10125} BLOCKED
+11-24 09:59:02.504   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{743334f com.google.android.gm/10140} BLOCKED
+11-24 09:59:02.504   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1f32750 com.google.android.devicelockcontroller/10186} BLOCKED
+11-24 09:59:02.504   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{f591adc com.google.android.contacts/10154} BLOCKED
+11-24 09:59:02.504   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{b17e8ac com.google.android.partnersetup/10124} BLOCKED
+11-24 09:59:02.504   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c79010e com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 09:59:02.504   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{92e2ec5 com.google.android.cellbroadcastreceiver/10188} BLOCKED
+11-24 09:59:02.505   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{a47f241 com.google.android.inputmethod.latin/10141} BLOCKED
+11-24 09:59:03.069   522   552 I ActivityManager: Start proc 2988:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.jamline/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 09:59:03.083  1096  1139 I Launcher.IconCache: Database bulk icon loading failed, using fallback bulk icon loading for: ComponentInfo{com.zvisionclub.jamline/com.zvisionclub.shell.MainActivity}
+11-24 09:59:03.191   522  2064 D ConnectivityService: requestNetwork for uid/pid:10192/2571 activeRequest: null callbackRequest: 71 [NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.jamline UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 09:59:03.204   522   761 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.jamline UnderlyingNetworks: Null] ]
+11-24 09:59:03.204   522   761 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.jamline UnderlyingNetworks: Null] ]
+11-24 09:59:03.204   522   761 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.jamline UnderlyingNetworks: Null] ]
+11-24 09:59:03.204   522   761 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=72, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.jamline UnderlyingNetworks: Null] ]
+11-24 09:59:03.350  2988  2988 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-24 09:59:03.787   522  2246 W InputManager-JNI: Input channel object '2776008 com.zvisionclub.jamline/com.zvisionclub.shell.MainActivity (client)' was disposed without first being removed with the input manager!
+11-24 09:59:04.145   522   826 D CoreBackPreview: Window{d0aea99 u0 com.zvisionclub.jamline/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@9751d1a, mPriority=0, mIsAnimationCallback=false}
+11-24 09:59:04.160   522   907 E JobScheduler.JobStatus: App com.zvisionclub.jamline became active but still in NEVER bucket
+11-24 09:59:04.381   522  2230 I WindowManager: finishDrawing of relaunch: Window{d0aea99 u0 com.zvisionclub.jamline/com.zvisionclub.shell.MainActivity} 4191ms
+11-24 09:59:04.414   522   541 W ziparchive: Unable to open '/data/app/~~_nSAFVoNY3YzuJq1rexFyg==/com.zvisionclub.jamline-IaDA6yhurxS1zfWpVCrEkQ==/base.dm': No such file or directory
+11-24 09:59:04.415   522   541 I ActivityTaskManager: Displayed com.zvisionclub.jamline/com.zvisionclub.shell.MainActivity for user 0: +5s621ms
+11-24 09:59:04.419   522   552 I ActivityManager: Start proc 3148:com.google.android.webview:webview_apk/u0a134 for service {com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}
+11-24 09:59:04.493   522  1949 W InputManager-JNI: Input channel object 'dda26b8 Splash Screen com.zvisionclub.jamline (client)' was disposed without first being removed with the input manager!
+11-24 09:59:04.616   522  2020 I ImeTracker: com.zvisionclub.jamline:1d0834f2: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 09:59:04.616   522  2020 I ImeTracker: com.zvisionclub.jamline:1d0834f2: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 09:59:04.629  1505  1505 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.jamline fieldId=0 fieldName=null extras=null}, false)
+11-24 09:59:04.720  1591  1591 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.jamline], userId:[0], reason:[package is added.].
+11-24 09:59:05.674  1053  1053 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.jamline
+11-24 09:59:05.704  3148  3277 W cr_AWNetworkFetcherTask: 	at org.chromium.android_webview.nonembedded.NetworkFetcherTask.download(chromium-TrichromeWebViewGoogle6432.apk-stable-567263637:48)
+11-24 09:59:05.923  1053  1359 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.jamline
+11-24 09:59:06.174  1695  3274 W earchbox:search: Long monitor contention with owner ThreadPoolForeg (3199) at org.chromium.net.AndroidCertVerifyResult hc.b(byte[][], java.lang.String, java.lang.String)(:com.google.android.gms.dynamite_cronetdynamite@231818047@23.18.18 (190800-0):36) waiters=0 in void hc.i() for 260ms
+11-24 09:59:06.431  1591  1591 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.jamline.
+11-24 09:59:06.432  1591  2478 I AiAiEcho: AppIndexer Package:[com.zvisionclub.jamline] UserProfile:[0] Enabled:[true].
+11-24 09:59:06.432  1591  2478 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.jamline], userId:[0], reason:[package is updated.].
+11-24 09:59:09.280  1591  1591 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.jamline.
+11-24 09:59:09.281  1591  3397 I AiAiEcho: AppIndexer Package:[com.zvisionclub.jamline] UserProfile:[0] Enabled:[true].
+11-24 09:59:09.281  1591  3397 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.jamline], userId:[0], reason:[package is updated.].
+11-24 09:59:09.882  2571  3677 D ProfileInstaller: Installing profile for com.zvisionclub.jamline
+11-24 09:59:12.492   522  2207 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{2475b01 com.google.android.gm/10140} BLOCKED
+11-24 09:59:12.714   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{dd344b9 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 09:59:12.715   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1fad0fe com.android.camera2/10146} BLOCKED
+11-24 09:59:12.715   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{5ec905f com.google.android.devicelockcontroller/10186} BLOCKED
+11-24 09:59:12.716   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{2309aac com.google.android.rkpdapp/10185} BLOCKED
+11-24 09:59:12.717   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ada7375 com.google.android.contacts/10154} BLOCKED
+11-24 09:59:12.717   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{faeff0a com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 09:59:14.601   522  2231 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{7fd0776 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 09:59:14.635   522   908 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{c3a91f3 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 09:59:14.997  1434  3914 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.jamline [CONTEXT service_id=258 ]
+11-24 09:59:22.737   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{2771fab com.google.android.youtube/10139} BLOCKED
+11-24 09:59:22.738   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1a0c608 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 09:59:22.738   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{ffaf1a1 com.google.android.gm/10140} BLOCKED
+11-24 09:59:22.740   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{1ce478a com.google.android.apps.maps/10153} BLOCKED
+11-24 09:59:22.741   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{6fe1fc6 com.google.android.rkpdapp/10185} BLOCKED
+11-24 09:59:22.741   522   575 I AppsFilter: interaction: PackageSetting{3347b45 com.zvisionclub.jamline/10192} -> PackageSetting{16cf23b com.google.android.projection.gearhead/10123} BLOCKED
