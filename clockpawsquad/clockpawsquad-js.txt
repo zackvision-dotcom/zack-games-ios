@@ -1,0 +1,80 @@
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{2563009 com.google.android.wifi.resources/10186} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{14b620e com.google.android.wifi.dialog/10187} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{9cd342f com.google.android.apps.wallpaper/10160} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{d9fba3c com.google.android.odad/10121} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{e28c3c5 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{25f911a com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{502e44b com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{cc3e28 com.android.bluetoothmidiservice/10106} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{cd6d741 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{a55a4e6 com.google.android.cellbroadcastreceiver/10176} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{e997a27 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{bbb14d4 android.auto_generated_rro_product__/10069} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{ef8a67d com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{4472972 com.google.android.inputmethod.latin/10140} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{11991c3 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-24 11:19:03.027   522   553 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{21eaa40 com.google.android.apps.restore/10120} BLOCKED
+11-24 11:19:03.357   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{5061354 com.google.android.youtube/10139} BLOCKED
+11-24 11:19:03.358   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{a858243 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:19:03.359   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{e29b97f com.google.android.as/10125} BLOCKED
+11-24 11:19:03.365   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{ed6dc9d com.google.android.gm/10142} BLOCKED
+11-24 11:19:03.365   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{3d70a05 com.google.android.devicelockcontroller/10191} BLOCKED
+11-24 11:19:03.366   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{c158ffe com.google.android.contacts/10154} BLOCKED
+11-24 11:19:03.366   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{25e8cf1 com.google.android.partnersetup/10124} BLOCKED
+11-24 11:19:03.366   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{502e44b com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:19:03.370   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{a55a4e6 com.google.android.cellbroadcastreceiver/10176} BLOCKED
+11-24 11:19:03.370   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{4472972 com.google.android.inputmethod.latin/10140} BLOCKED
+11-24 11:19:03.439  3043  3300 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.clockpawsquad/app_webview/variations_seed_new"
+11-24 11:19:03.439  3043  3300 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.zvisionclub.clockpawsquad/app_webview/variations_seed"
+11-24 11:19:03.710   522   592 I ActivityManager: Start proc 3334:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.zvisionclub.clockpawsquad/org.chromium.content.app.SandboxedProcessService0:0}
+11-24 11:19:03.719  1086  1086 D CarrierSvcBindHelper: onPackageAdded: com.zvisionclub.clockpawsquad
+11-24 11:19:03.782  1086  1377 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.clockpawsquad
+11-24 11:19:03.794  1086  1086 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.clockpawsquad
+11-24 11:19:03.850  1086  1377 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.clockpawsquad
+11-24 11:19:04.428   522  2748 D ConnectivityService: requestNetwork for uid/pid:10192/3043 activeRequest: null callbackRequest: 80 [NetworkRequest [ REQUEST id=81, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.clockpawsquad UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-24 11:19:04.429   522   794 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=81, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.clockpawsquad UnderlyingNetworks: Null] ]
+11-24 11:19:04.429   522   794 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=81, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.clockpawsquad UnderlyingNetworks: Null] ]
+11-24 11:19:04.429   522   794 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=81, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.clockpawsquad UnderlyingNetworks: Null] ]
+11-24 11:19:04.429   522   794 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=81, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.clockpawsquad UnderlyingNetworks: Null] ]
+11-24 11:19:05.964   522  1225 D CoreBackPreview: Window{7b3068d u0 com.zvisionclub.clockpawsquad/com.zvisionclub.shell.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@ce4c22a, mPriority=0, mIsAnimationCallback=false}
+11-24 11:19:06.534   522   551 W InputManager-JNI: Input channel object 'f6ee264 Splash Screen com.zvisionclub.clockpawsquad (client)' was disposed without first being removed with the input manager!
+11-24 11:19:06.534   522  2741 D CoreBackPreview: Window{f6ee264 u0 Splash Screen com.zvisionclub.clockpawsquad EXITING}: Setting back callback null
+11-24 11:19:06.698   522   579 W ziparchive: Unable to open '/data/app/~~-W_xB3p3JQGVXC7Dj4uNWQ==/com.zvisionclub.clockpawsquad-J_HxqyzmBWiRJY-dA1u_FA==/base.dm': No such file or directory
+11-24 11:19:06.699   522   579 I ActivityTaskManager: Displayed com.zvisionclub.clockpawsquad/com.zvisionclub.shell.MainActivity for user 0: +4s566ms
+11-24 11:19:06.699  1618  1618 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.clockpawsquad], userId:[0], reason:[package is added.].
+11-24 11:19:06.990  1618  1618 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.clockpawsquad.
+11-24 11:19:06.992  1618  2662 I AiAiEcho: AppIndexer Package:[com.zvisionclub.clockpawsquad] UserProfile:[0] Enabled:[true].
+11-24 11:19:06.992  1618  2662 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.clockpawsquad], userId:[0], reason:[package is updated.].
+11-24 11:19:06.999   522   946 I ImeTracker: com.zvisionclub.clockpawsquad:c384a118: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-24 11:19:06.999   522   946 I ImeTracker: com.zvisionclub.clockpawsquad:c384a118: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-24 11:19:07.005  1538  1538 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.clockpawsquad fieldId=0 fieldName=null extras=null}, false)
+11-24 11:19:07.766  1086  1086 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.clockpawsquad
+11-24 11:19:08.320  1086  1377 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.clockpawsquad
+11-24 11:19:08.768  1618  1618 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.clockpawsquad.
+11-24 11:19:08.782  1618  2318 I AiAiEcho: AppIndexer Package:[com.zvisionclub.clockpawsquad] UserProfile:[0] Enabled:[true].
+11-24 11:19:08.782  1618  2318 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.clockpawsquad], userId:[0], reason:[package is updated.].
+11-24 11:19:09.585   522   947 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{fa4ee33 com.google.android.gm/10142} BLOCKED
+11-24 11:19:10.418   522  2099 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{3083079 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:19:10.419   522  2099 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{fd7b1be com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:19:11.265  3043  4095 D ProfileInstaller: Installing profile for com.zvisionclub.clockpawsquad
+11-24 11:19:11.440   886   886 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.zvisionclub.clockpawsquad, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
+11-24 11:19:13.545  1490  3997 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.clockpawsquad [CONTEXT service_id=258 ]
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{ee6c75e com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{9b5b73f com.android.camera2/10145} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{9ee680c com.google.android.gm/10142} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{37e2555 com.google.android.devicelockcontroller/10191} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{d3fb6a com.google.android.rkpdapp/10175} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{ed8885b com.google.android.contacts/10154} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{d1ff8f8 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{f3407b8 com.google.android.projection.gearhead/10123} BLOCKED
+11-24 11:19:14.225   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{c48c1d1 com.google.android.apps.youtube.music/10156} BLOCKED
+11-24 11:19:24.927   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{58dfd14 com.google.android.youtube/10139} BLOCKED
+11-24 11:19:24.928   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{b01b55c com.google.android.apps.maps/10153} BLOCKED
+11-24 11:19:24.928   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{20909bd com.google.android.contacts/10154} BLOCKED
+11-24 11:19:34.933   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{45cb194 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-24 11:19:34.933   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{60ae43d com.google.android.as/10125} BLOCKED
+11-24 11:19:41.853   522  2741 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{f272af6 com.google.android.settings.intelligence/10118} BLOCKED
+11-24 11:19:44.968   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{decae34 com.google.android.as/10125} BLOCKED
+11-24 11:19:44.968   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{b12345d com.google.android.gm/10142} BLOCKED
+11-24 11:19:44.968   522   614 I AppsFilter: interaction: PackageSetting{f07df66 com.zvisionclub.clockpawsquad/10192} -> PackageSetting{fa2d1d2 com.google.android.contacts/10154} BLOCKED
+11-24 11:19:48.690  1538  1538 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.clockpawsquad fieldId=0 fieldName=null extras=null}, false)
