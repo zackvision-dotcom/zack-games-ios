@@ -50,7 +50,7 @@ def main():
         lst = json.load(open(os.path.join(d, 'listing.json'), encoding='utf-8'))
         for lang, x in lst.items():
             ok(s.put(f'{API}/{pkg}/edits/{e}/listings/{lang}', json={'language': lang, **x})); print('listing', lang)
-            for kind, files in (('icon', ['icon-512.png']), ('featureGraphic', ['feature.png'] if os.path.exists(os.path.join(d, 'feature.png')) else []),
+            for kind, files in (('icon', ['icon-512.png']), ('featureGraphic', [x for x in ('feature.png', 'feature-1024x500.jpg') if os.path.exists(os.path.join(d, x))][:1]),
                                 ('phoneScreenshots', sorted(os.listdir(os.path.join(d, 'screens'))) if os.path.isdir(os.path.join(d, 'screens')) else [])):
                 if not files: continue
                 ok(s.delete(f'{API}/{pkg}/edits/{e}/listings/{lang}/{kind}'))

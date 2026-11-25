@@ -1,7 +1,7 @@
 [
   {"flavor": "gullstreet", "web": "GullStreet", "label": "Gull Street", "landscape": false, "consumables": ["shells20", "shells120", "shells260", "shells600"]},
   {"flavor": "silkhop", "web": "SilkHop", "label": "Silk Hop", "landscape": false, "consumables": ["pearls"]},
-  {"flavor": "braise", "web": "Braise", "label": "Braise", "landscape": true, "consumables": []},
+  {"flavor": "braise", "web": "Braise", "label": "Braise", "landscape": true, "consumables": [], "ads": false},
   {"flavor": "clockpawsquad", "web": "ClockpawSquad", "label": "Clockpaw Squad", "landscape": false, "consumables": ["keys"]},
   {"flavor": "dungeondash", "web": "DungeonDash", "label": "Dungeon Dash", "landscape": false, "consumables": ["gems"]},
   {"flavor": "vanvoyage", "web": "VanVoyage", "label": "Van Voyage", "landscape": false, "consumables": ["coins"]},

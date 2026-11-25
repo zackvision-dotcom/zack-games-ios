@@ -51,6 +51,7 @@ android {
             sourceSets.getByName(f) {
                 assets.srcDirs(rootProject.file("../ios/${g["web"]}/Web"))
                 res.srcDirs(rootProject.file("res/$f"))
+                if (g["ads"] == false) manifest.srcFile(rootProject.file("manifests/no-ads.xml"))
             }
         }
     }
