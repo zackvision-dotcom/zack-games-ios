@@ -5,6 +5,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -55,6 +56,9 @@ class AdsBridge(private val act: MainActivity) {
             }, { if (c.isActive) c.resume(Unit) })
         }
         if (consent.canRequestAds()) {
+            // Audience 13+ on Play: cap ad content at Teen so sensitive/mature ads are excluded (privacy page says so).
+            MobileAds.setRequestConfiguration(RequestConfiguration.Builder()
+                .setMaxAdContentRating(RequestConfiguration.MAX_AD_CONTENT_RATING_T).build())
             suspendCancellableCoroutine { c -> MobileAds.initialize(act) { if (c.isActive) c.resume(Unit) } }
             started = true
             loadInterstitial(); loadRewarded()

@@ -90,6 +90,8 @@ final class NativeAds: NSObject, WKScriptMessageHandlerWithReply, FullScreenCont
         if #available(iOS 14, *), ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
             _ = await ATTrackingManager.requestTrackingAuthorization()
         }
+        // Cap ad content at Teen: sensitive/mature ads excluded (privacy page says so).
+        MobileAds.shared.requestConfiguration.maxAdContentRating = .teen
         _ = await MobileAds.shared.start()
         started = true
         loadInterstitial()
