@@ -108,7 +108,7 @@ h3{margin:10px 0 6px;font-size:16px;text-align:left}
 #toasts{position:fixed;top:calc(env(safe-area-inset-top) + 100px);left:0;right:0;z-index:35;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .toast{background:var(--cream);border:3px solid var(--ink);border-radius:14px;padding:7px 14px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.35);animation:pop .3s;transition:opacity .4s;max-width:90vw;text-align:center}.toast.out{opacity:0}
 .banner{position:fixed;left:0;right:0;top:30%;z-index:45;text-align:center;font-size:40px;font-weight:900;color:var(--red);-webkit-text-stroke:2.5px var(--ink);text-shadow:4px 4px 0 var(--ink);pointer-events:none;animation:ban 1.8s cubic-bezier(.2,1.4,.4,1) forwards;padding:0 10px}
-.banner.g{color:var(--green)}.banner.c{color:var(--cream)}.banner.y{color:var(--gold)}.banner.s{font-size:28px;top:22%}@keyframes ban{0%{transform:scale(2.4);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+.banner.g{color:var(--green)}.banner.c{color:var(--cream)}.banner.y{color:var(--gold)}.banner.s{font-size:28px;top:5%}@keyframes ban{0%{transform:scale(2.4);opacity:0}15%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
 .adov{position:fixed;inset:0;z-index:50;background:var(--ink);display:flex;align-items:center;justify-content:center}.adbox{color:var(--cream);text-align:center}.adtag{opacity:.7;font-weight:800}.adart img{width:120px;margin:20px}.adcount{font-size:44px;font-weight:900}
 /* the recipe card that flips */
 .rcard{position:fixed;left:50%;top:26%;z-index:46;width:150px;height:200px;margin-left:-75px;perspective:700px;pointer-events:none;animation:rcin 2.6s forwards}
@@ -1704,7 +1704,9 @@ function confirmBox(html) { return new Promise(res => { const el = div('confirm'
 const TQ = []; let tBusy = false;
 function toast(s) { if (TQ.length > 4) TQ.shift(); TQ.push(s); if (!tBusy) nextToast(); }
 function nextToast() { const s = TQ.shift(); if (s == null) { tBusy = false; return; } tBusy = true; const box = $('#toasts'); box.innerHTML = ''; const el = div('toast', s); box.appendChild(el); setTimeout(() => el.classList.add('out'), 1700); setTimeout(() => { el.remove(); nextToast(); }, 2000); }
-function banner(s, cls = '') { const el = div('banner ' + cls, s); document.body.appendChild(el); setTimeout(() => el.remove(), 1800); }
+let banUntil = 0;   // banners queue up: two at once used to overlap (e.g. 'New record!' over 'Unlocked')
+function banner(s, cls = '') { const now = Date.now(), wait = Math.max(0, banUntil - now); banUntil = now + wait + 1800;
+  setTimeout(() => { const el = div('banner ' + cls, s); document.body.appendChild(el); setTimeout(() => el.remove(), 1800); }, wait); }
 // Lulu's bubble (lulu_0 calm, 1 happy, 2 pointing, 3 grumbling, 4 dancing)
 let luluTimer = 0;
 function say(key, m = 0, ms = 3200, sticky = false, vars) {
