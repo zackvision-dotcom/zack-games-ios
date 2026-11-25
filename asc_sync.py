@@ -287,6 +287,23 @@ if __name__ == '__main__':
                         a['releaseType'] = str(a.get('releaseType')) + ' ERR ' + ' | '.join(_re.findall(r'"(?:code|detail)" : "([^"]+)"', str(e)))[:400]
                 print('STATUS', g, a['versionString'], st, 'release', a.get('releaseType'), 'created', (a.get('createdDate') or '')[:10])
         sys.exit(0)
+    if os.environ.get('RELEASE'):
+        # RELEASE (Zack 25/11 "gogo"): approved versions waiting for us (PENDING_DEVELOPER_RELEASE) go on sale now;
+        # versions still at Apple switch to AFTER_APPROVAL so they go on sale as soon as they are approved.
+        import re as _re
+        for g in sys.argv[1:]:
+            app = find_app(g)
+            for v in call('GET', f"/apps/{app['id']}/appStoreVersions?filter[platform]=IOS&limit=3")['data']:
+                a = v['attributes']; st = a['appStoreState']; act = '-'
+                try:
+                    if st == 'PENDING_DEVELOPER_RELEASE':
+                        call('POST', '/appStoreVersionReleaseRequests', {'data': {'type': 'appStoreVersionReleaseRequests', 'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': v['id']}}}}}); act = 'RELEASED NOW'
+                    elif st in ('WAITING_FOR_REVIEW', 'IN_REVIEW', 'PREPARE_FOR_SUBMISSION', 'READY_FOR_REVIEW') and a.get('releaseType') != 'AFTER_APPROVAL':
+                        call('PATCH', f"/appStoreVersions/{v['id']}", {'data': {'type': 'appStoreVersions', 'id': v['id'], 'attributes': {'releaseType': 'AFTER_APPROVAL'}}}); act = 'auto-release after approval'
+                except Exception as e:
+                    act = 'ERR ' + ' | '.join(_re.findall(r'"(?:code|detail)" : "([^"]+)"', str(e)))[:400]
+                print('RELEASE', g, a['versionString'], st, '->', act)
+        sys.exit(0)
     if os.environ.get('SUBMIT'):
         # App Review submission, ONLY on Zack's written go in the Developer session ("Oui soumet", 22/11/2026 for Gull Street + Silk Hop)
         import re as _re

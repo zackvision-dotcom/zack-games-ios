@@ -43,6 +43,7 @@ jobs:
           if grep -q '^prep' todo.txt; then export PREP=1; fi
           if grep -q '^manual' todo.txt; then export MANUAL=1; fi
           if grep -q '^status' todo.txt; then export STATUS=1; fi
+          if grep -q '^release' todo.txt; then export RELEASE=1; fi
           if grep -q '^iapnew' todo.txt; then export IAPNEW=1; fi
           if grep -q '^newver' todo.txt; then export NEWVER=$(grep '^newver' todo.txt | cut -d' ' -f2); fi
           if grep -q '^prepfix' todo.txt; then export PREP=1; export FIX=1; fi
