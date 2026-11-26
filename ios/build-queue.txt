@@ -1,2 +1,2 @@
 TuckStill
-# 0.9.1 with real AdMob ids (TestFlight still serves test ads via ADS_TEST)
+# 0.10: in-app purchases + real AdMob ids
