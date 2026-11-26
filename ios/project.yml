@@ -516,6 +516,38 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.sceneexpress
         PRODUCT_NAME: SceneExpress
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  TuckStill:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: TuckStill/Assets.xcassets
+      - path: TuckStill/Web
+        type: folder
+    info:
+      path: TuckStill/Info.plist
+      properties:
+        CFBundleDisplayName: Tuck Still
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.adventure-games
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.tuckstill
+        PRODUCT_NAME: TuckStill
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
   SilkHop:
     type: application
     platform: iOS
