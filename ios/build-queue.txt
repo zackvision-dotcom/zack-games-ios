@@ -1,2 +1,2 @@
 TuckStill
-# 0.10.1: starter pack = mushroom hat + 100 acorns
+# 0.10.2: shop fits 844px screens (tester)
