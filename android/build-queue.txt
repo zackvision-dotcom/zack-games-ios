@@ -1,1 +1,5 @@
-braise
+motsmeles
+solitaire
+logimages
+sudokuzen
+compteurpoints
