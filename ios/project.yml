@@ -1038,10 +1038,10 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.word-games
-        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~6778405496
         GADUseTestAds: $(ADS_TEST)
-        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
-        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        GADInterstitialUnit: ca-app-pub-3447270747554208/7241439925
+        GADRewardedUnit: ca-app-pub-3447270747554208/7092879073
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
     settings:
@@ -1081,10 +1081,10 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.card-games
-        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~2530817538
         GADUseTestAds: $(ADS_TEST)
-        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
-        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        GADInterstitialUnit: ca-app-pub-3447270747554208/5357833411
+        GADRewardedUnit: ca-app-pub-3447270747554208/4284424899
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
     settings:
@@ -1124,10 +1124,10 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.puzzle-games
-        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~1773490821
         GADUseTestAds: $(ADS_TEST)
-        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
-        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        GADInterstitialUnit: ca-app-pub-3447270747554208/9834592481
+        GADRewardedUnit: ca-app-pub-3447270747554208/2731670074
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
     settings:
@@ -1167,10 +1167,10 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.puzzle-games
-        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~5273752132
         GADUseTestAds: $(ADS_TEST)
-        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
-        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        GADInterstitialUnit: ca-app-pub-3447270747554208/3269184133
+        GADRewardedUnit: ca-app-pub-3447270747554208/4890608757
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
     settings:
@@ -1210,10 +1210,10 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         LSApplicationCategoryType: public.app-category.card-games
-        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADApplicationIdentifier: ca-app-pub-3447270747554208~1334507120
         GADUseTestAds: $(ADS_TEST)
-        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
-        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        GADInterstitialUnit: ca-app-pub-3447270747554208/7764184101
+        GADRewardedUnit: ca-app-pub-3447270747554208/9951363744
         NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
         SKAdNetworkItems: *skadnetworks
     settings:

@@ -3,4 +3,4 @@ Solitaire
 Logimages
 SudokuZen
 CompteurPoints
-# puzzle games: first TestFlight builds (10 languages, Sans pub IAP, daily reminder notifications in the kit)
+# real AdMob ids + small-screen fixes (TestFlight still serves test ads)
