@@ -1,4 +1,3 @@
-# Kunai builds
-builds
+# Kunai release build on 1.0
+setbuild 1034
 kunaigaiden
-#2
