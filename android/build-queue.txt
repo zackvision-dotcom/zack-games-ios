@@ -1,2 +1,6 @@
-sudokuzen
+tuckstill
 motsmeles
+solitaire
+logimages
+sudokuzen
+compteurpoints

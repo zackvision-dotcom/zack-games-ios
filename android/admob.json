@@ -1,0 +1,32 @@
+{
+ "motsmeles": {
+  "app": "ca-app-pub-3447270747554208~3134994750",
+  "interstitial": "ca-app-pub-3447270747554208/4630367265",
+  "rewarded": "ca-app-pub-3447270747554208/3529425626"
+ },
+ "solitaire": {
+  "app": "ca-app-pub-3447270747554208~6347160659",
+  "interstitial": "ca-app-pub-3447270747554208/6882668070",
+  "rewarded": "ca-app-pub-3447270747554208/2619668639"
+ },
+ "logimages": {
+  "app": "ca-app-pub-3447270747554208~1821913082",
+  "interstitial": "ca-app-pub-3447270747554208/4256504738",
+  "rewarded": "ca-app-pub-3447270747554208/7189469039"
+ },
+ "sudokuzen": {
+  "app": "ca-app-pub-3447270747554208~4124321995",
+  "interstitial": "ca-app-pub-3447270747554208/8378040580",
+  "rewarded": "ca-app-pub-3447270747554208/2344336468"
+ },
+ "compteurpoints": {
+  "app": "ca-app-pub-3447270747554208~9185076988",
+  "interstitial": "ca-app-pub-3447270747554208/7680423623",
+  "rewarded": "ca-app-pub-3447270747554208/5751877243"
+ },
+ "tuckstill": {
+  "app": "ca-app-pub-3447270747554208~3186965640",
+  "interstitial": "ca-app-pub-3447270747554208/8809285425",
+  "rewarded": "ca-app-pub-3447270747554208/4914659482"
+ }
+}

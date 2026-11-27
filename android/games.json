@@ -163,5 +163,12 @@
   "label": "Compteur",
   "landscape": false,
   "consumables": []
+ },
+ {
+  "flavor": "tuckstill",
+  "web": "TuckStill",
+  "label": "Tuck Still",
+  "landscape": false,
+  "consumables": []
  }
 ]
