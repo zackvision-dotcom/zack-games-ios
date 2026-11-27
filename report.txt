@@ -1,3 +1,5 @@
 PREP kunaigaiden territories 174 CHN False eyJzIjoiNjgzNTUyMjA3NiIsInQiOiJDSE4ifQ
-PREP kunaigaiden age nulls ['datingAndRelationships', 'kidsAgeBand', 'sharedLocation', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id a0703115-2381-4603-aeee-efced87c09ce
+PREP kunaigaiden age sharedLocation = False
+PREP kunaigaiden age datingAndRelationships = False
+PREP kunaigaiden age nulls ['kidsAgeBand', 'gracRatingClassificationNumber', 'developerAgeRatingInfoUrl'] id a0703115-2381-4603-aeee-efced87c09ce
 PREP kunaigaiden price schedule True
