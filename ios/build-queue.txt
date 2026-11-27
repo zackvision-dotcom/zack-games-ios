@@ -1,2 +1,2 @@
 TuckStill
-# 0.10: in-app purchases + real AdMob ids
+# 0.10.1: starter pack = mushroom hat + 100 acorns
