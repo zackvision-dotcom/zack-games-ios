@@ -1007,3 +1007,218 @@ targets:
         PRODUCT_NAME: JamLine
         OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
         TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  MotsMeles:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: MotsMeles/Assets.xcassets
+      - path: MotsMeles/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: MotsMeles/Info.plist
+      properties:
+        CFBundleDisplayName: Mots Mêlés
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.word-games
+        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
+        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.motsmeles
+        PRODUCT_NAME: MotsMeles
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  Solitaire:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: Solitaire/Assets.xcassets
+      - path: Solitaire/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: Solitaire/Info.plist
+      properties:
+        CFBundleDisplayName: Solitaire
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.card-games
+        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
+        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.solitaire
+        PRODUCT_NAME: Solitaire
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  Logimages:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: Logimages/Assets.xcassets
+      - path: Logimages/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: Logimages/Info.plist
+      properties:
+        CFBundleDisplayName: Logimages
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.puzzle-games
+        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
+        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.logimages
+        PRODUCT_NAME: Logimages
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  SudokuZen:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: SudokuZen/Assets.xcassets
+      - path: SudokuZen/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: SudokuZen/Info.plist
+      properties:
+        CFBundleDisplayName: Sudoku Zen
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.puzzle-games
+        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
+        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.sudokuzen
+        PRODUCT_NAME: SudokuZen
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later
+  CompteurPoints:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: Ads          # NativeAds.swift + InfoPlist.strings (ATT prompt, FR/EN)
+      - path: CompteurPoints/Assets.xcassets
+      - path: CompteurPoints/Web
+        type: folder
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
+    info:
+      path: CompteurPoints/Info.plist
+      properties:
+        CFBundleDisplayName: Compteur
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        LSApplicationCategoryType: public.app-category.card-games
+        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511   # Google TEST app id until the AdMob app exists
+        GADUseTestAds: $(ADS_TEST)
+        GADInterstitialUnit: ca-app-pub-3940256099942544/4411468910
+        GADRewardedUnit: ca-app-pub-3940256099942544/1712485313
+        NSUserTrackingUsageDescription: Your permission lets us show more relevant ads. The game stays fully playable without it.
+        SKAdNetworkItems: *skadnetworks
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zvisionclub.compteurpoints
+        PRODUCT_NAME: CompteurPoints
+        OTHER_SWIFT_FLAGS: $(inherited) -DADS   # compiles the AdMob bridge in Shared/GameApp.swift
+        TARGETED_DEVICE_FAMILY: "1"   # iPhone first; iPad layout comes later

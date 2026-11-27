@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Solitaire</title>
+<style>
+  :root{--felt:#2f7d57;--felt2:#256848;--ink:#1f2933;--paper:#fffdf6;--red:#d6453d;--gold:#ffd166}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:radial-gradient(ellipse at 50% 30%,var(--felt),var(--felt2));color:#fff;font-family:ui-rounded,"Nunito","Segoe UI Rounded",system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;overflow:hidden;touch-action:manipulation}
+  #app{height:100%;max-width:620px;margin:0 auto;display:flex;flex-direction:column;padding:calc(8px + env(safe-area-inset-top,0px)) max(8px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  header{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:42px}
+  h1{font-size:19px;margin:0}
+  button{font-family:inherit;border:0;cursor:pointer}
+  .pill{background:rgba(0,0,0,.25);color:#fff;border-radius:12px;padding:8px 11px;font-weight:800;font-size:13px}
+  .stats{display:flex;gap:6px}
+  #board{position:relative;flex:1;margin-top:8px}
+  .slot{position:absolute;border-radius:8px;border:2px dashed rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,.4)}
+  .card{position:absolute;border-radius:8px;background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.35);font-weight:900;transition:left .16s,top .16s;overflow:hidden}
+  .card.red{color:var(--red)}
+  .card .c{position:absolute;left:8%;top:3%;line-height:1;text-align:center}
+  .card .m{position:absolute;right:8%;bottom:6%;line-height:1}
+  .card.down{background:repeating-linear-gradient(45deg,#3b6fb6,#3b6fb6 6px,#4a80c8 6px,#4a80c8 12px);border:3px solid var(--paper)}
+  .card.hint{outline:3px solid var(--gold);z-index:99}
+  .card.shake{animation:sh .25s}
+  @keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  footer{display:flex;gap:8px;justify-content:center;padding-top:8px}
+  footer button{flex:1;max-width:150px;background:var(--paper);color:var(--ink);border-radius:14px;padding:12px 8px;font-weight:900;font-size:14px;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:200}
+  .box{background:var(--paper);color:var(--ink);border-radius:22px;padding:22px;text-align:center;max-width:340px;width:100%}
+  .box h2{margin:0 0 6px;font-size:26px}.box p{font-weight:700;margin:6px 0 14px}
+  .cta{background:var(--red);color:#fff;border-radius:14px;padding:13px 16px;font-weight:900;font-size:16px;width:100%;margin-top:8px}
+  .alt{background:#e8e1cf;color:var(--ink)}
+  [hidden]{display:none!important}
+  .langp{position:relative;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.langp select{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;cursor:pointer}
+  .noads{margin:16px auto 4px;text-align:center;max-width:340px;width:100%}.noads .na-buy{border:0;border-radius:999px;min-height:44px;padding:10px 20px;font:inherit;font-weight:800;background:rgba(40,28,18,.85);color:#fff;cursor:pointer}.noads small{display:block;opacity:.75;margin:6px 0 0;font-size:13px}.noads .na-link{background:none;border:0;color:inherit;text-decoration:underline;font:inherit;font-size:14px;min-height:44px;padding:8px 14px;cursor:pointer}.noads .na-ok{margin:6px 0;font-weight:700}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><h1 id="ttl"></h1><div class="stats"><div class="pill" id="moves"></div><div class="pill" id="timer">0:00</div><label class="pill langp"><span id="lang"></span><select id="langSel" aria-label="Language"><option value="fr">Français</option><option value="en">English</option><option value="es">Español</option><option value="pt">Português</option><option value="de">Deutsch</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="tr">Türkçe</option><option value="pl">Polski</option></select></label><button class="pill" id="snd">🔊</button></div></header>
+  <div id="board"></div>
+  <footer><button id="newB"></button><button id="undoB"></button><button id="hintB"></button></footer>
+</div>
+<div class="overlay" id="menu" hidden><div class="box"><h2 id="mT"></h2><p id="mS"></p><button class="cta" id="dailyB"></button><button class="cta alt" id="randB"></button><button class="cta alt" id="closeB"></button></div></div>
+<script>
+'use strict';
+const L = {
+  fr: { title: 'Solitaire', moves: '{n} coups', newG: 'Nouvelle', undo: '↩ Annuler', hint: '💡 Indice', hintN: '💡 Indice ({n})', hintAd: '💡 Indice 🎬', win: 'Gagné !', winS: '{t} · {n} coups', menu: 'Nouvelle partie', stats: 'Victoires : {w} · Série du jour : {s}', daily: '📅 Donne du jour', dailyDone: '📅 Donne du jour ✔', rand: '🔀 Donne au hasard', close: 'Continuer', auto: 'Fin automatique…', stuck: 'Plus de coup possible' },
+  en: { title: 'Solitaire', moves: '{n} moves', newG: 'New', undo: '↩ Undo', hint: '💡 Hint', hintN: '💡 Hint ({n})', hintAd: '💡 Hint 🎬', win: 'You win!', winS: '{t} · {n} moves', menu: 'New game', stats: 'Wins: {w} · Daily streak: {s}', daily: '📅 Daily deal', dailyDone: '📅 Daily deal ✔', rand: '🔀 Random deal', close: 'Keep playing', auto: 'Auto-finishing…', stuck: 'No more moves' },
+  es: { title: 'Solitario', moves: '{n} movimientos', newG: 'Nueva', undo: '↩ Deshacer', hint: '💡 Pista', hintN: '💡 Pista ({n})', hintAd: '💡 Pista 🎬', win: '¡Ganaste!', winS: '{t} · {n} movimientos', menu: 'Nueva partida', stats: 'Victorias: {w} · Racha diaria: {s}', daily: '📅 Reparto del día', dailyDone: '📅 Reparto del día ✔', rand: '🔀 Reparto al azar', close: 'Seguir jugando', auto: 'Terminando solo…', stuck: 'No quedan movimientos' },
+  pt: { title: 'Paciência', moves: '{n} jogadas', newG: 'Novo', undo: '↩ Desfazer', hint: '💡 Dica', hintN: '💡 Dica ({n})', hintAd: '💡 Dica 🎬', win: 'Você venceu!', winS: '{t} · {n} jogadas', menu: 'Novo jogo', stats: 'Vitórias: {w} · Sequência diária: {s}', daily: '📅 Jogo do dia', dailyDone: '📅 Jogo do dia ✔', rand: '🔀 Jogo aleatório', close: 'Continuar', auto: 'Finalizando…', stuck: 'Sem jogadas possíveis' },
+  de: { title: 'Solitär', moves: '{n} Züge', newG: 'Neu', undo: '↩ Zurück', hint: '💡 Tipp', hintN: '💡 Tipp ({n})', hintAd: '💡 Tipp 🎬', win: 'Gewonnen!', winS: '{t} · {n} Züge', menu: 'Neues Spiel', stats: 'Siege: {w} · Tagesserie: {s}', daily: '📅 Tagesspiel', dailyDone: '📅 Tagesspiel ✔', rand: '🔀 Zufallsspiel', close: 'Weiterspielen', auto: 'Wird beendet…', stuck: 'Keine Züge mehr' },
+  it: { title: 'Solitario', moves: '{n} mosse', newG: 'Nuova', undo: '↩ Annulla', hint: '💡 Aiuto', hintN: '💡 Aiuto ({n})', hintAd: '💡 Aiuto 🎬', win: 'Hai vinto!', winS: '{t} · {n} mosse', menu: 'Nuova partita', stats: 'Vittorie: {w} · Serie giornaliera: {s}', daily: '📅 Mano del giorno', dailyDone: '📅 Mano del giorno ✔', rand: '🔀 Mano casuale', close: 'Continua', auto: 'Completamento automatico…', stuck: 'Nessuna mossa possibile' },
+  ja: { title: 'ソリティア', moves: '{n}手', newG: '新規', undo: '↩ 戻す', hint: '💡 ヒント', hintN: '💡 ヒント ({n})', hintAd: '💡 ヒント 🎬', win: 'クリア！', winS: '{t} · {n}手', menu: '新しいゲーム', stats: '勝利数：{w} · 連続日数：{s}', daily: '📅 今日の配り', dailyDone: '📅 今日の配り ✔', rand: '🔀 ランダム配り', close: '続ける', auto: '自動で仕上げ中…', stuck: 'もう動かせる手がありません' },
+  ko: { title: '솔리테어', moves: '{n}수', newG: '새 게임', undo: '↩ 되돌리기', hint: '💡 힌트', hintN: '💡 힌트 ({n})', hintAd: '💡 힌트 🎬', win: '승리!', winS: '{t} · {n}수', menu: '새 게임', stats: '승리: {w} · 연속 일수: {s}', daily: '📅 오늘의 게임', dailyDone: '📅 오늘의 게임 ✔', rand: '🔀 무작위 게임', close: '계속하기', auto: '자동 마무리 중…', stuck: '더 이상 둘 수 있는 수가 없어요' },
+  tr: { title: 'Solitaire', moves: '{n} hamle', newG: 'Yeni', undo: '↩ Geri al', hint: '💡 İpucu', hintN: '💡 İpucu ({n})', hintAd: '💡 İpucu 🎬', win: 'Kazandın!', winS: '{t} · {n} hamle', menu: 'Yeni oyun', stats: 'Galibiyet: {w} · Günlük seri: {s}', daily: '📅 Günün dağıtımı', dailyDone: '📅 Günün dağıtımı ✔', rand: '🔀 Rastgele dağıtım', close: 'Devam et', auto: 'Otomatik bitiriliyor…', stuck: 'Başka hamle yok' },
+  pl: { title: 'Pasjans', moves: '{n} ruchów', newG: 'Nowa', undo: '↩ Cofnij', hint: '💡 Podpowiedź', hintN: '💡 Podpowiedź ({n})', hintAd: '💡 Podpowiedź 🎬', win: 'Wygrana!', winS: '{t} · {n} ruchów', menu: 'Nowa gra', stats: 'Wygrane: {w} · Seria dzienna: {s}', daily: '📅 Rozdanie dnia', dailyDone: '📅 Rozdanie dnia ✔', rand: '🔀 Losowe rozdanie', close: 'Graj dalej', auto: 'Kończenie automatyczne…', stuck: 'Brak możliwych ruchów' },
+};
+const LANGS = ['fr', 'en', 'es', 'pt', 'de', 'it', 'ja', 'ko', 'tr', 'pl'], NAV = (navigator.language || 'en').slice(0, 2).toLowerCase();
+let lang = LANGS.includes(NAV) ? NAV : 'en';
+const KEY = 'solitaire.save.v1';
+let S = { lang: null, muted: false, wins: 0, plays: 0, daily: '', streak: 0, hints: 3, hintDay: '', game: null };
+try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+const save = () => { S.game = G ? { G, t: elapsed(), undo: undo.slice(-40) } : null; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+if (S.lang && L[S.lang]) lang = S.lang;
+const T = () => L[lang], fmt = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k]), $ = id => document.getElementById(id);
+const dayKey = ms => { const d = new Date(ms); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+if (S.hintDay !== dayKey(Date.now())) { S.hintDay = dayKey(Date.now()); S.hints = Math.max(S.hints, 3); }
+const ADS = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.ads;
+const ad = kind => kind === 'interstitial' && S.noads ? Promise.resolve(false) : ADS ? Promise.resolve().then(() => ADS.postMessage({ op: kind })).then(ok => !!ok, () => false) : Promise.resolve(false);
+
+// ---------- 'Sans pub' in-app purchase (StoreKit bridge of the iOS shell). No bridge = no shop row ----------
+const STORE = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.store, NOADS_ID = "com.zvisionclub.solitaire.noads";
+const NA = {"fr": {"t": "Sans pub", "d": "Retire les publicités entre les grilles", "r": "Restaurer mes achats", "ok": "Merci ! Les pubs sont retirées.", "ro": "Achats restaurés"}, "en": {"t": "No ads", "d": "Removes ads between grids", "r": "Restore purchases", "ok": "Thank you! Ads are removed.", "ro": "Purchases restored"}, "es": {"t": "Sin anuncios", "d": "Quita los anuncios entre tableros", "r": "Restaurar compras", "ok": "¡Gracias! Anuncios eliminados.", "ro": "Compras restauradas"}, "pt": {"t": "Sem anúncios", "d": "Remove os anúncios entre os jogos", "r": "Restaurar compras", "ok": "Obrigado! Anúncios removidos.", "ro": "Compras restauradas"}, "de": {"t": "Ohne Werbung", "d": "Entfernt die Werbung zwischen Rätseln", "r": "Käufe wiederherstellen", "ok": "Danke! Werbung entfernt.", "ro": "Käufe wiederhergestellt"}, "it": {"t": "Senza pubblicità", "d": "Rimuove la pubblicità tra le griglie", "r": "Ripristina acquisti", "ok": "Grazie! Pubblicità rimossa.", "ro": "Acquisti ripristinati"}, "ja": {"t": "広告なし", "d": "問題の合間の広告を削除します", "r": "購入を復元", "ok": "ありがとうございます！広告を削除しました。", "ro": "購入を復元しました"}, "ko": {"t": "광고 제거", "d": "퍼즐 사이 광고를 없앱니다", "r": "구매 복원", "ok": "감사합니다! 광고가 제거되었어요.", "ro": "구매가 복원되었어요"}, "tr": {"t": "Reklamsız", "d": "Bulmacalar arasındaki reklamları kaldırır", "r": "Satın alımları geri yükle", "ok": "Teşekkürler! Reklamlar kaldırıldı.", "ro": "Satın alımlar geri yüklendi"}, "pl": {"t": "Bez reklam", "d": "Usuwa reklamy między planszami", "r": "Przywróć zakupy", "ok": "Dziękujemy! Reklamy usunięte.", "ro": "Zakupy przywrócone"}};
+let naPrice = '2,99 €', naBusy = false;
+const storeCall = m => Promise.resolve().then(() => STORE.postMessage(m));
+const grantNoads = () => { if (!S.noads) { S.noads = true; save(); } noadsBox(); };
+function noadsBox(msg) {
+  const b = document.getElementById('noadsBox'); if (!b) return; b.hidden = !STORE; if (!STORE) return; const x = NA[lang] || NA.en;
+  b.innerHTML = (msg ? '<p class="na-ok">' + msg + '</p>' : '') + (S.noads ? (msg ? '' : '<p class="na-ok">✓ ' + x.t + '</p>') : '<button class="na-buy">🚫 ' + x.t + ' · ' + naPrice + '</button><small>' + x.d + '</small>');
+  const buy = b.querySelector('.na-buy'); if (buy) buy.onclick = async () => { if (naBusy) return; naBusy = true; try { const r = await storeCall({ op: 'buy', id: NOADS_ID }); if (r && r.ok) { S.noads = true; save(); noadsBox(x.ok); } } catch (e) {} naBusy = false; };
+  const rs = document.createElement('button'); rs.className = 'na-link'; rs.textContent = x.r; b.appendChild(rs);
+  rs.onclick = async () => { try { const ids = await storeCall({ op: 'restore' }); if ((ids || []).includes(NOADS_ID)) { S.noads = true; save(); } noadsBox(x.ro); } catch (e) {} };
+}
+{ const nb = document.createElement('div'); nb.id = 'noadsBox'; nb.className = 'noads'; nb.hidden = true; (document.querySelector('#menu .box')).appendChild(nb); }
+if (STORE) {
+  window.nativeStoreUpdate = id => { if (id === NOADS_ID) grantNoads(); };
+  storeCall({ op: 'owned' }).then(ids => { if ((ids || []).includes(NOADS_ID)) grantNoads(); }).catch(() => {});
+  storeCall({ op: 'drain' }).then(ids => { if ((ids || []).includes(NOADS_ID)) grantNoads(); }).catch(() => {});
+  storeCall({ op: 'products', ids: [NOADS_ID] }).then(l => { if (l && l[0]) { naPrice = l[0].price; noadsBox(); } }).catch(() => {});
+}
+noadsBox();
+if (ADS) try { ADS.postMessage({ op: 'init' }); } catch (e) {}
+let ac = null; function beep(f, d = 0.07, v = 0.1, at = 0) { if (S.muted) return; try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); const o = ac.createOscillator(), g = ac.createGain(), t0 = ac.currentTime + at; o.type = 'triangle'; o.frequency.value = f; g.gain.setValueAtTime(v, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d); o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0 + d + 0.02); } catch (e) {} }
+
+// ---------- game ----------
+const SUIT = ['♠', '♥', '♦', '♣'], RANK = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'V', 'D', 'R'], RANK_EN = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'], RANK_DE = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'B', 'D', 'K'];
+const red = c => c.s === 1 || c.s === 2;
+let G = null, undo = [], t0 = 0, tBase = 0, tick = 0, hintId = null, autoRun = 0;
+function rng(seed) { let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+const hash = str => { let h = 2166136261; for (const c of str) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+function deal(seed, daily) {
+  const R = rng(seed), d = []; for (let s = 0; s < 4; s++) for (let r = 1; r <= 13; r++) d.push({ r, s, up: false, id: s * 13 + r });
+  for (let i = 51; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [d[i], d[j]] = [d[j], d[i]]; }
+  G = { stock: [], waste: [], found: [[], [], [], []], tab: [[], [], [], [], [], [], []], moves: 0, daily, won: false };
+  for (let i = 0; i < 7; i++) for (let j = i; j < 7; j++) { const c = d.pop(); c.up = j === i; G.tab[j].push(c); }
+  G.stock = d; undo = []; tBase = 0; t0 = Date.now(); hintId = null; S.plays++; clearInterval(autoRun); save(); render(); startClock();
+}
+const elapsed = () => tBase + (G && !G.won ? Math.floor((Date.now() - t0) / 1000) : 0);
+function startClock() { clearInterval(tick); tick = setInterval(() => { if (G && !G.won) $('timer').textContent = clockStr(elapsed()); }, 500); }
+const clockStr = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+const snap = () => { undo.push(JSON.stringify(G)); if (undo.length > 300) undo.shift(); };
+const canFound = c => { const f = G.found[c.s]; return (f.length ? f[f.length - 1].r : 0) === c.r - 1; };
+const canTab = (c, col) => { const t = G.tab[col]; if (!t.length) return c.r === 13; const top = t[t.length - 1]; return top.up && red(top) !== red(c) && top.r === c.r + 1; };
+function after(moved = true) { for (const t of G.tab) if (t.length && !t[t.length - 1].up) t[t.length - 1].up = true; if (moved) G.moves++; hintId = null;
+  if (G.found.every(f => f.length === 13)) win(); else { save(); render(); maybeAuto(); } }
+function tapStock() { snap(); if (G.stock.length) { const c = G.stock.pop(); c.up = true; G.waste.push(c); beep(500, 0.04); } else { if (!G.waste.length) { undo.pop(); return; } G.stock = G.waste.reverse().map(c => (c.up = false, c)); G.waste = []; beep(300, 0.08); } after(); }
+/** where a card (and the run under it) can go: returns {to:'f'|'t', col} or null */
+function target(src, col, idx) {
+  const pile = src === 'w' ? G.waste : src === 'f' ? G.found[col] : G.tab[col], c = pile[idx], single = idx === pile.length - 1;
+  if (!c || !c.up) return null;
+  if (single && src !== 'f' && canFound(c)) return { to: 'f' };
+  let empty = -1; for (let k = 0; k < 7; k++) { if (src === 't' && k === col) continue; if (canTab(c, k)) { if (G.tab[k].length) return { to: 't', col: k }; if (empty < 0) empty = k; } }
+  if (empty >= 0 && !(src === 't' && idx === 0)) return { to: 't', col: empty };   // moving a king from an empty-based column to another empty one is pointless
+  return null;
+}
+function tapCard(src, col, idx, el) {
+  const tg = target(src, col, idx); if (!tg) { if (el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); } beep(180, 0.08); return false; }
+  snap(); const pile = src === 'w' ? G.waste : src === 'f' ? G.found[col] : G.tab[col], run = pile.splice(idx);
+  if (tg.to === 'f') { G.found[run[0].s].push(run[0]); beep(700 + run[0].r * 30, 0.09); } else { G.tab[tg.col].push(...run); beep(560, 0.05); }
+  after(); return true;
+}
+function findHint() { // foundation first, then moves that uncover a face-down card, then anything, then the stock
+  const cands = []; if (G.waste.length) cands.push(['w', 0, G.waste.length - 1]);
+  G.tab.forEach((t, k) => t.forEach((c, i) => { if (c.up) cands.push(['t', k, i]); }));
+  let best = null, score = -1;
+  for (const [s, k, i] of cands) { const tg = target(s, k, i); if (!tg) continue; const pile = s === 'w' ? G.waste : G.tab[k]; let sc = tg.to === 'f' ? 5 : 1; if (s === 't' && i > 0 && !G.tab[k][i - 1].up) sc += 3; if (s === 't' && i === 0 && tg.to === 't' && !G.tab[tg.col].length) sc = 0; if (s === 't' && i > 0 && G.tab[k][i - 1].up && tg.to === 't') sc = 0.5; if (sc > score) { score = sc; best = pile[i].id; } }
+  return score > 0.6 ? best : (G.stock.length || G.waste.length > 1) ? 'stock' : best;
+}
+function maybeAuto() { if (G.stock.length || G.waste.length || G.tab.some(t => t.some(c => !c.up))) return; clearInterval(autoRun);
+  autoRun = setInterval(() => { for (let k = 0; k < 7; k++) { const t = G.tab[k]; if (t.length && canFound(t[t.length - 1])) { const c = t.pop(); G.found[c.s].push(c); G.moves++; beep(700 + c.r * 30, 0.06); if (G.found.every(f => f.length === 13)) { clearInterval(autoRun); win(); } else render(); return; } } clearInterval(autoRun); }, 90); }
+function win() { G.won = true; tBase = tBase + Math.floor((Date.now() - t0) / 1000); S.wins++; if (G.daily && S.daily !== dayKey(Date.now())) { S.streak = S.daily === dayKey(Date.now() - 864e5) ? S.streak + 1 : 1; S.daily = dayKey(Date.now()); S.hints++; }
+  const g = G; G = null; save(); G = g; S.game = null; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} render(); [523, 659, 784, 1047, 1319].forEach((f, i) => beep(f, 0.25, 0.12, i * 0.1)); setTimeout(() => menu(true), 700); }
+
+// ---------- rendering ----------
+const board = $('board'); let cw = 50, ch = 70, gap = 6;
+function layout() { const W = board.clientWidth, H = board.clientHeight; gap = Math.max(4, W * 0.012); cw = (W - gap * 6) / 7; ch = cw * 1.42; if (ch > H * 0.3) { ch = H * 0.3; cw = Math.min(cw, ch / 1.42); } }   // landscape: narrower cards rather than squashed ones
+const X = k => k * (cw + gap);
+function cardHTML(c, x, y, z, src, col, idx) {
+  const fs = cw * 0.36, R = lang === 'fr' ? RANK : lang === 'de' ? RANK_DE : RANK_EN;
+  return `<div class="card ${c.up ? (red(c) ? 'red' : '') : 'down'} ${hintId === c.id ? 'hint' : ''}" data-src="${src}" data-col="${col}" data-idx="${idx}" style="left:${x}px;top:${y}px;width:${cw}px;height:${ch}px;z-index:${z};font-size:${fs}px">${c.up ? `<div class="c">${R[c.r]}<br>${SUIT[c.s]}</div><div class="m" style="font-size:${cw * 0.62}px">${SUIT[c.s]}</div>` : ''}</div>`;
+}
+function render() {
+  layout(); let h = '', z = 1; const top = 0, tabY = ch + gap * 2.5;
+  h += `<div class="slot ${hintId === 'stock' ? 'card hint' : ''}" data-src="s" style="left:${X(0)}px;top:${top}px;width:${cw}px;height:${ch}px">↻</div>`;
+  for (let k = 0; k < 4; k++) h += `<div class="slot" style="left:${X(3 + k)}px;top:${top}px;width:${cw}px;height:${ch}px">${SUIT[k]}</div>`;
+  for (let k = 0; k < 7; k++) h += `<div class="slot" style="left:${X(k)}px;top:${tabY}px;width:${cw}px;height:${ch}px"></div>`;
+  if (G.stock.length) h += `<div class="card down ${hintId === 'stock' ? 'hint' : ''}" data-src="s" style="left:${X(0)}px;top:${top}px;width:${cw}px;height:${ch}px;z-index:${z++}"></div>`;
+  G.waste.slice(-3).forEach((c, i, a) => { h += cardHTML(c, X(1) + i * cw * 0.28, top, z++, i === a.length - 1 ? 'w' : 'x', 0, G.waste.length - 1); });
+  G.found.forEach((f, k) => { if (f.length) h += cardHTML(f[f.length - 1], X(3 + k), top, z++, 'f', k, f.length - 1); });
+  const room = board.clientHeight - tabY - ch;
+  G.tab.forEach((t, k) => { const ups = t.filter(c => c.up).length, downs = t.length - ups; let dUp = ch * 0.3, dDown = ch * 0.13, minUp = Math.max(9, Math.min(cw * 0.4, ch * 0.2)); const need = downs * dDown + Math.max(0, ups - 1) * dUp; if (need > room && need > 0) { dDown = Math.max(3, Math.min(dDown, (room - Math.max(0, ups - 1) * minUp) / Math.max(1, downs))); const left = room - downs * dDown; if (ups > 1) dUp = Math.max(4, Math.min(dUp, left / (ups - 1))); }
+    let y = tabY; t.forEach((c, i) => { h += cardHTML(c, X(k), y, z++, 't', k, i); y += c.up ? dUp : dDown; }); });
+  board.innerHTML = h; const t = T();
+  $('moves').textContent = fmt(t.moves, { n: G.moves }); $('timer').textContent = clockStr(elapsed());
+  $('hintB').textContent = S.hints > 0 ? fmt(t.hintN, { n: S.hints }) : ADS ? t.hintAd : fmt(t.hintN, { n: 0 }); $('hintB').style.opacity = S.hints > 0 || ADS ? 1 : 0.5; $('undoB').style.opacity = undo.length ? 1 : 0.5;
+}
+board.addEventListener('click', e => { if (!G || G.won) return; const el = e.target.closest('[data-src]'); if (!el) return; const s = el.dataset.src; if (s === 's') tapStock(); else if (s !== 'x') tapCard(s, +el.dataset.col, +el.dataset.idx, el); });
+$('undoB').onclick = () => { if (!undo.length || G.won) return; clearInterval(autoRun); G = JSON.parse(undo.pop()); hintId = null; beep(350, 0.06); save(); render(); };
+$('hintB').onclick = async () => { if (!G || G.won) return; if (S.hints <= 0) { if (!ADS || !(await ad('rewarded'))) return; S.hints = 1; } const h = findHint(); if (h === null) { menu(false, true); return; } S.hints--; hintId = h; save(); render(); beep(440, 0.12); };
+// ---------- menu ----------
+function menu(won, stuck) { const t = T(); $('mT').textContent = won ? t.win : stuck ? t.stuck : t.menu; $('mS').textContent = (won ? fmt(t.winS, { t: clockStr(tBase), n: G.moves }) + ' — ' : '') + fmt(t.stats, { w: S.wins, s: S.daily === dayKey(Date.now()) || S.daily === dayKey(Date.now() - 864e5) ? S.streak : 0 });
+  $('dailyB').textContent = S.daily === dayKey(Date.now()) ? t.dailyDone : t.daily; $('randB').textContent = t.rand; $('closeB').textContent = t.close; $('closeB').hidden = !!won; $('menu').hidden = false; }
+$('newB').onclick = () => menu(false); $('closeB').onclick = () => { $('menu').hidden = true; };
+const begin = async daily => { $('menu').hidden = true; if (S.plays > 0 && S.plays % 2 === 0) await ad('interstitial'); deal(daily ? hash('daily' + dayKey(Date.now())) : (Math.random() * 4294967296) >>> 0, daily); };
+$('dailyB').onclick = () => begin(true); $('randB').onclick = () => begin(false);
+function texts() { const t = T(); document.title = t.title; document.documentElement.lang = lang; $('ttl').textContent = t.title; $('lang').textContent = '🌐 ' + lang.toUpperCase(); $('langSel').value = lang; $('snd').textContent = S.muted ? '🔇' : '🔊'; $('newB').textContent = t.newG; $('undoB').textContent = t.undo; if (G) render(); }
+$('langSel').onchange = e => { lang = e.target.value; S.lang = lang; noadsBox(); save(); texts(); };
+$('snd').onclick = () => { S.muted = !S.muted; save(); texts(); };
+addEventListener('resize', () => G && render()); addEventListener('pagehide', () => G && !G.won && save());
+texts();
+if (S.game && S.game.G && !S.game.G.won) { G = S.game.G; tBase = S.game.t || 0; undo = S.game.undo || []; t0 = Date.now(); render(); startClock(); maybeAuto(); } else { S.plays = S.plays || 0; deal((Math.random() * 4294967296) >>> 0, false); }
+window.SOL = { get G() { return G; }, S, deal, tapStock, tapCard, target, findHint, hash }; // debug hook for automated tests
+</script>
+</body>
+</html>

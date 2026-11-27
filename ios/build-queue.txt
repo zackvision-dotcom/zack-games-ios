@@ -1,2 +1,6 @@
-TuckStill
-# 0.10.3: tester minor fixes
+MotsMeles
+Solitaire
+Logimages
+SudokuZen
+CompteurPoints
+# puzzle games: first TestFlight builds (10 languages, Sans pub IAP, daily reminder notifications in the kit)

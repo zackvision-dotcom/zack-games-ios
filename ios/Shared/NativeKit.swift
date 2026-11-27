@@ -1,5 +1,6 @@
 import StoreKit
 import UIKit
+import UserNotifications
 import WebKit
 #if canImport(FirebaseCore)
 import FirebaseAnalytics
@@ -18,6 +19,8 @@ import FirebaseCrashlytics
 ///   ZV.houseAd()       a full-screen card for one of our other games (cross-promotion); resolves true if shown. Games call it
 ///                      when no AdMob interstitial was ready, so it never replaces a paid ad.
 ///   ZV.event(name, p)  an analytics event (Firebase Analytics; nothing is sent when the target has no GoogleService-Info.plist).
+///   ZV.remind(hhmm, title, body)  a local notification every day at HH:MM (asks the iOS permission the first time;
+///                      resolves false if refused). ZV.remindOff() cancels it. Raw form: kit.postMessage({op:'remind', heure, titre, texte}).
 ///   ZV.others          how many of our other games are live (0: hide the "other games" button)
 ///   ZV.available       true in the iOS app (false on the web: the game hides its buttons).
 /// Catalogue: Promo.json (bundled), refreshed from the repo so a newly released game shows up in older builds too.
@@ -28,7 +31,8 @@ final class NativeKit: NSObject, WKScriptMessageHandlerWithReply, SKStoreProduct
         (function () {
           var k = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.kit;
           if (!k) { window.ZV = { available: false, joy: function () {}, share: function () {}, moreGames: function () {},
-                                  houseAd: function () { return Promise.resolve(false); }, event: function () {}, others: 0 }; return; }
+                                  houseAd: function () { return Promise.resolve(false); }, event: function () {}, others: 0,
+                                  remind: function () { return Promise.resolve(false); }, remindOff: function () {} }; return; }
           var call = function (o) { try { return k.postMessage(o); } catch (e) { return Promise.resolve(false); } };
           window.ZV = { available: true, others: __OTHERS__,
             joy: function (tag) { return call({ op: 'joy', tag: String(tag || '') }); },
@@ -36,7 +40,9 @@ final class NativeKit: NSObject, WKScriptMessageHandlerWithReply, SKStoreProduct
             shareFile: function (name, dataUrl, text) { return call({ op: 'shareFile', name: String(name || 'clip.mp4'), data: String(dataUrl || ''), text: String(text || '') }); },
             moreGames: function (lang) { return call({ op: 'more', lang: lang || document.documentElement.lang || 'fr' }); },
             houseAd: function (lang) { return call({ op: 'house', lang: lang || document.documentElement.lang || 'fr' }); },
-            event: function (name, p) { return call({ op: 'event', name: String(name || ''), params: p || {} }); } };
+            event: function (name, p) { return call({ op: 'event', name: String(name || ''), params: p || {} }); },
+            remind: function (hhmm, title, body) { return call({ op: 'remind', heure: String(hhmm || '09:00'), titre: String(title || ''), texte: String(body || '') }); },
+            remindOff: function () { return call({ op: 'remindOff' }); } };
         })();
         """
 
@@ -79,6 +85,7 @@ final class NativeKit: NSObject, WKScriptMessageHandlerWithReply, SKStoreProduct
         let b = message.body as? [String: Any] ?? [:]
         Task { @MainActor in
             if b["op"] as? String == "house" { self.house(b) { replyHandler($0, nil) }; return }
+            if b["op"] as? String == "remind" { replyHandler(await self.remind(b), nil); return }
             replyHandler(self.run(b["op"] as? String ?? "", b), nil)
         }
     }
@@ -86,6 +93,9 @@ final class NativeKit: NSObject, WKScriptMessageHandlerWithReply, SKStoreProduct
     @MainActor private func run(_ op: String, _ b: [String: Any]) -> Any {
         let en = (b["lang"] as? String ?? "fr").hasPrefix("en") || (b["lang"] == nil && !(Locale.preferredLanguages.first ?? "fr").hasPrefix("fr"))
         switch op {
+        case "remindOff":
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [Self.dailyId])
+            return true
         case "joy":
             joys += 1
             log("joy", ["tag": b["tag"] as? String ?? ""])
@@ -148,6 +158,21 @@ final class NativeKit: NSObject, WKScriptMessageHandlerWithReply, SKStoreProduct
         return t
     }
     private func present(_ vc: UIViewController) { top()?.present(vc, animated: true) }
+
+    static let dailyId = "zv.daily.reminder"
+    /// Daily local notification at HH:MM ("daily puzzle" reminder); asks the permission the first time.
+    private func remind(_ b: [String: Any]) async -> Bool {
+        let c = UNUserNotificationCenter.current()
+        guard (try? await c.requestAuthorization(options: [.alert, .sound])) == true else { return false }
+        let hm = (b["heure"] as? String ?? "09:00").split(separator: ":").compactMap { Int($0) }
+        var when = DateComponents(); when.hour = min(23, max(0, hm.first ?? 9)); when.minute = hm.count > 1 ? min(59, max(0, hm[1])) : 0
+        let content = UNMutableNotificationContent()
+        content.title = b["titre"] as? String ?? ""; content.body = b["texte"] as? String ?? ""; content.sound = .default
+        c.removePendingNotificationRequests(withIdentifiers: [Self.dailyId])
+        do { try await c.add(UNNotificationRequest(identifier: Self.dailyId, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: when, repeats: true))) }
+        catch { return false }
+        return true
+    }
 
     /// The App Store page inside the game (no app switch), the classic way for cross-promotion.
     private func openStore(_ g: Game) {
