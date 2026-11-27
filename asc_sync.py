@@ -272,6 +272,19 @@ if __name__ == '__main__':
                 call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'whatsNew': txt}}})
                 print('NEWVER', g, want, l['attributes']['locale'], 'whatsNew set')
         sys.exit(0)
+    if os.environ.get('NOADSFIX'):
+        # the app now shows ads (AdMob): drop the "no ads" claim from every store description, word-for-word replacements only
+        R = json.load(open(os.path.join(HERE, 'noadsfix.json'), encoding='utf-8'))
+        for g in sys.argv[1:]:
+            ver = edit_version(find_app(g)['id'])
+            for l in call('GET', f"/appStoreVersions/{ver['id']}/appStoreVersionLocalizations?limit=50")['data']:
+                d0 = l['attributes'].get('description') or ''; d = d0
+                for a, b in R.items(): d = d.replace(a, b)
+                if d != d0:
+                    call('PATCH', f"/appStoreVersionLocalizations/{l['id']}", {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'description': d}}})
+                left = [a for a in R if a in d]
+                print('NOADSFIX', g, l['attributes']['locale'], 'changed' if d != d0 else 'unchanged', 'LEFT' if left else '')
+        sys.exit(0)
     if os.environ.get('MANUAL') or os.environ.get('STATUS'):
         # MANUAL: "Publication manuelle" on the current version (we pick the release day, marketing calendar), allowed while in review.
         # STATUS: review state of every version + the release type, to watch Apple's answers.
