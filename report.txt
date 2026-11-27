@@ -1,2 +1,2 @@
+BUILD kunaigaiden v1034 VALID internal=IN_BETA_TESTING uploaded=2026-11-27T11:09
 BUILD kunaigaiden v1012 VALID internal=IN_BETA_TESTING uploaded=2026-11-23T04:44
-BUILD kunaigaiden v1010 VALID internal=IN_BETA_TESTING uploaded=2026-11-22T12:07
