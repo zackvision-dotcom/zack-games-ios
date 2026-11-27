@@ -1,2 +1,2 @@
 TuckStill
-# 0.10.2: shop fits 844px screens (tester)
+# 0.10.3: tester minor fixes
