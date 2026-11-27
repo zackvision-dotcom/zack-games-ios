@@ -90,7 +90,9 @@ class JsBridge(private val act: MainActivity) {
     shareFile: function (name, dataUrl, text) { return call({ op: 'shareFile', name: String(name || 'clip.mp4'), data: String(dataUrl || ''), text: String(text || '') }); },
     moreGames: function (lang) { return call({ op: 'more', lang: lang || document.documentElement.lang || 'fr' }); },
     houseAd: function (lang) { return call({ op: 'house', lang: lang || document.documentElement.lang || 'fr' }); },
-    event: function (name, p) { return call({ op: 'event', name: String(name || ''), params: p || {} }); } };
+    event: function (name, p) { return call({ op: 'event', name: String(name || ''), params: p || {} }); },
+    remind: function (hhmm, title, body) { return call({ op: 'remind', heure: String(hhmm || '09:00'), titre: String(title || ''), texte: String(body || '') }); },
+    remindOff: function () { return call({ op: 'remindOff' }); } };
   var hp = window.webkit.messageHandlers.haptic;
   try { Object.defineProperty(Navigator.prototype, 'vibrate', { configurable: true, writable: true,
     value: function (p) { try { hp.postMessage(Array.isArray(p) ? p : [Number(p) || 0]); } catch (e) {} return true; } }); } catch (e) {}

@@ -1,5 +1,2 @@
-motsmeles
-solitaire
-logimages
 sudokuzen
-compteurpoints
+motsmeles

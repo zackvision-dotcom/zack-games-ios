@@ -1,7 +1,12 @@
 package com.zvisionclub.shell
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Base64
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -31,7 +36,17 @@ class KitBridge(private val act: MainActivity) {
         "shareFile" -> { shareFile(b.optString("name", "clip.mp4"), b.optString("data"), b.optString("text")); true }
         "more", "house" -> false
         "event" -> true
+        "remind" -> remind(b.optString("heure", "09:00"), b.optString("titre"), b.optString("texte"))
+        "remindOff" -> { ReminderReceiver.cancel(act); true }
         else -> false
+    }
+
+    /** daily local notification at HH:MM; asks the notification permission on Android 13+ (the alarm is set either way) */
+    private fun remind(hhmm: String, title: String, body: String): Boolean {
+        if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(act, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(act, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 7)
+        ReminderReceiver.schedule(act, hhmm, title, body)
+        return true
     }
 
     private suspend fun joy(): Boolean {
