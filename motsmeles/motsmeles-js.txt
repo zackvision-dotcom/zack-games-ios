@@ -1,0 +1,80 @@
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{7cc3e0a com.android.providers.telephony.auto_generated_rro_product__/10062} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{299a67b com.android.phone.auto_generated_rro_vendor__/10081} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{a478c98 com.google.mainline.adservices/10137} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{2dd5cf1 com.android.imsserviceentitlement/10117} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{df830d6 com.google.android.healthconnect.controller/10173} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{d122f57 com.android.internal.emulation.pixel_2_xl/10016} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{f74da44 com.android.internal.emulation.pixel_3_xl/10056} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{3d9d72d com.android.internal.emulation.pixel_4_xl/10047} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{d1e8462 com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{82069f3 com.android.bookmarkprovider/10113} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{b0756b0 com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{aa9b929 com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{f6484ae com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{acdb24f com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{e032ddc com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{37bbee5 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{3e86197 com.google.android.settings.intelligence/10118} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{73705da com.google.android.projection.gearhead/10123} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{95d246b com.google.android.uwb.resources/10180} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{a80cd4 com.android.cts.ctsshim/10182} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{3834bc8 com.google.android.wifi.resources/10185} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{4ae6461 com.google.android.wifi.dialog/10186} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{4dc7b86 com.google.android.apps.wallpaper/10161} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{f279c47 com.google.android.odad/10121} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{b655c74 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{20be59d com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{374ca12 com.google.android.apps.youtube.music/10156} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{a37b5e3 com.android.bluetoothmidiservice/10108} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{3b5cbe0 com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{3e84c3 com.google.android.cellbroadcastreceiver/10176} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{7c63e99 com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{9d1755e android.auto_generated_rro_product__/10069} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{4a5cd3f com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{8e42140 com.google.android.inputmethod.latin/10143} BLOCKED
+11-28 16:04:41.803   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{cdbc60c android.auto_generated_rro_vendor__/10075} BLOCKED
+11-28 16:04:41.804   522  1876 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{9332b55 com.google.android.apps.restore/10120} BLOCKED
+11-28 16:04:41.806  3203  3824 D zzawv   : File /data/user/0/com.zvisionclub.motsmeles/cache/1743000482668.dex not found. No need for deletion
+11-28 16:04:41.975   522  2131 D ConnectivityService: requestNetwork for uid/pid:10192/3203 activeRequest: null callbackRequest: 113 [NetworkRequest [ REQUEST id=114, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-28 16:04:41.978   522   756 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=114, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:41.978   522   756 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=114, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:41.978   522   756 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=114, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:41.978   522   756 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=114, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:41.993   522  2866 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{87d76d6 com.google.android.settings.intelligence/10118} BLOCKED
+11-28 16:04:41.996   522   538 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{724fd57 com.google.android.settings.intelligence/10118} BLOCKED
+11-28 16:04:42.008   522  2860 D ConnectivityService: requestNetwork for uid/pid:10192/3203 activeRequest: null callbackRequest: 115 [NetworkRequest [ REQUEST id=116, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647
+11-28 16:04:42.018   522   756 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=116, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:42.018   522   756 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=116, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:42.063   522   756 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=116, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:42.063   522   756 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=116, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED Uid: 10192 RequestorUid: 10192 RequestorPkg: com.zvisionclub.motsmeles UnderlyingNetworks: Null] ]
+11-28 16:04:42.088   522  2132 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{25033e0 com.google.android.apps.maps/10153} BLOCKED
+11-28 16:04:42.259  3203  4049 W GooglePlayServicesUtil: Google Play services out of date for com.zvisionclub.motsmeles.  Requires 243734000 but found 231818047
+11-28 16:04:42.470  3203  4054 W GooglePlayServicesUtil: Google Play services out of date for com.zvisionclub.motsmeles.  Requires 243734000 but found 231818047
+11-28 16:04:44.582  1457  4264 I BlockstoreStorage: Clearing Blockstore Data for package com.zvisionclub.motsmeles [CONTEXT service_id=258 ]
+11-28 16:04:45.173  3203  4335 D ProfileInstaller: Installing profile for com.zvisionclub.motsmeles
+11-28 16:04:46.164   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{d763e2f com.google.android.googlequicksearchbox/10131} BLOCKED
+11-28 16:04:46.164   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{1a49731 com.android.camera2/10146} BLOCKED
+11-28 16:04:46.164   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{cad3531 com.google.android.gm/10141} BLOCKED
+11-28 16:04:46.164   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{4ea6214 com.google.android.devicelockcontroller/10170} BLOCKED
+11-28 16:04:46.165   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{dac416 com.google.android.rkpdapp/10175} BLOCKED
+11-28 16:04:46.165   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{3c3bf76 com.google.android.contacts/10155} BLOCKED
+11-28 16:04:46.165   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{9a4fc3c com.google.android.settings.intelligence/10118} BLOCKED
+11-28 16:04:46.166   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{73705da com.google.android.projection.gearhead/10123} BLOCKED
+11-28 16:04:46.179   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{374ca12 com.google.android.apps.youtube.music/10156} BLOCKED
+11-28 16:04:47.720  1050  1050 D CarrierSvcBindHelper: onPackageModified: com.zvisionclub.motsmeles
+11-28 16:04:47.744  1050  1320 D ImsResolver: maybeAddedImsService, packageName: com.zvisionclub.motsmeles
+11-28 16:04:50.598  1609  1609 I AiAiEcho: AppFetcherImpl onPackageChanged com.zvisionclub.motsmeles.
+11-28 16:04:50.601  1609  3699 I AiAiEcho: AppIndexer Package:[com.zvisionclub.motsmeles] UserProfile:[0] Enabled:[true].
+11-28 16:04:50.601  1609  3699 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.zvisionclub.motsmeles], userId:[0], reason:[package is updated.].
+11-28 16:04:57.248   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{7c1cd85 com.google.android.youtube/10139} BLOCKED
+11-28 16:04:57.248   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{3996385 com.google.android.apps.maps/10153} BLOCKED
+11-28 16:05:07.651   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{d541b38 com.google.android.googlequicksearchbox/10131} BLOCKED
+11-28 16:05:07.652   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{26ad711 com.google.android.as/10125} BLOCKED
+11-28 16:05:07.652   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{d2af076 com.google.android.contacts/10155} BLOCKED
+11-28 16:05:11.438   522  2832 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{d857bd8 com.google.android.settings.intelligence/10118} BLOCKED
+11-28 16:05:17.699   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{d708398 com.google.android.as/10125} BLOCKED
+11-28 16:05:17.700   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{9087f1 com.google.android.gm/10141} BLOCKED
+11-28 16:05:17.700   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{c5b7fd6 com.google.android.contacts/10155} BLOCKED
+11-28 16:05:18.886   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{76f7d91 com.google.android.contacts/10155} BLOCKED
+11-28 16:05:20.284  1481  1481 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.zvisionclub.motsmeles fieldId=0 fieldName=null extras=null}, false)
+11-28 16:05:29.268   522   576 I AppsFilter: interaction: PackageSetting{4457bea com.zvisionclub.motsmeles/10192} -> PackageSetting{e248fa7 com.google.android.contacts/10155} BLOCKED
