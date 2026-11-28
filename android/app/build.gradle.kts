@@ -89,6 +89,7 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.webkit:webkit:1.13.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.6")   // Play flagged the transitive fragment 1.1.0 (via UMP) as outdated
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("com.android.billingclient:billing:8.0.0")
     implementation("com.google.android.gms:play-services-ads:24.4.0")
