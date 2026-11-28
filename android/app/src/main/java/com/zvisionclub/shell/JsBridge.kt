@@ -71,8 +71,10 @@ class JsBridge(private val act: MainActivity) {
     }
 
     companion object {
-        /** Installed at document start: window.webkit.messageHandlers, window.ZV (same API as ios/Shared/NativeKit.swift), navigator.vibrate. */
-        fun shim(others: Int): String = """
+        /** Installed at document start: window.webkit.messageHandlers, window.ZV (same API as ios/Shared/NativeKit.swift), navigator.vibrate.
+         *  ads = false for a game declared without ads on Play (games.json "ads": false): the page then shows none.
+         *  store = false when the game sells nothing on this store (no products configured): the page then hides its shop row. */
+        fun shim(others: Int, store: Boolean = BuildConfig.CONSUMABLES.isNotEmpty(), ads: Boolean = BuildConfig.ADS_ON): String = """
 (function () {
   if (window.__zvShim) return; window.__zvShim = true;
   var A = window.ZVAndroid; if (!A) return;
@@ -80,7 +82,7 @@ class JsBridge(private val act: MainActivity) {
   window.__zvReply = function (id, ok, v) { var c = cb[id]; if (!c) return; delete cb[id]; ok ? c[0](v) : c[1](new Error(String(v))); };
   function h(name) { return { postMessage: function (o) { return new Promise(function (res, rej) {
     var id = ++n; cb[id] = [res, rej]; A.post(name, JSON.stringify(o === undefined ? null : o), id); }); } }; }
-  window.webkit = { messageHandlers: { store: h('store'), ads: h('ads'), kit: h('kit'), haptic: h('haptic') } };
+  window.webkit = { messageHandlers: { ${if (store) "store: h('store'), " else ""}${if (ads) "ads: h('ads'), " else ""}kit: h('kit'), haptic: h('haptic') } };
   window.ZVPlatform = 'android';
   var k = window.webkit.messageHandlers.kit;
   var call = function (o) { try { return k.postMessage(o); } catch (e) { return Promise.resolve(false); } };

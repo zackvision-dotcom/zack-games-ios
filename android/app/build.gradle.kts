@@ -45,6 +45,7 @@ android {
                 buildConfigField("String", "GAME", "\"$f\"")
                 buildConfigField("String", "CONSUMABLES", "\"" + (g["consumables"] as List<*>).joinToString(",") + "\"")
                 buildConfigField("boolean", "ADS_TEST", (!real).toString())
+                buildConfigField("boolean", "ADS_ON", (g["ads"] != false).toString())
                 buildConfigField("String", "AD_INTERSTITIAL", "\"" + (if (real) ids!!["interstitial"] else "ca-app-pub-3940256099942544/1033173712") + "\"")
                 buildConfigField("String", "AD_REWARDED", "\"" + (if (real) ids!!["rewarded"] else "ca-app-pub-3940256099942544/5224354917") + "\"")
             }

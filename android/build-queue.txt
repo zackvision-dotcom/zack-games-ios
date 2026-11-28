@@ -1,6 +1,2 @@
-tuckstill
-motsmeles
-solitaire
-logimages
-sudokuzen
-compteurpoints
+braise
+motsmeles ADS_TEST=0
