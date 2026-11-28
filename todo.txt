@@ -1,3 +1,2 @@
-# Kunai: remove the no-ads claim (release build has AdMob)
-noadsfix
+attach
 kunaigaiden
