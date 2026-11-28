@@ -3,6 +3,8 @@
   python play_api.py check <package>                     -> opens and discards an edit (proves the access)
   python play_api.py upload <flavor> <signed.aab> [track] -> uploads the bundle and puts it on the track (default internal)
   python play_api.py listing <flavor>                    -> pushes android/store/<flavor>/listing.json, icon and screenshots
+                                                            (store/<flavor>/screens-<lang>/ per language, else screens/)
+  python play_api.py promote <flavor> <versionCode>      -> puts that bundle on the production track (completed, 100 %)
 """
 import json, os, sys
 import requests
@@ -43,24 +45,29 @@ def main():
         with open(aab, 'rb') as fh:
             b = ok(s.post(f'{UP}/{pkg}/edits/{e}/bundles?uploadType=media', data=fh, headers={'Content-Type': 'application/octet-stream'}, timeout=600))
         vc = b['versionCode']; print('bundle', vc)
-        ok(s.put(f'{API}/{pkg}/edits/{e}/tracks/{track}', json={'track': track, 'releases': [{'versionCodes': [str(vc)], 'status': 'completed' if track == 'internal' else 'draft'}]}))
+        ok(s.put(f'{API}/{pkg}/edits/{e}/tracks/{track}', json={'track': track, 'releases': [{'versionCodes': [str(vc)], 'status': 'completed' if track in ('internal', 'production') else 'draft'}]}))
         print('commit', ok(s.post(f'{API}/{pkg}/edits/{e}:commit')).get('id'))
     elif cmd == 'listing':
         f = sys.argv[2]; pkg = 'com.zvisionclub.' + f; d = os.path.join(HERE, 'store', f); e = edit(s, pkg)
         lst = json.load(open(os.path.join(d, 'listing.json'), encoding='utf-8'))
         for lang, x in lst.items():
+            sd = 'screens-' + lang if os.path.isdir(os.path.join(d, 'screens-' + lang)) else 'screens'   # per-language shots when present
             ok(s.put(f'{API}/{pkg}/edits/{e}/listings/{lang}', json={'language': lang, **x})); print('listing', lang)
             for kind, files in (('icon', ['icon-512.png']), ('featureGraphic', [x for x in ('feature.png', 'feature-1024x500.jpg') if os.path.exists(os.path.join(d, x))][:1]),
-                                ('phoneScreenshots', sorted(os.listdir(os.path.join(d, 'screens'))) if os.path.isdir(os.path.join(d, 'screens')) else [])):
+                                ('phoneScreenshots', sorted(os.listdir(os.path.join(d, sd))) if os.path.isdir(os.path.join(d, sd)) else [])):
                 if not files: continue
                 ok(s.delete(f'{API}/{pkg}/edits/{e}/listings/{lang}/{kind}'))
                 for fn in files:
-                    p = os.path.join(d, fn) if kind != 'phoneScreenshots' else os.path.join(d, 'screens', fn)
+                    p = os.path.join(d, fn) if kind != 'phoneScreenshots' else os.path.join(d, sd, fn)
                     ct = 'image/png' if p.endswith('.png') else 'image/jpeg'
                     with open(p, 'rb') as fh:
                         ok(s.post(f'{UP}/{pkg}/edits/{e}/listings/{lang}/{kind}?uploadType=media', data=fh, headers={'Content-Type': ct}))
                 print(' ', kind, len(files))
         print('commit', ok(s.post(f'{API}/{pkg}/edits/{e}:commit')).get('id'))
+    elif cmd == 'promote':
+        f, vc = sys.argv[2], sys.argv[3]; pkg = 'com.zvisionclub.' + f; e = edit(s, pkg)
+        ok(s.put(f'{API}/{pkg}/edits/{e}/tracks/production', json={'track': 'production', 'releases': [{'versionCodes': [str(vc)], 'status': 'completed'}]}))
+        print('production', vc, 'commit', ok(s.post(f'{API}/{pkg}/edits/{e}:commit')).get('id'))
     else:
         print(__doc__)
 
